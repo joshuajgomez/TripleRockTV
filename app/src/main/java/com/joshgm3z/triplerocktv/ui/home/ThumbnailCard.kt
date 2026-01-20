@@ -78,7 +78,7 @@ fun ThumbnailCard(
                         }
                     ),
                     contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
+                    contentScale = ContentScale.FillBounds,
                     modifier = Modifier
                         .weight(1f)
                 )

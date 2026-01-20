@@ -1,11 +1,12 @@
 package com.joshgm3z.triplerocktv
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import androidx.navigation.toRoute
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
 import com.joshgm3z.triplerocktv.ui.home.MediaItem
 import com.joshgm3z.triplerocktv.ui.player.MediaInfoScreen
@@ -39,7 +40,11 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavHome
+        startDestination = NavHome,
+        modifier = Modifier.padding(
+            horizontal = borderPaddingHorizontal,
+            vertical = borderPaddingVertical
+        )
     ) {
         composable<NavHome> {
             HomeScreen(

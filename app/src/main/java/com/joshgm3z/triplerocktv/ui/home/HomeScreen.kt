@@ -14,8 +14,6 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import com.joshgm3z.triplerocktv.borderPaddingHorizontal
-import com.joshgm3z.triplerocktv.borderPaddingVertical
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
@@ -46,9 +44,7 @@ fun HomeScreen(
 
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
-        modifier = Modifier
-            .padding(horizontal = borderPaddingHorizontal, vertical = borderPaddingVertical)
-            .padding(10.dp)
+        modifier = Modifier.padding(10.dp)
     ) {
         TopBar {
             if (it == TopbarItem.Search) openSearchScreen()
