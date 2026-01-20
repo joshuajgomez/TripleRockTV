@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
 
 enum class HomeScreenLayoutId {
@@ -17,14 +18,13 @@ fun getHomeScreenConstraints(): ConstraintSet = ConstraintSet {
     val menu = createRefFor(HomeScreenLayoutId.Menu)
     val content = createRefFor(HomeScreenLayoutId.Content)
 
-    constrain(sideBar) {
+    constrain(topBar) {
         top.linkTo(parent.top)
         start.linkTo(parent.start)
     }
-    constrain(topBar) {
-        top.linkTo(sideBar.top)
-        start.linkTo(sideBar.end)
-        end.linkTo(menu.start)
+    constrain(sideBar) {
+        top.linkTo(topBar.bottom, margin = 20.dp)
+        start.linkTo(topBar.start)
     }
     constrain(menu) {
         top.linkTo(topBar.top)
