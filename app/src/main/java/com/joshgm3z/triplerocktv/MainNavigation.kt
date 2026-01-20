@@ -16,22 +16,22 @@ val borderPaddingHorizontal = 20.dp
 val borderPaddingVertical = 12.dp
 
 @Serializable
-private object Home
+object NavHome
 
 @Serializable
-private data class NavMediaInfo(val mediaItem: MediaItem)
+data class NavMediaInfo(val id: String)
 
 @Serializable
-private object NavMediaPlayer
+object NavMediaPlayer
 
 @Serializable
-private object NavLogin
+object NavLogin
 
 @Serializable
-private object NavLoading
+object NavLoading
 
 @Serializable
-private object NavSearch
+object NavSearch
 
 @Composable
 fun MainNavigation() {
@@ -39,12 +39,12 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Home
+        startDestination = NavHome
     ) {
-        composable<Home> {
+        composable<NavHome> {
             HomeScreen(
                 openMediaInfoScreen = {
-                    navController.navigate(NavMediaInfo(it))
+                    navController.navigate(NavMediaInfo(it.id))
                 },
                 openSearchScreen = {
                     navController.navigate(NavSearch)
@@ -52,9 +52,8 @@ fun MainNavigation() {
             )
         }
         composable<NavMediaInfo> { backStackEntry ->
-            val item: MediaItem = backStackEntry.toRoute()
             MediaInfoScreen(
-                mediaItem = item,
+                mediaItem = MediaItem.sample(),
                 goBack = {
                     navController.popBackStack()
                 }
@@ -63,7 +62,7 @@ fun MainNavigation() {
         composable<NavSearch> {
             SearchScreen(
                 openMediaInfoScreen = {
-                    navController.navigate(NavMediaInfo(it))
+                    navController.navigate(NavMediaInfo(it.id))
                 },
                 goBack = {
                     navController.popBackStack()
