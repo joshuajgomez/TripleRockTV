@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -140,10 +141,10 @@ fun StartOverButton(
             .clip(RoundedCornerShape(20.dp))
             .background(color = colorScheme.onSecondary)
             .width(400.dp)
-            .height(80.dp)
+            .height(80.dp),
     ) {
         Icon(
-            Icons.Default.PlayArrow,
+            Icons.Default.Refresh,
             contentDescription = null,
             tint = colorScheme.secondary
         )
