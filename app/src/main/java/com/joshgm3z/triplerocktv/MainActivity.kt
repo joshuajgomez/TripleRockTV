@@ -4,14 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.tv.material3.Text
-import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
-import com.joshgm3z.triplerocktv.ui.HomeScreen
+import com.joshgm3z.triplerocktv.ui.home.HomeScreen
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 class MainActivity : ComponentActivity() {

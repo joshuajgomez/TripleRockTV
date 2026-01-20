@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui
+package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -6,14 +6,14 @@ import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-fun HomeScreen() {
-    Text("Home Screen")
+fun ThumbnailCard() {
+    Text("Movie name")
 }
 
-@Composable
 @Preview
-private fun PreviewHomeScreen() {
+@Composable
+private fun PreviewThumbnailCard() {
     TripleRockTVTheme {
-        HomeScreen()
+        ThumbnailCard()
     }
 }
