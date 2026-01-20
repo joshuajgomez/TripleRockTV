@@ -1,14 +1,15 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.tooling.preview.Devices
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
@@ -21,18 +22,17 @@ val borderPaddingVertical = 12.dp
 
 @Composable
 fun HomeScreen() {
+    var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Search) }
+
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
         modifier = Modifier
-            .padding(
-                horizontal = borderPaddingHorizontal,
-                vertical = borderPaddingVertical
-            )
+            .padding(horizontal = borderPaddingHorizontal, vertical = borderPaddingVertical)
             .padding(10.dp)
     ) {
-        TopBar()
+        TopBar { selectedTopbarItem = it }
         SideBar()
-        Content()
+        Content(selectedTopbarItem)
         MenuIcon()
     }
 }

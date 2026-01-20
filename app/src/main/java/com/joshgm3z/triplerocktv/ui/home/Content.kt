@@ -23,23 +23,25 @@ import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-fun Content() {
+fun Content(topbarItem: TopbarItem = TopbarItem.Movies) {
     FlowRow(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
             .padding(top = 30.dp, start = 10.dp, end = 10.dp),
         maxItemsInEachRow = 5,
     ) {
-//        ContentPlaceholder()
-//        return@FlowRow
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
-        ThumbnailCard()
+        if (topbarItem == TopbarItem.Search) {
+            ContentPlaceholder("Search for movies")
+        } else {
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem)
+        }
     }
 }
 

@@ -37,7 +37,10 @@ const val focusChange = 5
 
 
 @Composable
-fun ThumbnailCard(onClick: () -> Unit = {}) {
+fun ThumbnailCard(
+    topbarItem: TopbarItem = TopbarItem.Movies,
+    onClick: () -> Unit = {}
+) {
     var focused by remember { mutableStateOf(false) }
     Box(
         modifier = Modifier
@@ -67,7 +70,13 @@ fun ThumbnailCard(onClick: () -> Unit = {}) {
                     .clip(RoundedCornerShape(5.dp)),
             ) {
                 Image(
-                    painter = painterResource(R.drawable.avatar_movie),
+                    painter = painterResource(
+                        when (topbarItem) {
+                            TopbarItem.Movies -> R.drawable.movie
+                            TopbarItem.LiveTv -> R.drawable.livetv
+                            else -> R.drawable.tvseries
+                        }
+                    ),
                     contentDescription = null,
                     contentScale = ContentScale.FillWidth,
                     modifier = Modifier

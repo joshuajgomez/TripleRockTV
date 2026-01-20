@@ -35,7 +35,7 @@ enum class TopbarItem {
 }
 
 @Composable
-fun TopBar() {
+fun TopBar(onItemClick: (TopbarItem) -> Unit = {}) {
     var selected by remember { mutableStateOf(TopbarItem.Movies) }
     Row(
         modifier = Modifier
@@ -48,6 +48,7 @@ fun TopBar() {
                 selected = selected == it,
             ) {
                 selected = it
+                onItemClick(it)
             }
         }
     }
