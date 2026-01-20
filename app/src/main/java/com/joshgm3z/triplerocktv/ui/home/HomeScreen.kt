@@ -1,16 +1,19 @@
 package com.joshgm3z.triplerocktv.ui.home
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
+import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 val borderPaddingHorizontal = 20.dp
@@ -20,10 +23,12 @@ val borderPaddingVertical = 12.dp
 fun HomeScreen() {
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
-        modifier = Modifier.padding(
-            horizontal = borderPaddingHorizontal,
-            vertical = borderPaddingVertical
-        )
+        modifier = Modifier
+            .padding(
+                horizontal = borderPaddingHorizontal,
+                vertical = borderPaddingVertical
+            )
+            .padding(10.dp)
     ) {
         TopBar()
         SideBar()
@@ -46,7 +51,7 @@ fun MenuIcon(onMenuClick: () -> Unit = {}) {
 }
 
 @Composable
-@Preview
+@TvPreview
 private fun PreviewHomeScreen() {
     TripleRockTVTheme {
         HomeScreen()
