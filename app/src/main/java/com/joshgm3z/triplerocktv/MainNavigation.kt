@@ -37,7 +37,10 @@ private object NavSearch
 fun MainNavigation() {
     val navController = rememberNavController()
 
-    NavHost(navController = navController, startDestination = Home) {
+    NavHost(
+        navController = navController,
+        startDestination = Home
+    ) {
         composable<Home> {
             HomeScreen(
                 openMediaInfoScreen = {
@@ -50,9 +53,12 @@ fun MainNavigation() {
         }
         composable<NavMediaInfo> { backStackEntry ->
             val item: MediaItem = backStackEntry.toRoute()
-            MediaInfoScreen(item) {
-                navController.popBackStack()
-            }
+            MediaInfoScreen(
+                mediaItem = item,
+                goBack = {
+                    navController.popBackStack()
+                }
+            )
         }
         composable<NavSearch> {
             SearchScreen(
