@@ -27,7 +27,7 @@ fun Content(topbarItem: TopbarItem = TopbarItem.Movies) {
     FlowRow(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
-            .padding(top = 30.dp, start = 10.dp, end = 10.dp),
+            .padding(horizontal = 10.dp),
         maxItemsInEachRow = 5,
     ) {
         if (topbarItem == TopbarItem.Search) {

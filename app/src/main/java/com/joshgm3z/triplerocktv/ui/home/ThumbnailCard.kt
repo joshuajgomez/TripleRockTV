@@ -72,7 +72,7 @@ fun ThumbnailCard(
                 Image(
                     painter = painterResource(
                         when (topbarItem) {
-                            TopbarItem.Movies -> R.drawable.movie
+                            TopbarItem.Movies -> R.drawable.avatar_movie
                             TopbarItem.LiveTv -> R.drawable.livetv
                             else -> R.drawable.tvseries
                         }

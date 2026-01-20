@@ -22,7 +22,7 @@ val borderPaddingVertical = 12.dp
 
 @Composable
 fun HomeScreen() {
-    var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Search) }
+    var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
 
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
