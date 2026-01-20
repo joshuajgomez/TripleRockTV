@@ -23,7 +23,10 @@ import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-fun Content(topbarItem: TopbarItem = TopbarItem.Movies) {
+fun Content(
+    topbarItem: TopbarItem = TopbarItem.Movies,
+    onContentClick: (MediaItem) -> Unit = {}
+) {
     FlowRow(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
@@ -33,14 +36,14 @@ fun Content(topbarItem: TopbarItem = TopbarItem.Movies) {
         if (topbarItem == TopbarItem.Search) {
             ContentPlaceholder("Search for movies")
         } else {
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
-            ThumbnailCard(topbarItem)
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
         }
     }
 }

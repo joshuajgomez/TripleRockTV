@@ -29,40 +29,45 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.home.MediaItem
 import com.joshgm3z.triplerocktv.ui.theme.Gray10
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-fun MediaInfoScreen() {
+fun MediaInfoScreen(
+    mediaItem: MediaItem = MediaItem.sample(),
+    goBack: () -> Unit = {},
+) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (thumbNail, title, year, resume, startOver, description, back, subtitle) = createRefs()
 
         BackButton(modifier = Modifier.constrainAs(back) {
             start.linkTo(parent.start, margin = 100.dp)
             top.linkTo(parent.top, margin = 100.dp)
-        }) {}
+        }) { goBack() }
 
         ContentTitle(modifier = Modifier.constrainAs(title) {
             start.linkTo(back.start)
             top.linkTo(back.bottom, 80.dp)
-        })
+        }, mediaItem.title)
 
         ContentYear(modifier = Modifier.constrainAs(year) {
             start.linkTo(title.start)
             top.linkTo(title.bottom, 10.dp)
-        })
+        }, mediaItem.year)
 
         MovieDescription(modifier = Modifier.constrainAs(description) {
             start.linkTo(title.start)
             top.linkTo(year.bottom, 50.dp)
-        })
+        }, mediaItem.description)
 
         ThumbnailEnlarged(modifier = Modifier.constrainAs(thumbNail) {
             end.linkTo(parent.end, 100.dp)
             top.linkTo(back.top)
-        })
+        }, mediaItem.thumbNail)
 
         SubtitleInfo(modifier = Modifier.constrainAs(subtitle) {
             start.linkTo(back.start)
@@ -158,9 +163,12 @@ fun StartOverButton(
 }
 
 @Composable
-fun MovieDescription(modifier: Modifier) {
+fun MovieDescription(
+    modifier: Modifier,
+    description: String,
+) {
     Text(
-        text = "Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron.",
+        text = description,
         modifier = modifier.width(700.dp),
         fontSize = 25.sp,
         color = colorScheme.onBackground.copy(alpha = 0.8f),
@@ -169,9 +177,12 @@ fun MovieDescription(modifier: Modifier) {
 }
 
 @Composable
-fun ContentYear(modifier: Modifier) {
+fun ContentYear(
+    modifier: Modifier,
+    year: String,
+) {
     Text(
-        text = "2007",
+        text = year,
         modifier = modifier,
         fontSize = 25.sp,
         color = colorScheme.onBackground.copy(alpha = 0.5f)
@@ -179,9 +190,12 @@ fun ContentYear(modifier: Modifier) {
 }
 
 @Composable
-fun ContentTitle(modifier: Modifier) {
+fun ContentTitle(
+    modifier: Modifier,
+    title: String,
+) {
     Text(
-        text = "Avatar: The Way of Water",
+        text = title,
         modifier = modifier,
         fontSize = 50.sp,
         color = colorScheme.onBackground
@@ -189,33 +203,12 @@ fun ContentTitle(modifier: Modifier) {
 }
 
 @Composable
-fun BackButton(
+fun ThumbnailEnlarged(
     modifier: Modifier,
-    onClick: () -> Unit
+    resId: Int,
 ) {
-    TextButton(
-        onClick = { onClick() },
-        modifier = modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(color = Gray10)
-            .padding(horizontal = 20.dp)
-    ) {
-        Icon(
-            Icons.AutoMirrored.Default.ArrowBack,
-            contentDescription = null
-        )
-        Spacer(Modifier.size(10.dp))
-        Text(
-            "Go back",
-            color = colorScheme.onBackground
-        )
-    }
-}
-
-@Composable
-fun ThumbnailEnlarged(modifier: Modifier) {
     Image(
-        painter = painterResource(R.drawable.avatar_movie),
+        painter = painterResource(resId),
         contentDescription = null,
         contentScale = ContentScale.FillWidth,
         modifier = modifier

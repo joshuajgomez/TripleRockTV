@@ -14,14 +14,34 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
+import com.joshgm3z.triplerocktv.borderPaddingHorizontal
+import com.joshgm3z.triplerocktv.borderPaddingVertical
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
-val borderPaddingHorizontal = 20.dp
-val borderPaddingVertical = 12.dp
+data class MediaItem(
+    val id: String,
+    val title: String,
+    val year: String,
+    val description: String,
+    val thumbNail: Int,
+) {
+    companion object {
+        fun sample() = MediaItem(
+            id = "1",
+            title = "Avatar: The Way of Water",
+            year = "2022",
+            description = "Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron.",
+            thumbNail = com.joshgm3z.triplerocktv.R.drawable.avatar_movie
+        )
+    }
+}
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    openMediaInfoScreen: (MediaItem) -> Unit = {},
+    openSearchScreen: () -> Unit = {},
+) {
     var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
 
     ConstraintLayout(
@@ -30,9 +50,14 @@ fun HomeScreen() {
             .padding(horizontal = borderPaddingHorizontal, vertical = borderPaddingVertical)
             .padding(10.dp)
     ) {
-        TopBar { selectedTopbarItem = it }
+        TopBar {
+            if (it == TopbarItem.Search) openSearchScreen()
+            else selectedTopbarItem = it
+        }
         SideBar()
-        Content(selectedTopbarItem)
+        Content(selectedTopbarItem) {
+            openMediaInfoScreen(it)
+        }
         MenuIcon()
     }
 }
