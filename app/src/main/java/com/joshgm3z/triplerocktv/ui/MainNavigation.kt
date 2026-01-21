@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable

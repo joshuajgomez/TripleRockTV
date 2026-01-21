@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
+import com.joshgm3z.triplerocktv.ui.MainNavigation
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 class MainActivity : ComponentActivity() {
