@@ -26,15 +26,15 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
+import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
-import com.joshgm3z.triplerocktv.ui.home.MediaItem
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun MediaInfoScreen(
-    mediaItem: MediaItem = MediaItem.sample(),
+    mediaData: MediaData = MediaData.sample(),
     goBack: () -> Unit = {},
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -48,22 +48,22 @@ fun MediaInfoScreen(
         ContentTitle(modifier = Modifier.constrainAs(title) {
             start.linkTo(back.start)
             top.linkTo(back.bottom, 30.dp)
-        }, mediaItem.title)
+        }, mediaData.title)
 
         ContentYear(modifier = Modifier.constrainAs(year) {
             start.linkTo(title.start)
             top.linkTo(title.bottom, 10.dp)
-        }, mediaItem.year)
+        }, mediaData.year)
 
         MovieDescription(modifier = Modifier.constrainAs(description) {
             start.linkTo(title.start)
             top.linkTo(year.bottom, 20.dp)
-        }, mediaItem.description)
+        }, mediaData.description)
 
         ThumbnailEnlarged(modifier = Modifier.constrainAs(thumbNail) {
             end.linkTo(parent.end, 100.dp)
             top.linkTo(back.top)
-        }, mediaItem.thumbNail)
+        }, mediaData.thumbNail)
 
         SubtitleInfo(modifier = Modifier.constrainAs(subtitle) {
             start.linkTo(back.start)

@@ -7,8 +7,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
-import com.joshgm3z.triplerocktv.ui.home.MediaItem
 import com.joshgm3z.triplerocktv.ui.player.MediaInfoScreen
 import com.joshgm3z.triplerocktv.ui.search.SearchScreen
 import kotlinx.serialization.Serializable
@@ -58,7 +58,7 @@ fun MainNavigation() {
         }
         composable<NavMediaInfo> { backStackEntry ->
             MediaInfoScreen(
-                mediaItem = MediaItem.sample(),
+                mediaData = MediaData.sample(),
                 goBack = {
                     navController.popBackStack()
                 }

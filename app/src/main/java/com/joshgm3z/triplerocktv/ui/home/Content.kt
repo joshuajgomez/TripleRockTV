@@ -19,13 +19,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun Content(
     topbarItem: TopbarItem = TopbarItem.Movies,
-    onContentClick: (MediaItem) -> Unit = {}
+    onContentClick: (MediaData) -> Unit = {}
 ) {
     FlowRow(
         modifier = Modifier
@@ -36,14 +37,14 @@ fun Content(
         if (topbarItem == TopbarItem.Search) {
             ContentPlaceholder("Search for movies")
         } else {
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaItem.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
         }
     }
 }

@@ -14,30 +14,13 @@ import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
+import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
-data class MediaItem(
-    val id: String,
-    val title: String,
-    val year: String,
-    val description: String,
-    val thumbNail: Int,
-) {
-    companion object {
-        fun sample() = MediaItem(
-            id = "1",
-            title = "Avatar: The Way of Water",
-            year = "2022",
-            description = "Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron. Second installment to Avatar, this is a blockbuster from James Cameron.",
-            thumbNail = com.joshgm3z.triplerocktv.R.drawable.avatar_movie
-        )
-    }
-}
-
 @Composable
 fun HomeScreen(
-    openMediaInfoScreen: (MediaItem) -> Unit = {},
+    openMediaInfoScreen: (MediaData) -> Unit = {},
     openSearchScreen: () -> Unit = {},
 ) {
     var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
