@@ -9,6 +9,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
+import com.joshgm3z.triplerocktv.ui.login.LoginScreen
 import com.joshgm3z.triplerocktv.ui.player.MediaInfoScreen
 import com.joshgm3z.triplerocktv.ui.search.SearchScreen
 import kotlinx.serialization.Serializable
@@ -71,6 +72,13 @@ fun MainNavigation() {
                 },
                 goBack = {
                     navController.popBackStack()
+                }
+            )
+        }
+        composable<NavLogin> {
+            LoginScreen(
+                onLoginSuccess = {
+                    navController.navigate(NavLoading)
                 }
             )
         }
