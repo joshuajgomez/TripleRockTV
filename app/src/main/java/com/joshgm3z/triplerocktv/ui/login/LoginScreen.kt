@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -31,7 +32,10 @@ import androidx.tv.material3.MaterialTheme.colorScheme
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import com.joshgm3z.triplerocktv.viewmodel.ILoginViewModel
+import com.joshgm3z.triplerocktv.viewmodel.LoginUiState
 import com.joshgm3z.triplerocktv.viewmodel.LoginViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class LoginLayoutId {
     Logo,
@@ -42,8 +46,14 @@ enum class LoginLayoutId {
 }
 
 @Composable
+fun getLoginViewModel(): ILoginViewModel = when {
+    LocalInspectionMode.current -> FakeLoginViewModel()
+    else -> hiltViewModel<LoginViewModel>()
+}
+
+@Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: ILoginViewModel = getLoginViewModel(),
     onLoginSuccess: () -> Unit = {},
 ) {
     var username by remember { mutableStateOf("") }
@@ -56,7 +66,7 @@ fun LoginScreen(
         constraintSet = getLoginConstraints()
     ) {
         Image(
-            painter = painterResource(R.drawable.avatar_movie),
+            painter = painterResource(R.drawable.ic_3rocktv_playstore),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
@@ -183,8 +193,24 @@ private fun getLoginConstraints() = ConstraintSet {
 
 @TvPreview
 @Composable
-private fun PreviewLoginScreen() {
+private fun PreviewLoginScreen_Initial() {
     TripleRockTVTheme {
         LoginScreen()
+    }
+}
+
+@TvPreview
+@Composable
+private fun PreviewLoginScreen_Loading() {
+    TripleRockTVTheme {
+        LoginScreen(viewModel = FakeLoginViewModel(MutableStateFlow(LoginUiState(loading = true))))
+    }
+}
+
+@TvPreview
+@Composable
+private fun PreviewLoginScreen_Error() {
+    TripleRockTVTheme {
+        LoginScreen(viewModel = FakeLoginViewModel(MutableStateFlow(LoginUiState(errorMessage = "Unable to connect to internet"))))
     }
 }

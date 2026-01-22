@@ -20,11 +20,11 @@ data class LoginUiState(
 class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository
-) : ViewModel() {
+) : ViewModel(), ILoginViewModel {
     private val _uiState = MutableStateFlow(LoginUiState())
-    val uiState = _uiState.asStateFlow()
+    override val uiState = _uiState.asStateFlow()
 
-    fun onLoginClick(
+    override fun onLoginClick(
         username: String,
         password: String
     ) {
