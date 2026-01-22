@@ -10,7 +10,9 @@ import androidx.tv.material3.ExperimentalTvMaterial3Api
 import androidx.tv.material3.Surface
 import com.joshgm3z.triplerocktv.ui.MainNavigation
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalTvMaterial3Api::class)
     override fun onCreate(savedInstanceState: Bundle?) {

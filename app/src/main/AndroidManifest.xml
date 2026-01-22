@@ -15,6 +15,7 @@
         android:icon="@mipmap/ic_3rocktv"
         android:label="@string/app_name"
         android:supportsRtl="true"
+        android:name=".TripleRockTvApp"
         android:theme="@style/Theme.TripleRockTV">
         <activity
             android:name=".MainActivity"
