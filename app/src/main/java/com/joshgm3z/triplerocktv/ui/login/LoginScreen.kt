@@ -4,10 +4,14 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -128,14 +132,22 @@ fun SubmitButton(
 ) {
     TextButton(
         onClick = { onClick() },
-        modifier = modifier,
-        enabled = !isLoading
+        modifier = modifier.width(150.dp),
+        enabled = !isLoading,
+        colors = ButtonDefaults.textButtonColors(
+            containerColor = colorScheme.primaryContainer,
+            disabledContainerColor = colorScheme.primaryContainer.copy(alpha = 0.5f),
+            contentColor = colorScheme.onPrimaryContainer,
+            disabledContentColor = colorScheme.onPrimaryContainer.copy(alpha = 0.5f),
+        ),
     ) {
         AnimatedVisibility(isLoading) {
-            CircularProgressIndicator()
-            Spacer(Modifier.size(10.dp))
+            Row {
+                CircularProgressIndicator(modifier = Modifier.size(20.dp))
+                Spacer(Modifier.size(10.dp))
+            }
         }
-        Text("Login")
+        Text(if (isLoading) "Logging in..." else "Login")
     }
 }
 
