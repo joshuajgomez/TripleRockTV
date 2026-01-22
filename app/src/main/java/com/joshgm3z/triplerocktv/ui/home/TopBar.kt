@@ -2,10 +2,11 @@ package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
@@ -29,6 +30,7 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 enum class TopbarItem {
     Search,
+    Home,
     Movies,
     Series,
     LiveTv,
@@ -39,8 +41,11 @@ fun TopBar(onItemClick: (TopbarItem) -> Unit = {}) {
     var selected by remember { mutableStateOf(TopbarItem.Movies) }
     Row(
         modifier = Modifier
-            .layoutId(HomeScreenLayoutId.TopBar),
-        horizontalArrangement = Arrangement.spacedBy(30.dp)
+            .layoutId(HomeScreenLayoutId.TopBar)
+            .height(40.dp)
+            .padding(start = 10.dp),
+        horizontalArrangement = Arrangement.spacedBy(30.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         TopbarItem.entries.forEach {
             TopBarOption(
@@ -73,7 +78,7 @@ fun TopBarOption(
             .onFocusChanged { focused = it.isFocused }
             .clip(RoundedCornerShape(40.dp))
             .background(color = colorBg)
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(horizontal = 10.dp, vertical = 4.dp)
             .clickable(true) { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -82,7 +87,9 @@ fun TopBarOption(
                 Icons.Default.Search,
                 contentDescription = null,
                 tint = colorFg,
-                modifier = Modifier.padding(end = 5.dp)
+                modifier = Modifier
+                    .padding(end = 5.dp)
+                    .size(15.dp)
             )
         }
         Text(

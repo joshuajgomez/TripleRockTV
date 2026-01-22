@@ -23,7 +23,7 @@ fun getHomeScreenConstraints(): ConstraintSet = ConstraintSet {
         start.linkTo(parent.start)
     }
     constrain(sideBar) {
-        top.linkTo(topBar.bottom, margin = 30.dp)
+        top.linkTo(topBar.bottom)
         start.linkTo(topBar.start)
     }
     constrain(menu) {

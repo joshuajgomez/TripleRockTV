@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -24,17 +25,22 @@ fun HomeScreen(
     openSearchScreen: () -> Unit = {},
 ) {
     var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
+    var selectedSidebarItem: Int by remember { mutableIntStateOf(1) }
 
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
-        modifier = Modifier.padding(10.dp)
     ) {
         TopBar {
             if (it == TopbarItem.Search) openSearchScreen()
             else selectedTopbarItem = it
         }
-        SideBar()
-        Content(selectedTopbarItem) {
+        SideBar(selectedSidebarItem) {
+            selectedSidebarItem = it
+        }
+        Content(
+            selectedTopbarItem,
+            selectedSidebarItem
+        ) {
             openMediaInfoScreen(it)
         }
         MenuIcon()

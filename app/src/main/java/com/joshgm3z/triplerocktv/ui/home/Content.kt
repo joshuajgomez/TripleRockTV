@@ -1,11 +1,13 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,34 +19,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.Gray20
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun Content(
     topbarItem: TopbarItem = TopbarItem.Movies,
+    selectedSidebarItem: Int = 1,
     onContentClick: (MediaData) -> Unit = {}
 ) {
     FlowRow(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
-            .padding(horizontal = 10.dp),
+            .padding(horizontal = 10.dp)
+            .fillMaxSize()
+            .background(color = Gray20),
         maxItemsInEachRow = 5,
     ) {
         if (topbarItem == TopbarItem.Search) {
             ContentPlaceholder("Search for movies")
         } else {
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
-            ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            repeat(selectedSidebarItem) {
+                ThumbnailCard(topbarItem) { onContentClick(MediaData.sample()) }
+            }
         }
     }
 }
