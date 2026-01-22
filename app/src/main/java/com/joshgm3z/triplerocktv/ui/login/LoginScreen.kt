@@ -3,25 +3,32 @@ package com.joshgm3z.triplerocktv.ui.login
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -35,6 +42,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.Gray10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import com.joshgm3z.triplerocktv.viewmodel.ILoginViewModel
 import com.joshgm3z.triplerocktv.viewmodel.LoginUiState
@@ -60,15 +68,53 @@ fun LoginScreen(
     viewModel: ILoginViewModel = getLoginViewModel(),
     onLoginSuccess: () -> Unit = {},
 ) {
-    var username by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-
     val uiState = viewModel.uiState.collectAsState().value
 
-    ConstraintLayout(
+    if (uiState.loginSuccess) {
+        onLoginSuccess()
+        return
+    }
+
+    Box(
         modifier = Modifier.fillMaxSize(),
-        constraintSet = getLoginConstraints()
+        contentAlignment = Alignment.Center
     ) {
+        Image(
+            painter = painterResource(R.drawable.avatar_movie),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
+            modifier = Modifier.fillMaxSize()
+        )
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = colorScheme.background.copy(alpha = 0.95f))
+        ) {}
+        LoginForm(uiState) { username, password ->
+            viewModel.onLoginClick(username, password)
+        }
+    }
+}
+
+@Composable
+fun LoginForm(
+    uiState: LoginUiState,
+    onLoginClick: (username: String, password: String) -> Unit = { _, _ -> }
+) {
+    Column(
+        modifier = Modifier
+            .clip(RoundedCornerShape(10.dp))
+            .width(250.dp)
+            .height(400.dp)
+            .background(color = colorScheme.background)
+            .padding(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+
+        ) {
+        var username by remember { mutableStateOf("") }
+        var password by remember { mutableStateOf("") }
+
         Image(
             painter = painterResource(R.drawable.ic_3rocktv_playstore),
             contentDescription = null,
@@ -92,9 +138,9 @@ fun LoginScreen(
         ) { password = it }
         SubmitButton(
             onClick = {
-                viewModel.onLoginClick(
-                    username = username,
-                    password = password
+                onLoginClick(
+                    username,
+                    password
                 )
             },
             isLoading = uiState.loading,
@@ -117,7 +163,7 @@ fun ErrorMessage(
         modifier = modifier
     ) {
         Text(
-            errorMessage!!,
+            errorMessage ?: "",
             color = colorScheme.onErrorContainer,
             modifier = Modifier.background(color = colorScheme.errorContainer)
         )
@@ -132,7 +178,7 @@ fun SubmitButton(
 ) {
     TextButton(
         onClick = { onClick() },
-        modifier = modifier.width(150.dp),
+        modifier = modifier.fillMaxWidth(),
         enabled = !isLoading,
         colors = ButtonDefaults.textButtonColors(
             containerColor = colorScheme.primaryContainer,
@@ -160,46 +206,14 @@ fun TextInput(
     onTextChange: (String) -> Unit
 ) {
     Column(modifier = modifier) {
-        Text(label)
+        Text(label, color = colorScheme.onBackground)
+        Spacer(Modifier.size(10.dp))
         TextField(
             value = text,
             placeholder = { Text("") },
             onValueChange = { onTextChange(it) },
             enabled = enabled
         )
-    }
-}
-
-private fun getLoginConstraints() = ConstraintSet {
-    val logo = createRefFor(LoginLayoutId.Logo)
-    val usernameInput = createRefFor(LoginLayoutId.UsernameInput)
-    val passwordInput = createRefFor(LoginLayoutId.PasswordInput)
-    val submitButton = createRefFor(LoginLayoutId.SubmitButton)
-    val errorMessage = createRefFor(LoginLayoutId.ErrorMessage)
-
-    constrain(logo) {
-        top.linkTo(parent.top, 50.dp)
-        end.linkTo(parent.end, 50.dp)
-    }
-    constrain(usernameInput) {
-        top.linkTo(logo.bottom, 30.dp)
-        start.linkTo(logo.start)
-        end.linkTo(logo.end)
-    }
-    constrain(passwordInput) {
-        top.linkTo(usernameInput.bottom, 10.dp)
-        start.linkTo(logo.start)
-        end.linkTo(logo.end)
-    }
-    constrain(submitButton) {
-        top.linkTo(passwordInput.bottom, 10.dp)
-        start.linkTo(logo.start)
-        end.linkTo(logo.end)
-    }
-    constrain(errorMessage) {
-        top.linkTo(submitButton.bottom, 10.dp)
-        start.linkTo(logo.start)
-        end.linkTo(logo.end)
     }
 }
 

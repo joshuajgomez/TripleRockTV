@@ -82,5 +82,8 @@ fun MainNavigation() {
                 }
             )
         }
+        composable<NavLoading> {
+            navController.navigate(NavHome)
+        }
     }
 }
