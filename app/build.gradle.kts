@@ -3,6 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+    kotlin("kapt")
 }
 
 android {
@@ -37,6 +39,17 @@ android {
     buildFeatures {
         compose = true
     }
+
+    flavorDimensions += "environment"
+    productFlavors {
+        create("demo") {
+            dimension = "environment"
+        }
+        create("online") {
+            dimension = "environment"
+            isDefault = true
+        }
+    }
 }
 
 dependencies {
@@ -58,6 +71,8 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.androidx.navigation.compose)

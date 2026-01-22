@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.repository.demo
+package com.joshgm3z.triplerocktv
 
 import com.joshgm3z.triplerocktv.repository.MediaRepository
 import com.joshgm3z.triplerocktv.repository.data.MediaData
