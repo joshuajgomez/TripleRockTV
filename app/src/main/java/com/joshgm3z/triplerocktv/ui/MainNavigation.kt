@@ -83,7 +83,11 @@ fun MainNavigation() {
             )
         }
         composable<NavLoading> {
-            MediaLoadingScreen()
+            MediaLoadingScreen(
+                onMediaLoaded = {
+                    navController.navigate(NavHome)
+                }
+            )
         }
     }
 }

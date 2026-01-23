@@ -12,31 +12,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+enum class MediaLoadingType(val label: String) {
+    VideoOnDemand("Video On Demand"),
+    Series("Series"),
+    LiveTv("Live TV"),
+    ParsingPlaylist("Parsing Playlist"),
+}
+
 data class MediaLoadingUiState(
-    var videoLoadingState: LoadingState = LoadingState(),
-    var seriesLoadingState: LoadingState = LoadingState(),
-    var liveTvLoadingState: LoadingState = LoadingState(),
-    var parsingState: LoadingState = LoadingState(),
+    val map: Map<MediaLoadingType, LoadingState> = emptyMap(),
 ) {
     companion object {
-        fun sample() = MediaLoadingUiState(
-            videoLoadingState = LoadingState(
-                percent = 50,
-                status = LoadingStatus.Complete,
-            ),
-            seriesLoadingState = LoadingState(
-                percent = 50,
-                status = LoadingStatus.Ongoing,
-            ),
-            liveTvLoadingState = LoadingState(
-                percent = 50,
-                status = LoadingStatus.Error,
-            ),
-            parsingState = LoadingState(
-                percent = 50,
-                status = LoadingStatus.Initial,
-            )
-        )
+        fun sample() = MediaLoadingUiState()
     }
 }
 
@@ -58,54 +45,27 @@ class MediaLoadingViewModel
 @Inject constructor(
     repository: MediaRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(MediaLoadingUiState())
+    private val _uiState = MutableStateFlow<Map<MediaLoadingType, LoadingState>>(emptyMap())
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            repeat(11) { i ->
-                _uiState.update {
-                    it.copy(videoLoadingState = LoadingState(10 * i, LoadingStatus.Ongoing))
-                }
-                if (i == 10) {
+            MediaLoadingType.entries.forEach { type ->
+                repeat(11) { i ->
                     _uiState.update {
-                        it.copy(videoLoadingState = LoadingState(status = LoadingStatus.Complete))
+                        it.toMutableMap().apply {
+                            set(type, LoadingState(i * 10, LoadingStatus.Ongoing))
+                        }
                     }
-                }
-                delay(200)
-            }
-            repeat(11) { i ->
-                _uiState.update {
-                    it.copy(seriesLoadingState = LoadingState(10 * i, LoadingStatus.Ongoing))
-                }
-                if (i == 10) {
-                    _uiState.update {
-                        it.copy(seriesLoadingState = LoadingState(status = LoadingStatus.Complete))
+                    if (i == 10) {
+                        _uiState.update {
+                            it.toMutableMap().apply {
+                                set(type, LoadingState(status = LoadingStatus.Complete))
+                            }
+                        }
                     }
+                    delay(200)
                 }
-                delay(200)
-            }
-            repeat(11) { i ->
-                _uiState.update {
-                    it.copy(liveTvLoadingState = LoadingState(10 * i, LoadingStatus.Ongoing))
-                }
-                if (i == 10) {
-                    _uiState.update {
-                        it.copy(liveTvLoadingState = LoadingState(status = LoadingStatus.Complete))
-                    }
-                }
-                delay(200)
-            }
-            repeat(11) { i ->
-                _uiState.update {
-                    it.copy(parsingState = LoadingState(10 * i, LoadingStatus.Ongoing))
-                }
-                if (i == 10) {
-                    _uiState.update {
-                        it.copy(parsingState = LoadingState(status = LoadingStatus.Complete))
-                    }
-                }
-                delay(200)
             }
         }
     }

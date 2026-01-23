@@ -19,6 +19,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,46 +38,38 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import com.joshgm3z.triplerocktv.viewmodel.LoadingState
 import com.joshgm3z.triplerocktv.viewmodel.LoadingStatus
 import com.joshgm3z.triplerocktv.viewmodel.MediaLoadingViewModel
+import kotlinx.coroutines.delay
 
 @Composable
 fun MediaLoadingScreen(
     viewModel: MediaLoadingViewModel = hiltViewModel(),
+    onMediaLoaded: () -> Unit = {},
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Column {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Text("Please wait", fontSize = 30.sp, fontWeight = FontWeight.Bold)
                 Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
             }
-            Spacer(Modifier.size(50.dp))
+            Spacer(Modifier.size(70.dp))
             Column {
-                val uiState = viewModel.uiState.collectAsState().value
-                AnimatedVisibility(uiState.videoLoadingState.status != LoadingStatus.Initial) {
-                    LoadingBar(
-                        "Video on demand",
-                        uiState.videoLoadingState
-                    )
+                val stateMap = viewModel.uiState.collectAsState().value
+                if (stateMap.all { it.value.status == LoadingStatus.Complete }) {
+                    LaunchedEffect(Unit) {
+                        delay(500)
+                        onMediaLoaded()
+                    }
                 }
-                AnimatedVisibility(uiState.seriesLoadingState.status != LoadingStatus.Initial) {
-                    LoadingBar(
-                        "Series",
-                        uiState.seriesLoadingState
-                    )
-                }
-                AnimatedVisibility(uiState.liveTvLoadingState.status != LoadingStatus.Initial) {
-                    LoadingBar(
-                        "Live TV",
-                        uiState.liveTvLoadingState
-                    )
-                }
-                AnimatedVisibility(uiState.parsingState.status != LoadingStatus.Initial) {
-                    LoadingBar(
-                        "Parsing playlist",
-                        uiState.parsingState
-                    )
+                stateMap.forEach { (type, state) ->
+                    AnimatedVisibility(state.status != LoadingStatus.Initial) {
+                        LoadingBar(
+                            type.label,
+                            state
+                        )
+                    }
                 }
             }
         }
