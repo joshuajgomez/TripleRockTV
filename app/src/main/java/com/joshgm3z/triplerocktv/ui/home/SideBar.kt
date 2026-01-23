@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.Gray900
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import kotlin.random.Random
 
@@ -37,7 +38,8 @@ fun SideBar(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.SideBar)
             .width(170.dp)
-            .fillMaxHeight(),
+            .fillMaxHeight()
+            .background(color = Gray900),
     ) {
         items(5) {
             SideBarItem(

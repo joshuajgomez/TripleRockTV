@@ -25,6 +25,8 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Gray20
+import com.joshgm3z.triplerocktv.ui.theme.Gray800
+import com.joshgm3z.triplerocktv.ui.theme.Gray900
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
@@ -36,9 +38,9 @@ fun Content(
     FlowRow(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
-            .padding(horizontal = 10.dp)
             .fillMaxSize()
-            .background(color = Gray20),
+            .background(color = Gray800)
+            .padding(start = 10.dp, end = 10.dp, top = 10.dp),
         maxItemsInEachRow = 5,
     ) {
         if (topbarItem == TopbarItem.Search) {
