@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -45,14 +46,20 @@ fun MediaInfoScreen(
             top.linkTo(parent.top, margin = 20.dp)
         }) { goBack() }
 
+        ThumbnailEnlarged(modifier = Modifier.constrainAs(thumbNail) {
+            end.linkTo(parent.end, 50.dp)
+            top.linkTo(parent.top)
+            bottom.linkTo(parent.bottom)
+        }, mediaData.thumbNail)
+
         ContentTitle(modifier = Modifier.constrainAs(title) {
-            start.linkTo(back.start)
+            start.linkTo(back.start, 40.dp)
             top.linkTo(back.bottom, 30.dp)
         }, mediaData.title)
 
         ContentYear(modifier = Modifier.constrainAs(year) {
             start.linkTo(title.start)
-            top.linkTo(title.bottom, 10.dp)
+            top.linkTo(title.bottom, 5.dp)
         }, mediaData.year)
 
         MovieDescription(modifier = Modifier.constrainAs(description) {
@@ -60,24 +67,19 @@ fun MediaInfoScreen(
             top.linkTo(year.bottom, 20.dp)
         }, mediaData.description)
 
-        ThumbnailEnlarged(modifier = Modifier.constrainAs(thumbNail) {
-            end.linkTo(parent.end, 100.dp)
-            top.linkTo(back.top)
-        }, mediaData.thumbNail)
-
         SubtitleInfo(modifier = Modifier.constrainAs(subtitle) {
-            start.linkTo(back.start)
-            bottom.linkTo(startOver.top, 10.dp)
+            start.linkTo(title.start)
+            top.linkTo(description.bottom, 10.dp)
         })
 
         ResumeButton(modifier = Modifier.constrainAs(resume) {
-            start.linkTo(back.start)
-            bottom.linkTo(thumbNail.bottom)
+            start.linkTo(title.start)
+            top.linkTo(subtitle.bottom, 10.dp)
         }) {}
 
         StartOverButton(modifier = Modifier.constrainAs(startOver) {
-            start.linkTo(back.start)
-            bottom.linkTo(resume.top, 10.dp)
+            start.linkTo(title.start)
+            top.linkTo(resume.bottom, 10.dp)
         }) {}
 
     }
@@ -111,7 +113,7 @@ fun ResumeButton(
     TextButton(
         { onClick() },
         modifier = modifier
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(color = colorScheme.primaryContainer)
             .width(300.dp)
             .height(50.dp)
@@ -124,7 +126,6 @@ fun ResumeButton(
         Spacer(Modifier.size(10.dp))
         Text(
             text = text,
-            fontSize = 20.sp,
             color = colorScheme.onPrimaryContainer
         )
     }
@@ -139,7 +140,7 @@ fun StartOverButton(
     TextButton(
         { onClick() },
         modifier = modifier
-            .clip(RoundedCornerShape(20.dp))
+            .clip(RoundedCornerShape(5.dp))
             .background(color = colorScheme.onSecondary)
             .width(300.dp)
             .height(50.dp),
@@ -152,7 +153,6 @@ fun StartOverButton(
         Spacer(Modifier.size(10.dp))
         Text(
             text = text,
-            fontSize = 20.sp,
             color = colorScheme.secondary
         )
     }
@@ -165,10 +165,12 @@ fun MovieDescription(
 ) {
     Text(
         text = description,
-        modifier = modifier.width(300.dp),
-        fontSize = 10.sp,
+        modifier = modifier
+            .width(330.dp)
+            .height(100.dp),
+        fontSize = 12.sp,
         color = colorScheme.onBackground.copy(alpha = 0.8f),
-        lineHeight = 25.sp
+        lineHeight = 18.sp
     )
 }
 
@@ -180,7 +182,6 @@ fun ContentYear(
     Text(
         text = year,
         modifier = modifier,
-        fontSize = 20.sp,
         color = colorScheme.onBackground.copy(alpha = 0.5f)
     )
 }
@@ -194,6 +195,7 @@ fun ContentTitle(
         text = title,
         modifier = modifier,
         fontSize = 20.sp,
+        fontWeight = FontWeight.Bold,
         color = colorScheme.onBackground
     )
 }
