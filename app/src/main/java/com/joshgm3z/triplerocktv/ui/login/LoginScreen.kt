@@ -116,7 +116,7 @@ fun LoginForm(
         var password by remember { mutableStateOf("") }
 
         Image(
-            painter = painterResource(R.drawable.ic_3rocktv_playstore),
+            painter = painterResource(R.drawable.logo_3rocktv_cutout),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
