@@ -41,7 +41,7 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavHome,
+        startDestination = NavLoading,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
@@ -83,7 +83,7 @@ fun MainNavigation() {
             )
         }
         composable<NavLoading> {
-            navController.navigate(NavHome)
+            MediaLoadingScreen()
         }
     }
 }
