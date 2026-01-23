@@ -89,7 +89,11 @@ fun TopBarOption(
             .clip(RoundedCornerShape(40.dp))
             .background(color = colorBg)
             .padding(horizontal = 10.dp, vertical = 4.dp)
-            .clickable(true) { onClick() },
+            .clickable(
+                enabled = true,
+                interactionSource = null,
+                indication = null
+            ) { onClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (item == TopbarItem.Search) {

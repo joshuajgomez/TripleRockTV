@@ -75,7 +75,11 @@ fun SideBarItem(
             .onFocusChanged { focused = it.isFocused }
             .background(color = colorBg)
             .padding(horizontal = 15.dp, vertical = 10.dp)
-            .clickable(true) { onClick() },
+            .clickable(
+                enabled = true,
+                interactionSource = null,
+                indication = null
+            ) { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
