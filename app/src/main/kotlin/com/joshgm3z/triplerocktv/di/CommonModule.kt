@@ -12,5 +12,4 @@ import kotlinx.coroutines.Dispatchers
 class CommonModule {
     @Provides
     fun provideCoroutineScope(): CoroutineScope = CoroutineScope(Dispatchers.IO)
-
 }
