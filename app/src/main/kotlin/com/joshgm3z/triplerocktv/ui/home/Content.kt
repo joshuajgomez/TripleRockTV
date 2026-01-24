@@ -35,6 +35,7 @@ import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
 
 @Composable
 fun Content(
+    modifier: Modifier = Modifier,
     categoryId: Int = 1,
     viewModel: HomeViewModel = hiltViewModel(),
     onContentClick: (StreamEntity) -> Unit = {}
@@ -43,7 +44,7 @@ fun Content(
     val uiState = viewModel.uiState.collectAsState().value
     Log.i("Content", "Content: ${uiState.mediaList.size}")
     FlowRow(
-        modifier = Modifier
+        modifier = modifier
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
             .background(color = Gray800)
