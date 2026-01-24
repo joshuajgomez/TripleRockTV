@@ -8,7 +8,7 @@ import androidx.room.RoomDatabase
         CategoryEntity::class,
         StreamEntity::class
     ],
-    version = 5
+    version = 6
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao

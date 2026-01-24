@@ -58,8 +58,8 @@ fun SideBar(
         items(uiState.categories) {
             SideBarItem(
                 it,
-                selected = selected == it.categoryId.toInt(),
-            ) { onSelection(it.categoryId.toInt()) }
+                selected = selected == it.categoryId,
+            ) { onSelection(it.categoryId) }
         }
     }
 }
@@ -83,10 +83,10 @@ fun SideBarItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
+            .height(30.dp)
             .onFocusChanged { focused = it.isFocused }
             .background(color = colorBg)
-            .padding(horizontal = 15.dp, vertical = 10.dp)
+            .padding(horizontal = 10.dp, vertical = 5.dp)
             .clickable(
                 enabled = true,
                 interactionSource = null,
@@ -98,12 +98,13 @@ fun SideBarItem(
         Text(
             text = category.categoryName,
             color = colorFg,
-            fontSize = 13.sp
+            fontSize = 11.sp,
+            lineHeight = 15.sp,
         )
         Text(
-            text = category.categoryId.toString(),
+            text = category.count.toString(),
             color = colorFg.copy(alpha = 0.3f),
-            fontSize = 13.sp
+            fontSize = 10.sp
         )
     }
 }

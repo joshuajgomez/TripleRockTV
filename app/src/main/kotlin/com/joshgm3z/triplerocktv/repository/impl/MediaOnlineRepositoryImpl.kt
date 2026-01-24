@@ -60,7 +60,7 @@ class MediaOnlineRepositoryImpl
     private suspend fun fetchAndStoreContent(categoryEntity: CategoryEntity) {
         val vodStreams = iptvService.getVodStreams(username, password, categoryEntity.categoryId)
 
-        categoryDao.insert(categoryEntity)
+        categoryDao.insert(categoryEntity.apply { count = vodStreams.size })
         streamsDao.insertStreams(vodStreams.map {
             StreamEntity(
                 num = it.num,
