@@ -2,8 +2,6 @@ package com.joshgm3z.triplerocktv.viewmodel
 
 import androidx.lifecycle.ViewModel
 import com.joshgm3z.triplerocktv.repository.LoginRepository
-import com.joshgm3z.triplerocktv.repository.MediaRepository
-import com.joshgm3z.triplerocktv.repository.data.MediaData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow

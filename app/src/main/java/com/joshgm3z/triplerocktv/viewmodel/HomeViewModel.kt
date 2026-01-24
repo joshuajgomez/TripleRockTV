@@ -1,7 +1,7 @@
 package com.joshgm3z.triplerocktv.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.joshgm3z.triplerocktv.repository.MediaRepository
+import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,7 +17,7 @@ sealed class HomeUiState {
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
-    repository: MediaRepository
+    repository: MediaLocalRepository
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState = _uiState.asStateFlow()

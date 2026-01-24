@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.repository
 
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 
-interface MediaRepository {
+interface MediaLocalRepository {
     fun fetchAllMediaData(
         onSuccess: (List<MediaData>) -> Unit,
         onError: (String) -> Unit,

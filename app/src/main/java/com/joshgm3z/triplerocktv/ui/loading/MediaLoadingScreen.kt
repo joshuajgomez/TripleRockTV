@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui
+package com.joshgm3z.triplerocktv.ui.loading
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
@@ -31,12 +31,12 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
+import com.joshgm3z.triplerocktv.repository.LoadingState
+import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Gray800
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.viewmodel.LoadingState
-import com.joshgm3z.triplerocktv.viewmodel.LoadingStatus
 import com.joshgm3z.triplerocktv.viewmodel.MediaLoadingViewModel
 import kotlinx.coroutines.delay
 

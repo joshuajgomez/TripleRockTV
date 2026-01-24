@@ -1,17 +1,17 @@
 package com.joshgm3z.triplerocktv
 
-import com.joshgm3z.triplerocktv.repository.MediaRepository
+import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.data.MediaData
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DemoMediaRepository
+class DemoMediaLocalRepository
 @Inject
 constructor(
     private val scope: CoroutineScope
-) : MediaRepository {
+) : MediaLocalRepository {
     override fun fetchAllMediaData(
         onSuccess: (List<MediaData>) -> Unit,
         onError: (String) -> Unit

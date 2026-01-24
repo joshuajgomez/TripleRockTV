@@ -1,7 +1,8 @@
 package com.joshgm3z.triplerocktv
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
-import com.joshgm3z.triplerocktv.repository.MediaRepository
+import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -16,7 +17,12 @@ abstract class DemoBindingModule {
     ): LoginRepository
 
     @Binds
-    abstract fun bindMediaRepository(
-        repo: DemoMediaRepository
-    ): MediaRepository
+    abstract fun bindMediaLocalRepository(
+        repo: DemoMediaLocalRepository
+    ): MediaLocalRepository
+
+    @Binds
+    abstract fun bindMediaOnlineRepository(
+        repo: DemoMediaOnlineRepository
+    ): MediaOnlineRepository
 }
