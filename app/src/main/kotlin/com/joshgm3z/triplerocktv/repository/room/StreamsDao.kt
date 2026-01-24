@@ -11,6 +11,9 @@ interface StreamsDao {
     @Query("SELECT * FROM streams WHERE categoryId = :categoryId LIMIT 30")
     fun getAllStreams(categoryId: Int): Flow<List<StreamEntity>>
 
+    @Query("SELECT * FROM streams WHERE streamId = :streamId")
+    fun getStream(streamId: Int): Flow<StreamEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<StreamEntity>)
 

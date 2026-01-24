@@ -40,11 +40,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchMediaDataById(
-        id: String,
+        streamId: Int,
         onSuccess: (StreamEntity) -> Unit,
         onError: (String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        streamsDao.getStream(streamId).collect { stream ->
+            Log.i(TAG, "fetchMediaDataById: $stream")
+            onSuccess(stream)
+        }
     }
 
 }

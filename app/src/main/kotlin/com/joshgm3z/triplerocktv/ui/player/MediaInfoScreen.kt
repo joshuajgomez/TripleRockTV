@@ -16,6 +16,7 @@ import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.Icon
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -25,6 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -34,12 +36,15 @@ import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
+import com.joshgm3z.triplerocktv.viewmodel.MediaInfoViewModel
 
 @Composable
 fun MediaInfoScreen(
-    mediaData: StreamEntity,
+    viewModel: MediaInfoViewModel = hiltViewModel(),
     goBack: () -> Unit = {},
 ) {
+    val streamEntity = viewModel.uiState.collectAsState().value.streamEntity ?: return
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (thumbNail, title, year, resume, startOver, description, back, subtitle) = createRefs()
 
@@ -52,22 +57,22 @@ fun MediaInfoScreen(
             end.linkTo(parent.end, 50.dp)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
-        }, mediaData.streamIcon ?: "")
+        }, streamEntity.streamIcon ?: "")
 
         ContentTitle(modifier = Modifier.constrainAs(title) {
             start.linkTo(back.start, 40.dp)
             top.linkTo(back.bottom, 30.dp)
-        }, mediaData.name)
+        }, streamEntity.name)
 
         ContentYear(modifier = Modifier.constrainAs(year) {
             start.linkTo(title.start)
             top.linkTo(title.bottom, 5.dp)
-        }, mediaData.added)
+        }, streamEntity.added)
 
         MovieDescription(modifier = Modifier.constrainAs(description) {
             start.linkTo(title.start)
             top.linkTo(year.bottom, 20.dp)
-        }, mediaData.streamType)
+        }, streamEntity.streamType)
 
         SubtitleInfo(modifier = Modifier.constrainAs(subtitle) {
             start.linkTo(title.start)
