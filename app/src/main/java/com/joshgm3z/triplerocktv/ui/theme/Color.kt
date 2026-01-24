@@ -17,3 +17,4 @@ val Gray900 = Color(0xFF212121)
 val Gray800 = Color(0xFF252525)
 
 val Green10 = Color(0xFF4CAF50)
+val Orange10 = Color(0xFFFF5722)
