@@ -19,7 +19,7 @@ data class StreamEntity(
             num = 1,
             name = "The Walking Dead",
             streamType = "TV Show",
-            streamIcon = "https://www.themoviedb.org/t/p/w6",
+            streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/cQvc9N6JiMVKqol3wcYrGshsIdZ.jpg",
             categoryId = 1,
             added = "2023"
         )
