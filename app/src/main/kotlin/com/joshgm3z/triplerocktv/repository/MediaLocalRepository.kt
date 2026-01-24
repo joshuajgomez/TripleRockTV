@@ -17,7 +17,7 @@ interface MediaLocalRepository {
     )
 
     suspend fun fetchMediaDataById(
-        id: String,
+        streamId: Int,
         onSuccess: (StreamEntity) -> Unit,
         onError: (String) -> Unit,
     )

@@ -32,12 +32,22 @@ constructor() : MediaLocalRepository {
     }
 
     override suspend fun fetchMediaDataById(
-        id: String,
+        streamId: Int,
         onSuccess: (StreamEntity) -> Unit,
         onError: (String) -> Unit
     ) {
-        delay(2000)
-        onSuccess(StreamEntity.sample())
+        delay(100)
+        var streamEntity = streamsCategory122.find { it.streamId == streamId }
+        if (streamEntity == null)
+            streamEntity = streamEntityCategory56.find { it.streamId == streamId }
+        if (streamEntity == null)
+            streamEntity = streamEntityCategory43.find { it.streamId == streamId }
+
+        if (streamEntity == null)
+            onError("Cannot find info")
+        else
+            onSuccess(streamEntity)
+
     }
 
     private val categoryEntityList = listOf(

@@ -31,7 +31,7 @@ import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
-const val cardContainerHeight = 165
+const val cardContainerHeight = 185
 const val cardContainerWidth = 145
 const val cardHeight = cardContainerHeight - 15
 const val cardWidth = cardContainerWidth - 15
@@ -75,6 +75,7 @@ fun ThumbnailCard(
                 GlideImage(
                     model = streamEntity.streamIcon,
                     contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
                     modifier = Modifier.weight(1f)
                 )
                 Footer(streamEntity)
@@ -87,18 +88,14 @@ fun ThumbnailCard(
 fun Footer(streamEntity: StreamEntity) {
     Column(
         modifier = Modifier
-            .height(40.dp)
+            .height(43.dp)
             .padding(5.dp)
     ) {
         Text(
             streamEntity.name,
             color = colorScheme.onBackground,
             fontSize = 12.sp,
-        )
-        Text(
-            "2007",
-            color = colorScheme.onBackground.copy(alpha = 0.5f),
-            fontSize = 10.sp,
+            lineHeight = 15.sp,
         )
     }
 }
@@ -107,6 +104,6 @@ fun Footer(streamEntity: StreamEntity) {
 @Composable
 private fun PreviewThumbnailCard() {
     TripleRockTVTheme {
-//        ThumbnailCard()
+        ThumbnailCard(StreamEntity.sample())
     }
 }
