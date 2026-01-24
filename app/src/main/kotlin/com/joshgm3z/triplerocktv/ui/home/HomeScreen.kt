@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.home
 
+import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.MoreVert
@@ -33,18 +34,15 @@ fun HomeScreen(
     openMediaInfoScreen: (StreamEntity) -> Unit = {},
     openSearchScreen: () -> Unit = {},
 ) {
-    var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
-    var selectedCategory: Int by remember { mutableIntStateOf(0) }
+    var focusedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
+    var focusedCategory: Int by remember { mutableIntStateOf(0) }
 
-    val sidebarFocusRequester = remember { FocusRequester() }
-    val contentFocusRequester = remember { FocusRequester() }
-    val topMenuFocusRequester = remember { FocusRequester() }
     var focus by remember { mutableStateOf(FocusItem.Content) }
 
-    BackHandler(enabled = true) {
-        when (focus) {
-            FocusItem.Content -> sidebarFocusRequester.requestFocus()
-            else -> topMenuFocusRequester.requestFocus()
+    BackHandler(enabled = focus != FocusItem.TopMenu) {
+        focus = when (focus) {
+            FocusItem.Content -> FocusItem.SideBar
+            else -> FocusItem.TopMenu
         }
     }
 
@@ -52,34 +50,29 @@ fun HomeScreen(
         constraintSet = getHomeScreenConstraints(),
     ) {
         TopBar(
-            modifier = Modifier
-                .focusRequester(topMenuFocusRequester)
-                .onFocusChanged { if (it.hasFocus) focus = FocusItem.TopMenu }
-        ) {
-            if (it == TopbarItem.Search) openSearchScreen()
-            else selectedTopbarItem = it
-        }
-        SideBar(
-            modifier = Modifier
-                .focusRequester(sidebarFocusRequester)
-                .onFocusChanged { if (it.hasFocus) focus = FocusItem.SideBar },
-            selected = selectedCategory
-        ) {
-            selectedCategory = it
-        }
-        Content(
-            modifier = Modifier
-                .focusRequester(contentFocusRequester)
-                .onFocusChanged { if (it.hasFocus) focus = FocusItem.Content },
-            categoryId = selectedCategory
-        ) {
-            openMediaInfoScreen(it)
-        }
-        MenuIcon()
+            setFocus = { focus = it },
+            focus = focus,
+            onItemClick = { focus = FocusItem.SideBar },
+            focusedTopBarItem = focusedTopbarItem,
+            onFocusedTopBarItemChange = { focusedTopbarItem = it }
+        )
 
-        LaunchedEffect(Unit) {
-            contentFocusRequester.requestFocus()
-        }
+        Content(
+            categoryId = focusedCategory,
+            onContentClick = { openMediaInfoScreen(it) },
+            focus = focus,
+            setFocus = { focus = it }
+        )
+
+        SideBar(
+            focusedCategory = focusedCategory,
+            focus = focus,
+            onCategoryFocus = { focusedCategory = it },
+            onClick = { focus = FocusItem.Content },
+            setFocus = { focus = it }
+        )
+
+        MenuIcon()
     }
 }
 

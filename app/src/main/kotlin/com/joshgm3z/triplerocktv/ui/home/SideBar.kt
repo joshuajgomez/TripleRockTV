@@ -15,15 +15,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -31,36 +32,57 @@ import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
-import com.joshgm3z.triplerocktv.ui.theme.Gray900
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
-import kotlin.random.Random
 
 @Composable
 fun SideBar(
     modifier: Modifier = Modifier,
-    selected: Int = 0,
     viewModel: HomeViewModel = hiltViewModel(),
-    onSelection: (Int) -> Unit = {},
+    focusedCategory: Int,
+    onCategoryFocus: (Int) -> Unit = {},
+    onClick: () -> Unit = {},
+    focus: FocusItem,
+    setFocus: (FocusItem) -> Unit = {},
 ) {
+    val sidebarFocusRequester = remember { FocusRequester() }
+
+    LaunchedEffect(focus) {
+        if (focus == FocusItem.SideBar) sidebarFocusRequester.requestFocus()
+    }
+
     val uiState = viewModel.uiState.collectAsState().value
     if (uiState.categories.isNotEmpty())
         LaunchedEffect(Unit) {
-            onSelection(uiState.categories.first().categoryId)
+            onCategoryFocus(uiState.categories.first().categoryId)
         }
-    Log.i("SideBar", "SideBar: uiState=$uiState")
+
+    val verticalGradient = Brush.horizontalGradient(
+        colors = listOf(Color.Black, Color.Black, Color.Transparent)
+    )
     LazyColumn(
         modifier = modifier
+            .focusRequester(sidebarFocusRequester)
+            .onFocusChanged {
+                Log.i("JOSHH", "SideBar: focus changed=${it.hasFocus}")
+
+                if (it.hasFocus) {
+                    setFocus(FocusItem.SideBar)
+                } else {
+                }
+            }
             .layoutId(HomeScreenLayoutId.SideBar)
-            .width(170.dp)
+            .width(if (focus == FocusItem.SideBar) 250.dp else 20.dp)
             .fillMaxHeight()
-            .background(color = Gray900),
+            .background(brush = verticalGradient),
     ) {
         items(uiState.categories) {
             SideBarItem(
-                it,
-                selected = selected == it.categoryId,
-            ) { onSelection(it.categoryId) }
+                category = it,
+                focused = focusedCategory == it.categoryId,
+                onCategoryFocus = { onCategoryFocus(it.categoryId) },
+                onClick = { onClick() },
+            )
         }
     }
 }
@@ -68,25 +90,27 @@ fun SideBar(
 @Composable
 fun SideBarItem(
     category: CategoryEntity,
-    selected: Boolean = false,
+    focused: Boolean,
+    onCategoryFocus: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
-    var focused by remember { mutableStateOf(Random.nextBoolean()) }
     val colorFg = when {
-        selected -> colorScheme.primary
+        focused -> colorScheme.onBackground
         else -> colorScheme.onBackground.copy(alpha = 0.6f)
     }
-    val colorBg = when {
-        selected -> colorScheme.primaryContainer
-        focused -> colorScheme.primaryContainer.copy(alpha = 0.2f)
-        else -> Color.Transparent
+    val fontWeight = when {
+        focused -> FontWeight.Bold
+        else -> FontWeight.Normal
+    }
+    val fontSize = when {
+        focused -> 13.sp
+        else -> 11.sp
     }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(30.dp)
-            .onFocusChanged { focused = it.isFocused }
-            .background(color = colorBg)
+            .onFocusChanged { if (it.hasFocus) onCategoryFocus() }
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .clickable(
                 enabled = true,
@@ -99,8 +123,9 @@ fun SideBarItem(
         Text(
             text = category.categoryName,
             color = colorFg,
-            fontSize = 11.sp,
+            fontSize = fontSize,
             lineHeight = 15.sp,
+            fontWeight = fontWeight
         )
         Text(
             text = category.count.toString(),
@@ -114,6 +139,6 @@ fun SideBarItem(
 @Composable
 private fun PreviewSideBar() {
     TripleRockTVTheme {
-        SideBar()
+//        SideBar()
     }
 }

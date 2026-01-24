@@ -13,13 +13,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
@@ -43,11 +43,21 @@ enum class TopbarItem {
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
-    onItemClick: (TopbarItem) -> Unit = {}
+    focus: FocusItem = FocusItem.TopMenu,
+    onItemClick: (TopbarItem) -> Unit = {},
+    setFocus: (FocusItem) -> Unit = {},
+    focusedTopBarItem: TopbarItem,
+    onFocusedTopBarItemChange: (TopbarItem) -> Unit = {},
 ) {
-    var selected by remember { mutableStateOf(TopbarItem.Movies) }
+    val topMenuFocusRequester = remember { FocusRequester() }
+    LaunchedEffect(focus) {
+        if (focus == FocusItem.TopMenu) topMenuFocusRequester.requestFocus()
+    }
+
     Row(
         modifier = modifier
+            .focusRequester(topMenuFocusRequester)
+            .onFocusChanged { if (it.hasFocus) setFocus(FocusItem.TopMenu) }
             .layoutId(HomeScreenLayoutId.TopBar)
             .height(40.dp)
             .fillMaxWidth()
@@ -63,11 +73,10 @@ fun TopBar(
         TopbarItem.entries.forEach {
             TopBarOption(
                 item = it,
-                selected = selected == it,
-            ) {
-                selected = it
-                onItemClick(it)
-            }
+                focused = focusedTopBarItem == it,
+                onFocused = { onFocusedTopBarItemChange(it) },
+                onClick = { onItemClick(it) }
+            )
         }
     }
 }
@@ -75,20 +84,19 @@ fun TopBar(
 @Composable
 fun TopBarOption(
     item: TopbarItem,
-    selected: Boolean = false,
+    focused: Boolean = false,
+    onFocused: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
-    var focused by remember { mutableStateOf(false) }
-    val colorFg = if (selected) colorScheme.background
+    val colorFg = if (focused) colorScheme.background
     else colorScheme.onBackground.copy(alpha = 0.6f)
     val colorBg = when {
-        selected -> colorScheme.onBackground.copy(alpha = 0.7f)
-        focused -> colorScheme.onBackground.copy(alpha = 0.1f)
+        focused -> colorScheme.onBackground
         else -> colorScheme.background
     }
     Row(
         modifier = Modifier
-            .onFocusChanged { focused = it.isFocused }
+            .onFocusChanged { if (it.isFocused) onFocused() }
             .clip(RoundedCornerShape(40.dp))
             .background(color = colorBg)
             .padding(horizontal = 10.dp, vertical = 4.dp)
@@ -112,7 +120,7 @@ fun TopBarOption(
         Text(
             text = item.label(),
             color = colorFg,
-            fontSize = 15.sp,
+            fontSize = if (focused) 17.sp else 15.sp,
         )
     }
 }
@@ -126,6 +134,6 @@ private fun TopbarItem.label() = when (this) {
 @TvPreview
 private fun PreviewTopBar() {
     TripleRockTVTheme {
-        TopBar()
+//        TopBar()
     }
 }
