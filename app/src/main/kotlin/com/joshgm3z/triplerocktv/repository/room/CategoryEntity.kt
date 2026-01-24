@@ -8,4 +8,5 @@ data class CategoryEntity(
     @PrimaryKey val categoryId: Int,
     val categoryName: String,
     val parentId: Int,
+    var count: Int = 0,
 )
