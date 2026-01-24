@@ -2,8 +2,8 @@ package com.joshgm3z.triplerocktv.di
 
 import android.content.Context
 import androidx.room.Room
-import com.joshgm3z.triplerocktv.repository.data.AppDatabase
-import com.joshgm3z.triplerocktv.repository.data.CategoryDao
+import com.joshgm3z.triplerocktv.repository.room.AppDatabase
+import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +22,9 @@ class DatabaseModule {
             context,
             AppDatabase::class.java,
             "triple_rock_tv_db"
-        ).build()
+        )
+            .fallbackToDestructiveMigration(true)
+            .build()
     }
 
     @Provides

@@ -32,7 +32,7 @@ fun HomeScreen(
             if (it == TopbarItem.Search) openSearchScreen()
             else selectedTopbarItem = it
         }
-        SideBar(selectedSidebarItem) {
+        SideBar(selected = selectedSidebarItem) {
             selectedSidebarItem = it
         }
         Content(

@@ -1,11 +1,11 @@
-package com.joshgm3z.triplerocktv.repository.data
+package com.joshgm3z.triplerocktv.repository.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "categories")
 data class CategoryEntity(
-    @PrimaryKey val categoryId: String,
+    @PrimaryKey val categoryId: Int,
     val categoryName: String,
-    val parentId: Int
+    val parentId: Int,
 )

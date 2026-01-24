@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.repository.data
+package com.joshgm3z.triplerocktv.repository.room
 
 import androidx.room.Dao
 import androidx.room.Insert
