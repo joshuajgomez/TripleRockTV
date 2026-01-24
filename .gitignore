@@ -8,3 +8,4 @@
 .externalNativeBuild
 .cxx
 local.properties
+app/src/main/kotlin/com/joshgm3z/triplerocktv/repository/retrofit/Secrets.kt
