@@ -24,7 +24,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -51,7 +50,7 @@ fun MediaLoadingScreen(
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Please wait", fontSize = 30.sp, fontWeight = FontWeight.Bold)
+                Text("Please wait", fontSize = 30.sp)
                 Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
             }
             Spacer(Modifier.size(70.dp))
