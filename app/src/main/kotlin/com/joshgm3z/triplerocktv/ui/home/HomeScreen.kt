@@ -13,17 +13,17 @@ import androidx.compose.ui.layout.layoutId
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import com.joshgm3z.triplerocktv.repository.data.MediaData
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun HomeScreen(
-    openMediaInfoScreen: (MediaData) -> Unit = {},
+    openMediaInfoScreen: (StreamEntity) -> Unit = {},
     openSearchScreen: () -> Unit = {},
 ) {
     var selectedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
-    var selectedSidebarItem: Int by remember { mutableIntStateOf(1) }
+    var selectedCategory: Int by remember { mutableIntStateOf(0) }
 
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
@@ -32,13 +32,10 @@ fun HomeScreen(
             if (it == TopbarItem.Search) openSearchScreen()
             else selectedTopbarItem = it
         }
-        SideBar(selected = selectedSidebarItem) {
-            selectedSidebarItem = it
+        SideBar(selected = selectedCategory) {
+            selectedCategory = it
         }
-        Content(
-            selectedTopbarItem,
-            selectedSidebarItem
-        ) {
+        Content(categoryId = selectedCategory) {
             openMediaInfoScreen(it)
         }
         MenuIcon()

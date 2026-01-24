@@ -1,7 +1,7 @@
 package com.joshgm3z.triplerocktv.repository
 
-import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 
 interface MediaLocalRepository {
 
@@ -11,13 +11,14 @@ interface MediaLocalRepository {
     )
 
     suspend fun fetchAllMediaData(
-        onSuccess: (List<MediaData>) -> Unit,
+        categoryId: Int,
+        onSuccess: (List<StreamEntity>) -> Unit,
         onError: (String) -> Unit,
     )
 
     suspend fun fetchMediaDataById(
         id: String,
-        onSuccess: (MediaData) -> Unit,
+        onSuccess: (StreamEntity) -> Unit,
         onError: (String) -> Unit,
     )
 }

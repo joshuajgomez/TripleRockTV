@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -42,6 +43,10 @@ fun SideBar(
     onSelection: (Int) -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsState().value
+    if (uiState.categories.isNotEmpty())
+        LaunchedEffect(Unit) {
+            onSelection(uiState.categories.first().categoryId)
+        }
     Log.i("SideBar", "SideBar: uiState=$uiState")
     LazyColumn(
         modifier = Modifier
