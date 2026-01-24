@@ -32,6 +32,6 @@ fun getHomeScreenConstraints(): ConstraintSet = ConstraintSet {
     }
     constrain(content) {
         top.linkTo(sideBar.top)
-        start.linkTo(sideBar.end)
+        start.linkTo(parent.start)
     }
 }

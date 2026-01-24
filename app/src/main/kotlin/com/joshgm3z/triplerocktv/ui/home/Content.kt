@@ -15,9 +15,17 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -37,14 +45,25 @@ import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
 fun Content(
     modifier: Modifier = Modifier,
     categoryId: Int = 1,
+    focus: FocusItem,
     viewModel: HomeViewModel = hiltViewModel(),
-    onContentClick: (StreamEntity) -> Unit = {}
+    onContentClick: (StreamEntity) -> Unit = {},
+    setFocus: (FocusItem) -> Unit = {},
 ) {
+    val contentFocusRequester = remember { FocusRequester() }
+    LaunchedEffect(focus) {
+        if (focus == FocusItem.Content) contentFocusRequester.requestFocus()
+    }
+
     viewModel.fetchContent(categoryId)
     val uiState = viewModel.uiState.collectAsState().value
     Log.i("Content", "Content: ${uiState.mediaList.size}")
     FlowRow(
         modifier = modifier
+            .focusRequester(contentFocusRequester)
+            .onFocusChanged {
+                if (it.hasFocus) setFocus(FocusItem.Content)
+            }
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
             .background(color = Gray800)
@@ -87,6 +106,6 @@ fun ContentPlaceholder(text: String = "Fetching movies") {
 @Composable
 private fun PreviewContent() {
     TripleRockTVTheme {
-        Content()
+//        Content()
     }
 }
