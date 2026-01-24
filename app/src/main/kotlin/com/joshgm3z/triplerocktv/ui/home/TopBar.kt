@@ -41,10 +41,13 @@ enum class TopbarItem {
 }
 
 @Composable
-fun TopBar(onItemClick: (TopbarItem) -> Unit = {}) {
+fun TopBar(
+    modifier: Modifier = Modifier,
+    onItemClick: (TopbarItem) -> Unit = {}
+) {
     var selected by remember { mutableStateOf(TopbarItem.Movies) }
     Row(
-        modifier = Modifier
+        modifier = modifier
             .layoutId(HomeScreenLayoutId.TopBar)
             .height(40.dp)
             .fillMaxWidth()

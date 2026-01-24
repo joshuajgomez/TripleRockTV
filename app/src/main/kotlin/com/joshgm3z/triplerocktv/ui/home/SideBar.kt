@@ -38,6 +38,7 @@ import kotlin.random.Random
 
 @Composable
 fun SideBar(
+    modifier: Modifier = Modifier,
     selected: Int = 0,
     viewModel: HomeViewModel = hiltViewModel(),
     onSelection: (Int) -> Unit = {},
@@ -49,7 +50,7 @@ fun SideBar(
         }
     Log.i("SideBar", "SideBar: uiState=$uiState")
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .layoutId(HomeScreenLayoutId.SideBar)
             .width(170.dp)
             .fillMaxHeight()
