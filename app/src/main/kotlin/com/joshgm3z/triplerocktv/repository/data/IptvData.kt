@@ -3,7 +3,7 @@ package com.joshgm3z.triplerocktv.repository.data
 import com.google.gson.annotations.SerializedName
 
 data class IptvCategory(
-    @SerializedName("category_id") val categoryId: String,
+    @SerializedName("category_id") val categoryId: Int,
     @SerializedName("category_name") val categoryName: String,
     @SerializedName("parent_id") val parentId: Int
 )

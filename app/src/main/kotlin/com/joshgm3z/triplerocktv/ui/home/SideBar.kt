@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.home
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +11,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -22,18 +25,24 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
+import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Gray900
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
 import kotlin.random.Random
 
 @Composable
 fun SideBar(
     selected: Int = 0,
-    onSelection: (Int) -> Unit = {}
+    viewModel: HomeViewModel = hiltViewModel(),
+    onSelection: (Int) -> Unit = {},
 ) {
+    val uiState = viewModel.uiState.collectAsState().value
+    Log.i("SideBar", "SideBar: uiState=$uiState")
     LazyColumn(
         modifier = Modifier
             .layoutId(HomeScreenLayoutId.SideBar)
@@ -41,20 +50,18 @@ fun SideBar(
             .fillMaxHeight()
             .background(color = Gray900),
     ) {
-        items(5) {
+        items(uiState.categories) {
             SideBarItem(
-                text = "English 4K",
-                count = it * 100,
-                selected = selected == it
-            ) { onSelection(it) }
+                it,
+                selected = selected == it.categoryId.toInt(),
+            ) { onSelection(it.categoryId.toInt()) }
         }
     }
 }
 
 @Composable
 fun SideBarItem(
-    text: String,
-    count: Int,
+    category: CategoryEntity,
     selected: Boolean = false,
     onClick: () -> Unit = {},
 ) {
@@ -84,12 +91,12 @@ fun SideBarItem(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(
-            text = text,
+            text = category.categoryName,
             color = colorFg,
             fontSize = 13.sp
         )
         Text(
-            text = count.toString(),
+            text = category.categoryId.toString(),
             color = colorFg.copy(alpha = 0.3f),
             fontSize = 13.sp
         )

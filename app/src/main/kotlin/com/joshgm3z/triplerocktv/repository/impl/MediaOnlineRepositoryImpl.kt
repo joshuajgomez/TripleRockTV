@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.repository.impl
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
-import com.joshgm3z.triplerocktv.repository.data.CategoryDao
-import com.joshgm3z.triplerocktv.repository.data.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.CategoryDao
+import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import javax.inject.Inject
 
