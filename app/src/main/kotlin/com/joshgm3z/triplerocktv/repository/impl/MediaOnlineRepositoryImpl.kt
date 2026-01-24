@@ -5,10 +5,10 @@ import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
-import com.joshgm3z.triplerocktv.repository.data.IptvCategory
 import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
+import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
 import javax.inject.Inject
@@ -21,23 +21,27 @@ class MediaOnlineRepositoryImpl
 ) : MediaOnlineRepository {
     companion object {
         private const val TAG: String = "MediaOnlineRepositoryImpl"
+        private const val LIMIT = 3
     }
 
-    private val username: String = "jgomez554"
-    private val password: String = "38333563"
+    private val username = Secrets.username
+    private val password = Secrets.password
 
     override suspend fun fetchContent(onFetch: (MediaLoadingType, LoadingState) -> Unit) {
+        categoryDao.deleteAllCategories()
+        streamsDao.deleteAllStreams()
+
         try {
-            val categories = fetchCategories()
+            val categories = fetchCategories().subList(0, LIMIT)
             val total = categories.size
-            Log.i(TAG, "fetchContent: $total categories found")
             categories.forEachIndexed { index, it ->
-                if (index == 3) return@forEachIndexed // limit to 3 categories for now
-                fetchContent(it.categoryId)
-                Log.i(TAG, "fetchContent: index=$index, percent=${index * 100 / total}")
+                fetchAndStoreContent(it)
                 onFetch(
                     MediaLoadingType.VideoOnDemand,
-                    LoadingState(index * 100 / total, LoadingStatus.Ongoing)
+                    LoadingState(
+                        percent = (index.toFloat() / total * 100).toInt(),
+                        status = LoadingStatus.Ongoing
+                    )
                 )
             }
             onFetch(
@@ -53,10 +57,10 @@ class MediaOnlineRepositoryImpl
         }
     }
 
-    private suspend fun fetchContent(categoryId: Int) {
-        Log.i(TAG, "fetchContent: entry")
-        val vodStreams = iptvService.getVodStreams(username, password, categoryId)
-        Log.i(TAG, "fetchContent: $vodStreams")
+    private suspend fun fetchAndStoreContent(categoryEntity: CategoryEntity) {
+        val vodStreams = iptvService.getVodStreams(username, password, categoryEntity.categoryId)
+
+        categoryDao.insert(categoryEntity)
         streamsDao.insertStreams(vodStreams.map {
             StreamEntity(
                 num = it.num,
@@ -70,15 +74,13 @@ class MediaOnlineRepositoryImpl
         })
     }
 
-    private suspend fun fetchCategories(): List<IptvCategory> {
-        val vodCategories = iptvService.getVodCategories(username, password)
-        categoryDao.insertCategories(vodCategories.map {
+    private suspend fun fetchCategories(): List<CategoryEntity> {
+        return iptvService.getVodCategories(username, password).map {
             CategoryEntity(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
                 parentId = it.parentId
             )
-        })
-        return vodCategories
+        }
     }
 }

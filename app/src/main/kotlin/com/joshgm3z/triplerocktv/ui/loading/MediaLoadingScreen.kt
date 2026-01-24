@@ -56,7 +56,7 @@ fun MediaLoadingScreen(
             Spacer(Modifier.size(70.dp))
             Column {
                 val stateMap = viewModel.uiState.collectAsState().value
-                if (stateMap.all { it.value.status == LoadingStatus.Complete }) {
+                if (stateMap.isNotEmpty() && stateMap.all { it.value.status == LoadingStatus.Complete }) {
                     LaunchedEffect(Unit) {
                         delay(500)
                         onMediaLoaded()
