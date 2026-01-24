@@ -2,13 +2,15 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import android.util.Log
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.data.MediaData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamsDao
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
-    private val categoryDao: CategoryDao
+    private val categoryDao: CategoryDao,
+    private val streamsDao: StreamsDao,
 ) : MediaLocalRepository {
 
     companion object {
@@ -27,14 +29,19 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchAllMediaData(
-        onSuccess: (List<MediaData>) -> Unit,
+        categoryId: Int,
+        onSuccess: (List<StreamEntity>) -> Unit,
         onError: (String) -> Unit
     ) {
+        streamsDao.getAllStreams(categoryId).collect { streams ->
+            Log.i(TAG, "fetchAllMediaData: $streams")
+            onSuccess(streams)
+        }
     }
 
     override suspend fun fetchMediaDataById(
         id: String,
-        onSuccess: (MediaData) -> Unit,
+        onSuccess: (StreamEntity) -> Unit,
         onError: (String) -> Unit
     ) {
         TODO("Not yet implemented")

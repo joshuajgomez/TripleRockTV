@@ -27,7 +27,9 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
-import com.joshgm3z.triplerocktv.repository.data.MediaData
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Green10
@@ -35,7 +37,7 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun MediaInfoScreen(
-    mediaData: MediaData = MediaData.sample(),
+    mediaData: StreamEntity,
     goBack: () -> Unit = {},
 ) {
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
@@ -50,22 +52,22 @@ fun MediaInfoScreen(
             end.linkTo(parent.end, 50.dp)
             top.linkTo(parent.top)
             bottom.linkTo(parent.bottom)
-        }, mediaData.thumbNail)
+        }, mediaData.streamIcon ?: "")
 
         ContentTitle(modifier = Modifier.constrainAs(title) {
             start.linkTo(back.start, 40.dp)
             top.linkTo(back.bottom, 30.dp)
-        }, mediaData.title)
+        }, mediaData.name)
 
         ContentYear(modifier = Modifier.constrainAs(year) {
             start.linkTo(title.start)
             top.linkTo(title.bottom, 5.dp)
-        }, mediaData.year)
+        }, mediaData.added)
 
         MovieDescription(modifier = Modifier.constrainAs(description) {
             start.linkTo(title.start)
             top.linkTo(year.bottom, 20.dp)
-        }, mediaData.description)
+        }, mediaData.streamType)
 
         SubtitleInfo(modifier = Modifier.constrainAs(subtitle) {
             start.linkTo(title.start)
@@ -200,13 +202,15 @@ fun ContentTitle(
     )
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ThumbnailEnlarged(
     modifier: Modifier,
-    resId: Int,
+    iconUrl: String,
 ) {
-    Image(
-        painter = painterResource(resId),
+
+    GlideImage(
+        model = iconUrl,
         contentDescription = null,
         contentScale = ContentScale.FillBounds,
         modifier = modifier
@@ -221,6 +225,6 @@ fun ThumbnailEnlarged(
 @Composable
 private fun PreviewMediaInfoScreen() {
     TripleRockTVTheme {
-        MediaInfoScreen()
+//        MediaInfoScreen()
     }
 }

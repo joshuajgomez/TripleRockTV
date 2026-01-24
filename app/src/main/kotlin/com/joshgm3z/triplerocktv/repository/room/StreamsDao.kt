@@ -1,0 +1,19 @@
+package com.joshgm3z.triplerocktv.repository.room
+
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
+
+@Dao
+interface StreamsDao {
+    @Query("SELECT * FROM streams WHERE categoryId = :categoryId LIMIT 30")
+    fun getAllStreams(categoryId: Int): Flow<List<StreamEntity>>
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertStreams(streams: List<StreamEntity>)
+
+    @Query("DELETE FROM streams")
+    suspend fun deleteAllStreams()
+}

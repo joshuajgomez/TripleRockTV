@@ -31,6 +31,14 @@ interface IptvService {
     ): List<IptvCategory>
 
     @GET("player_api.php")
+    suspend fun getVodStreams(
+        @Query("username") username: String,
+        @Query("password") password: String,
+        @Query("category_id") categoryId: Int,
+        @Query("action") action: String = "get_vod_streams",
+    ): List<IptvStream>
+
+    @GET("player_api.php")
     suspend fun getSeries(
         @Query("username") username: String,
         @Query("password") password: String,

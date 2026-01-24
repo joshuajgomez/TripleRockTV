@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.joshgm3z.triplerocktv.repository.data.MediaData
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.home.Content
@@ -20,7 +20,7 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun SearchScreen(
-    openMediaInfoScreen: (MediaData) -> Unit = {},
+    openMediaInfoScreen: (StreamEntity) -> Unit = {},
     goBack: () -> Unit = {},
 ) {
     Row(modifier = Modifier.fillMaxSize()) {

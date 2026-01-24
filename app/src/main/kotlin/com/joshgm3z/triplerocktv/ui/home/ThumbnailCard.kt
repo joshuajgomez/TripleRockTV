@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
@@ -36,9 +38,10 @@ const val cardWidth = cardContainerWidth - 15
 const val focusChange = 5
 
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun ThumbnailCard(
-    topbarItem: TopbarItem = TopbarItem.Movies,
+    streamEntity: StreamEntity,
     onClick: () -> Unit = {}
 ) {
     var focused by remember { mutableStateOf(false) }
@@ -69,34 +72,26 @@ fun ThumbnailCard(
                     .height(if (focused) (cardHeight + focusChange).dp else cardHeight.dp)
                     .clip(RoundedCornerShape(5.dp)),
             ) {
-                Image(
-                    painter = painterResource(
-                        when (topbarItem) {
-                            TopbarItem.Movies -> R.drawable.avatar_movie
-                            TopbarItem.LiveTv -> R.drawable.livetv
-                            else -> R.drawable.tvseries
-                        }
-                    ),
+                GlideImage(
+                    model = streamEntity.streamIcon,
                     contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .weight(1f)
+                    modifier = Modifier.weight(1f)
                 )
-                Footer()
+                Footer(streamEntity)
             }
         }
     }
 }
 
 @Composable
-fun Footer() {
+fun Footer(streamEntity: StreamEntity) {
     Column(
         modifier = Modifier
             .height(40.dp)
             .padding(5.dp)
     ) {
         Text(
-            "Avatar",
+            streamEntity.name,
             color = colorScheme.onBackground,
             fontSize = 12.sp,
         )
@@ -112,6 +107,6 @@ fun Footer() {
 @Composable
 private fun PreviewThumbnailCard() {
     TripleRockTVTheme {
-        ThumbnailCard()
+//        ThumbnailCard()
     }
 }

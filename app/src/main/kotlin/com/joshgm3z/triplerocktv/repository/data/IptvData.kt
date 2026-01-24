@@ -14,7 +14,7 @@ data class IptvStream(
     @SerializedName("stream_type") val streamType: String,
     @SerializedName("stream_id") val streamId: Int,
     @SerializedName("stream_icon") val streamIcon: String?,
-    @SerializedName("category_id") val categoryId: String,
+    @SerializedName("category_id") val categoryId: Int,
     @SerializedName("added") val added: String
 )
 

@@ -7,7 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.joshgm3z.triplerocktv.repository.data.MediaData
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
 import com.joshgm3z.triplerocktv.ui.loading.MediaLoadingScreen
 import com.joshgm3z.triplerocktv.ui.login.LoginScreen
@@ -22,7 +22,7 @@ val borderPaddingVertical = 12.dp
 object NavHome
 
 @Serializable
-data class NavMediaInfo(val id: String)
+data class NavMediaInfo(val id: Int)
 
 @Serializable
 object NavMediaPlayer
@@ -42,7 +42,7 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavLoading,
+        startDestination = NavHome,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
@@ -51,7 +51,7 @@ fun MainNavigation() {
         composable<NavHome> {
             HomeScreen(
                 openMediaInfoScreen = {
-                    navController.navigate(NavMediaInfo(it.id))
+                    navController.navigate(NavMediaInfo(it.streamId))
                 },
                 openSearchScreen = {
                     navController.navigate(NavSearch)
@@ -60,7 +60,7 @@ fun MainNavigation() {
         }
         composable<NavMediaInfo> { backStackEntry ->
             MediaInfoScreen(
-                mediaData = MediaData.sample(),
+                mediaData = StreamEntity.sample(),
                 goBack = {
                     navController.popBackStack()
                 }
@@ -69,7 +69,7 @@ fun MainNavigation() {
         composable<NavSearch> {
             SearchScreen(
                 openMediaInfoScreen = {
-                    navController.navigate(NavMediaInfo(it.id))
+                    navController.navigate(NavMediaInfo(it.streamId))
                 },
                 goBack = {
                     navController.popBackStack()
