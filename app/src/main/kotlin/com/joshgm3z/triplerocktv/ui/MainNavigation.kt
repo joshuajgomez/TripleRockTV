@@ -7,6 +7,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
 import com.joshgm3z.triplerocktv.ui.loading.MediaLoadingScreen
 import com.joshgm3z.triplerocktv.ui.login.LoginScreen
@@ -41,7 +42,7 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavHome,
+        startDestination = NavMediaInfo(StreamEntity.sample().streamId),
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
