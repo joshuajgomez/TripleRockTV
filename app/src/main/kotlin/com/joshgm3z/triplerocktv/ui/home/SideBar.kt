@@ -3,6 +3,8 @@ package com.joshgm3z.triplerocktv.ui.home
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,14 +19,17 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -65,21 +70,44 @@ fun SideBar(
             onCategoryFocus(uiState.categories.first().categoryId)
         }
 
-    val verticalGradient = Brush.horizontalGradient(
-        colors = listOf(Color.Black, Color.Black, Color.Transparent)
-    )
-    LazyColumn(
+    Column(
         modifier = modifier
             .focusRequester(sidebarFocusRequester)
             .onFocusChanged {
                 if (it.hasFocus) setFocus(FocusItem.SideBar)
             }
             .layoutId(HomeScreenLayoutId.SideBar)
-            .width(if (focus == FocusItem.SideBar) 250.dp else 20.dp)
-            .fillMaxHeight()
-            .background(brush = verticalGradient),
     ) {
-        items(uiState.categories) {
+        if (focus == FocusItem.SideBar) {
+            MaximizedSideBar(
+                focusedCategory = focusedCategory,
+                onCategoryFocus = { onCategoryFocus(it) },
+                onClick = { onClick() },
+                categories = uiState.categories
+            )
+        } else {
+            uiState.categories.firstOrNull { it.categoryId == focusedCategory }?.let {
+                MinimizedSideBar(it.categoryName)
+            }
+        }
+    }
+}
+
+@Composable
+fun MaximizedSideBar(
+    focusedCategory: Int,
+    onCategoryFocus: (Int) -> Unit = {},
+    onClick: () -> Unit = {},
+    categories: List<CategoryEntity>
+) {
+    LazyColumn(
+        modifier = Modifier
+            .width(250.dp)
+            .fillMaxHeight()
+            .background(brush = verticalGradient)
+            .padding(top = 20.dp),
+    ) {
+        items(categories) {
             SideBarItem(
                 category = it,
                 focused = focusedCategory == it.categoryId,
@@ -88,6 +116,46 @@ fun SideBar(
             )
         }
     }
+}
+
+@Composable
+fun MinimizedSideBar(text: String) {
+    Box(
+        modifier = Modifier
+            .layoutId(HomeScreenLayoutId.SideBar)
+            .fillMaxHeight()
+            .width(300.dp),
+    ) {
+        Text(
+            text = text,
+            color = colorScheme.onBackground.copy(alpha = 0.6f),
+            fontSize = 12.sp,
+            modifier = Modifier
+                .rotateVertically()
+                .padding(top = 5.dp, end = 60.dp),
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
+    }
+}
+
+val verticalGradient = Brush.horizontalGradient(
+    colors = listOf(Color.Black, Color.Black, Color.Transparent)
+)
+
+fun Modifier.rotateVertically(clockwise: Boolean = false): Modifier {
+    val rotate = rotate(if (clockwise) 90f else -90f)
+    val adjustBounds = layout { measurable, constraints ->
+        val placeable = measurable.measure(constraints)
+        // Swap the width and height in the layout
+        layout(placeable.height, placeable.width) {
+            placeable.place(
+                x = -(placeable.width / 2 - placeable.height / 2),
+                y = -(placeable.height / 2 - placeable.width / 2)
+            )
+        }
+    }
+    return rotate then adjustBounds
 }
 
 @Composable
@@ -111,7 +179,7 @@ fun SideBarItem(
     }
     Row(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(0.8f)
             .height(30.dp)
             .onFocusChanged { if (it.hasFocus) onCategoryFocus() }
             .padding(horizontal = 10.dp, vertical = 5.dp)
@@ -132,8 +200,8 @@ fun SideBarItem(
         )
         Text(
             text = category.count.toString(),
-            color = colorFg.copy(alpha = 0.3f),
-            fontSize = 10.sp
+            color = colorFg.copy(alpha = 0.7f),
+            fontSize = fontSize
         )
     }
 }

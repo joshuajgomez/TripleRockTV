@@ -40,13 +40,14 @@ import com.joshgm3z.triplerocktv.ui.theme.Gray800
 import com.joshgm3z.triplerocktv.ui.theme.Gray900
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
+import com.joshgm3z.triplerocktv.viewmodel.IHomeViewModel
 
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
     categoryId: Int = 1,
     focus: FocusItem,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: IHomeViewModel = getHomeViewModel(),
     onContentClick: (StreamEntity) -> Unit = {},
     setFocus: (FocusItem) -> Unit = {},
 ) {
@@ -66,8 +67,10 @@ fun Content(
             }
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
-            .padding(start = 10.dp, end = 10.dp, top = 10.dp),
+            .padding(start = 30.dp, end = 10.dp, top = 10.dp),
         maxItemsInEachRow = 5,
+        horizontalArrangement = Arrangement.spacedBy(10.dp),
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         uiState.mediaList.forEach {
             ThumbnailCard(it) { onContentClick(it) }
