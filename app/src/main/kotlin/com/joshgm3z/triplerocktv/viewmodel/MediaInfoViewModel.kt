@@ -25,9 +25,9 @@ class MediaInfoViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository,
     savedStateHandle: SavedStateHandle
-) : ViewModel() {
+) : ViewModel(), IMediaInfoViewModel {
     private val _uiState = MutableStateFlow(MediaUiState(null))
-    val uiState = _uiState.asStateFlow()
+    override val uiState = _uiState.asStateFlow()
 
     companion object {
         private const val TAG = "MediaInfoViewModel"
