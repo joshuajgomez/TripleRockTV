@@ -21,6 +21,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -41,6 +43,10 @@ enum class TopbarItem {
     LiveTv,
 }
 
+val verticalGradient = Brush.verticalGradient(
+    colors = listOf(Color.Black, Color.Transparent)
+)
+
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
@@ -55,36 +61,49 @@ fun TopBar(
         if (focus == FocusItem.TopMenu) topMenuFocusRequester.requestFocus()
     }
 
+    val topBarModifier = when (focus) {
+        FocusItem.TopMenu -> modifier
+            .height(150.dp)
+            .background(brush = verticalGradient)
+
+        else -> modifier.height(50.dp)
+    }
+
+
     Row(
-        modifier = modifier
+        modifier = topBarModifier
             .focusRequester(topMenuFocusRequester)
             .onFocusChanged { if (it.hasFocus) setFocus(FocusItem.TopMenu) }
             .layoutId(HomeScreenLayoutId.TopBar)
-            .height(40.dp)
             .fillMaxWidth()
             .padding(start = 10.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo_3rocktv_cutout),
-            contentDescription = null
-        )
         Row(
-            horizontalArrangement = Arrangement.spacedBy(20.dp)
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.fillMaxWidth()
         ) {
-            TopbarItem.entries.forEach {
-                TopBarOption(
-                    item = it,
-                    focused = focusedTopBarItem == it,
-                    selected = focusedTopBarItem == it && focus != FocusItem.TopMenu,
-                    onFocused = { onFocusedTopBarItemChange(it) },
-                    onClick = { onItemClick() }
-                )
+            Image(
+                painter = painterResource(R.drawable.logo_3rocktv_cutout),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(20.dp)
+            ) {
+                TopbarItem.entries.forEach {
+                    TopBarOption(
+                        item = it,
+                        focused = focusedTopBarItem == it,
+                        selected = focusedTopBarItem == it && focus != FocusItem.TopMenu,
+                        onFocused = { onFocusedTopBarItemChange(it) },
+                        onClick = { onItemClick() }
+                    )
+                }
             }
+            MenuIcon()
         }
 
-        MenuIcon()
     }
 }
 
@@ -104,7 +123,7 @@ fun TopBarOption(
     val colorBg = when {
         selected -> colorScheme.background
         focused -> colorScheme.onBackground
-        else -> colorScheme.background
+        else -> Color.Transparent
     }
     Row(
         modifier = Modifier
@@ -147,6 +166,14 @@ private fun TopbarItem.label() = when (this) {
 @TvPreview
 private fun PreviewTopBar() {
     TripleRockTVTheme {
-        TopBar()
+        TopBar(focus = FocusItem.Content)
+    }
+}
+
+@Composable
+@TvPreview
+private fun PreviewTopBarFocused() {
+    TripleRockTVTheme {
+        TopBar(focus = FocusItem.TopMenu)
     }
 }
