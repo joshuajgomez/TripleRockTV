@@ -66,7 +66,6 @@ fun Content(
             }
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
-            .background(color = Gray800)
             .padding(start = 10.dp, end = 10.dp, top = 10.dp),
         maxItemsInEachRow = 5,
     ) {
