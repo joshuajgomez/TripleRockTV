@@ -28,11 +28,12 @@ enum class FocusItem {
 fun HomeScreen(
     openMediaInfoScreen: (StreamEntity) -> Unit = {},
     openSearchScreen: () -> Unit = {},
+    defaultFocus: FocusItem = FocusItem.TopMenu
 ) {
     var focusedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
     var focusedCategory: Int by remember { mutableIntStateOf(0) }
 
-    var focus by remember { mutableStateOf(FocusItem.Content) }
+    var focus by remember { mutableStateOf(defaultFocus) }
 
     BackHandler(enabled = focus != FocusItem.TopMenu) {
         focus = when (focus) {
@@ -44,13 +45,6 @@ fun HomeScreen(
     ConstraintLayout(
         constraintSet = getHomeScreenConstraints(),
     ) {
-        TopBar(
-            setFocus = { focus = it },
-            focus = focus,
-            onItemClick = { focus = FocusItem.SideBar },
-            focusedTopBarItem = focusedTopbarItem,
-            onFocusedTopBarItemChange = { focusedTopbarItem = it }
-        )
 
         Content(
             categoryId = focusedCategory,
@@ -65,6 +59,14 @@ fun HomeScreen(
             onCategoryFocus = { focusedCategory = it },
             onClick = { focus = FocusItem.Content },
             setFocus = { focus = it }
+        )
+
+        TopBar(
+            setFocus = { focus = it },
+            focus = focus,
+            onItemClick = { focus = FocusItem.SideBar },
+            focusedTopBarItem = focusedTopbarItem,
+            onFocusedTopBarItemChange = { focusedTopbarItem = it }
         )
     }
 }

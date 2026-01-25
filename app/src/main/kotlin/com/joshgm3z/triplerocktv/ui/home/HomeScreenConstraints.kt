@@ -3,6 +3,8 @@ package com.joshgm3z.triplerocktv.ui.home
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintSet
+import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 enum class HomeScreenLayoutId {
     TopBar,
@@ -31,7 +33,15 @@ fun getHomeScreenConstraints(): ConstraintSet = ConstraintSet {
         end.linkTo(parent.end)
     }
     constrain(content) {
-        top.linkTo(topBar.bottom)
-        start.linkTo(parent.start)
+        top.linkTo(parent.top, 50.dp)
+        start.linkTo(parent.start, 30.dp)
+    }
+}
+
+@Composable
+@TvPreview
+private fun PreviewHomeScreen() {
+    TripleRockTVTheme {
+        HomeScreen(defaultFocus = FocusItem.SideBar)
     }
 }

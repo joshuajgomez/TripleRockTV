@@ -67,7 +67,7 @@ fun Content(
             }
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
-            .padding(start = 30.dp, end = 10.dp, top = 10.dp),
+            .padding(start = 10.dp, end = 10.dp, top = 10.dp),
         maxItemsInEachRow = 5,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)

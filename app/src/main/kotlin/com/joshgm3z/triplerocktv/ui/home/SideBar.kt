@@ -104,8 +104,8 @@ fun MaximizedSideBar(
         modifier = Modifier
             .width(250.dp)
             .fillMaxHeight()
-            .background(brush = verticalGradient)
-            .padding(top = 20.dp),
+            .background(brush = horizontalGradient)
+            .padding(top = 50.dp),
     ) {
         items(categories) {
             SideBarItem(
@@ -139,7 +139,7 @@ fun MinimizedSideBar(text: String) {
     }
 }
 
-val verticalGradient = Brush.horizontalGradient(
+val horizontalGradient = Brush.horizontalGradient(
     colors = listOf(Color.Black, Color.Black, Color.Transparent)
 )
 
