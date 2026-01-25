@@ -1,5 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.home
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,41 +47,41 @@ fun ThumbnailCard(
     onClick: () -> Unit = {}
 ) {
     var focused by remember { mutableStateOf(false) }
-    Box(
-        modifier = Modifier
+    val modifier = if (focused) Modifier.border(
+        width = 2.dp,
+        color = colorScheme.onBackground,
+        shape = RoundedCornerShape(10.dp)
+    ) else Modifier
+
+    ElevatedCard(
+        onClick = { onClick() },
+        elevation = CardDefaults.elevatedCardElevation(
+            defaultElevation = if (focused) 6.dp else 2.dp
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = colorScheme.surface,
+            contentColor = colorScheme.onSurface,
+        ),
+        modifier = modifier
             .onFocusChanged { focused = it.isFocused }
-            .width(cardContainerWidth.dp)
-            .height(cardContainerHeight.dp)
             .clickable(
                 indication = null,
                 interactionSource = null
-            ) { onClick() },
-        contentAlignment = Alignment.Center,
+            ) { onClick() }
     ) {
-        ElevatedCard(
-            onClick = { onClick() },
-            elevation = CardDefaults.elevatedCardElevation(
-                defaultElevation = if (focused) 6.dp else 2.dp
-            ),
-            colors = CardDefaults.cardColors(
-                containerColor = colorScheme.surface,
-                contentColor = colorScheme.onSurface,
-            )
+        Column(
+            modifier = Modifier
+                .width(cardWidth.dp)
+                .height(cardHeight.dp)
+                .clip(RoundedCornerShape(5.dp)),
         ) {
-            Column(
-                modifier = Modifier
-                    .width(if (focused) (cardWidth + focusChange).dp else cardWidth.dp)
-                    .height(if (focused) (cardHeight + focusChange).dp else cardHeight.dp)
-                    .clip(RoundedCornerShape(5.dp)),
-            ) {
-                GlideImage(
-                    model = streamEntity.streamIcon,
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier.weight(1f)
-                )
-                Footer(streamEntity)
-            }
+            GlideImage(
+                model = streamEntity.streamIcon,
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier.weight(1f)
+            )
+            Footer(streamEntity)
         }
     }
 }
