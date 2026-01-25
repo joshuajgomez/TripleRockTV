@@ -28,12 +28,14 @@ class MediaOnlineRepositoryImpl
     private val password = Secrets.password
 
     override suspend fun fetchContent(onFetch: (MediaLoadingType, LoadingState) -> Unit) {
-//        categoryDao.deleteAllCategories()
-//        streamsDao.deleteAllStreams()
-
         try {
             val categories = fetchCategories().subList(0, LIMIT)
             val total = categories.size
+            if (total > 0) {
+                // Clear existing data only if network call is successful
+                categoryDao.deleteAllCategories()
+                streamsDao.deleteAllStreams()
+            }
             categories.forEachIndexed { index, it ->
                 fetchAndStoreContent(it)
                 onFetch(

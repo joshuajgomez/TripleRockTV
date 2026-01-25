@@ -1,7 +1,7 @@
 package com.joshgm3z.triplerocktv.di
 
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.retrofit.SampleService
+import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,16 +30,10 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-            .baseUrl("https://webhop.xyz/")
+            .baseUrl(Secrets.webUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-    }
-
-    @Provides
-    @Singleton
-    fun provideSampleService(retrofit: Retrofit): SampleService {
-        return retrofit.create(SampleService::class.java)
     }
 
     @Provides
