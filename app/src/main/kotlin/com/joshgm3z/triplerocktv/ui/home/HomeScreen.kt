@@ -71,8 +71,6 @@ fun HomeScreen(
             onClick = { focus = FocusItem.Content },
             setFocus = { focus = it }
         )
-
-        MenuIcon()
     }
 }
 

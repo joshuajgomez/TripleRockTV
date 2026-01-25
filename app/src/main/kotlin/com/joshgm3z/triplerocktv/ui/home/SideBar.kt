@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,6 +23,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -33,16 +33,24 @@ import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import com.joshgm3z.triplerocktv.viewmodel.FakeHomeViewModel
 import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
+import com.joshgm3z.triplerocktv.viewmodel.IHomeViewModel
+
+@Composable
+fun getHomeViewModel(): IHomeViewModel = when {
+    LocalInspectionMode.current -> FakeHomeViewModel()
+    else -> hiltViewModel<HomeViewModel>()
+}
 
 @Composable
 fun SideBar(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
-    focusedCategory: Int,
+    viewModel: IHomeViewModel = getHomeViewModel(),
+    focusedCategory: Int = 0,
     onCategoryFocus: (Int) -> Unit = {},
     onClick: () -> Unit = {},
-    focus: FocusItem,
+    focus: FocusItem = FocusItem.SideBar,
     setFocus: (FocusItem) -> Unit = {},
 ) {
     val sidebarFocusRequester = remember { FocusRequester() }
@@ -64,12 +72,7 @@ fun SideBar(
         modifier = modifier
             .focusRequester(sidebarFocusRequester)
             .onFocusChanged {
-                Log.i("JOSHH", "SideBar: focus changed=${it.hasFocus}")
-
-                if (it.hasFocus) {
-                    setFocus(FocusItem.SideBar)
-                } else {
-                }
+                if (it.hasFocus) setFocus(FocusItem.SideBar)
             }
             .layoutId(HomeScreenLayoutId.SideBar)
             .width(if (focus == FocusItem.SideBar) 250.dp else 20.dp)
@@ -137,8 +140,22 @@ fun SideBarItem(
 
 @TvPreview
 @Composable
+private fun PreviewSideBarFocused() {
+    TripleRockTVTheme {
+        SideBar(
+            focusedCategory = 56,
+            focus = FocusItem.SideBar
+        )
+    }
+}
+
+@TvPreview
+@Composable
 private fun PreviewSideBar() {
     TripleRockTVTheme {
-//        SideBar()
+        SideBar(
+            focusedCategory = 56,
+            focus = FocusItem.Content
+        )
     }
 }
