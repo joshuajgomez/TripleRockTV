@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.player
 
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import kotlinx.coroutines.flow.MutableStateFlow

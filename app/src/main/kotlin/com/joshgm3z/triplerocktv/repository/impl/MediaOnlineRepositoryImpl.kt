@@ -27,7 +27,10 @@ class MediaOnlineRepositoryImpl
     private val username = Secrets.username
     private val password = Secrets.password
 
-    override suspend fun fetchContent(onFetch: (MediaLoadingType, LoadingState) -> Unit) {
+    override suspend fun fetchContent(
+        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onError: (String) -> Unit
+    ) {
         try {
             val categories = fetchCategories().subList(0, LIMIT)
             val total = categories.size
@@ -35,7 +38,11 @@ class MediaOnlineRepositoryImpl
                 // Clear existing data only if network call is successful
                 categoryDao.deleteAllCategories()
                 streamsDao.deleteAllStreams()
+            } else {
+                onError("Unable to fetch categories.")
+                return
             }
+
             categories.forEachIndexed { index, it ->
                 fetchAndStoreContent(it)
                 onFetch(
@@ -52,10 +59,7 @@ class MediaOnlineRepositoryImpl
             )
         } catch (e: Exception) {
             Log.e(TAG, "fetchContent: error=${e.message}")
-            onFetch(
-                MediaLoadingType.VideoOnDemand,
-                LoadingState(0, LoadingStatus.Error, e.message)
-            )
+            onError("Unable to fetch categories.")
         }
     }
 

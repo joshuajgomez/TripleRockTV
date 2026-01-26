@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.home
 
 import android.util.Log
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.player
 
 import android.util.Log
 import androidx.lifecycle.SavedStateHandle
@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.NavMediaInfo
 import dagger.hilt.android.lifecycle.HiltViewModel

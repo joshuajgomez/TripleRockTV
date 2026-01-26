@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.login
 
 import androidx.lifecycle.ViewModel
 import com.joshgm3z.triplerocktv.repository.LoginRepository

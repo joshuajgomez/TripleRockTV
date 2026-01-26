@@ -36,7 +36,6 @@ import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Gray800
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.viewmodel.MediaLoadingViewModel
 import kotlinx.coroutines.delay
 
 @Composable
@@ -49,27 +48,70 @@ fun MediaLoadingScreen(
         contentAlignment = Alignment.Center,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Text("Please wait", fontSize = 30.sp)
-                Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
-            }
-            Spacer(Modifier.size(70.dp))
             Column {
-                val stateMap = viewModel.uiState.collectAsState().value
-                if (stateMap.isNotEmpty() && stateMap.all { it.value.status == LoadingStatus.Complete }) {
-                    LaunchedEffect(Unit) {
-                        delay(500)
-                        onMediaLoaded()
+                when (val uiState = viewModel.uiState.collectAsState().value) {
+                    is MediaLoadingUiState.Update -> {
+                        ShowLoadingUpdates(uiState) {}
+                    }
+
+                    is MediaLoadingUiState.Error -> {
+                        ShowError(uiState.message)
+                    }
+
+                    else -> {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            Text("Please wait")
+                        }
                     }
                 }
-                stateMap.forEach { (type, state) ->
-                    AnimatedVisibility(state.status != LoadingStatus.Initial) {
-                        LoadingBar(
-                            type.label,
-                            state
-                        )
-                    }
-                }
+
+            }
+        }
+    }
+}
+
+@Composable
+fun ShowError(message: String) {
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Icon(
+                Icons.Default.Warning, contentDescription = null,
+                tint = colorScheme.errorContainer
+            )
+            Spacer(Modifier.size(10.dp))
+            Text(message)
+        }
+    }
+}
+
+
+@Composable
+private fun ShowLoadingUpdates(
+    uiState: MediaLoadingUiState.Update,
+    onMediaLoaded: () -> Unit,
+) {
+    Row {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text("Please wait", fontSize = 30.sp)
+            Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
+        }
+        Spacer(Modifier.size(70.dp))
+        val stateMap = uiState.map
+        if (stateMap.isNotEmpty() && stateMap.all { it.value.status == LoadingStatus.Complete }) {
+            LaunchedEffect(Unit) {
+                delay(500)
+                onMediaLoaded()
+            }
+        }
+        stateMap.forEach { (type, state) ->
+            AnimatedVisibility(state.status != LoadingStatus.Initial) {
+                LoadingBar(
+                    type.label,
+                    state
+                )
             }
         }
     }

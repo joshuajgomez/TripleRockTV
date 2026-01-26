@@ -38,9 +38,6 @@ import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.viewmodel.FakeHomeViewModel
-import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
-import com.joshgm3z.triplerocktv.viewmodel.IHomeViewModel
 
 @Composable
 fun getHomeViewModel(): IHomeViewModel = when {
