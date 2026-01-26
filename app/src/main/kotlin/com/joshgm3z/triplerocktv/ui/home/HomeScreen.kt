@@ -30,7 +30,7 @@ fun HomeScreen(
     openSearchScreen: () -> Unit = {},
     defaultFocus: FocusItem = FocusItem.TopMenu
 ) {
-    var focusedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Movies) }
+    var focusedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Home) }
     var focusedCategory: Int by remember { mutableIntStateOf(0) }
 
     var focus by remember { mutableStateOf(defaultFocus) }
