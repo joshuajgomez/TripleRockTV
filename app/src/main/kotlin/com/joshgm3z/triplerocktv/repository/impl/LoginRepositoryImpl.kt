@@ -4,7 +4,8 @@ import com.joshgm3z.triplerocktv.repository.LoginRepository
 import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor() : LoginRepository {
-    override fun tryLogin(
+    override suspend fun tryLogin(
+        webUrl: String,
         username: String,
         password: String,
         onSuccess: () -> Unit,

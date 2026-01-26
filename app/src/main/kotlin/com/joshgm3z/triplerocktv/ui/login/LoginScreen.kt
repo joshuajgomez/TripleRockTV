@@ -2,26 +2,16 @@ package com.joshgm3z.triplerocktv.ui.login
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -30,27 +20,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme.colorScheme
+import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import kotlinx.coroutines.flow.MutableStateFlow
-
-enum class LoginLayoutId {
-    Logo,
-    UsernameInput,
-    PasswordInput,
-    SubmitButton,
-    ErrorMessage
-}
 
 @Composable
 fun getLoginViewModel(): ILoginViewModel = when {
@@ -74,99 +57,105 @@ fun LoginScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = colorScheme.background.copy(alpha = 0.95f))
-        ) {}
-        LoginForm(uiState) { username, password ->
-            viewModel.onLoginClick(username, password)
+        LoginForm(uiState) { webUrl, username, password ->
+            viewModel.onLoginClick(webUrl, username, password)
         }
     }
+}
+
+enum class LoginLayoutId {
+    Logo,
+    Title,
+    ErrorMessage,
+    UrlInput,
+    UsernameInput,
+    PasswordInput,
+    SubmitButton,
 }
 
 @Composable
 fun LoginForm(
     uiState: LoginUiState,
-    onLoginClick: (username: String, password: String) -> Unit = { _, _ -> }
+    onLoginClick: (
+        webUrl: String,
+        username: String,
+        password: String,
+    ) -> Unit = { _, _, _ -> }
 ) {
-    Column(
+    var webUrl by remember { mutableStateOf("https://") }
+    var webUrlError by remember { mutableStateOf(false) }
+    var username by remember { mutableStateOf("") }
+    var usernameError by remember { mutableStateOf(false) }
+    var password by remember { mutableStateOf("") }
+    var passwordError by remember { mutableStateOf(false) }
+
+    ConstraintLayout(
+        constraintSet = getLoginConstraints(),
         modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .fillMaxSize()
-            .background(color = colorScheme.background)
-            .padding(20.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-
-        ) {
-        var username by remember { mutableStateOf("") }
-        var password by remember { mutableStateOf("") }
-
+            .width(600.dp)
+            .height(320.dp),
+    ) {
         Image(
             painter = painterResource(R.drawable.logo_3rocktv_cutout),
             contentDescription = null,
-            contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .clip(CircleShape)
-                .size(100.dp)
                 .layoutId(LoginLayoutId.Logo)
+                .width(200.dp)
         )
-        Text(
-            "Login with your IPTV credentials",
-            color = colorScheme.onBackground,
-            fontSize = 25.sp
+        ErrorCard(
+            modifier = Modifier.layoutId(LoginLayoutId.ErrorMessage),
+            message = uiState.errorMessage
         )
         TextInput(
-            modifier = Modifier.layoutId(LoginLayoutId.UsernameInput),
-            text = username,
+            modifier = Modifier.layoutId(LoginLayoutId.UrlInput),
+            text = webUrl,
             label = "Server URL",
-            enabled = !uiState.loading
-        ) { username = it }
+            isError = webUrlError,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Uri,
+                imeAction = ImeAction.Next
+            ),
+            enabled = !uiState.loading,
+        ) { webUrl = it }
         TextInput(
             modifier = Modifier.layoutId(LoginLayoutId.UsernameInput),
             text = username,
             label = "Username",
+            isError = usernameError,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Text,
+                imeAction = ImeAction.Next
+            ),
             enabled = !uiState.loading
         ) { username = it }
         TextInput(
             modifier = Modifier.layoutId(LoginLayoutId.PasswordInput),
             text = password,
             label = "Password",
+            isError = passwordError,
+            keyboardOptions = KeyboardOptions(
+                keyboardType = KeyboardType.Password,
+                imeAction = ImeAction.Next
+            ),
             enabled = !uiState.loading,
         ) { password = it }
-        Spacer(Modifier.size(10.dp))
         SubmitButton(
             onClick = {
-                onLoginClick(
+                webUrlError = webUrl.isEmpty()
+                usernameError = username.isEmpty()
+                passwordError = password.isEmpty()
+
+                if (webUrl.isNotEmpty()
+                    && username.isNotEmpty()
+                    && password.isNotEmpty()
+                ) onLoginClick(
+                    webUrl,
                     username,
                     password
                 )
             },
             isLoading = uiState.loading,
             modifier = Modifier.layoutId(LoginLayoutId.SubmitButton)
-        )
-        ErrorMessage(
-            modifier = Modifier.layoutId(LoginLayoutId.ErrorMessage),
-            errorMessage = uiState.errorMessage
-        )
-    }
-}
-
-@Composable
-fun ErrorMessage(
-    modifier: Modifier,
-    errorMessage: String?
-) {
-    AnimatedVisibility(
-        !errorMessage.isNullOrEmpty(),
-        modifier = modifier
-    ) {
-        Text(
-            errorMessage ?: "",
-            color = colorScheme.onErrorContainer,
-            modifier = Modifier.background(color = colorScheme.errorContainer)
         )
     }
 }
@@ -177,51 +166,21 @@ fun SubmitButton(
     isLoading: Boolean,
     onClick: () -> Unit,
 ) {
-    TextButton(
+    Button(
         onClick = { onClick() },
-        modifier = modifier.width(300.dp),
+        modifier = modifier.width(100.dp),
         enabled = !isLoading,
-        colors = ButtonDefaults.textButtonColors(
-            containerColor = colorScheme.primaryContainer,
-            disabledContainerColor = colorScheme.primaryContainer.copy(alpha = 0.5f),
-            contentColor = colorScheme.onPrimaryContainer,
-            disabledContentColor = colorScheme.onPrimaryContainer.copy(alpha = 0.5f),
-        ),
     ) {
-        AnimatedVisibility(isLoading) {
-            Row {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp))
-                Spacer(Modifier.size(10.dp))
-            }
+        Row(
+            horizontalArrangement = Arrangement.Center,
+            modifier = Modifier.fillMaxWidth(),
+        ) {
+            if (isLoading) CircularProgressIndicator(
+                modifier = Modifier.size(20.dp),
+                color = colorScheme.onBackground
+            )
+            else Text("Sign in")
         }
-        Text(if (isLoading) "Logging in..." else "Login")
-    }
-}
-
-@Composable
-fun TextInput(
-    modifier: Modifier = Modifier,
-    text: String,
-    label: String,
-    enabled: Boolean,
-    onTextChange: (String) -> Unit
-) {
-    Row(
-        modifier = modifier,
-    ) {
-        /*TextField(
-            value = text,
-            placeholder = { Text("") },
-            onValueChange = { onTextChange(it) },
-            enabled = enabled,
-            modifier = Modifier.width(200.dp)
-        )*/
-        OutlinedTextField(
-            label = { Text(label) },
-            value = text,
-            enabled = enabled,
-            onValueChange = { onTextChange(it) }
-        )
     }
 }
 
@@ -237,7 +196,7 @@ private fun PreviewLoginScreen_Initial() {
 @Composable
 private fun PreviewLoginScreen_Loading() {
     TripleRockTVTheme {
-        LoginScreen(viewModel = FakeLoginViewModel(MutableStateFlow(LoginUiState(loading = true))))
+        LoginScreen(viewModel = FakeLoginViewModel(LoginUiState(loading = true)))
     }
 }
 
@@ -245,6 +204,10 @@ private fun PreviewLoginScreen_Loading() {
 @Composable
 private fun PreviewLoginScreen_Error() {
     TripleRockTVTheme {
-        LoginScreen(viewModel = FakeLoginViewModel(MutableStateFlow(LoginUiState(errorMessage = "Unable to connect to internet"))))
+        LoginScreen(
+            viewModel = FakeLoginViewModel(
+                LoginUiState(errorMessage = "Unable to connect to internet")
+            )
+        )
     }
 }

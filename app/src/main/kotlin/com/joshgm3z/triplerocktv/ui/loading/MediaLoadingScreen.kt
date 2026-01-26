@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.loading
 
-import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -37,10 +36,6 @@ import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
-import com.joshgm3z.triplerocktv.ui.login.FakeLoginViewModel
-import com.joshgm3z.triplerocktv.ui.login.ILoginViewModel
-import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
-import com.joshgm3z.triplerocktv.ui.player.FakeMediaInfoViewModel
 import com.joshgm3z.triplerocktv.ui.theme.Gray800
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
@@ -65,7 +60,7 @@ fun MediaLoadingScreen(
             Column {
                 when (val uiState = viewModel.uiState.collectAsState().value) {
                     is MediaLoadingUiState.Update -> {
-                        ShowLoadingUpdates(uiState) {}
+                        ShowLoadingUpdates(uiState) { onMediaLoaded() }
                     }
 
                     is MediaLoadingUiState.Error -> {
@@ -76,7 +71,7 @@ fun MediaLoadingScreen(
 
                     else -> {
                         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                            Text("Please wait")
+                            Text("Please wait", fontSize = 25.sp)
                         }
                     }
                 }
