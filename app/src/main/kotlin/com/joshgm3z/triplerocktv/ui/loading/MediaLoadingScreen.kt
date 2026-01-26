@@ -128,10 +128,7 @@ private fun ShowLoadingUpdates(
     onMediaLoaded: () -> Unit,
 ) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Text("Please wait", fontSize = 30.sp)
-            Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
-        }
+        Text("Fetching content", fontSize = 30.sp)
         Spacer(Modifier.size(70.dp))
         val stateMap = uiState.map
         if (stateMap.isNotEmpty() && stateMap.all { it.value.status == LoadingStatus.Complete }) {
