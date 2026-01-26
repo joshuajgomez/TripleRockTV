@@ -29,7 +29,7 @@ class MediaOnlineRepositoryImpl
 
     override suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
-        onError: (String) -> Unit
+        onError: (String, String) -> Unit
     ) {
         try {
             val categories = fetchCategories().subList(0, LIMIT)
@@ -39,7 +39,7 @@ class MediaOnlineRepositoryImpl
                 categoryDao.deleteAllCategories()
                 streamsDao.deleteAllStreams()
             } else {
-                onError("Unable to fetch categories.")
+                onError("Unable to fetch categories.", "No categories found.")
                 return
             }
 
@@ -59,7 +59,7 @@ class MediaOnlineRepositoryImpl
             )
         } catch (e: Exception) {
             Log.e(TAG, "fetchContent: error=${e.message}")
-            onError("Unable to fetch categories.")
+            onError("Unable to fetch categories.", e.message ?: "")
         }
     }
 
