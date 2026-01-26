@@ -42,7 +42,7 @@ fun Content(
 ) {
     val contentFocusRequester = remember { FocusRequester() }
     LaunchedEffect(focus) {
-        if (focus == FocusItem.Content) contentFocusRequester.requestFocus()
+        if (focus == FocusItem.Content) contentFocusRequester.restoreFocusedChild()
     }
 
     viewModel.fetchContent(categoryId)
