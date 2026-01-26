@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
@@ -35,6 +36,7 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import com.joshgm3z.triplerocktv.R
@@ -72,12 +74,7 @@ fun LoginScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Image(
-            painter = painterResource(R.drawable.avatar_movie),
-            contentDescription = null,
-            contentScale = ContentScale.FillWidth,
-            modifier = Modifier.fillMaxSize()
-        )
+
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -97,8 +94,7 @@ fun LoginForm(
     Column(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
-            .width(250.dp)
-            .height(400.dp)
+            .fillMaxSize()
             .background(color = colorScheme.background)
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -117,18 +113,30 @@ fun LoginForm(
                 .size(100.dp)
                 .layoutId(LoginLayoutId.Logo)
         )
+        Text(
+            "Login with your IPTV credentials",
+            color = colorScheme.onBackground,
+            fontSize = 25.sp
+        )
         TextInput(
             modifier = Modifier.layoutId(LoginLayoutId.UsernameInput),
             text = username,
-            label = "Enter username",
+            label = "Server URL",
+            enabled = !uiState.loading
+        ) { username = it }
+        TextInput(
+            modifier = Modifier.layoutId(LoginLayoutId.UsernameInput),
+            text = username,
+            label = "Username",
             enabled = !uiState.loading
         ) { username = it }
         TextInput(
             modifier = Modifier.layoutId(LoginLayoutId.PasswordInput),
             text = password,
-            label = "Enter password",
+            label = "Password",
             enabled = !uiState.loading,
         ) { password = it }
+        Spacer(Modifier.size(10.dp))
         SubmitButton(
             onClick = {
                 onLoginClick(
@@ -171,7 +179,7 @@ fun SubmitButton(
 ) {
     TextButton(
         onClick = { onClick() },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier.width(300.dp),
         enabled = !isLoading,
         colors = ButtonDefaults.textButtonColors(
             containerColor = colorScheme.primaryContainer,
@@ -198,14 +206,21 @@ fun TextInput(
     enabled: Boolean,
     onTextChange: (String) -> Unit
 ) {
-    Column(modifier = modifier) {
-        Text(label, color = colorScheme.onBackground)
-        Spacer(Modifier.size(10.dp))
-        TextField(
+    Row(
+        modifier = modifier,
+    ) {
+        /*TextField(
             value = text,
             placeholder = { Text("") },
             onValueChange = { onTextChange(it) },
-            enabled = enabled
+            enabled = enabled,
+            modifier = Modifier.width(200.dp)
+        )*/
+        OutlinedTextField(
+            label = { Text(label) },
+            value = text,
+            enabled = enabled,
+            onValueChange = { onTextChange(it) }
         )
     }
 }
