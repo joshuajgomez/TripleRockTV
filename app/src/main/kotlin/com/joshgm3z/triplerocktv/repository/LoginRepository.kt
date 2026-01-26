@@ -1,7 +1,8 @@
 package com.joshgm3z.triplerocktv.repository
 
 interface LoginRepository {
-    fun tryLogin(
+    suspend fun tryLogin(
+        webUrl: String,
         username: String,
         password: String,
         onSuccess: () -> Unit,

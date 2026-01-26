@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.StateFlow
 interface ILoginViewModel {
     val uiState: StateFlow<LoginUiState>
     fun onLoginClick(
+        webUrl: String,
         username: String,
         password: String
     )

@@ -4,7 +4,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
 class FakeLoginViewModel(
-    override val uiState: StateFlow<LoginUiState> = MutableStateFlow(LoginUiState())
+    uiState: LoginUiState = LoginUiState()
 ) : ILoginViewModel {
-    override fun onLoginClick(username: String, password: String) {}
+    override val uiState: StateFlow<LoginUiState> = MutableStateFlow(uiState)
+    override fun onLoginClick(
+        webUrl: String,
+        username: String,
+        password: String
+    ) {
+    }
 }
