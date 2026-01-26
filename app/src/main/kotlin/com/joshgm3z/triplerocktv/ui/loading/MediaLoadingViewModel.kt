@@ -18,7 +18,7 @@ sealed class MediaLoadingUiState {
         val map: Map<MediaLoadingType, LoadingState> = emptyMap()
     ) : MediaLoadingUiState()
 
-    data class Error(val message: String) : MediaLoadingUiState()
+    data class Error(val message: String, val summary: String) : MediaLoadingUiState()
 }
 
 @HiltViewModel
@@ -49,8 +49,8 @@ class MediaLoadingViewModel
                         _uiState.value = MediaLoadingUiState.Update(updatedMap)
                     }
                 },
-                onError = { errorMessage ->
-                    _uiState.value = MediaLoadingUiState.Error(errorMessage)
+                onError = { errorMessage, summary ->
+                    _uiState.value = MediaLoadingUiState.Error(errorMessage, summary)
                 }
             )
         }

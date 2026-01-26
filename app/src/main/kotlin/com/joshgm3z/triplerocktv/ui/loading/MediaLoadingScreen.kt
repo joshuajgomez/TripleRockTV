@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.loading
 
+import android.R
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -68,7 +69,7 @@ fun MediaLoadingScreen(
                     }
 
                     is MediaLoadingUiState.Error -> {
-                        ShowError(uiState.message) {
+                        ShowError(uiState.message, uiState.summary) {
                             viewModel.fetchContent()
                         }
                     }
@@ -88,6 +89,7 @@ fun MediaLoadingScreen(
 @Composable
 fun ShowError(
     message: String,
+    summary: String,
     onClickRetry: () -> Unit,
 ) {
     Column(
@@ -101,8 +103,17 @@ fun ShowError(
                 tint = colorScheme.errorContainer
             )
             Spacer(Modifier.size(10.dp))
-            Text(message)
+            Text(
+                message,
+                fontSize = 20.sp
+            )
         }
+        Spacer(Modifier.size(10.dp))
+        Text(
+            summary,
+            color = colorScheme.onBackground.copy(alpha = 0.7f),
+            fontSize = 15.sp
+        )
         Spacer(Modifier.size(20.dp))
         Button(onClick = { onClickRetry() }) {
             Text("Try again")
