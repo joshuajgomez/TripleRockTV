@@ -188,7 +188,7 @@ fun SubmitButton(
 @Composable
 private fun PreviewLoginScreen_Initial() {
     TripleRockTVTheme {
-        LoginScreen()
+        LoginForm(uiState = LoginUiState())
     }
 }
 
@@ -196,7 +196,7 @@ private fun PreviewLoginScreen_Initial() {
 @Composable
 private fun PreviewLoginScreen_Loading() {
     TripleRockTVTheme {
-        LoginScreen(viewModel = FakeLoginViewModel(LoginUiState(loading = true)))
+        LoginForm(uiState = LoginUiState(loading = true))
     }
 }
 
@@ -204,10 +204,6 @@ private fun PreviewLoginScreen_Loading() {
 @Composable
 private fun PreviewLoginScreen_Error() {
     TripleRockTVTheme {
-        LoginScreen(
-            viewModel = FakeLoginViewModel(
-                LoginUiState(errorMessage = "Unable to connect to internet")
-            )
-        )
+        LoginForm(uiState = LoginUiState(errorMessage = "Unable to connect to internet"))
     }
 }
