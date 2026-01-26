@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.loading
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -93,7 +94,7 @@ private fun ShowLoadingUpdates(
     uiState: MediaLoadingUiState.Update,
     onMediaLoaded: () -> Unit,
 ) {
-    Row {
+    Row(verticalAlignment = Alignment.CenterVertically) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text("Please wait", fontSize = 30.sp)
             Text("Fetching content", color = colorScheme.onBackground.copy(alpha = 0.5f))
@@ -106,12 +107,14 @@ private fun ShowLoadingUpdates(
                 onMediaLoaded()
             }
         }
-        stateMap.forEach { (type, state) ->
-            AnimatedVisibility(state.status != LoadingStatus.Initial) {
-                LoadingBar(
-                    type.label,
-                    state
-                )
+        Column {
+            stateMap.forEach { (type, state) ->
+                AnimatedVisibility(state.status != LoadingStatus.Initial) {
+                    LoadingBar(
+                        type.label,
+                        state
+                    )
+                }
             }
         }
     }
