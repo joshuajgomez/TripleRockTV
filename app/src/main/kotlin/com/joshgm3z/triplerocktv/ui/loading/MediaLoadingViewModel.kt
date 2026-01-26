@@ -6,9 +6,9 @@ import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,13 +24,19 @@ sealed class MediaLoadingUiState {
 @HiltViewModel
 class MediaLoadingViewModel
 @Inject constructor(
-    repository: MediaOnlineRepository
-) : ViewModel() {
+    private val repository: MediaOnlineRepository
+) : ViewModel(), IMediaLoadingViewModel {
     private val _uiState = MutableStateFlow<MediaLoadingUiState>(MediaLoadingUiState.Initial)
-    val uiState = _uiState.asStateFlow()
+    override val uiState = _uiState.asStateFlow()
 
     init {
+        fetchContent()
+    }
+
+    override fun fetchContent() {
+        _uiState.value = MediaLoadingUiState.Initial
         viewModelScope.launch {
+            delay(500)
             repository.fetchContent(
                 onFetch = { type, state ->
                     with(_uiState.value) {
