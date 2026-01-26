@@ -22,7 +22,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,17 +35,11 @@ import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.constraintlayout.compose.ConstraintLayout
-import androidx.constraintlayout.compose.ConstraintSet
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
-import com.joshgm3z.triplerocktv.ui.theme.Gray10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.viewmodel.ILoginViewModel
-import com.joshgm3z.triplerocktv.viewmodel.LoginUiState
-import com.joshgm3z.triplerocktv.viewmodel.LoginViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 
 enum class LoginLayoutId {

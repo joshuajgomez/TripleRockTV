@@ -23,5 +23,6 @@ enum class LoadingStatus {
 interface MediaOnlineRepository {
     suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onError: (String) -> Unit,
     )
 }

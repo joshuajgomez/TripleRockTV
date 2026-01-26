@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.home
 
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity

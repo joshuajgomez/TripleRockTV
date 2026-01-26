@@ -53,9 +53,6 @@ import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.viewmodel.FakeMediaInfoViewModel
-import com.joshgm3z.triplerocktv.viewmodel.IMediaInfoViewModel
-import com.joshgm3z.triplerocktv.viewmodel.MediaInfoViewModel
 
 @Composable
 fun getMediaInfoViewModel() = when {

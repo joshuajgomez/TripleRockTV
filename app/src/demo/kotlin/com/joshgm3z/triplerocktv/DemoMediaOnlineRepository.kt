@@ -10,7 +10,10 @@ import javax.inject.Inject
 class DemoMediaOnlineRepository
 @Inject
 constructor() : MediaOnlineRepository {
-    override suspend fun fetchContent(onFetch: (MediaLoadingType, LoadingState) -> Unit) {
+    override suspend fun fetchContent(
+        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onError: (String) -> Unit
+    ) {
         MediaLoadingType.entries.forEach { type ->
             repeat(11) { i ->
                 onFetch(type, LoadingState(i * 10, LoadingStatus.Ongoing))

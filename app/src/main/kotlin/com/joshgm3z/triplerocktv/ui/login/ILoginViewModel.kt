@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.login
 
 import kotlinx.coroutines.flow.StateFlow
 
