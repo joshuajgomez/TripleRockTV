@@ -25,23 +25,35 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.tv.material3.Button
 import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.login.FakeLoginViewModel
+import com.joshgm3z.triplerocktv.ui.login.ILoginViewModel
+import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
+import com.joshgm3z.triplerocktv.ui.player.FakeMediaInfoViewModel
 import com.joshgm3z.triplerocktv.ui.theme.Gray800
 import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 import kotlinx.coroutines.delay
 
 @Composable
+fun getMediaLoadingViewModel(): IMediaLoadingViewModel = when {
+    LocalInspectionMode.current -> FakeMediaLoadingViewModel()
+    else -> hiltViewModel<MediaLoadingViewModel>()
+}
+
+@Composable
 fun MediaLoadingScreen(
-    viewModel: MediaLoadingViewModel = hiltViewModel(),
+    viewModel: IMediaLoadingViewModel = getMediaLoadingViewModel(),
     onMediaLoaded: () -> Unit = {},
 ) {
     Box(
@@ -56,7 +68,9 @@ fun MediaLoadingScreen(
                     }
 
                     is MediaLoadingUiState.Error -> {
-                        ShowError(uiState.message)
+                        ShowError(uiState.message) {
+                            viewModel.fetchContent()
+                        }
                     }
 
                     else -> {
@@ -72,10 +86,14 @@ fun MediaLoadingScreen(
 }
 
 @Composable
-fun ShowError(message: String) {
-    Box(
+fun ShowError(
+    message: String,
+    onClickRetry: () -> Unit,
+) {
+    Column(
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Icon(
@@ -84,6 +102,10 @@ fun ShowError(message: String) {
             )
             Spacer(Modifier.size(10.dp))
             Text(message)
+        }
+        Spacer(Modifier.size(20.dp))
+        Button(onClick = { onClickRetry() }) {
+            Text("Try again")
         }
     }
 }
