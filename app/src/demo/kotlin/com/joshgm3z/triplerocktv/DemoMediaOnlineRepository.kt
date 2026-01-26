@@ -12,7 +12,7 @@ class DemoMediaOnlineRepository
 constructor() : MediaOnlineRepository {
     override suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
-        onError: (String) -> Unit
+        onError: (String, String) -> Unit
     ) {
         MediaLoadingType.entries.forEach { type ->
             repeat(11) { i ->
