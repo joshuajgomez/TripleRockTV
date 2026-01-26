@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -162,6 +163,10 @@ fun SideBarItem(
     onCategoryFocus: () -> Unit = {},
     onClick: () -> Unit = {},
 ) {
+    val focusRequester = remember { FocusRequester() }
+    LaunchedEffect(focused) {
+        if (focused) focusRequester.requestFocus()
+    }
     val colorFg = when {
         focused -> colorScheme.onBackground
         else -> colorScheme.onBackground.copy(alpha = 0.6f)
@@ -178,6 +183,7 @@ fun SideBarItem(
         modifier = Modifier
             .fillMaxWidth(0.8f)
             .height(30.dp)
+            .focusRequester(focusRequester)
             .onFocusChanged { if (it.hasFocus) onCategoryFocus() }
             .padding(horizontal = 10.dp, vertical = 5.dp)
             .clickable(

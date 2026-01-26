@@ -42,7 +42,7 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavLoading,
+        startDestination = NavHome,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
