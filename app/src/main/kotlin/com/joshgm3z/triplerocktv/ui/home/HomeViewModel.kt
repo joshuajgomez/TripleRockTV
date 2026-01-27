@@ -1,14 +1,13 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,47 +16,60 @@ class HomeViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository
 ) : ViewModel(), IHomeViewModel {
-    private val _uiState = MutableStateFlow(HomeUiState(isLoading = true))
-    override val uiState: StateFlow<HomeUiState> = _uiState.asStateFlow()
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Empty)
+    override val uiState = _uiState.asStateFlow()
 
-    companion object {
-        private const val TAG = "HomeViewModel"
-    }
+    lateinit var categoryEntities: List<CategoryEntity>
 
     init {
-        Log.i(TAG, "entry")
+        fetchCategories(TopbarItem.Home)
+    }
+
+    override fun fetchCategories(topbarItem: TopbarItem) {
+        Logger.debug("topbarItem=$topbarItem")
+        _uiState.value = HomeUiState.Loading("Loading categories")
+
+        categoryEntities = emptyList()
         viewModelScope.launch {
             repository.fetchCategories(
+                topbarItem = topbarItem,
                 onSuccess = { categories ->
-                    Log.i(TAG, "fetchCategories.onSuccess $categories")
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            categories = categories
-                        )
+                    Logger.debug("fetchCategories.onSuccess $categories")
+                    categoryEntities = categories
+                    if (categories.isEmpty()) {
+                        _uiState.value = HomeUiState.Error("No categories found")
+                    } else {
+                        fetchContent(categoryId = categories.first().categoryId)
                     }
                 },
-                onError = {},
+                onError = {
+                    Logger.debug("fetchCategories.onError $it")
+                    _uiState.value = HomeUiState.Error(it)
+                },
             )
         }
     }
 
     override fun fetchContent(categoryId: Int) {
-        Log.i(TAG, "fetchContent: categoryId=$categoryId entry")
+        Logger.debug("topbarItem=$categoryId")
+        _uiState.value = HomeUiState.Loading("Loading content")
         viewModelScope.launch {
             repository.fetchAllMediaData(
                 categoryId = categoryId,
                 onSuccess = { streams ->
-                    Log.i(TAG, "fetchAllMediaData.onSuccess $streams")
-                    _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            mediaList = streams
+                    Logger.debug("fetchAllMediaData.onSuccess $streams")
+                    if (streams.isEmpty()) {
+                        _uiState.value = HomeUiState.Error("No contents found")
+                    } else {
+                        _uiState.value = HomeUiState.Ready(
+                            categoryEntities = categoryEntities,
+                            streamEntities = streams
                         )
                     }
                 },
                 onError = {
-                    Log.w(TAG, "fetchContent: error")
+                    Logger.debug("fetchAllMediaData.onError $it")
+                    _uiState.value = HomeUiState.Error(it)
                 },
             )
         }

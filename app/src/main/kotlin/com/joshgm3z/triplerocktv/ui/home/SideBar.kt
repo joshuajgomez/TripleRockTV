@@ -37,20 +37,15 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-fun getHomeViewModel(): IHomeViewModel = when {
-    LocalInspectionMode.current -> FakeHomeViewModel()
-    else -> hiltViewModel<HomeViewModel>()
-}
-
-@Composable
 fun SideBar(
     modifier: Modifier = Modifier,
-    viewModel: IHomeViewModel = getHomeViewModel(),
     focusedCategory: Int = 0,
+    uiState: HomeUiState.Ready,
     onCategoryFocus: (Int) -> Unit = {},
     onClick: () -> Unit = {},
     focus: FocusItem = FocusItem.SideBar,
@@ -61,12 +56,6 @@ fun SideBar(
     LaunchedEffect(focus) {
         if (focus == FocusItem.SideBar) sidebarFocusRequester.requestFocus()
     }
-
-    val uiState = viewModel.uiState.collectAsState().value
-    if (uiState.categories.isNotEmpty())
-        LaunchedEffect(Unit) {
-            onCategoryFocus(uiState.categories.first().categoryId)
-        }
 
     Column(
         modifier = modifier
@@ -81,10 +70,10 @@ fun SideBar(
                 focusedCategory = focusedCategory,
                 onCategoryFocus = { onCategoryFocus(it) },
                 onClick = { onClick() },
-                categories = uiState.categories
+                categories = uiState.categoryEntities
             )
         } else {
-            uiState.categories.firstOrNull { it.categoryId == focusedCategory }?.let {
+            uiState.categoryEntities.firstOrNull { it.categoryId == focusedCategory }?.let {
                 MinimizedSideBar(it.categoryName)
             }
         }
@@ -215,7 +204,11 @@ private fun PreviewSideBarFocused() {
     TripleRockTVTheme {
         SideBar(
             focusedCategory = 56,
-            focus = FocusItem.SideBar
+            focus = FocusItem.SideBar,
+            uiState = HomeUiState.Ready(
+                categoryEntities = CategoryEntity.samples(),
+                streamEntities = listOf(StreamEntity.sample())
+            )
         )
     }
 }
@@ -226,7 +219,11 @@ private fun PreviewSideBar() {
     TripleRockTVTheme {
         SideBar(
             focusedCategory = 56,
-            focus = FocusItem.Content
+            focus = FocusItem.Content,
+            uiState = HomeUiState.Ready(
+                categoryEntities = CategoryEntity.samples(),
+                streamEntities = listOf(StreamEntity.sample())
+            )
         )
     }
 }
