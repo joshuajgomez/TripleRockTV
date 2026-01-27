@@ -10,6 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.tv.material3.CompactCard
 import androidx.tv.material3.Text
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -20,8 +21,8 @@ import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
-const val cardContainerHeight = 250
-const val cardContainerWidth = 170
+const val cardContainerHeight = 150
+const val cardContainerWidth = 105
 
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -55,7 +56,9 @@ fun ThumbnailCard(
                 text = streamEntity.name,
                 maxLines = 4,
                 overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.padding(7.dp)
+                modifier = Modifier.padding(5.dp),
+                fontSize = 12.sp,
+                lineHeight = 16.sp,
             )
         }
     )
