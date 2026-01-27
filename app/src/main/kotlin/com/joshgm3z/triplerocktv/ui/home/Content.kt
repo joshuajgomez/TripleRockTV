@@ -52,8 +52,8 @@ fun Content(
             .fillMaxSize()
             .padding(start = 10.dp, end = 10.dp, top = 10.dp),
         maxItemsInEachRow = 5,
-        horizontalArrangement = Arrangement.spacedBy(10.dp),
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        horizontalArrangement = Arrangement.spacedBy(20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         uiState.streamEntities.forEach {
             ThumbnailCard(it) { onContentClick(it) }
