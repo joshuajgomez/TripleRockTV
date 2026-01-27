@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -36,7 +37,7 @@ class MediaLoadingViewModel
     override fun fetchContent() {
         _uiState.value = MediaLoadingUiState.Initial
         viewModelScope.launch {
-            delay(2000)
+            delay(1000)
             repository.fetchContent(
                 onFetch = { type, state ->
                     with(_uiState.value) {

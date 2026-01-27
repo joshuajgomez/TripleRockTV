@@ -1,7 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.login
 
 import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -32,6 +32,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Button
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
+import com.joshgm3z.triplerocktv.EMPTY_TEXT
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
@@ -49,9 +50,8 @@ fun LoginScreen(
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
-    if (uiState.loginSuccess) {
-        onLoginSuccess()
-        return
+    LaunchedEffect(uiState.loginSuccess) {
+        if (uiState.loginSuccess) onLoginSuccess()
     }
 
     Box(
@@ -85,9 +85,9 @@ fun LoginForm(
 ) {
     var webUrl by remember { mutableStateOf("https://") }
     var webUrlError by remember { mutableStateOf(false) }
-    var username by remember { mutableStateOf("") }
+    var username by remember { mutableStateOf(EMPTY_TEXT) }
     var usernameError by remember { mutableStateOf(false) }
-    var password by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf(EMPTY_TEXT) }
     var passwordError by remember { mutableStateOf(false) }
 
     ConstraintLayout(

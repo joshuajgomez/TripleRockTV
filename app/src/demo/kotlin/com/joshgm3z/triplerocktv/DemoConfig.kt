@@ -8,3 +8,5 @@ class DemoConfig {
         var ALL_SHOULD_FAIL_ONCE = false
     }
 }
+
+const val EMPTY_TEXT = "Demo text"
