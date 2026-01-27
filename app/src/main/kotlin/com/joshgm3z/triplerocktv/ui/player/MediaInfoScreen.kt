@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
@@ -36,9 +37,14 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
+import androidx.tv.material3.IconButton
 import androidx.tv.material3.MaterialTheme.colorScheme
+import androidx.tv.material3.OutlinedButton
+import androidx.tv.material3.OutlinedIconButton
 import androidx.tv.material3.Text
+import androidx.tv.material3.WideButton
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.bumptech.glide.integration.compose.placeholder
@@ -66,10 +72,10 @@ fun MediaInfoScreen(
     ConstraintLayout(modifier = Modifier.fillMaxSize()) {
         val (info, back, wallpaper) = createRefs()
 
-        Wallpaper(modifier = Modifier.constrainAs(wallpaper) {
+        /*Wallpaper(modifier = Modifier.constrainAs(wallpaper) {
             start.linkTo(parent.start)
             top.linkTo(parent.top)
-        }, streamEntity.streamIcon)
+        }, streamEntity.streamIcon)*/
 
         InfoContainer(
             modifier = Modifier.constrainAs(info) {
@@ -125,10 +131,21 @@ fun InfoContainer(
                 }
             }
             Spacer(Modifier.size(20.dp))
-            ResumeButton(onClick = {})
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                ResumeButton(onClick = {})
+                Spacer(Modifier.size(10.dp))
+                AddFavorite()
+            }
             Spacer(Modifier.size(10.dp))
             StartOverButton() {}
         }
+    }
+}
+
+@Composable
+fun AddFavorite(onClick: () -> Unit = {}) {
+    OutlinedIconButton(onClick = { onClick() }) {
+        Icon(imageVector = Icons.Default.Add, contentDescription = null)
     }
 }
 
@@ -181,22 +198,20 @@ fun SubtitleInfo() {
 }
 
 @Composable
-fun Modifier.buttonModifier() = width(200.dp)
-
-@Composable
 fun ResumeButton(
     text: String = "Resume",
     onClick: () -> Unit,
 ) {
-    Button(
-        { onClick() },
-        modifier = Modifier.buttonModifier(),
+    WideButton(
+        onClick = { onClick() },
+        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
     ) {
         Icon(
             Icons.Default.PlayArrow,
             contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
         )
-        Spacer(Modifier.size(10.dp))
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text(text = text)
     }
 }
@@ -206,15 +221,16 @@ fun StartOverButton(
     text: String = "Start over",
     onClick: () -> Unit,
 ) {
-    Button(
-        { onClick() },
-        modifier = Modifier.buttonModifier(),
+    WideButton(
+        onClick = { onClick() },
+        contentPadding = ButtonDefaults.ButtonWithIconContentPadding,
     ) {
         Icon(
             Icons.Default.Refresh,
             contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
         )
-        Spacer(Modifier.size(10.dp))
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text(text = text)
     }
 }
