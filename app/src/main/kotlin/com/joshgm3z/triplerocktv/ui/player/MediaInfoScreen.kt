@@ -16,21 +16,14 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Icon
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -42,6 +35,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.tv.material3.Button
+import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -186,43 +181,23 @@ fun SubtitleInfo() {
 }
 
 @Composable
-fun Modifier.buttonModifier(focus: Boolean) =
-    clip(RoundedCornerShape(5.dp))
-        .width(200.dp)
-        .height(40.dp)
-        .background(
-            color = if (focus) colorScheme.onBackground
-            else colorScheme.background
-        )
-
-@Composable
-fun colorFg(focus: Boolean) = when {
-    focus -> colorScheme.background
-    else -> colorScheme.onBackground
-}
+fun Modifier.buttonModifier() = width(200.dp)
 
 @Composable
 fun ResumeButton(
     text: String = "Resume",
     onClick: () -> Unit,
 ) {
-    var focus by remember { mutableStateOf(false) }
-    TextButton(
+    Button(
         { onClick() },
-        modifier = Modifier
-            .buttonModifier(focus)
-            .onFocusChanged { focus = it.isFocused },
+        modifier = Modifier.buttonModifier(),
     ) {
         Icon(
             Icons.Default.PlayArrow,
             contentDescription = null,
-            tint = colorFg(focus)
         )
         Spacer(Modifier.size(10.dp))
-        Text(
-            text = text,
-            color = colorFg(focus)
-        )
+        Text(text = text)
     }
 }
 
@@ -231,24 +206,16 @@ fun StartOverButton(
     text: String = "Start over",
     onClick: () -> Unit,
 ) {
-    var focus by remember { mutableStateOf(false) }
-    TextButton(
+    Button(
         { onClick() },
-        modifier = Modifier
-            .buttonModifier(focus)
-            .onFocusChanged { focus = it.isFocused },
-        elevation = ButtonDefaults.buttonElevation()
+        modifier = Modifier.buttonModifier(),
     ) {
         Icon(
             Icons.Default.Refresh,
             contentDescription = null,
-            tint = colorFg(focus)
         )
         Spacer(Modifier.size(10.dp))
-        Text(
-            text = text,
-            color = colorFg(focus)
-        )
+        Text(text = text)
     }
 }
 
