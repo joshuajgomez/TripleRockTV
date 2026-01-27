@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,9 +32,8 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
-    categoryId: Int = 1,
     focus: FocusItem,
-    viewModel: IHomeViewModel = getHomeViewModel(),
+    uiState: HomeUiState.Ready,
     onContentClick: (StreamEntity) -> Unit = {},
     setFocus: (FocusItem) -> Unit = {},
 ) {
@@ -45,9 +42,6 @@ fun Content(
         if (focus == FocusItem.Content) contentFocusRequester.restoreFocusedChild()
     }
 
-    viewModel.fetchContent(categoryId)
-    val uiState = viewModel.uiState.collectAsState().value
-    Log.i("Content", "Content: ${uiState.mediaList.size}")
     FlowRow(
         modifier = modifier
             .focusRequester(contentFocusRequester)
@@ -61,7 +55,7 @@ fun Content(
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        uiState.mediaList.forEach {
+        uiState.streamEntities.forEach {
             ThumbnailCard(it) { onContentClick(it) }
         }
     }

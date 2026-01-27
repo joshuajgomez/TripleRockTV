@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.asStateFlow
 
 class FakeHomeViewModel : IHomeViewModel {
     override val uiState: StateFlow<HomeUiState> = MutableStateFlow(
-        HomeUiState(
-            categories = CategoryEntity.samples(),
-            mediaList = listOf(
+        HomeUiState.Ready(
+            categoryEntities = CategoryEntity.samples(),
+            streamEntities = listOf(
                 StreamEntity.sample(),
                 StreamEntity.sample(),
                 StreamEntity.sample(),
@@ -19,4 +19,5 @@ class FakeHomeViewModel : IHomeViewModel {
     ).asStateFlow()
 
     override fun fetchContent(categoryId: Int) {}
+    override fun fetchCategories(topbarItem: TopbarItem) {}
 }
