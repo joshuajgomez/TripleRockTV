@@ -42,7 +42,7 @@ fun MainNavigation() {
 
     NavHost(
         navController = navController,
-        startDestination = NavMediaInfo(StreamEntity.sample().streamId),
+        startDestination = NavLogin,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical

@@ -15,11 +15,11 @@ constructor() : MediaOnlineRepository {
         onError: (String, String) -> Unit
     ) {
         MediaLoadingType.entries.forEach { type ->
-            repeat(11) { i ->
+            repeat(10) { i ->
                 onFetch(type, LoadingState(i * 10, LoadingStatus.Ongoing))
                 delay(200)
-                if (i == 10) onFetch(type, LoadingState(status = LoadingStatus.Complete))
             }
+            onFetch(type, LoadingState(status = LoadingStatus.Complete))
         }
     }
 }
