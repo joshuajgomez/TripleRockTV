@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.login
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -168,18 +169,20 @@ fun SubmitButton(
 ) {
     Button(
         onClick = { onClick() },
-        modifier = modifier.width(100.dp),
+        modifier = modifier.width(150.dp),
         enabled = !isLoading,
     ) {
         Row(
             horizontalArrangement = Arrangement.Center,
             modifier = Modifier.fillMaxWidth(),
         ) {
-            if (isLoading) CircularProgressIndicator(
-                modifier = Modifier.size(20.dp),
-                color = colorScheme.onBackground
-            )
-            else Text("Sign in")
+            AnimatedContent(isLoading) {
+                if (it) CircularProgressIndicator(
+                    modifier = Modifier.size(20.dp),
+                    color = colorScheme.onBackground
+                )
+                else Text("Sign in")
+            }
         }
     }
 }
