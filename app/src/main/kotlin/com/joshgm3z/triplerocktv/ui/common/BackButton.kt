@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
@@ -24,8 +25,9 @@ fun BackButton(
         Icon(
             Icons.AutoMirrored.Default.ArrowBack,
             contentDescription = null,
+            modifier = Modifier.size(ButtonDefaults.IconSize)
         )
-        Spacer(Modifier.size(5.dp))
+        Spacer(Modifier.size(ButtonDefaults.IconSpacing))
         Text("Go back")
     }
 }
