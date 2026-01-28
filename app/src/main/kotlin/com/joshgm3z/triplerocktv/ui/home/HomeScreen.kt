@@ -37,7 +37,7 @@ enum class FocusItem {
 
 @Composable
 fun getHomeViewModel(): IHomeViewModel = when {
-//    LocalInspectionMode.current -> FakeHomeViewModel()
+    LocalInspectionMode.current -> FakeHomeViewModel()
     else -> hiltViewModel<HomeViewModel>()
 }
 

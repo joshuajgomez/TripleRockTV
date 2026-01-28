@@ -6,10 +6,10 @@ import kotlinx.coroutines.flow.StateFlow
 
 data class HomeUiState(
     var selectedTopbarItem: TopbarItem = TopbarItem.Home,
-    var selectedCategoryEntity: CategoryEntity?,
+    var selectedCategoryEntity: CategoryEntity? = null,
     var categoryEntities: List<CategoryEntity> = emptyList(),
     val streamEntities: List<StreamEntity> = emptyList(),
-    var isLoading: Boolean = false,
+    var isLoading: Boolean = true,
     var errorMessage: String? = null,
 )
 
