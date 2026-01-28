@@ -207,7 +207,9 @@ private fun PreviewSideBarFocused() {
             focus = FocusItem.SideBar,
             uiState = HomeUiState.Ready(
                 categoryEntities = CategoryEntity.samples(),
-                streamEntities = listOf(StreamEntity.sample())
+                streamEntities = listOf(StreamEntity.sample()),
+                selectedCategoryEntity = CategoryEntity.samples().first(),
+                selectedTopbarItem = TopbarItem.Home
             )
         )
     }
@@ -222,7 +224,9 @@ private fun PreviewSideBar() {
             focus = FocusItem.Content,
             uiState = HomeUiState.Ready(
                 categoryEntities = CategoryEntity.samples(),
-                streamEntities = listOf(StreamEntity.sample())
+                streamEntities = listOf(StreamEntity.sample()),
+                selectedCategoryEntity = CategoryEntity.samples().first(),
+                selectedTopbarItem = TopbarItem.Home
             )
         )
     }

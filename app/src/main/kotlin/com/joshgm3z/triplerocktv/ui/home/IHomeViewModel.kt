@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.StateFlow
 
 sealed class HomeUiState {
     class Ready(
+        val selectedTopbarItem: TopbarItem,
+        val selectedCategoryEntity: CategoryEntity,
         val categoryEntities: List<CategoryEntity>,
         val streamEntities: List<StreamEntity>
     ) : HomeUiState()
@@ -17,6 +19,6 @@ sealed class HomeUiState {
 
 interface IHomeViewModel {
     val uiState: StateFlow<HomeUiState>
-    fun fetchContent(categoryId: Int)
+    fun fetchContent(categoryEntity: CategoryEntity)
     fun fetchCategories(topbarItem: TopbarItem)
 }

@@ -13,13 +13,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -32,22 +27,11 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
-    focus: FocusItem,
     uiState: HomeUiState.Ready,
     onContentClick: (StreamEntity) -> Unit = {},
-    setFocus: (FocusItem) -> Unit = {},
 ) {
-    val contentFocusRequester = remember { FocusRequester() }
-    LaunchedEffect(focus) {
-        if (focus == FocusItem.Content) contentFocusRequester.restoreFocusedChild()
-    }
-
     FlowRow(
         modifier = modifier
-            .focusRequester(contentFocusRequester)
-            .onFocusChanged {
-                if (it.hasFocus) setFocus(FocusItem.Content)
-            }
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
             .padding(start = 10.dp, end = 10.dp, top = 10.dp),

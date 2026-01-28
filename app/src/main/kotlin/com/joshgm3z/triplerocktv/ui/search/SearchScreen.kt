@@ -19,6 +19,7 @@ import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.home.Content
 import com.joshgm3z.triplerocktv.ui.home.FocusItem
 import com.joshgm3z.triplerocktv.ui.home.HomeUiState
+import com.joshgm3z.triplerocktv.ui.home.TopbarItem
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
@@ -41,12 +42,12 @@ fun SearchScreen(
             )
             Spacer(Modifier.size(10.dp))
             Content(
-                setFocus = {},
-                focus = FocusItem.Content,
                 onContentClick = { openMediaInfoScreen(it) },
                 uiState = HomeUiState.Ready(
                     categoryEntities = CategoryEntity.samples(),
-                    streamEntities = listOf(StreamEntity.sample())
+                    streamEntities = listOf(StreamEntity.sample()),
+                    selectedCategoryEntity = CategoryEntity.samples().first(),
+                    selectedTopbarItem = TopbarItem.Home
                 )
             )
         }
