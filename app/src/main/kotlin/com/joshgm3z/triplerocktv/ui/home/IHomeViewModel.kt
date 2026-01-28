@@ -5,7 +5,7 @@ import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import kotlinx.coroutines.flow.StateFlow
 
 data class HomeUiState(
-    var selectedTopbarItem: TopbarItem = TopbarItem.Home,
+    var selectedTopbarItem: TopbarItem? = null,
     var selectedCategoryEntity: CategoryEntity? = null,
     var categoryEntities: List<CategoryEntity> = emptyList(),
     val streamEntities: List<StreamEntity> = emptyList(),
@@ -15,6 +15,6 @@ data class HomeUiState(
 
 interface IHomeViewModel {
     val uiState: StateFlow<HomeUiState>
-    fun fetchContent(categoryEntity: CategoryEntity)
-    fun fetchCategories(topbarItem: TopbarItem)
+    fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity)
+    fun onTopbarItemUpdate(topbarItem: TopbarItem)
 }
