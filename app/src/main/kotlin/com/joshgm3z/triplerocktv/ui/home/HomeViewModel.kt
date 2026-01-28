@@ -16,7 +16,7 @@ class HomeViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository
 ) : ViewModel(), IHomeViewModel {
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Empty)
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState())
     override val uiState = _uiState.asStateFlow()
 
     lateinit var categoryEntities: List<CategoryEntity>

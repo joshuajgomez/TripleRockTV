@@ -27,7 +27,7 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 @Composable
 fun Content(
     modifier: Modifier = Modifier,
-    uiState: HomeUiState.Ready,
+    streamEntities: List<StreamEntity>,
     onContentClick: (StreamEntity) -> Unit = {},
 ) {
     FlowRow(
@@ -39,7 +39,7 @@ fun Content(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        uiState.streamEntities.forEach {
+        streamEntities.forEach {
             ThumbnailCard(it) { onContentClick(it) }
         }
     }

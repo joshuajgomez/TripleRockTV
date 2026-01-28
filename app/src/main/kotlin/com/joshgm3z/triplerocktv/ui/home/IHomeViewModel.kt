@@ -4,18 +4,14 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import kotlinx.coroutines.flow.StateFlow
 
-sealed class HomeUiState {
-    class Ready(
-        val selectedTopbarItem: TopbarItem,
-        val selectedCategoryEntity: CategoryEntity,
-        val categoryEntities: List<CategoryEntity>,
-        val streamEntities: List<StreamEntity>
-    ) : HomeUiState()
-
-    data class Loading(val message: String = "Loading content") : HomeUiState()
-    data object Empty : HomeUiState()
-    data class Error(val message: String) : HomeUiState()
-}
+data class HomeUiState(
+    var selectedTopbarItem: TopbarItem = TopbarItem.Home,
+    var selectedCategoryEntity: CategoryEntity?,
+    var categoryEntities: List<CategoryEntity> = emptyList(),
+    val streamEntities: List<StreamEntity> = emptyList(),
+    var isLoading: Boolean = false,
+    var errorMessage: String? = null,
+)
 
 interface IHomeViewModel {
     val uiState: StateFlow<HomeUiState>
