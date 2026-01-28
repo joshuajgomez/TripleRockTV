@@ -20,13 +20,16 @@ class HomeViewModel
     override val uiState = _uiState.asStateFlow()
 
     lateinit var categoryEntities: List<CategoryEntity>
+    lateinit var selectedCategoryEntity: CategoryEntity
+    var selectedTopbarItem: TopbarItem = TopbarItem.Home // Initial value
 
     init {
-        fetchCategories(TopbarItem.Home)
+        fetchCategories(selectedTopbarItem)
     }
 
     override fun fetchCategories(topbarItem: TopbarItem) {
         Logger.debug("topbarItem=$topbarItem")
+        selectedTopbarItem = topbarItem
         _uiState.value = HomeUiState.Loading("Loading categories")
 
         categoryEntities = emptyList()
@@ -39,7 +42,7 @@ class HomeViewModel
                     if (categories.isEmpty()) {
                         _uiState.value = HomeUiState.Error("No categories found")
                     } else {
-                        fetchContent(categoryId = categories.first().categoryId)
+                        fetchContent(categoryEntity = categories.first())
                     }
                 },
                 onError = {
@@ -50,12 +53,13 @@ class HomeViewModel
         }
     }
 
-    override fun fetchContent(categoryId: Int) {
-        Logger.debug("topbarItem=$categoryId")
+    override fun fetchContent(categoryEntity: CategoryEntity) {
+        Logger.debug("categoryEntity=$categoryEntity")
+        selectedCategoryEntity = categoryEntity
         _uiState.value = HomeUiState.Loading("Loading content")
         viewModelScope.launch {
             repository.fetchAllMediaData(
-                categoryId = categoryId,
+                categoryId = categoryEntity.categoryId,
                 onSuccess = { streams ->
                     Logger.debug("fetchAllMediaData.onSuccess $streams")
                     if (streams.isEmpty()) {
@@ -63,7 +67,9 @@ class HomeViewModel
                     } else {
                         _uiState.value = HomeUiState.Ready(
                             categoryEntities = categoryEntities,
-                            streamEntities = streams
+                            streamEntities = streams,
+                            selectedCategoryEntity = selectedCategoryEntity,
+                            selectedTopbarItem = selectedTopbarItem
                         )
                     }
                 },

@@ -14,10 +14,12 @@ class FakeHomeViewModel : IHomeViewModel {
                 StreamEntity.sample(),
                 StreamEntity.sample(),
                 StreamEntity.sample(),
-            )
+            ),
+            selectedCategoryEntity = CategoryEntity.samples().first(),
+            selectedTopbarItem = TopbarItem.Home,
         )
     ).asStateFlow()
 
-    override fun fetchContent(categoryId: Int) {}
+    override fun fetchContent(categoryEntity: CategoryEntity) {}
     override fun fetchCategories(topbarItem: TopbarItem) {}
 }
