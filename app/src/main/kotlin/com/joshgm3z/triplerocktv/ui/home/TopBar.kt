@@ -13,15 +13,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.res.painterResource
@@ -43,37 +38,17 @@ enum class TopbarItem {
     LiveTv,
 }
 
-val verticalGradient = Brush.verticalGradient(
-    colors = listOf(Color.Black, Color.Transparent)
-)
-
 @Composable
 fun TopBar(
     modifier: Modifier = Modifier,
-    focus: FocusItem = FocusItem.TopMenu,
     onItemClick: () -> Unit = {},
-    setFocus: (FocusItem) -> Unit = {},
     focusedTopBarItem: TopbarItem = TopbarItem.Movies,
     onFocusedTopBarItemChange: (TopbarItem) -> Unit = {},
 ) {
-    val topMenuFocusRequester = remember { FocusRequester() }
-    LaunchedEffect(focus) {
-        if (focus == FocusItem.TopMenu) topMenuFocusRequester.requestFocus()
-    }
-
-    val topBarModifier = when (focus) {
-        FocusItem.TopMenu -> modifier
-            .height(150.dp)
-            .background(brush = verticalGradient)
-
-        else -> modifier.height(50.dp)
-    }
-
+    val topBarModifier = modifier.height(50.dp)
 
     Row(
         modifier = topBarModifier
-            .focusRequester(topMenuFocusRequester)
-            .onFocusChanged { if (it.hasFocus) setFocus(FocusItem.TopMenu) }
             .layoutId(HomeScreenLayoutId.TopBar)
             .fillMaxWidth()
             .padding(start = 10.dp),
@@ -95,7 +70,7 @@ fun TopBar(
                     TopBarOption(
                         item = it,
                         focused = focusedTopBarItem == it,
-                        selected = focusedTopBarItem == it && focus != FocusItem.TopMenu,
+                        selected = focusedTopBarItem == it,
                         onFocused = { onFocusedTopBarItemChange(it) },
                         onClick = { onItemClick() }
                     )
@@ -166,7 +141,7 @@ private fun TopbarItem.label() = when (this) {
 @TvPreview
 private fun PreviewTopBar() {
     TripleRockTVTheme {
-        TopBar(focus = FocusItem.Content)
+        TopBar()
     }
 }
 
@@ -174,6 +149,6 @@ private fun PreviewTopBar() {
 @TvPreview
 private fun PreviewTopBarFocused() {
     TripleRockTVTheme {
-        TopBar(focus = FocusItem.TopMenu)
+        TopBar()
     }
 }

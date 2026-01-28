@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
-import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -32,12 +33,6 @@ import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
-enum class FocusItem {
-    SideBar,
-    Content,
-    TopMenu,
-}
-
 @Composable
 fun getHomeViewModel(): IHomeViewModel = when {
     LocalInspectionMode.current -> FakeHomeViewModel()
@@ -51,7 +46,7 @@ fun HomeScreen(
     viewModel: IHomeViewModel = getHomeViewModel(),
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
-
+    val focusRestorer = remember { FocusRequester() }
     BackHandler(enabled = true) {
         when (drawerState.currentValue) {
             DrawerValue.Closed -> DrawerValue.Open
@@ -62,7 +57,12 @@ fun HomeScreen(
     val uiState = viewModel.uiState.collectAsState().value
     NavigationDrawer(drawerContent = {
         if (uiState.categoryEntities.isEmpty()) return@NavigationDrawer
-        LazyColumn(modifier = Modifier.fillMaxHeight()) {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxHeight()
+                .focusGroup()
+                .focusRestorer(focusRestorer)
+        ) {
             items(uiState.categoryEntities) { categoryEntity ->
                 NavigationDrawerItem(
                     modifier = Modifier.onFocusChanged {
