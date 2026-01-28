@@ -21,11 +21,15 @@ class HomeViewModel
     override val uiState = _uiState.asStateFlow()
 
     init {
-        fetchCategories(uiState.value.selectedTopbarItem)
+        onTopbarItemUpdate(TopbarItem.Home)
     }
 
-    override fun fetchCategories(topbarItem: TopbarItem) {
+    override fun onTopbarItemUpdate(topbarItem: TopbarItem) {
         Logger.debug("topbarItem=$topbarItem")
+        if (_uiState.value.selectedTopbarItem == topbarItem) {
+            Logger.debug("topbarItem already selected")
+            return
+        }
         _uiState.update { HomeUiState(selectedTopbarItem = topbarItem) }
 
         viewModelScope.launch {
@@ -38,7 +42,7 @@ class HomeViewModel
                         _uiState.update { it.copy(errorMessage = "No categories found") }
                     } else {
                         _uiState.update { it.copy(categoryEntities = categories) }
-                        fetchContent(categories.first())
+                        onSelectedCategoryUpdate(categories.first())
                     }
                 },
                 onError = { error ->
@@ -49,8 +53,13 @@ class HomeViewModel
         }
     }
 
-    override fun fetchContent(categoryEntity: CategoryEntity) {
+    override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {
         Logger.debug("categoryEntity=$categoryEntity")
+        if (_uiState.value.selectedCategoryEntity == categoryEntity) {
+            Logger.debug("categoryEntity already selected")
+            return
+        }
+
         _uiState.update {
             it.copy(
                 isLoading = true,

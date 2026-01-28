@@ -11,8 +11,11 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -21,7 +24,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
-import androidx.tv.material3.ModalNavigationDrawer
+import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.Text
 import androidx.tv.material3.rememberDrawerState
@@ -57,13 +60,13 @@ fun HomeScreen(
     }
 
     val uiState = viewModel.uiState.collectAsState().value
-    ModalNavigationDrawer(drawerContent = {
-        if (uiState.categoryEntities.isEmpty()) return@ModalNavigationDrawer
+    NavigationDrawer(drawerContent = {
+        if (uiState.categoryEntities.isEmpty()) return@NavigationDrawer
         LazyColumn(modifier = Modifier.fillMaxHeight()) {
             items(uiState.categoryEntities) { categoryEntity ->
                 NavigationDrawerItem(
                     modifier = Modifier.onFocusChanged {
-                        if (it.isFocused) viewModel.fetchContent(categoryEntity)
+                        if (it.isFocused) viewModel.onSelectedCategoryUpdate(categoryEntity)
                     },
                     selected = uiState.selectedCategoryEntity == categoryEntity,
                     onClick = { drawerState.setValue(DrawerValue.Closed) },

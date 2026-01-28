@@ -21,6 +21,6 @@ class FakeHomeViewModel : IHomeViewModel {
         )
     ).asStateFlow()
 
-    override fun fetchContent(categoryEntity: CategoryEntity) {}
-    override fun fetchCategories(topbarItem: TopbarItem) {}
+    override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {}
+    override fun onTopbarItemUpdate(topbarItem: TopbarItem) {}
 }
