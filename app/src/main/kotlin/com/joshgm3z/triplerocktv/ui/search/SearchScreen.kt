@@ -43,12 +43,7 @@ fun SearchScreen(
             Spacer(Modifier.size(10.dp))
             Content(
                 onContentClick = { openMediaInfoScreen(it) },
-                uiState = HomeUiState.Ready(
-                    categoryEntities = CategoryEntity.samples(),
-                    streamEntities = listOf(StreamEntity.sample()),
-                    selectedCategoryEntity = CategoryEntity.samples().first(),
-                    selectedTopbarItem = TopbarItem.Home
-                )
+                streamEntities = listOf(StreamEntity.sample()),
             )
         }
     }
