@@ -5,24 +5,32 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusGroup
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.NavigationBarDefaults
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.NavigationRailDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -32,9 +40,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -125,27 +135,20 @@ fun NavigationDrawerContent(
     closeDrawer: () -> Unit,
     focusRestorer: FocusRequester,
 ): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
-    Column {
-        Row(
-            modifier = Modifier
-                .height(70.dp)
-                .padding(start = 10.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            AnimatedContent(hasFocus) {
-                if (it) {
-                    TopMenuDropDown(uiState.selectedTopbarItem) {
-                        onTopbarItemUpdate(it)
-                    }
-                } else {
-                    Image(
-                        painter = painterResource(R.drawable.logo_3rocktv_cutout),
-                        contentDescription = null,
-                        modifier = Modifier.size(40.dp)
-                    )
-                }
-            }
-        }
+    Column(
+        modifier = Modifier.padding(
+            start = 10.dp,
+            top = 20.dp
+        )
+    ) {
+        TopbarUser(
+            hasFocus = true,
+        )
+        TopbarMenu(
+            hasFocus = hasFocus,
+            selectedTopbarItem = uiState.selectedTopbarItem,
+            onTopbarItemUpdate = onTopbarItemUpdate
+        )
         if (!uiState.categoryEntities.isEmpty())
             LazyColumn(
                 modifier = Modifier
@@ -165,6 +168,64 @@ fun NavigationDrawerContent(
                     )
                 }
             }
+    }
+}
+
+val topIconModifier = Modifier
+    .defaultMinSize(minWidth = 56.dp)
+    .height(50.dp)
+    .padding(bottom = 15.dp)
+
+@Composable
+fun TopbarMenu(
+    hasFocus: Boolean,
+    selectedTopbarItem: TopbarItem?,
+    onTopbarItemUpdate: (TopbarItem) -> Unit
+) {
+    Row(
+        modifier = topIconModifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        AnimatedContent(hasFocus) {
+            if (it) {
+                TopMenuDropDown(selectedTopbarItem) { item ->
+                    onTopbarItemUpdate(item)
+                }
+            } else {
+                Icon(
+                    imageVector = Icons.Default.Home,
+                    contentDescription = null,
+                    modifier = Modifier.size(30.dp)
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun TopbarUser(
+    hasFocus: Boolean,
+) {
+    Row(
+        modifier = topIconModifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        AnimatedContent(hasFocus) {
+            if (it) {
+                UserDropDown(TopbarItem.Search) {}
+            } else {
+                Image(
+                    painter = painterResource(R.drawable.avatar_movie),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(25.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            }
+        }
     }
 }
 
@@ -208,7 +269,51 @@ fun TopMenuDropDown(
             }
         }
     }
+}
 
+@Composable
+fun UserDropDown(
+    selectedTopbarItem: TopbarItem?,
+    onSelectionChange: (TopbarItem) -> Unit
+) {
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box {
+            Button(
+                onClick = { expanded = !expanded },
+                modifier = Modifier.width(150.dp)
+            ) {
+                Image(
+                    painter = painterResource(R.drawable.avatar_movie),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(25.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text("someone")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                TopbarItem.entries.forEach { item ->
+                    DropdownMenuItem(
+                        text = { androidx.compose.material3.Text(item.name) },
+                        onClick = {
+                            onSelectionChange(item)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
 }
 
 @Composable
