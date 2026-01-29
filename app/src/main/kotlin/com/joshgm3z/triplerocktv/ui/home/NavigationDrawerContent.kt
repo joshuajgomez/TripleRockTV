@@ -41,11 +41,49 @@ import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
+import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.NavigationDrawerScope
 import androidx.tv.material3.Text
+import androidx.tv.material3.rememberDrawerState
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+
+@Composable
+@TvPreview
+private fun PreviewNavigationDrawerContent() {
+    TripleRockTVTheme {
+        val drawerValue = rememberDrawerState(DrawerValue.Open)
+        NavigationDrawer(
+            drawerState = drawerValue,
+            drawerContent = NavigationDrawerContent(
+                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
+                onTopbarItemUpdate = {},
+                onSelectedCategoryUpdate = {},
+                closeDrawer = {},
+                focusRestorer = FocusRequester(),
+            )
+        ) { }
+    }
+}
+
+@Composable
+@TvPreview
+private fun PreviewNavigationDrawerContent_Closed() {
+    TripleRockTVTheme {
+        NavigationDrawer(
+            drawerContent = NavigationDrawerContent(
+                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
+                onTopbarItemUpdate = {},
+                onSelectedCategoryUpdate = {},
+                closeDrawer = {},
+                focusRestorer = FocusRequester(),
+            )
+        ) { }
+    }
+}
 
 @Composable
 fun NavigationDrawerContent(
