@@ -75,7 +75,11 @@ fun HomeScreen(
     val uiState = viewModel.uiState.collectAsState().value
     NavigationDrawer(drawerContent = {
         Column(modifier = Modifier.padding(10.dp)) {
-            TopMenuDropDown(uiState.selectedTopbarItem) { viewModel.onTopbarItemUpdate(it) }
+            if (hasFocus) {
+                TopMenuDropDown(uiState.selectedTopbarItem) {
+                    viewModel.onTopbarItemUpdate(it)
+                }
+            }
             Spacer(Modifier.size(10.dp))
             if (!uiState.categoryEntities.isEmpty())
                 LazyColumn(
