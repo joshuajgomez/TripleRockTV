@@ -2,17 +2,23 @@ package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
-import androidx.compose.animation.core.AnimationSpec
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -27,8 +33,11 @@ import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
@@ -65,24 +74,28 @@ fun HomeScreen(
 
     val uiState = viewModel.uiState.collectAsState().value
     NavigationDrawer(drawerContent = {
-        if (uiState.categoryEntities.isEmpty()) return@NavigationDrawer
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxHeight()
-                .focusGroup()
-                .focusRestorer(focusRestorer)
-        ) {
-            items(uiState.categoryEntities) { categoryEntity ->
-                NavigationDrawerItem(
-                    modifier = Modifier.onFocusChanged {
-                        if (it.isFocused) viewModel.onSelectedCategoryUpdate(categoryEntity)
-                    },
-                    selected = uiState.selectedCategoryEntity == categoryEntity,
-                    onClick = { drawerState.setValue(DrawerValue.Closed) },
-                    content = { Text(text = categoryEntity.categoryName) },
-                    leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
-                )
-            }
+        Column(modifier = Modifier.padding(10.dp)) {
+            TopMenuDropDown(uiState.selectedTopbarItem) { viewModel.onTopbarItemUpdate(it) }
+            Spacer(Modifier.size(10.dp))
+            if (!uiState.categoryEntities.isEmpty())
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .focusGroup()
+                        .focusRestorer(focusRestorer)
+                ) {
+                    items(uiState.categoryEntities) { categoryEntity ->
+                        NavigationDrawerItem(
+                            modifier = Modifier.onFocusChanged {
+                                if (it.isFocused) viewModel.onSelectedCategoryUpdate(categoryEntity)
+                            },
+                            selected = uiState.selectedCategoryEntity == categoryEntity,
+                            onClick = { drawerState.setValue(DrawerValue.Closed) },
+                            content = { Text(text = categoryEntity.categoryName) },
+                            leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
+                        )
+                    }
+                }
         }
     }) {
         Crossfade(uiState, animationSpec = defaultAnimationSpec) {
@@ -100,6 +113,49 @@ fun HomeScreen(
             }
         }
     }
+}
+
+@Composable
+fun TopMenuDropDown(
+    selectedTopbarItem: TopbarItem?,
+    onSelectionChange: (TopbarItem) -> Unit
+) {
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box {
+            Button(
+                onClick = { expanded = !expanded },
+                modifier = Modifier.width(150.dp)
+            ) {
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(selectedTopbarItem?.name ?: "Select")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                TopbarItem.entries.forEach { item ->
+                    DropdownMenuItem(
+                        text = { androidx.compose.material3.Text(item.name) },
+                        onClick = {
+                            onSelectionChange(item)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
+
 }
 
 @Composable
