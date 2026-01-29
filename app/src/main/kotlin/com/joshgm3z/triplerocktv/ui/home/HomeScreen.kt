@@ -142,7 +142,7 @@ fun NavigationDrawerContent(
         )
     ) {
         TopbarUser(
-            hasFocus = true,
+            hasFocus = hasFocus,
         )
         TopbarMenu(
             hasFocus = hasFocus,
