@@ -1,13 +1,17 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -33,6 +37,7 @@ import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -46,6 +51,7 @@ import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.NavigationDrawerScope
 import androidx.tv.material3.Text
 import androidx.tv.material3.rememberDrawerState
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
@@ -119,13 +125,27 @@ fun NavigationDrawerContent(
     closeDrawer: () -> Unit,
     focusRestorer: FocusRequester,
 ): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
-    Column(modifier = Modifier.padding(10.dp)) {
-        if (hasFocus) {
-            TopMenuDropDown(uiState.selectedTopbarItem) {
-                onTopbarItemUpdate(it)
+    Column {
+        Row(
+            modifier = Modifier
+                .height(70.dp)
+                .padding(start = 10.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            AnimatedContent(hasFocus) {
+                if (it) {
+                    TopMenuDropDown(uiState.selectedTopbarItem) {
+                        onTopbarItemUpdate(it)
+                    }
+                } else {
+                    Image(
+                        painter = painterResource(R.drawable.logo_3rocktv_cutout),
+                        contentDescription = null,
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
             }
         }
-        Spacer(Modifier.size(10.dp))
         if (!uiState.categoryEntities.isEmpty())
             LazyColumn(
                 modifier = Modifier
