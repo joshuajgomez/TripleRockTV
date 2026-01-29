@@ -1,6 +1,9 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.AnimationSpec
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -11,8 +14,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -31,7 +38,9 @@ import androidx.tv.material3.Text
 import androidx.tv.material3.rememberDrawerState
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.common.defaultAnimationSpec
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun getHomeViewModel(): IHomeViewModel = when {
@@ -76,26 +85,40 @@ fun HomeScreen(
             }
         }
     }) {
-        when {
-            uiState.isLoading -> InfoBox("Loading data")
-            !uiState.errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
-            uiState.streamEntities.isNotEmpty() -> Content(
-                onContentClick = { openMediaInfoScreen(it) },
-                streamEntities = uiState.streamEntities,
-            )
+        Crossfade(uiState, animationSpec = defaultAnimationSpec) {
+            with(it) {
+                when {
+                    isLoading -> InfoBox(text = "Loading data", delayMs = 0)
+                    !errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
+                    streamEntities.isNotEmpty() -> Content(
+                        onContentClick = { streamEntity -> openMediaInfoScreen(streamEntity) },
+                        streamEntities = streamEntities,
+                    )
 
-            else -> InfoBox("No data found")
+                    else -> InfoBox("No data found")
+                }
+            }
         }
     }
 }
 
 @Composable
-fun InfoBox(text: String) {
+fun InfoBox(
+    text: String,
+    delayMs: Long = 0
+) {
+    var showText by remember { mutableStateOf(delayMs == 0L) }
+    LaunchedEffect(delayMs) {
+        if (delayMs > 0) {
+            delay(delayMs)
+            showText = true
+        }
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, fontSize = 20.sp)
+        if (showText) Text(text = text, fontSize = 20.sp)
     }
 }
 
