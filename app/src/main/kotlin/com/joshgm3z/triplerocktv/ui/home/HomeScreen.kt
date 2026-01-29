@@ -1,39 +1,55 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRestorer
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.tv.material3.Button
+import androidx.tv.material3.ButtonDefaults
+import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
+import androidx.tv.material3.NavigationDrawer
+import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.Text
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import androidx.tv.material3.rememberDrawerState
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.common.defaultAnimationSpec
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
-import com.joshgm3z.triplerocktv.util.Logger
-
-enum class FocusItem {
-    SideBar,
-    Content,
-    TopMenu,
-}
+import kotlinx.coroutines.delay
 
 @Composable
 fun getHomeViewModel(): IHomeViewModel = when {
@@ -45,79 +61,124 @@ fun getHomeViewModel(): IHomeViewModel = when {
 fun HomeScreen(
     openMediaInfoScreen: (StreamEntity) -> Unit = {},
     openSearchScreen: () -> Unit = {},
-    defaultFocus: FocusItem = FocusItem.TopMenu,
     viewModel: IHomeViewModel = getHomeViewModel(),
 ) {
-    when (val uiState = viewModel.uiState.collectAsState().value) {
-        is HomeUiState.Loading -> InfoBox("Loading data")
-        is HomeUiState.Error -> InfoBox("Error loading content")
-        is HomeUiState.Ready -> HomeScreenContent(
-            uiState = uiState,
-            openMediaInfoScreen = { openMediaInfoScreen(it) },
-            defaultFocus = defaultFocus,
-            onTopBarItemChange = {
-                viewModel.fetchCategories(it)
-            }
-        )
+    val drawerState = rememberDrawerState(DrawerValue.Closed)
+    val focusRestorer = remember { FocusRequester() }
+    BackHandler(enabled = true) {
+        when (drawerState.currentValue) {
+            DrawerValue.Closed -> DrawerValue.Open
+            else -> DrawerValue.Closed
+        }.let { drawerState.setValue(it) }
+    }
 
-        else -> InfoBox("No data found")
+    val uiState = viewModel.uiState.collectAsState().value
+    NavigationDrawer(drawerContent = {
+        Column(modifier = Modifier.padding(10.dp)) {
+            if (hasFocus) {
+                TopMenuDropDown(uiState.selectedTopbarItem) {
+                    viewModel.onTopbarItemUpdate(it)
+                }
+            }
+            Spacer(Modifier.size(10.dp))
+            if (!uiState.categoryEntities.isEmpty())
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .focusGroup()
+                        .focusRestorer(focusRestorer)
+                ) {
+                    items(uiState.categoryEntities) { categoryEntity ->
+                        NavigationDrawerItem(
+                            modifier = Modifier.onFocusChanged {
+                                if (it.isFocused) viewModel.onSelectedCategoryUpdate(categoryEntity)
+                            },
+                            selected = uiState.selectedCategoryEntity == categoryEntity,
+                            onClick = { drawerState.setValue(DrawerValue.Closed) },
+                            content = { Text(text = categoryEntity.categoryName) },
+                            leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
+                        )
+                    }
+                }
+        }
+    }) {
+        Crossfade(uiState, animationSpec = defaultAnimationSpec) {
+            with(it) {
+                when {
+                    isLoading -> InfoBox(text = "Loading data", delayMs = 0)
+                    !errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
+                    streamEntities.isNotEmpty() -> Content(
+                        onContentClick = { streamEntity -> openMediaInfoScreen(streamEntity) },
+                        streamEntities = streamEntities,
+                    )
+
+                    else -> InfoBox("No data found")
+                }
+            }
+        }
     }
 }
 
 @Composable
-fun InfoBox(text: String) {
+fun TopMenuDropDown(
+    selectedTopbarItem: TopbarItem?,
+    onSelectionChange: (TopbarItem) -> Unit
+) {
+    Box(
+        modifier = Modifier,
+        contentAlignment = Alignment.CenterEnd
+    ) {
+        var expanded by remember { mutableStateOf(false) }
+
+        Box {
+            Button(
+                onClick = { expanded = !expanded },
+                modifier = Modifier.width(150.dp)
+            ) {
+                Icon(
+                    Icons.Default.ArrowDropDown,
+                    contentDescription = null,
+                    modifier = Modifier.size(ButtonDefaults.IconSize)
+                )
+                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+                Text(selectedTopbarItem?.name ?: "Select")
+            }
+            DropdownMenu(
+                expanded = expanded,
+                onDismissRequest = { expanded = false }
+            ) {
+                TopbarItem.entries.forEach { item ->
+                    DropdownMenuItem(
+                        text = { androidx.compose.material3.Text(item.name) },
+                        onClick = {
+                            onSelectionChange(item)
+                            expanded = false
+                        }
+                    )
+                }
+            }
+        }
+    }
+
+}
+
+@Composable
+fun InfoBox(
+    text: String,
+    delayMs: Long = 0
+) {
+    var showText by remember { mutableStateOf(delayMs == 0L) }
+    LaunchedEffect(delayMs) {
+        if (delayMs > 0) {
+            delay(delayMs)
+            showText = true
+        }
+    }
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        Text(text = text, fontSize = 20.sp)
-    }
-}
-
-@Composable
-fun HomeScreenContent(
-    uiState: HomeUiState.Ready,
-    defaultFocus: FocusItem = FocusItem.TopMenu,
-    openMediaInfoScreen: (StreamEntity) -> Unit,
-    onTopBarItemChange: (TopbarItem) -> Unit,
-) {
-    var focusedTopbarItem: TopbarItem by remember { mutableStateOf(TopbarItem.Home) }
-    var focusedCategory: Int by remember { mutableIntStateOf(0) }
-    var focus by remember { mutableStateOf(defaultFocus) }
-
-    BackHandler(enabled = focus != FocusItem.TopMenu) {
-        focus = when (focus) {
-            FocusItem.Content -> FocusItem.SideBar
-            else -> FocusItem.TopMenu
-        }
-    }
-    ConstraintLayout(
-        constraintSet = getHomeScreenConstraints(),
-    ) {
-
-        Content(
-            onContentClick = { openMediaInfoScreen(it) },
-            focus = focus,
-            uiState = uiState,
-            setFocus = { focus = it }
-        )
-
-        SideBar(
-            focusedCategory = focusedCategory,
-            focus = focus,
-            uiState = uiState,
-            onCategoryFocus = { focusedCategory = it },
-            onClick = { focus = FocusItem.Content },
-            setFocus = { focus = it }
-        )
-
-        TopBar(
-            setFocus = { focus = it },
-            focus = focus,
-            onItemClick = { focus = FocusItem.SideBar },
-            focusedTopBarItem = focusedTopbarItem,
-            onFocusedTopBarItemChange = { focusedTopbarItem = it }
-        )
+        if (showText) Text(text = text, fontSize = 20.sp)
     }
 }
 

@@ -6,18 +6,21 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
+
 class FakeHomeViewModel : IHomeViewModel {
     override val uiState: StateFlow<HomeUiState> = MutableStateFlow(
-        HomeUiState.Ready(
+        HomeUiState(
             categoryEntities = CategoryEntity.samples(),
             streamEntities = listOf(
                 StreamEntity.sample(),
                 StreamEntity.sample(),
                 StreamEntity.sample(),
-            )
+            ),
+            selectedCategoryEntity = CategoryEntity.samples().first(),
+            selectedTopbarItem = TopbarItem.Home,
         )
     ).asStateFlow()
 
-    override fun fetchContent(categoryId: Int) {}
-    override fun fetchCategories(topbarItem: TopbarItem) {}
+    override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {}
+    override fun onTopbarItemUpdate(topbarItem: TopbarItem) {}
 }

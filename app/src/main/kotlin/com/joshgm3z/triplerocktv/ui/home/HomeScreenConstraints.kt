@@ -42,6 +42,6 @@ fun getHomeScreenConstraints(): ConstraintSet = ConstraintSet {
 @TvPreview
 private fun PreviewHomeScreen() {
     TripleRockTVTheme {
-        HomeScreen(defaultFocus = FocusItem.SideBar)
+        HomeScreen()
     }
 }
