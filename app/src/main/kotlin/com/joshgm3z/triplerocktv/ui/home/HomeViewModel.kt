@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,60 +17,71 @@ class HomeViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository
 ) : ViewModel(), IHomeViewModel {
-    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Empty)
+    private val _uiState = MutableStateFlow(HomeUiState())
     override val uiState = _uiState.asStateFlow()
 
-    lateinit var categoryEntities: List<CategoryEntity>
-
     init {
-        fetchCategories(TopbarItem.Home)
+        onTopbarItemUpdate(TopbarItem.Home)
     }
 
-    override fun fetchCategories(topbarItem: TopbarItem) {
+    override fun onTopbarItemUpdate(topbarItem: TopbarItem) {
         Logger.debug("topbarItem=$topbarItem")
-        _uiState.value = HomeUiState.Loading("Loading categories")
+        if (_uiState.value.selectedTopbarItem == topbarItem) {
+            Logger.debug("topbarItem already selected")
+            return
+        }
+        _uiState.update { HomeUiState(selectedTopbarItem = topbarItem) }
 
-        categoryEntities = emptyList()
         viewModelScope.launch {
             repository.fetchCategories(
                 topbarItem = topbarItem,
                 onSuccess = { categories ->
+                    _uiState.update { it.copy(isLoading = false) }
                     Logger.debug("fetchCategories.onSuccess $categories")
-                    categoryEntities = categories
                     if (categories.isEmpty()) {
-                        _uiState.value = HomeUiState.Error("No categories found")
+                        _uiState.update { it.copy(errorMessage = "No categories found") }
                     } else {
-                        fetchContent(categoryId = categories.first().categoryId)
+                        _uiState.update { it.copy(categoryEntities = categories) }
+                        onSelectedCategoryUpdate(categories.first())
                     }
                 },
-                onError = {
-                    Logger.debug("fetchCategories.onError $it")
-                    _uiState.value = HomeUiState.Error(it)
+                onError = { error ->
+                    Logger.debug("fetchCategories.onError $error")
+                    _uiState.update { it.copy(isLoading = false, errorMessage = error) }
                 },
             )
         }
     }
 
-    override fun fetchContent(categoryId: Int) {
-        Logger.debug("topbarItem=$categoryId")
-        _uiState.value = HomeUiState.Loading("Loading content")
+    override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {
+        Logger.debug("categoryEntity=$categoryEntity")
+        if (_uiState.value.selectedCategoryEntity == categoryEntity) {
+            Logger.debug("categoryEntity already selected")
+            return
+        }
+
+        _uiState.update {
+            it.copy(
+                isLoading = true,
+                selectedCategoryEntity = categoryEntity,
+                streamEntities = emptyList()
+            )
+        }
         viewModelScope.launch {
             repository.fetchAllMediaData(
-                categoryId = categoryId,
+                categoryId = categoryEntity.categoryId,
                 onSuccess = { streams ->
+                    _uiState.update { it.copy(isLoading = false) }
                     Logger.debug("fetchAllMediaData.onSuccess $streams")
                     if (streams.isEmpty()) {
-                        _uiState.value = HomeUiState.Error("No contents found")
+                        _uiState.update { it.copy(errorMessage = "No contents found") }
                     } else {
-                        _uiState.value = HomeUiState.Ready(
-                            categoryEntities = categoryEntities,
-                            streamEntities = streams
-                        )
+                        _uiState.update { it.copy(streamEntities = streams) }
                     }
                 },
-                onError = {
-                    Logger.debug("fetchAllMediaData.onError $it")
-                    _uiState.value = HomeUiState.Error(it)
+                onError = { error ->
+                    Logger.debug("fetchAllMediaData.onError $error")
+                    _uiState.update { it.copy(errorMessage = error, isLoading = false) }
                 },
             )
         }
