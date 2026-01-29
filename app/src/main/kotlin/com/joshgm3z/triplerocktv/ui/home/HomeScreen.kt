@@ -43,8 +43,10 @@ import androidx.tv.material3.Icon
 import androidx.tv.material3.IconButton
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
+import androidx.tv.material3.NavigationDrawerScope
 import androidx.tv.material3.Text
 import androidx.tv.material3.rememberDrawerState
+import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.common.defaultAnimationSpec
@@ -73,49 +75,76 @@ fun HomeScreen(
     }
 
     val uiState = viewModel.uiState.collectAsState().value
-    NavigationDrawer(drawerContent = {
-        Column(modifier = Modifier.padding(10.dp)) {
-            if (hasFocus) {
-                TopMenuDropDown(uiState.selectedTopbarItem) {
-                    viewModel.onTopbarItemUpdate(it)
-                }
-            }
-            Spacer(Modifier.size(10.dp))
-            if (!uiState.categoryEntities.isEmpty())
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxHeight()
-                        .focusGroup()
-                        .focusRestorer(focusRestorer)
-                ) {
-                    items(uiState.categoryEntities) { categoryEntity ->
-                        NavigationDrawerItem(
-                            modifier = Modifier.onFocusChanged {
-                                if (it.isFocused) viewModel.onSelectedCategoryUpdate(categoryEntity)
-                            },
-                            selected = uiState.selectedCategoryEntity == categoryEntity,
-                            onClick = { drawerState.setValue(DrawerValue.Closed) },
-                            content = { Text(text = categoryEntity.categoryName) },
-                            leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
-                        )
-                    }
-                }
-        }
-    }) {
-        Crossfade(uiState, animationSpec = defaultAnimationSpec) {
-            with(it) {
-                when {
-                    isLoading -> InfoBox(text = "Loading data", delayMs = 0)
-                    !errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
-                    streamEntities.isNotEmpty() -> Content(
-                        onContentClick = { streamEntity -> openMediaInfoScreen(streamEntity) },
-                        streamEntities = streamEntities,
-                    )
+    NavigationDrawer(
+        drawerContent = NavigationDrawerContent(
+            uiState = uiState,
+            onTopbarItemUpdate = { viewModel.onTopbarItemUpdate(it) },
+            onSelectedCategoryUpdate = { viewModel.onSelectedCategoryUpdate(it) },
+            closeDrawer = { drawerState.setValue(DrawerValue.Closed) },
+            focusRestorer = focusRestorer,
+        ),
+        content = NavigationContent(
+            uiState = uiState,
+            openMediaInfoScreen = openMediaInfoScreen,
+        )
+    )
+}
 
-                    else -> InfoBox("No data found")
-                }
+@Composable
+fun NavigationContent(
+    uiState: HomeUiState,
+    openMediaInfoScreen: (StreamEntity) -> Unit,
+): @Composable () -> Unit = {
+    Crossfade(uiState, animationSpec = defaultAnimationSpec) {
+        with(it) {
+            when {
+                isLoading -> InfoBox(text = "Loading data", delayMs = 0)
+                !errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
+                streamEntities.isNotEmpty() -> Content(
+                    onContentClick = { streamEntity -> openMediaInfoScreen(streamEntity) },
+                    streamEntities = streamEntities,
+                )
+
+                else -> InfoBox("No data found")
             }
         }
+    }
+}
+
+@Composable
+fun NavigationDrawerContent(
+    uiState: HomeUiState,
+    onTopbarItemUpdate: (TopbarItem) -> Unit,
+    onSelectedCategoryUpdate: (CategoryEntity) -> Unit,
+    closeDrawer: () -> Unit,
+    focusRestorer: FocusRequester,
+): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
+    Column(modifier = Modifier.padding(10.dp)) {
+        if (hasFocus) {
+            TopMenuDropDown(uiState.selectedTopbarItem) {
+                onTopbarItemUpdate(it)
+            }
+        }
+        Spacer(Modifier.size(10.dp))
+        if (!uiState.categoryEntities.isEmpty())
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .focusGroup()
+                    .focusRestorer(focusRestorer)
+            ) {
+                items(uiState.categoryEntities) { categoryEntity ->
+                    NavigationDrawerItem(
+                        modifier = Modifier.onFocusChanged {
+                            if (it.isFocused) onSelectedCategoryUpdate(categoryEntity)
+                        },
+                        selected = uiState.selectedCategoryEntity == categoryEntity,
+                        onClick = { closeDrawer() },
+                        content = { Text(text = categoryEntity.categoryName) },
+                        leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
+                    )
+                }
+            }
     }
 }
 
