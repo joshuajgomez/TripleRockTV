@@ -2,6 +2,8 @@ package com.joshgm3z.triplerocktv.ui.home
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,6 +12,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,12 +20,14 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -35,12 +40,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
+import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.NavigationDrawerScope
@@ -94,10 +101,9 @@ fun NavigationDrawerContent(
     focusRestorer: FocusRequester,
 ): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
     Column(
-        modifier = Modifier.padding(
-            start = 10.dp,
-            top = 20.dp
-        )
+        modifier = Modifier
+            .padding(top = 20.dp)
+            .width(if (hasFocus) 240.dp else 60.dp)
     ) {
         TopbarUser(
             hasFocus = hasFocus,
@@ -132,6 +138,7 @@ fun NavigationDrawerContent(
 val topIconModifier = Modifier
     .defaultMinSize(minWidth = 56.dp)
     .height(50.dp)
+    .fillMaxWidth()
     .padding(bottom = 15.dp)
 
 @Composable
@@ -142,8 +149,8 @@ fun TopbarMenu(
 ) {
     Row(
         modifier = topIconModifier,
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         AnimatedContent(hasFocus) {
             if (it) {
@@ -167,12 +174,12 @@ fun TopbarUser(
 ) {
     Row(
         modifier = topIconModifier,
-        verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         AnimatedContent(hasFocus) {
             if (it) {
-                UserDropDown(TopbarItem.Search) {}
+                UserDropDown {}
             } else {
                 Image(
                     painter = painterResource(R.drawable.avatar_movie),
@@ -199,14 +206,13 @@ fun TopMenuDropDown(
         var expanded by remember { mutableStateOf(false) }
 
         Box {
-            Button(
+            OutlinedButton(
                 onClick = { expanded = !expanded },
                 modifier = Modifier.width(150.dp)
             ) {
                 Icon(
-                    Icons.Default.ArrowDropDown,
+                    Icons.Default.Home,
                     contentDescription = null,
-                    modifier = Modifier.size(ButtonDefaults.IconSize)
                 )
                 Spacer(Modifier.size(ButtonDefaults.IconSpacing))
                 Text(selectedTopbarItem?.name ?: "Select")
@@ -217,6 +223,12 @@ fun TopMenuDropDown(
             ) {
                 TopbarItem.entries.forEach { item ->
                     DropdownMenuItem(
+                        leadingIcon = {
+                            Icon(
+                                Icons.Default.Home,
+                                contentDescription = null,
+                            )
+                        },
                         text = { androidx.compose.material3.Text(item.name) },
                         onClick = {
                             onSelectionChange(item)
@@ -231,7 +243,6 @@ fun TopMenuDropDown(
 
 @Composable
 fun UserDropDown(
-    selectedTopbarItem: TopbarItem?,
     onSelectionChange: (TopbarItem) -> Unit
 ) {
     Box(
@@ -241,9 +252,14 @@ fun UserDropDown(
         var expanded by remember { mutableStateOf(false) }
 
         Box {
-            Button(
-                onClick = { expanded = !expanded },
-                modifier = Modifier.width(150.dp)
+            Row(
+                modifier = Modifier
+                    .clickable(
+                        enabled = true,
+                        onClick = { expanded = !expanded })
+                    .clip(RoundedCornerShape(10.dp))
+                    .padding(horizontal = 10.dp, vertical = 5.dp),
+                verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     painter = painterResource(R.drawable.avatar_movie),
