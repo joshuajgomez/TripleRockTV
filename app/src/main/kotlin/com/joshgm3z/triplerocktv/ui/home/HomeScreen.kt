@@ -59,6 +59,7 @@ fun HomeScreen(
             onSelectedCategoryUpdate = { viewModel.onSelectedCategoryUpdate(it) },
             closeDrawer = { drawerState.setValue(DrawerValue.Closed) },
             focusRestorer = focusRestorer,
+            isOpen = drawerState.currentValue == DrawerValue.Open,
         ),
         content = navigationContent(
             uiState = uiState,

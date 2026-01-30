@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
@@ -33,6 +34,8 @@ import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
+import androidx.tv.material3.NavigationDrawerItemColors
+import androidx.tv.material3.NavigationDrawerItemDefaults
 import androidx.tv.material3.NavigationDrawerScope
 import androidx.tv.material3.Text
 import androidx.tv.material3.rememberDrawerState
@@ -48,6 +51,7 @@ fun navigationDrawerContent(
     onSelectedCategoryUpdate: (CategoryEntity) -> Unit,
     closeDrawer: () -> Unit,
     focusRestorer: FocusRequester,
+    isOpen: Boolean = false,
 ): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
     Column(
         modifier = Modifier.padding(top = 20.dp)
@@ -67,6 +71,9 @@ fun navigationDrawerContent(
             ) {
                 items(uiState.categoryEntities) { categoryEntity ->
                     NavigationDrawerItem(
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = Color.Transparent,
+                        ),
                         modifier = Modifier.onFocusChanged {
                             if (it.isFocused) onSelectedCategoryUpdate(categoryEntity)
                         },
@@ -74,7 +81,7 @@ fun navigationDrawerContent(
                         onClick = { closeDrawer() },
                         content = { Text(text = categoryEntity.categoryName) },
                         leadingContent = {
-                            Icon(
+                            if (isOpen) Icon(
                                 Icons.Default.ArrowForward,
                                 contentDescription = null
                             )
