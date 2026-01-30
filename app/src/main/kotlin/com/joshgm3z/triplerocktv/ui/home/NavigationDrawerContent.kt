@@ -1,18 +1,12 @@
 package com.joshgm3z.triplerocktv.ui.home
 
-import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.focusGroup
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,19 +14,11 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,14 +26,11 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRestorer
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.tv.material3.Button
 import androidx.tv.material3.ButtonDefaults
 import androidx.tv.material3.DrawerValue
 import androidx.tv.material3.Icon
-import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.NavigationDrawer
 import androidx.tv.material3.NavigationDrawerItem
 import androidx.tv.material3.NavigationDrawerScope
@@ -59,41 +42,7 @@ import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
-@TvPreview
-private fun PreviewNavigationDrawerContent() {
-    TripleRockTVTheme {
-        val drawerValue = rememberDrawerState(DrawerValue.Open)
-        NavigationDrawer(
-            drawerState = drawerValue,
-            drawerContent = NavigationDrawerContent(
-                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
-                onTopbarItemUpdate = {},
-                onSelectedCategoryUpdate = {},
-                closeDrawer = {},
-                focusRestorer = FocusRequester(),
-            )
-        ) { }
-    }
-}
-
-@Composable
-@TvPreview
-private fun PreviewNavigationDrawerContent_Closed() {
-    TripleRockTVTheme {
-        NavigationDrawer(
-            drawerContent = NavigationDrawerContent(
-                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
-                onTopbarItemUpdate = {},
-                onSelectedCategoryUpdate = {},
-                closeDrawer = {},
-                focusRestorer = FocusRequester(),
-            )
-        ) { }
-    }
-}
-
-@Composable
-fun NavigationDrawerContent(
+fun navigationDrawerContent(
     uiState: HomeUiState,
     onTopbarItemUpdate: (TopbarItem) -> Unit,
     onSelectedCategoryUpdate: (CategoryEntity) -> Unit,
@@ -101,17 +50,13 @@ fun NavigationDrawerContent(
     focusRestorer: FocusRequester,
 ): @Composable NavigationDrawerScope.(DrawerValue) -> Unit = {
     Column(
-        modifier = Modifier
-            .padding(top = 20.dp)
-            .width(if (hasFocus) 240.dp else 60.dp)
+        modifier = Modifier.padding(top = 20.dp)
     ) {
         TopbarUser(
             hasFocus = hasFocus,
         )
-        TopbarMenu(
+        TopbarHome(
             hasFocus = hasFocus,
-            selectedTopbarItem = uiState.selectedTopbarItem,
-            onTopbarItemUpdate = onTopbarItemUpdate
         )
         if (!uiState.categoryEntities.isEmpty())
             LazyColumn(
@@ -128,7 +73,12 @@ fun NavigationDrawerContent(
                         selected = uiState.selectedCategoryEntity == categoryEntity,
                         onClick = { closeDrawer() },
                         content = { Text(text = categoryEntity.categoryName) },
-                        leadingContent = { Icon(Icons.Default.Add, contentDescription = null) },
+                        leadingContent = {
+                            Icon(
+                                Icons.Default.ArrowForward,
+                                contentDescription = null
+                            )
+                        },
                     )
                 }
             }
@@ -136,37 +86,11 @@ fun NavigationDrawerContent(
 }
 
 val topIconModifier = Modifier
-    .defaultMinSize(minWidth = 56.dp)
     .height(50.dp)
-    .fillMaxWidth()
-    .padding(bottom = 15.dp)
-
-@Composable
-fun TopbarMenu(
-    hasFocus: Boolean,
-    selectedTopbarItem: TopbarItem?,
-    onTopbarItemUpdate: (TopbarItem) -> Unit
-) {
-    Row(
-        modifier = topIconModifier,
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        AnimatedContent(hasFocus) {
-            if (it) {
-                TopMenuDropDown(selectedTopbarItem) { item ->
-                    onTopbarItemUpdate(item)
-                }
-            } else {
-                Icon(
-                    imageVector = Icons.Default.Home,
-                    contentDescription = null,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-        }
-    }
-}
+    .padding(
+        bottom = 15.dp,
+        start = 12.dp
+    )
 
 @Composable
 fun TopbarUser(
@@ -177,115 +101,74 @@ fun TopbarUser(
         horizontalArrangement = Arrangement.Center,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        AnimatedContent(hasFocus) {
-            if (it) {
-                UserDropDown {}
-            } else {
-                Image(
-                    painter = painterResource(R.drawable.avatar_movie),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(25.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-            }
+        Image(
+            painter = painterResource(R.drawable.avatar_movie),
+            contentDescription = null,
+            modifier = Modifier
+                .size(25.dp)
+                .clip(CircleShape),
+            contentScale = ContentScale.Crop
+        )
+        if (hasFocus) {
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text("Someone")
         }
     }
 }
 
 @Composable
-fun TopMenuDropDown(
-    selectedTopbarItem: TopbarItem?,
-    onSelectionChange: (TopbarItem) -> Unit
+fun TopbarHome(
+    hasFocus: Boolean,
 ) {
-    Box(
-        modifier = Modifier,
-        contentAlignment = Alignment.CenterEnd
+    Row(
+        modifier = topIconModifier,
+        horizontalArrangement = Arrangement.Center,
+        verticalAlignment = Alignment.CenterVertically,
     ) {
-        var expanded by remember { mutableStateOf(false) }
-
-        Box {
-            OutlinedButton(
-                onClick = { expanded = !expanded },
-                modifier = Modifier.width(150.dp)
-            ) {
-                Icon(
-                    Icons.Default.Home,
-                    contentDescription = null,
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text(selectedTopbarItem?.name ?: "Select")
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                TopbarItem.entries.forEach { item ->
-                    DropdownMenuItem(
-                        leadingIcon = {
-                            Icon(
-                                Icons.Default.Home,
-                                contentDescription = null,
-                            )
-                        },
-                        text = { androidx.compose.material3.Text(item.name) },
-                        onClick = {
-                            onSelectionChange(item)
-                            expanded = false
-                        }
-                    )
-                }
-            }
+        Icon(
+            imageVector = Icons.Default.Home,
+            contentDescription = null,
+            modifier = Modifier
+                .size(25.dp)
+                .clip(CircleShape),
+        )
+        if (hasFocus) {
+            Spacer(Modifier.size(ButtonDefaults.IconSpacing))
+            Text("Home")
         }
     }
 }
 
 @Composable
-fun UserDropDown(
-    onSelectionChange: (TopbarItem) -> Unit
-) {
-    Box(
-        modifier = Modifier,
-        contentAlignment = Alignment.CenterEnd
-    ) {
-        var expanded by remember { mutableStateOf(false) }
+@TvPreview
+private fun PreviewNavigationDrawerContent() {
+    TripleRockTVTheme {
+        val drawerValue = rememberDrawerState(DrawerValue.Open)
+        NavigationDrawer(
+            drawerState = drawerValue,
+            drawerContent = navigationDrawerContent(
+                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
+                onTopbarItemUpdate = {},
+                onSelectedCategoryUpdate = {},
+                closeDrawer = {},
+                focusRestorer = remember { FocusRequester() },
+            )
+        ) { }
+    }
+}
 
-        Box {
-            Row(
-                modifier = Modifier
-                    .clickable(
-                        enabled = true,
-                        onClick = { expanded = !expanded })
-                    .clip(RoundedCornerShape(10.dp))
-                    .padding(horizontal = 10.dp, vertical = 5.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Image(
-                    painter = painterResource(R.drawable.avatar_movie),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(25.dp)
-                        .clip(CircleShape),
-                    contentScale = ContentScale.Crop
-                )
-                Spacer(Modifier.size(ButtonDefaults.IconSpacing))
-                Text("someone")
-            }
-            DropdownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                TopbarItem.entries.forEach { item ->
-                    DropdownMenuItem(
-                        text = { androidx.compose.material3.Text(item.name) },
-                        onClick = {
-                            onSelectionChange(item)
-                            expanded = false
-                        }
-                    )
-                }
-            }
-        }
+@Composable
+@TvPreview
+private fun PreviewNavigationDrawerContent_Closed() {
+    TripleRockTVTheme {
+        NavigationDrawer(
+            drawerContent = navigationDrawerContent(
+                uiState = HomeUiState(categoryEntities = CategoryEntity.samples()),
+                onTopbarItemUpdate = {},
+                onSelectedCategoryUpdate = {},
+                closeDrawer = {},
+                focusRestorer = remember { FocusRequester() },
+            )
+        ) { }
     }
 }
