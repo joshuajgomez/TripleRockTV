@@ -5,6 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamUserResponse
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
@@ -40,13 +41,17 @@ class LocalDatastore @Inject constructor(
     }
 
     fun getLoginCredentials(
-        onFetch: (
-            username: String,
-            password: String
-        ) -> Unit
+        onFetch: (UserInfo) -> Unit
     ) = runBlocking {
         dataStore.data.firstOrNull()?.let {
-            onFetch(it[USERNAME]!!, it[PASSWORD]!!)
+            onFetch(
+                UserInfo(
+                    username = it[USERNAME] ?: "",
+                    password = it[PASSWORD] ?: "",
+                    webUrl = it[SERVER_URL] ?: "",
+                    expiryDate = it[EXPIRY_DATE] ?: "",
+                )
+            )
         }
     }
 
