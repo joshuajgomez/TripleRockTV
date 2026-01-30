@@ -2,12 +2,15 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
+import com.joshgm3z.triplerocktv.repository.retrofit.XtreamUserResponse
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
-class LoginRepositoryImpl @Inject constructor() : LoginRepository {
+class LoginRepositoryImpl @Inject constructor(
+    private val localDataStore: LocalDatastore,
+) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
         username: String,
@@ -35,6 +38,7 @@ class LoginRepositoryImpl @Inject constructor() : LoginRepository {
                 // Xtream API returns auth = 1 on success
                 if (body?.user_info?.auth == 1) {
                     delay(1000)
+                    localDataStore.storeCredentials(body, password)
                     onSuccess()
                 } else {
                     onError("Invalid username or password")
