@@ -40,6 +40,7 @@ fun getHomeViewModel(): IHomeViewModel = when {
 fun HomeScreen(
     openMediaInfoScreen: (StreamEntity) -> Unit = {},
     openSearchScreen: () -> Unit = {},
+    openSettingsScreen: () -> Unit = {},
     viewModel: IHomeViewModel = getHomeViewModel(),
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -56,7 +57,7 @@ fun HomeScreen(
         drawerContent = navigationDrawerContent(
             uiState = uiState,
             onTopbarItemUpdate = { viewModel.onTopbarItemUpdate(it) },
-            openSettings = { viewModel.openSettings() },
+            openSettings = { openSettingsScreen() },
             onSelectedCategoryUpdate = { viewModel.onSelectedCategoryUpdate(it) },
             closeDrawer = { drawerState.setValue(DrawerValue.Closed) },
             focusRestorer = focusRestorer,

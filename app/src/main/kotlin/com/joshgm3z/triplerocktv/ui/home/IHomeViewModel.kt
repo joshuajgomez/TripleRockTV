@@ -10,7 +10,6 @@ data class HomeUiState(
     var categoryEntities: List<CategoryEntity> = emptyList(),
     val streamEntities: List<StreamEntity> = emptyList(),
     var isLoading: Boolean = true,
-    var showSettings: Boolean = false,
     var errorMessage: String? = null,
 )
 
@@ -18,5 +17,4 @@ interface IHomeViewModel {
     val uiState: StateFlow<HomeUiState>
     fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity)
     fun onTopbarItemUpdate(topbarItem: TopbarItem)
-    fun openSettings()
 }

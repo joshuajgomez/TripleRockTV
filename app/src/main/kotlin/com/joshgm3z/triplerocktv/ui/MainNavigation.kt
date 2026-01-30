@@ -33,6 +33,9 @@ object NavLogin
 object NavLoading
 
 @Serializable
+object NavSettings
+
+@Serializable
 object NavSearch
 
 @Composable
@@ -54,6 +57,9 @@ fun MainNavigation() {
                 },
                 openSearchScreen = {
                     navController.navigate(NavSearch)
+                },
+                openSettingsScreen = {
+                    navController.navigate(NavSettings)
                 }
             )
         }
@@ -85,6 +91,14 @@ fun MainNavigation() {
             MediaLoadingScreen(
                 onMediaLoaded = {
                     navController.navigate(NavHome)
+                }
+            )
+        }
+        composable<NavSettings> {
+            SettingsScreen(
+                onUserLoggedOut = {
+                    navController.popBackStack()
+                    navController.navigate(NavLogin)
                 }
             )
         }
