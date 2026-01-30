@@ -1,11 +1,16 @@
 package com.joshgm3z.triplerocktv.di
 
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.stringPreferencesKey
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.runBlocking
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -28,9 +33,21 @@ class NetworkModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+    fun provideBaseUrl(dataStore: LocalDatastore): String {
+        return runBlocking {
+            dataStore.getServerUrl()!!
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideRetrofit(
+        okHttpClient: OkHttpClient,
+        baseUrl: String
+    ): Retrofit {
+        Logger.debug("baseUrl = [${baseUrl}]")
         return Retrofit.Builder()
-            .baseUrl(Secrets.webUrl)
+            .baseUrl(baseUrl)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

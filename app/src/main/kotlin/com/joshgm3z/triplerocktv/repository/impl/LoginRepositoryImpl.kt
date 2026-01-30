@@ -37,8 +37,8 @@ class LoginRepositoryImpl @Inject constructor(
                 val body = response.body()
                 // Xtream API returns auth = 1 on success
                 if (body?.user_info?.auth == 1) {
+                    localDataStore.storeCredentials(body, webUrl, password)
                     delay(1000)
-                    localDataStore.storeCredentials(body, password)
                     onSuccess()
                 } else {
                     onError("Invalid username or password")

@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.repository.impl
 
-import android.util.Log
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
@@ -8,7 +7,6 @@ import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
@@ -19,13 +17,21 @@ class MediaOnlineRepositoryImpl
     private val iptvService: IptvService,
     private val categoryDao: CategoryDao,
     private val streamsDao: StreamsDao,
+    localDatastore: LocalDatastore,
 ) : MediaOnlineRepository {
     companion object {
         private const val LIMIT = 5
     }
 
-    private val username = Secrets.username
-    private val password = Secrets.password
+    private lateinit var username: String
+    private lateinit var password: String
+
+    init {
+        localDatastore.getLoginCredentials { username, password ->
+            this.username = username
+            this.password = password
+        }
+    }
 
     override suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
