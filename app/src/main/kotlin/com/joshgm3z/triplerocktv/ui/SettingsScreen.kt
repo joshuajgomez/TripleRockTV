@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
@@ -17,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.tv.material3.Text
 import androidx.tv.material3.WideButton
+import com.joshgm3z.triplerocktv.ui.common.BackButton
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.login.ILoginViewModel
 import com.joshgm3z.triplerocktv.ui.login.getLoginViewModel
@@ -26,10 +28,17 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 fun SettingsScreen(
     viewModel: ILoginViewModel = getLoginViewModel(),
     onUserLoggedOut: () -> Unit = {},
+    goBack: () -> Unit = {},
 ) {
     var loading by remember { mutableStateOf(false) }
 
-    Column(modifier = Modifier.fillMaxSize()) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.SpaceBetween
+    ) {
+        BackButton(onClick = { goBack() })
         WideButton(
             enabled = !loading,
             title = {

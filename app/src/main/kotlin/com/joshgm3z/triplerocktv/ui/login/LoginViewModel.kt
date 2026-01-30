@@ -30,10 +30,7 @@ class LoginViewModel
         password: String
     ) {
         _uiState.update {
-            it.copy(
-                loading = true,
-                errorMessage = null
-            )
+            it.copy(loading = true, errorMessage = null)
         }
         viewModelScope.launch {
             repository.tryLogin(
@@ -42,18 +39,12 @@ class LoginViewModel
                 password = password,
                 onSuccess = {
                     _uiState.update {
-                        it.copy(
-                            loginSuccess = true,
-                            loading = false
-                        )
+                        it.copy(loginSuccess = true, loading = false)
                     }
                 },
                 onError = { error ->
                     _uiState.update {
-                        it.copy(
-                            errorMessage = error,
-                            loading = false
-                        )
+                        it.copy(errorMessage = error, loading = false)
                     }
                 },
             )
@@ -61,6 +52,9 @@ class LoginViewModel
     }
 
     override fun onLogoutClick(onLogoutComplete: () -> Unit) {
+        _uiState.update {
+            it.copy(loading = true, errorMessage = null)
+        }
         viewModelScope.launch {
             repository.tryLogout {
                 onLogoutComplete()

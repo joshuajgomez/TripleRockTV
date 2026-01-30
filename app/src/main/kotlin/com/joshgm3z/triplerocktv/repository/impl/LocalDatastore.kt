@@ -49,4 +49,8 @@ class LocalDatastore @Inject constructor(
             onFetch(it[USERNAME]!!, it[PASSWORD]!!)
         }
     }
+
+    suspend fun clearAllData() {
+        dataStore.edit { it.clear() }
+    }
 }

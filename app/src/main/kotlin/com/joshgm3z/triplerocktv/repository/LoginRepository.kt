@@ -9,5 +9,5 @@ interface LoginRepository {
         onError: (String) -> Unit,
     )
 
-    suspend fun tryLogout(onLogoutCompleter: () -> Unit) {}
+    suspend fun tryLogout(onLogoutComplete: () -> Unit) {}
 }
