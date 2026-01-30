@@ -26,12 +26,20 @@ import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
 @Composable
 fun Content(
-    modifier: Modifier = Modifier,
     streamEntities: List<StreamEntity>,
     onContentClick: (StreamEntity) -> Unit = {},
 ) {
+    CustomFlowRow {
+        streamEntities.forEach {
+            ThumbnailCard(it) { onContentClick(it) }
+        }
+    }
+}
+
+@Composable
+fun CustomFlowRow(content: @Composable () -> Unit) {
     FlowRow(
-        modifier = modifier
+        modifier = Modifier
             .layoutId(HomeScreenLayoutId.Content)
             .fillMaxSize()
             .padding(start = 20.dp, end = 10.dp, top = 10.dp),
@@ -39,9 +47,7 @@ fun Content(
         horizontalArrangement = Arrangement.spacedBy(20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        streamEntities.forEach {
-            ThumbnailCard(it) { onContentClick(it) }
-        }
+        content()
     }
 }
 

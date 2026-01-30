@@ -10,7 +10,7 @@ fun navigationContent(
 ): @Composable () -> Unit = {
     with(uiState) {
         when {
-            isLoading -> InfoBox(text = "Loading data", delayMs = 0)
+            isLoading -> LoadingBox()
             !errorMessage.isNullOrEmpty() -> InfoBox("Error loading content")
             streamEntities.isNotEmpty() -> Content(
                 onContentClick = { streamEntity -> openMediaInfoScreen(streamEntity) },
