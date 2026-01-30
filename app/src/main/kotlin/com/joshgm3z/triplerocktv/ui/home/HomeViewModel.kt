@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +20,8 @@ class HomeViewModel
 ) : ViewModel(), IHomeViewModel {
     private val _uiState = MutableStateFlow(HomeUiState())
     override val uiState = _uiState.asStateFlow()
+
+    private var streamEntityCache: HashMap<CategoryEntity, List<StreamEntity>> = hashMapOf()
 
     init {
         onTopbarItemUpdate(TopbarItem.Home)
@@ -59,6 +62,7 @@ class HomeViewModel
 
     override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {
         Logger.debug("categoryEntity=$categoryEntity")
+
         if (_uiState.value.selectedCategoryEntity == categoryEntity) {
             Logger.debug("categoryEntity already selected")
             return
@@ -71,6 +75,13 @@ class HomeViewModel
                 streamEntities = emptyList()
             )
         }
+
+        streamEntityCache[categoryEntity]?.let { streams ->
+            Logger.debug("streams available in cache")
+            _uiState.update { it.copy(streamEntities = streams, isLoading = false) }
+            return
+        }
+
         viewModelScope.launch {
             repository.fetchAllMediaData(
                 categoryId = categoryEntity.categoryId,
@@ -81,6 +92,7 @@ class HomeViewModel
                         _uiState.update { it.copy(errorMessage = "No contents found") }
                     } else {
                         _uiState.update { it.copy(streamEntities = streams) }
+                        streamEntityCache[categoryEntity] = streams
                     }
                 },
                 onError = { error ->

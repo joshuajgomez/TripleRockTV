@@ -11,6 +11,7 @@ import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
+import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
 class MediaOnlineRepositoryImpl
@@ -20,8 +21,7 @@ class MediaOnlineRepositoryImpl
     private val streamsDao: StreamsDao,
 ) : MediaOnlineRepository {
     companion object {
-        private const val TAG: String = "MediaOnlineRepositoryImpl"
-        private const val LIMIT = 3
+        private const val LIMIT = 5
     }
 
     private val username = Secrets.username
@@ -58,7 +58,7 @@ class MediaOnlineRepositoryImpl
                 LoadingState(0, LoadingStatus.Complete)
             )
         } catch (e: Exception) {
-            Log.e(TAG, "fetchContent: error=${e.message}")
+            Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
         }
     }
