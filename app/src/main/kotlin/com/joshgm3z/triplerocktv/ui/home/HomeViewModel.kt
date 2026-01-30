@@ -53,6 +53,10 @@ class HomeViewModel
         }
     }
 
+    override fun openSettings() {
+        _uiState.update { it.copy(showSettings = !it.showSettings) }
+    }
+
     override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {
         Logger.debug("categoryEntity=$categoryEntity")
         if (_uiState.value.selectedCategoryEntity == categoryEntity) {
