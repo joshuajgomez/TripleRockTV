@@ -9,4 +9,6 @@ interface ILoginViewModel {
         username: String,
         password: String
     )
+
+    fun onLogoutClick(onLogoutComplete: () -> Unit = {})
 }

@@ -23,4 +23,5 @@ class FakeHomeViewModel : IHomeViewModel {
 
     override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {}
     override fun onTopbarItemUpdate(topbarItem: TopbarItem) {}
+    override fun openSettings() {}
 }

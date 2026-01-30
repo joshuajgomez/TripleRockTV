@@ -13,4 +13,6 @@ class FakeLoginViewModel(
         password: String
     ) {
     }
+
+    override fun onLogoutClick(onLogoutComplete: () -> Unit) {}
 }

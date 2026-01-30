@@ -20,4 +20,9 @@ constructor() : LoginRepository {
         else
             onSuccess()
     }
+
+    override suspend fun tryLogout(onLogoutCompleter: () -> Unit) {
+        delay(1000)
+        onLogoutCompleter()
+    }
 }

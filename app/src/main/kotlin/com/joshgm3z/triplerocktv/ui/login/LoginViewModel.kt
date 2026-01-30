@@ -59,4 +59,12 @@ class LoginViewModel
             )
         }
     }
+
+    override fun onLogoutClick(onLogoutComplete: () -> Unit) {
+        viewModelScope.launch {
+            repository.tryLogout {
+                onLogoutComplete()
+            }
+        }
+    }
 }
