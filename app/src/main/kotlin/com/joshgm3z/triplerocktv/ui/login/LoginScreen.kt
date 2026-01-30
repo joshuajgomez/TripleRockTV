@@ -1,15 +1,20 @@
 package com.joshgm3z.triplerocktv.ui.login
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,16 +31,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.tv.material3.Button
+import androidx.tv.material3.Icon
 import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.EMPTY_TEXT
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
+import com.joshgm3z.triplerocktv.ui.theme.Green10
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
+import kotlinx.coroutines.delay
 
 @Composable
 fun getLoginViewModel(): ILoginViewModel = when {
@@ -51,6 +60,7 @@ fun LoginScreen(
     val uiState = viewModel.uiState.collectAsState().value
 
     LaunchedEffect(uiState.loginSuccess) {
+        delay(2000)
         if (uiState.loginSuccess) onLoginSuccess()
     }
 
@@ -58,7 +68,9 @@ fun LoginScreen(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        LoginForm(uiState) { webUrl, username, password ->
+        if (uiState.loginSuccess) AnimatedVisibility(true) {
+            SuccessCard()
+        } else LoginForm(uiState) { webUrl, username, password ->
             viewModel.onLoginClick(webUrl, username, password)
         }
     }
@@ -162,6 +174,20 @@ fun LoginForm(
 }
 
 @Composable
+fun SuccessCard() {
+    Row(verticalAlignment = Alignment.CenterVertically) {
+        Icon(
+            imageVector = Icons.Default.Check,
+            contentDescription = null,
+            tint = Green10,
+            modifier = Modifier.size(45.dp)
+        )
+        Spacer(Modifier.size(20.dp))
+        Text("Signed in", fontSize = 25.sp)
+    }
+}
+
+@Composable
 fun SubmitButton(
     modifier: Modifier = Modifier,
     isLoading: Boolean,
@@ -198,6 +224,14 @@ private fun PreviewLoginScreen_Initial() {
 private fun PreviewLoginScreen_Loading() {
     TripleRockTVTheme {
         LoginForm(uiState = LoginUiState(loading = true))
+    }
+}
+
+@TvPreview
+@Composable
+private fun PreviewLoginScreen_Success() {
+    TripleRockTVTheme {
+        LoginForm(uiState = LoginUiState(loginSuccess = true))
     }
 }
 
