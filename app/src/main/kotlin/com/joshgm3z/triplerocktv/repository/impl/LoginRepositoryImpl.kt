@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
+import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -33,6 +34,7 @@ class LoginRepositoryImpl @Inject constructor() : LoginRepository {
                 val body = response.body()
                 // Xtream API returns auth = 1 on success
                 if (body?.user_info?.auth == 1) {
+                    delay(1000)
                     onSuccess()
                 } else {
                     onError("Invalid username or password")
