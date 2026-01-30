@@ -53,14 +53,14 @@ fun HomeScreen(
 
     val uiState = viewModel.uiState.collectAsState().value
     NavigationDrawer(
-        drawerContent = NavigationDrawerContent(
+        drawerContent = navigationDrawerContent(
             uiState = uiState,
             onTopbarItemUpdate = { viewModel.onTopbarItemUpdate(it) },
             onSelectedCategoryUpdate = { viewModel.onSelectedCategoryUpdate(it) },
             closeDrawer = { drawerState.setValue(DrawerValue.Closed) },
             focusRestorer = focusRestorer,
         ),
-        content = NavigationContent(
+        content = navigationContent(
             uiState = uiState,
             openMediaInfoScreen = openMediaInfoScreen,
         )
