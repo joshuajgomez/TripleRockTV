@@ -2,8 +2,10 @@ package com.joshgm3z.triplerocktv.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -12,6 +14,7 @@ import com.joshgm3z.triplerocktv.ui.loading.MediaLoadingScreen
 import com.joshgm3z.triplerocktv.ui.login.LoginScreen
 import com.joshgm3z.triplerocktv.ui.player.MediaInfoScreen
 import com.joshgm3z.triplerocktv.ui.search.SearchScreen
+import com.joshgm3z.triplerocktv.viewmodel.MainViewModel
 import kotlinx.serialization.Serializable
 
 val borderPaddingHorizontal = 20.dp
@@ -39,12 +42,14 @@ object NavSettings
 object NavSearch
 
 @Composable
-fun MainNavigation() {
+fun MainNavigation(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
+
+    val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
 
     NavHost(
         navController = navController,
-        startDestination = NavLogin,
+        startDestination = if (isLoggedIn) NavHome else NavLogin,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
@@ -97,8 +102,15 @@ fun MainNavigation() {
         composable<NavSettings> {
             SettingsScreen(
                 onUserLoggedOut = {
+                    navController.navigate(NavLogin) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                gotoMediaLoadingScreen = {
+                    navController.navigate(NavLoading)
+                },
+                goBack = {
                     navController.popBackStack()
-                    navController.navigate(NavLogin)
                 }
             )
         }

@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.login
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoginRepository
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,13 +17,32 @@ data class LoginUiState(
     var loginSuccess: Boolean = false,
 )
 
+data class UserInfo(
+    val username: String,
+    val password: String,
+    val webUrl: String,
+    val expiryDate: String,
+)
+
 @HiltViewModel
 class LoginViewModel
 @Inject constructor(
-    private val repository: LoginRepository
+    private val repository: LoginRepository,
+    private val localDatastore: LocalDatastore,
 ) : ViewModel(), ILoginViewModel {
     private val _uiState = MutableStateFlow(LoginUiState())
     override val uiState = _uiState.asStateFlow()
+
+    private val _userInfo = MutableStateFlow<UserInfo?>(null)
+    override val userInfo = _userInfo.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            localDatastore.getLoginCredentials {
+                _userInfo.value = it
+            }
+        }
+    }
 
     override fun onLoginClick(
         webUrl: String,

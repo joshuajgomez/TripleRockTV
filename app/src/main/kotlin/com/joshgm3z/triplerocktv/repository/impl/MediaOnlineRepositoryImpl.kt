@@ -27,9 +27,9 @@ class MediaOnlineRepositoryImpl
     private lateinit var password: String
 
     init {
-        localDatastore.getLoginCredentials { username, password ->
-            this.username = username
-            this.password = password
+        localDatastore.getLoginCredentials {
+            this.username = it.username
+            this.password = it.password
         }
     }
 
