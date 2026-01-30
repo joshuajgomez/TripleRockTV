@@ -11,7 +11,7 @@ class LoginRepositoryImpl @Inject constructor() : LoginRepository {
         onSuccess: () -> Unit,
         onError: (String) -> Unit
     ) {
-        TODO("Not yet implemented")
+        onSuccess()
     }
 
 }
