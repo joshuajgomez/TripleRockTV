@@ -33,6 +33,7 @@ import androidx.tv.material3.MaterialTheme.colorScheme
 import androidx.tv.material3.Text
 import com.joshgm3z.triplerocktv.EMPTY_TEXT
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.ui.common.TvPreview
 import com.joshgm3z.triplerocktv.ui.theme.TripleRockTVTheme
 
@@ -82,11 +83,11 @@ fun LoginForm(
         password: String,
     ) -> Unit = { _, _, _ -> }
 ) {
-    var webUrl by remember { mutableStateOf("https://") }
+    var webUrl by remember { mutableStateOf(/*"https://"*/ Secrets.webUrl) }
     var webUrlError by remember { mutableStateOf(false) }
-    var username by remember { mutableStateOf(EMPTY_TEXT) }
+    var username by remember { mutableStateOf(Secrets.username) }
     var usernameError by remember { mutableStateOf(false) }
-    var password by remember { mutableStateOf(EMPTY_TEXT) }
+    var password by remember { mutableStateOf(Secrets.password) }
     var passwordError by remember { mutableStateOf(false) }
 
     ConstraintLayout(
