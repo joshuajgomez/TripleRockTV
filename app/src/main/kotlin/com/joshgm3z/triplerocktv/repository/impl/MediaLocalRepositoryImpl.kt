@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
 import com.joshgm3z.triplerocktv.viewmodel.TopbarItem
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -39,6 +40,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
             Log.i(TAG, "fetchAllMediaData: $streams")
             onSuccess(streams)
         }
+    }
+
+    override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
+        return streamsDao.getAllStreams(categoryId).first()
     }
 
     override suspend fun fetchMediaDataById(
