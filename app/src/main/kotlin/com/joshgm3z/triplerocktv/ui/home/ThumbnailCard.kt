@@ -42,14 +42,14 @@ fun ThumbnailCard(
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier,
-                loading = placeholder {
+                /*loading = placeholder {
                     Image(
                         painter = painterResource(id = R.drawable.avatar_movie),
                         contentDescription = null,
                         modifier = Modifier,
                         contentScale = ContentScale.FillWidth
                     )
-                }
+                }*/
             )
         }, title = {
             Text(

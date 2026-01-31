@@ -11,6 +11,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.joshgm3z.triplerocktv.ui.home.HomeScreen
 import com.joshgm3z.triplerocktv.ui.loading.MediaLoadingScreen
+import com.joshgm3z.triplerocktv.ui.loading.SplashScreen
 import com.joshgm3z.triplerocktv.ui.login.LoginScreen
 import com.joshgm3z.triplerocktv.ui.player.MediaInfoScreen
 import com.joshgm3z.triplerocktv.ui.search.SearchScreen
@@ -22,6 +23,9 @@ val borderPaddingVertical = 12.dp
 
 @Serializable
 object NavHome
+
+@Serializable
+object NavSplash
 
 @Serializable
 data class NavMediaInfo(val streamId: Int)
@@ -45,16 +49,21 @@ object NavSearch
 fun MainNavigation(viewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
 
-    val isLoggedIn = viewModel.isLoggedIn.collectAsState().value
+    viewModel.isLoggedIn.collectAsState().value?.let {
+        navController.navigate(if (it) NavHome else NavLogin)
+    }
 
     NavHost(
         navController = navController,
-        startDestination = if (isLoggedIn) NavHome else NavLogin,
+        startDestination = NavSplash,
         modifier = Modifier.padding(
             horizontal = borderPaddingHorizontal,
             vertical = borderPaddingVertical
         )
     ) {
+        composable<NavSplash> {
+            SplashScreen()
+        }
         composable<NavHome> {
             HomeScreen(
                 openMediaInfoScreen = {
