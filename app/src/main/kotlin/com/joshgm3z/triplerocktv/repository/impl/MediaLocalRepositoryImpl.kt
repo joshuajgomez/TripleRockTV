@@ -36,14 +36,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
         onSuccess: (List<StreamEntity>) -> Unit,
         onError: (String) -> Unit
     ) {
-        streamsDao.getAllStreams(categoryId).collect { streams ->
+        /*streamsDao.getAllStreams(categoryId).collect { streams ->
             Log.i(TAG, "fetchAllMediaData: $streams")
             onSuccess(streams)
-        }
+        }*/
     }
 
     override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
-        return streamsDao.getAllStreams(categoryId).first()
+        return streamsDao.getAllStreams(categoryId)
     }
 
     override suspend fun fetchMediaDataById(
