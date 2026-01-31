@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     kotlin("kapt")
@@ -38,7 +37,6 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
-        compose = true
         buildConfig = true
     }
 
@@ -62,33 +60,19 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.tv.foundation)
     implementation(libs.androidx.tv.material)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.constraintlayout.compose)
-    implementation(libs.androidx.compose.material3)
     implementation(libs.androidx.datastore.core)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
-    implementation("com.github.bumptech.glide:glide:5.0.5")
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+    implementation(libs.androidx.leanback)
+    implementation(libs.androidx.fragment.ktx)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
-    implementation(libs.androidx.hilt.navigation.compose)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
@@ -97,7 +81,5 @@ dependencies {
     implementation(libs.room.ktx)
     kapt(libs.room.compiler)
 
-    implementation(libs.glide.compose)
-    implementation("androidx.leanback:leanback:1.0.0")
-    implementation("androidx.fragment:fragment-ktx:1.8.5")
+    implementation(libs.glide)
 }
