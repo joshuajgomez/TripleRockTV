@@ -3,7 +3,9 @@ package com.joshgm3z.triplerocktv
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.text.color
 import androidx.fragment.app.viewModels
+import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
@@ -34,11 +36,20 @@ class MainBrowseFragment : BrowseSupportFragment() {
         prepareEntranceTransition()
     }
 
+    private lateinit var backgroundManager: BackgroundManager
+
     private fun setupUI() {
         brandColor = ContextCompat.getColor(requireContext(), R.color.black)
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
-        title = "TripleRockTV"
+        title = "3Rock TV"
+        // Initialize BackgroundManager
+        backgroundManager = BackgroundManager.getInstance(requireActivity())
+        backgroundManager.attach(requireActivity().window)
+
+        // Set a solid background color for the entire fragment
+        backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
+
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
