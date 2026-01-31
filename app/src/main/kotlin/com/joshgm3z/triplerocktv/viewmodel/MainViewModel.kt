@@ -14,13 +14,13 @@ class MainViewModel
 @Inject constructor(
     localDatastore: LocalDatastore
 ) : ViewModel() {
-    private val _isLoggedIn = MutableStateFlow(false)
+    private val _isLoggedIn = MutableStateFlow<Boolean?>(null)
     val isLoggedIn = _isLoggedIn.asStateFlow()
 
     init {
         viewModelScope.launch {
-            localDatastore.getServerUrl()?.let {
-                _isLoggedIn.value = true
+            localDatastore.getServerUrl().let {
+                _isLoggedIn.value = !it.isNullOrEmpty()
             }
         }
     }
