@@ -1,11 +1,10 @@
-package com.joshgm3z.triplerocktv.ui.home
+package com.joshgm3z.triplerocktv.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
-import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,8 +21,6 @@ class HomeViewModel
 ) : ViewModel(), IHomeViewModel {
     private val _uiState = MutableStateFlow(HomeUiState())
     override val uiState = _uiState.asStateFlow()
-
-    private var streamEntityCache: HashMap<CategoryEntity, List<StreamEntity>> = hashMapOf()
 
     init {
         onTopbarItemUpdate(TopbarItem.Home)
@@ -51,8 +48,7 @@ class HomeViewModel
                     if (categories.isEmpty()) {
                         _uiState.update { it.copy(errorMessage = "No categories found") }
                     } else {
-                        _uiState.update { it.copy(categoryEntities = categories) }
-                        onSelectedCategoryUpdate(categories.first())
+                        fetchStreams(categories)
                     }
                 },
                 onError = { error ->
@@ -63,46 +59,26 @@ class HomeViewModel
         }
     }
 
-    override fun onSelectedCategoryUpdate(categoryEntity: CategoryEntity) {
-        Logger.debug("categoryEntity=$categoryEntity")
-
-        if (_uiState.value.selectedCategoryEntity == categoryEntity) {
-            Logger.debug("categoryEntity already selected")
-            return
-        }
-
-        _uiState.update {
-            it.copy(
-                isLoading = true,
-                selectedCategoryEntity = categoryEntity,
-                streamEntities = emptyList()
-            )
-        }
-
-        streamEntityCache[categoryEntity]?.let { streams ->
-            Logger.debug("streams available in cache")
-            _uiState.update { it.copy(streamEntities = streams, isLoading = false) }
-            return
-        }
-
+    private fun fetchStreams(categories: List<CategoryEntity>) {
         viewModelScope.launch {
-            repository.fetchAllMediaData(
-                categoryId = categoryEntity.categoryId,
-                onSuccess = { streams ->
-                    _uiState.update { it.copy(isLoading = false) }
-                    Logger.debug("fetchAllMediaData.onSuccess $streams")
-                    if (streams.isEmpty()) {
-                        _uiState.update { it.copy(errorMessage = "No contents found") }
-                    } else {
-                        _uiState.update { it.copy(streamEntities = streams) }
-                        streamEntityCache[categoryEntity] = streams
-                    }
-                },
-                onError = { error ->
-                    Logger.debug("fetchAllMediaData.onError $error")
-                    _uiState.update { it.copy(errorMessage = error, isLoading = false) }
-                },
-            )
+            categories.forEach { categoryEntity ->
+                repository.fetchAllMediaData(
+                    categoryId = categoryEntity.categoryId,
+                    onSuccess = { streams ->
+                        _uiState.update { it.copy(isLoading = false) }
+                        Logger.debug("fetchAllMediaData.onSuccess $streams")
+                        if (streams.isEmpty()) {
+                            _uiState.update { it.copy(errorMessage = "No contents found") }
+                        } else {
+                            _uiState.update { it.copy(contentMap = it.contentMap + (categoryEntity to streams)) }
+                        }
+                    },
+                    onError = { error ->
+                        Logger.debug("fetchAllMediaData.onError $error")
+                        _uiState.update { it.copy(errorMessage = error, isLoading = false) }
+                    },
+                )
+            }
         }
     }
 }
