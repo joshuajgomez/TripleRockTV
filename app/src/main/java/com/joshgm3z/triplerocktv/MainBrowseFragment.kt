@@ -15,6 +15,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.joshgm3z.triplerocktv.ui.home.HomeViewModel
+import com.joshgm3z.triplerocktv.ui.home.HomeUiState
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +31,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         setupUI()
         setupEventListeners()
         observeViewModel()
+        prepareEntranceTransition()
     }
 
     private fun setupUI() {
@@ -37,6 +39,9 @@ class MainBrowseFragment : BrowseSupportFragment() {
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         title = "TripleRockTV"
+        
+        rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+        adapter = rowsAdapter
     }
 
     private fun setupEventListeners() {
@@ -59,8 +64,8 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun updateRows(uiState: com.joshgm3z.triplerocktv.ui.home.HomeUiState) {
-        rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private fun updateRows(uiState: HomeUiState) {
+        rowsAdapter.clear()
 
         // Map categories to rows
         uiState.categoryEntities.forEachIndexed { index, category ->
@@ -74,8 +79,10 @@ class MainBrowseFragment : BrowseSupportFragment() {
             
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
-
-        adapter = rowsAdapter
+        
+        if (uiState.categoryEntities.isNotEmpty()) {
+            startEntranceTransition()
+        }
     }
 
     companion object {

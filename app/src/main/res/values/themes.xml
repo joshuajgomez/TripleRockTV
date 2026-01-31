@@ -1,8 +1,7 @@
 <resources>
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
-        <!-- Customize your colors here -->
-        <item name="browseRowsMarginStart">48dp</item>
-        <item name="browseRowsMarginTop">32dp</item>
+        <!-- Removed browseRowsMarginStart and browseRowsMarginTop as they can interfere with
+             Leanback's internal transition logic and prevent the UI from minimizing correctly. -->
     </style>
 </resources>
