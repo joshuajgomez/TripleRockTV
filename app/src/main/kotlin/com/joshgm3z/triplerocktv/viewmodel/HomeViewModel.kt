@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -43,10 +44,14 @@ class HomeViewModel
             repository.fetchCategories(
                 topbarItem = topbarItem,
                 onSuccess = { categories ->
-                    _uiState.update { it.copy(isLoading = false) }
                     Logger.debug("fetchCategories.onSuccess $categories")
                     if (categories.isEmpty()) {
-                        _uiState.update { it.copy(errorMessage = "No categories found") }
+                        _uiState.update {
+                            it.copy(
+                                errorMessage = "No categories found",
+                                isLoading = false
+                            )
+                        }
                     } else {
                         fetchStreams(categories)
                     }
@@ -61,23 +66,13 @@ class HomeViewModel
 
     private fun fetchStreams(categories: List<CategoryEntity>) {
         viewModelScope.launch {
-            categories.forEach { categoryEntity ->
-                repository.fetchAllMediaData(
-                    categoryId = categoryEntity.categoryId,
-                    onSuccess = { streams ->
-                        _uiState.update { it.copy(isLoading = false) }
-                        Logger.debug("fetchAllMediaData.onSuccess $streams")
-                        if (streams.isEmpty()) {
-                            _uiState.update { it.copy(errorMessage = "No contents found") }
-                        } else {
-                            _uiState.update { it.copy(contentMap = it.contentMap + (categoryEntity to streams)) }
-                        }
-                    },
-                    onError = { error ->
-                        Logger.debug("fetchAllMediaData.onError $error")
-                        _uiState.update { it.copy(errorMessage = error, isLoading = false) }
-                    },
-                )
+            _uiState.update {
+                it.copy(
+                    contentMap = categories.associateWith { category ->
+                        repository.fetchStreams(
+                            category.categoryId
+                        )
+                    })
             }
         }
     }

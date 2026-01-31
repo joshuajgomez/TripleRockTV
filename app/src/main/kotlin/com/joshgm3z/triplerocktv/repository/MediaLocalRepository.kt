@@ -18,6 +18,8 @@ interface MediaLocalRepository {
         onError: (String) -> Unit,
     )
 
+    suspend fun fetchStreams(categoryId: Int): List<StreamEntity>
+
     suspend fun fetchMediaDataById(
         streamId: Int,
         onSuccess: (StreamEntity) -> Unit,
