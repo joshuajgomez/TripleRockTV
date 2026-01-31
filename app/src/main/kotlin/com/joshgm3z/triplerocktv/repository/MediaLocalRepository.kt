@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.repository
 
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
-import com.joshgm3z.triplerocktv.ui.home.TopbarItem
+import com.joshgm3z.triplerocktv.viewmodel.TopbarItem
 
 interface MediaLocalRepository {
 

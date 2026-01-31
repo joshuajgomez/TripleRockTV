@@ -14,8 +14,8 @@ import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.joshgm3z.triplerocktv.ui.home.HomeViewModel
-import com.joshgm3z.triplerocktv.ui.home.HomeUiState
+import com.joshgm3z.triplerocktv.viewmodel.HomeUiState
+import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -39,7 +39,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         title = "TripleRockTV"
-        
+
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
     }
@@ -68,19 +68,16 @@ class MainBrowseFragment : BrowseSupportFragment() {
         rowsAdapter.clear()
 
         // Map categories to rows
-        uiState.categoryEntities.forEachIndexed { index, category ->
-            val header = HeaderItem(index.toLong(), category.categoryName)
+        uiState.contentMap.forEach { (category, streams) ->
+            val header = HeaderItem(category.categoryId.toLong(), category.categoryName)
             val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
-            
-            // If this is the selected category, show its streams
-            if (uiState.selectedCategoryEntity?.categoryId == category.categoryId) {
-                listRowAdapter.addAll(0, uiState.streamEntities)
-            }
-            
+
+            listRowAdapter.addAll(0, streams)
+
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
-        
-        if (uiState.categoryEntities.isNotEmpty()) {
+
+        if (uiState.contentMap.isNotEmpty()) {
             startEntranceTransition()
         }
     }

@@ -4,10 +4,8 @@ import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
-import com.joshgm3z.triplerocktv.ui.NavMediaInfo
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -33,10 +31,9 @@ class MediaInfoViewModel
     }
 
     init {
-        val route = savedStateHandle.toRoute<NavMediaInfo>()
         viewModelScope.launch {
             repository.fetchMediaDataById(
-                route.streamId,
+                StreamEntity.sample().streamId,
                 onSuccess = { streamEntity ->
                     Log.i(TAG, "fetchMediaDataById.onSuccess $streamEntity")
                     _uiState.update {

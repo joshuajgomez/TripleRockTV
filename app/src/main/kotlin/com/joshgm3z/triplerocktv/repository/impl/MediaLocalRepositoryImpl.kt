@@ -6,7 +6,7 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
-import com.joshgm3z.triplerocktv.ui.home.TopbarItem
+import com.joshgm3z.triplerocktv.viewmodel.TopbarItem
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
