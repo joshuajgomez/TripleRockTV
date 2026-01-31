@@ -98,4 +98,5 @@ dependencies {
     kapt(libs.room.compiler)
 
     implementation(libs.glide.compose)
+    implementation("androidx.leanback:leanback:1.0.0")
 }
