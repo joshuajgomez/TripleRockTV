@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.home
 
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 import kotlinx.coroutines.flow.StateFlow
 
 data class HomeUiState(
@@ -11,6 +12,7 @@ data class HomeUiState(
     val streamEntities: List<StreamEntity> = emptyList(),
     var isLoading: Boolean = true,
     var errorMessage: String? = null,
+    var username: String? = null,
 )
 
 interface IHomeViewModel {

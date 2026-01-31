@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.home
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.util.Logger
@@ -16,7 +17,8 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
-    private val repository: MediaLocalRepository
+    private val repository: MediaLocalRepository,
+    localDatastore: LocalDatastore
 ) : ViewModel(), IHomeViewModel {
     private val _uiState = MutableStateFlow(HomeUiState())
     override val uiState = _uiState.asStateFlow()
@@ -25,6 +27,11 @@ class HomeViewModel
 
     init {
         onTopbarItemUpdate(TopbarItem.Home)
+        viewModelScope.launch {
+            localDatastore.getLoginCredentials { userInfo ->
+                _uiState.update { it.copy(username = userInfo.username) }
+            }
+        }
     }
 
     override fun onTopbarItemUpdate(topbarItem: TopbarItem) {
