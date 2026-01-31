@@ -1,4 +1,8 @@
 <resources>
 
-    <style name="Theme.TripleRockTV" parent="Theme.AppCompat.DayNight.NoActionBar" />
+    <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
+        <!-- Customize your colors here -->
+        <item name="browseRowsMarginStart">48dp</item>
+        <item name="browseRowsMarginTop">32dp</item>
+    </style>
 </resources>
