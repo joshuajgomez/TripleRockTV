@@ -29,12 +29,12 @@ class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository,
     private val localDatastore: LocalDatastore,
-) : ViewModel(), ILoginViewModel {
+) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
-    override val uiState = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     private val _userInfo = MutableStateFlow<UserInfo?>(null)
-    override val userInfo = _userInfo.asStateFlow()
+    val userInfo = _userInfo.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -44,7 +44,7 @@ class LoginViewModel
         }
     }
 
-    override fun onLoginClick(
+    fun onLoginClick(
         webUrl: String,
         username: String,
         password: String
@@ -71,7 +71,7 @@ class LoginViewModel
         }
     }
 
-    override fun onLogoutClick(onLogoutComplete: () -> Unit) {
+    fun onLogoutClick(onLogoutComplete: () -> Unit) {
         _uiState.update {
             it.copy(loading = true, errorMessage = null)
         }

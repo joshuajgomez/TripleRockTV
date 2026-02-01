@@ -3,13 +3,19 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mediaLoadingFragment">
+    app:startDestination="@id/mediaLoginFragment">
 
     <fragment
-        android:id="@+id/mainBrowseFragment"
-        android:name="com.joshgm3z.triplerocktv.MainBrowseFragment"
-        android:label="MainBrowseFragment"
-        tools:layout="@layout/fragment_main_browse" />
+        android:id="@+id/mediaLoginFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.login.LoginFragment"
+        android:label="MediaLoginFragment"
+        tools:layout="@layout/fragment_login">
+        <action
+            android:id="@+id/action_mediaLoginFragment_to_mediaLoadingFragment"
+            app:destination="@id/mediaLoadingFragment"
+            app:popUpTo="@id/mediaLoginFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
     <fragment
         android:id="@+id/mediaLoadingFragment"
@@ -22,5 +28,11 @@
             app:popUpTo="@id/mediaLoadingFragment"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/mainBrowseFragment"
+        android:name="com.joshgm3z.triplerocktv.MainBrowseFragment"
+        android:label="MainBrowseFragment"
+        tools:layout="@layout/fragment_main_browse" />
 
 </navigation>
