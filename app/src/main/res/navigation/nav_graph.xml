@@ -31,7 +31,7 @@
 
     <fragment
         android:id="@+id/mainBrowseFragment"
-        android:name="com.joshgm3z.triplerocktv.MainBrowseFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.browse.MainBrowseFragment"
         android:label="MainBrowseFragment"
         tools:layout="@layout/fragment_main_browse" />
 

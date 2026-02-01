@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.ui.browse
 
 import android.os.Bundle
 import android.view.View
@@ -15,8 +15,7 @@ import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.joshgm3z.triplerocktv.viewmodel.HomeUiState
-import com.joshgm3z.triplerocktv.viewmodel.HomeViewModel
+import com.joshgm3z.triplerocktv.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -24,7 +23,7 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class MainBrowseFragment : BrowseSupportFragment() {
 
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: BrowseViewModel by viewModels()
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -74,7 +73,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun updateRows(uiState: HomeUiState) {
+    private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
 
         // Map categories to rows

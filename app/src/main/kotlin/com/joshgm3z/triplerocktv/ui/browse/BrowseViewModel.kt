@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.viewmodel
+package com.joshgm3z.triplerocktv.ui.browse
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -15,17 +15,33 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class BrowseUiState(
+    var selectedBrowseType: BrowseType? = null,
+    val contentMap: Map<CategoryEntity, List<StreamEntity>> = emptyMap(),
+    var isLoading: Boolean = true,
+    var errorMessage: String? = null,
+    var username: String? = null,
+)
+
+enum class BrowseType {
+    Home,
+    VideoOnDemand,
+    LiveTV,
+    EPG,
+    Series,
+}
+
 @HiltViewModel
-class HomeViewModel
+class BrowseViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository,
     localDatastore: LocalDatastore
-) : ViewModel(), IHomeViewModel {
-    private val _uiState = MutableStateFlow(HomeUiState())
-    override val uiState = _uiState.asStateFlow()
+) : ViewModel() {
+    private val _uiState = MutableStateFlow(BrowseUiState())
+    val uiState = _uiState.asStateFlow()
 
     init {
-        onTopbarItemUpdate(TopbarItem.Home)
+        onTopbarItemUpdate(BrowseType.Home)
         viewModelScope.launch {
             localDatastore.getLoginCredentials { userInfo ->
                 _uiState.update { it.copy(username = userInfo.username) }
@@ -33,17 +49,17 @@ class HomeViewModel
         }
     }
 
-    override fun onTopbarItemUpdate(topbarItem: TopbarItem) {
-        Logger.debug("topbarItem=$topbarItem")
-        if (_uiState.value.selectedTopbarItem == topbarItem) {
+    fun onTopbarItemUpdate(browseType: BrowseType) {
+        Logger.debug("topbarItem=$browseType")
+        if (_uiState.value.selectedBrowseType == browseType) {
             Logger.debug("topbarItem already selected")
             return
         }
-        _uiState.update { HomeUiState(selectedTopbarItem = topbarItem) }
+        _uiState.update { BrowseUiState(selectedBrowseType = browseType) }
 
         viewModelScope.launch {
             repository.fetchCategories(
-                topbarItem = topbarItem,
+                browseType = browseType,
                 onSuccess = { categories ->
                     Logger.debug("fetchCategories.onSuccess $categories")
                     if (categories.isEmpty()) {

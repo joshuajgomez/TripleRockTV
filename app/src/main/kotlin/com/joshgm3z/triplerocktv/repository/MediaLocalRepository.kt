@@ -2,12 +2,12 @@ package com.joshgm3z.triplerocktv.repository
 
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
-import com.joshgm3z.triplerocktv.viewmodel.TopbarItem
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 
 interface MediaLocalRepository {
 
     suspend fun fetchCategories(
-        topbarItem: TopbarItem,
+        browseType: BrowseType,
         onSuccess: (List<CategoryEntity>) -> Unit,
         onError: (String) -> Unit,
     )
