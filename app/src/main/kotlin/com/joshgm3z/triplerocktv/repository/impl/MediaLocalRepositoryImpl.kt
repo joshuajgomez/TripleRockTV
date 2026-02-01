@@ -6,8 +6,7 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryDao
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamsDao
-import com.joshgm3z.triplerocktv.viewmodel.TopbarItem
-import kotlinx.coroutines.flow.first
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -20,7 +19,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchCategories(
-        topbarItem: TopbarItem,
+        browseType: BrowseType,
         onSuccess: (List<CategoryEntity>) -> Unit,
         onError: (String) -> Unit
     ) {

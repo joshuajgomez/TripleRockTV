@@ -55,7 +55,7 @@ class MediaLoadingFragment : Fragment() {
                 tvProgressEPG,
             ).forEach {
                 updateProgress(it)
-                delay(100)
+                delay(10)
             }
             findNavController().navigate(R.id.action_mediaLoadingFragment_to_mainBrowseFragment)
         }
@@ -68,7 +68,7 @@ class MediaLoadingFragment : Fragment() {
         for (i in 0..100) {
             // Set level (percent * 100)
             progressDrawable.level = i * 100
-            delay(50)
+            delay(10)
         }
     }
 }

@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.ui.browse
 
 import android.view.LayoutInflater
 import android.view.View
@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 
 class StreamAdapter : ListAdapter<StreamEntity, StreamAdapter.StreamViewHolder>(StreamDiffCallback()) {
