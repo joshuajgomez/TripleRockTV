@@ -94,7 +94,7 @@ class LoginFragment : Fragment() {
                     binding.etPassword.text.toString().trim()
                 )
             }
-            false
+            true
         }
 
         binding.login.setOnClickListener {

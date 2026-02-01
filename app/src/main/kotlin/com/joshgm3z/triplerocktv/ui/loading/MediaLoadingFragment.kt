@@ -10,8 +10,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -27,6 +29,7 @@ class MediaLoadingFragment : Fragment() {
     lateinit var tvProgressLiveTv: TextView
     lateinit var tvProgressSeries: TextView
     lateinit var tvProgressEPG: TextView
+    lateinit var tvStatus: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,6 +44,7 @@ class MediaLoadingFragment : Fragment() {
         tvProgressLiveTv = view.findViewById(R.id.tv_progress_live_tv)
         tvProgressSeries = view.findViewById(R.id.tv_progress_series)
         tvProgressEPG = view.findViewById(R.id.tv_progress_epg)
+        tvStatus = view.findViewById(R.id.tv_status)
         return view
     }
 
@@ -48,27 +52,34 @@ class MediaLoadingFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            listOf(
-                tvProgressVod,
-                tvProgressLiveTv,
-                tvProgressSeries,
-                tvProgressEPG,
-            ).forEach {
-                updateProgress(it)
-                delay(10)
+            viewModel.uiState.collectLatest {
+                when (it) {
+                    is MediaLoadingUiState.Initial -> {}
+                    is MediaLoadingUiState.Error -> {}
+                    is MediaLoadingUiState.Update -> {
+                        it.map.forEach { (type, state) ->
+                            when (type) {
+                                MediaLoadingType.VideoOnDemand -> tvProgressVod
+                                MediaLoadingType.LiveTv -> tvProgressLiveTv
+                                MediaLoadingType.EPG -> tvProgressEPG
+                                MediaLoadingType.Series -> tvProgressSeries
+                            }.let { textView -> updateProgress(textView, state.percent) }
+                        }
+                        tvStatus.text = "Download complete"
+                        delay(2000)
+                        if (it.map.values.all { state -> state.percent == 100 })
+
+                            findNavController().navigate(
+                                R.id.action_mediaLoadingFragment_to_mainBrowseFragment
+                            )
+                    }
+                }
             }
-            findNavController().navigate(R.id.action_mediaLoadingFragment_to_mainBrowseFragment)
         }
     }
 
-    private suspend fun updateProgress(textView: TextView) {
+    private fun updateProgress(textView: TextView, progress: Int) {
         val progressDrawable = textView.background
-        progressDrawable.level = 5000
-
-        for (i in 0..100) {
-            // Set level (percent * 100)
-            progressDrawable.level = i * 100
-            delay(10)
-        }
+        progressDrawable.level = progress * 100
     }
 }

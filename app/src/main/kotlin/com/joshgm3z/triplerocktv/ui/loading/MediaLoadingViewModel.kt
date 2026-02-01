@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -41,15 +42,19 @@ class MediaLoadingViewModel
                 onFetch = { type, state ->
                     with(_uiState.value) {
                         val updatedMap = when (this) {
-                            is MediaLoadingUiState.Update -> map.toMutableMap()
-                                .apply { set(type, state) }
+                            is MediaLoadingUiState.Update -> {
+                                Logger.debug("fetchContent: found map $map")
+                                map.toMutableMap()
+                                    .apply { set(type, state) }
+                            }
 
                             else -> {
+                                Logger.debug("fetchContent: new map")
                                 val map = hashMapOf(
                                     MediaLoadingType.VideoOnDemand to LoadingState(),
-                                    MediaLoadingType.Series to LoadingState(),
-                                    MediaLoadingType.LiveTv to LoadingState(),
-                                    MediaLoadingType.EPG to LoadingState(),
+//                                    MediaLoadingType.Series to LoadingState(),
+//                                    MediaLoadingType.LiveTv to LoadingState(),
+//                                    MediaLoadingType.EPG to LoadingState(),
                                 )
                                 map.apply { set(type, state) }
                             }

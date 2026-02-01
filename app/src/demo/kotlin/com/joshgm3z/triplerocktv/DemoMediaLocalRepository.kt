@@ -3,7 +3,7 @@ package com.joshgm3z.triplerocktv
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
-import com.joshgm3z.triplerocktv.ui.home.TopbarItem
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -12,7 +12,7 @@ class DemoMediaLocalRepository
 constructor() : MediaLocalRepository {
 
     override suspend fun fetchCategories(
-        topbarItem: TopbarItem,
+        browseType: BrowseType,
         onSuccess: (List<CategoryEntity>) -> Unit,
         onError: (String) -> Unit
     ) {
@@ -30,6 +30,15 @@ constructor() : MediaLocalRepository {
             122 -> onSuccess(streamsCategory122)
             56 -> onSuccess(streamEntityCategory56)
             43 -> onSuccess(streamEntityCategory43)
+        }
+    }
+
+    override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
+        return when (categoryId) {
+            122 -> streamsCategory122
+            56 -> streamEntityCategory56
+            43 -> streamEntityCategory43
+            else -> emptyList()
         }
     }
 

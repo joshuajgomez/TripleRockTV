@@ -19,7 +19,7 @@ constructor() : MediaOnlineRepository {
                 onFetch(type, LoadingState(i * 10, LoadingStatus.Ongoing))
                 delay(200)
             }
-            onFetch(type, LoadingState(status = LoadingStatus.Complete))
+            onFetch(type, LoadingState(percent = 100, status = LoadingStatus.Complete))
         }
     }
 }
