@@ -4,7 +4,7 @@ enum class MediaLoadingType(val label: String) {
     VideoOnDemand("Video On Demand"),
     Series("Series"),
     LiveTv("Live TV"),
-    ParsingPlaylist("Parsing Playlist"),
+    EPG("EPG"),
 }
 
 data class LoadingState(

@@ -5,7 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
-import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,15 +25,15 @@ sealed class MediaLoadingUiState {
 class MediaLoadingViewModel
 @Inject constructor(
     private val repository: MediaOnlineRepository
-) : ViewModel(), IMediaLoadingViewModel {
+) : ViewModel() {
     private val _uiState = MutableStateFlow<MediaLoadingUiState>(MediaLoadingUiState.Initial)
-    override val uiState = _uiState.asStateFlow()
+    val uiState = _uiState.asStateFlow()
 
     init {
         fetchContent()
     }
 
-    override fun fetchContent() {
+    fun fetchContent() {
         _uiState.value = MediaLoadingUiState.Initial
         viewModelScope.launch {
             delay(1000)
@@ -45,7 +44,15 @@ class MediaLoadingViewModel
                             is MediaLoadingUiState.Update -> map.toMutableMap()
                                 .apply { set(type, state) }
 
-                            else -> mapOf(type to state)
+                            else -> {
+                                val map = hashMapOf(
+                                    MediaLoadingType.VideoOnDemand to LoadingState(),
+                                    MediaLoadingType.Series to LoadingState(),
+                                    MediaLoadingType.LiveTv to LoadingState(),
+                                    MediaLoadingType.EPG to LoadingState(),
+                                )
+                                map.apply { set(type, state) }
+                            }
                         }
                         _uiState.value = MediaLoadingUiState.Update(updatedMap)
                     }
