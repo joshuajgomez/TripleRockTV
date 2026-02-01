@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mainBrowseFragment">
+    app:startDestination="@id/mediaLoadingFragment">
 
     <fragment
         android:id="@+id/mainBrowseFragment"
@@ -15,6 +15,12 @@
         android:id="@+id/mediaLoadingFragment"
         android:name="com.joshgm3z.triplerocktv.ui.loading.MediaLoadingFragment"
         android:label="MediaLoadingFragment"
-        tools:layout="@layout/fragment_media_loading" />
+        tools:layout="@layout/fragment_media_loading">
+        <action
+            android:id="@+id/action_mediaLoadingFragment_to_mainBrowseFragment"
+            app:destination="@id/mainBrowseFragment"
+            app:popUpTo="@id/mediaLoadingFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

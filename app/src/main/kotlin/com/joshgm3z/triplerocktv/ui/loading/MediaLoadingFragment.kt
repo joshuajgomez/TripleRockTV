@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -54,6 +55,7 @@ class MediaLoadingFragment : Fragment() {
                 updateProgress(it)
                 delay(100)
             }
+            findNavController().navigate(R.id.action_mediaLoadingFragment_to_mainBrowseFragment)
         }
     }
 
