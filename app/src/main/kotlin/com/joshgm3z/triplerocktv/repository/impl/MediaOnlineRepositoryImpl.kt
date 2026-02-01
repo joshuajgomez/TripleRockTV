@@ -61,7 +61,7 @@ class MediaOnlineRepositoryImpl
             }
             onFetch(
                 MediaLoadingType.VideoOnDemand,
-                LoadingState(0, LoadingStatus.Complete)
+                LoadingState(100, LoadingStatus.Complete)
             )
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
