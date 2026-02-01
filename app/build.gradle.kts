@@ -38,6 +38,7 @@ android {
     }
     buildFeatures {
         buildConfig = true
+        viewBinding = true
     }
 
     flavorDimensions += "environment"
@@ -77,6 +78,7 @@ dependencies {
     implementation(libs.androidx.legacy.support.v4)
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
+    implementation(libs.androidx.annotation)
     kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
