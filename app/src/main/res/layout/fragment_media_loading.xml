@@ -1,63 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.loading.MediaLoadingFragment">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="500dp"
         android:layout_height="200dp"
-        android:layout_gravity="center"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_gravity="center">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Please wait"
+            android:textColor="@color/design_default_color_surface"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tv_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Downloading content" />
+            android:text="Downloading content"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-        <LinearLayout
-            android:layout_width="300dp"
-            android:layout_height="match_parent"
-            android:layout_marginStart="30dp"
-            android:orientation="vertical">
+        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
+            android:id="@+id/pbwt_vod"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:progress="45"
+            android:text="Video On Demand"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/tv_progress_vod"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/text_progress_bg"
-                android:paddingStart="10dp"
-                android:text="Video On Demand" />
+        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
+            android:id="@+id/pbwt_live_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Live TV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbwt_vod" />
 
-            <TextView
-                android:id="@+id/tv_progress_live_tv"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/text_progress_bg"
-                android:paddingStart="10dp"
-                android:text="Live TV" />
+        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
+            android:id="@+id/pbwt_series"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Series"
+            app:isError="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbwt_live_tv" />
 
-            <TextView
-                android:id="@+id/tv_progress_epg"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:layout_marginBottom="20dp"
-                android:background="@drawable/text_progress_bg"
-                android:paddingStart="10dp"
-                android:text="EPG" />
+        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
+            android:id="@+id/pbwt_epg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="EPG"
+            app:isComplete="true"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbwt_series" />
 
-            <TextView
-                android:id="@+id/tv_progress_series"
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:background="@drawable/text_progress_bg"
-                android:paddingStart="10dp"
-                android:text="Series" />
-        </LinearLayout>
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
