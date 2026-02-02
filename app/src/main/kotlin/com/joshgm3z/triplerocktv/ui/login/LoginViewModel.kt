@@ -22,6 +22,7 @@ data class UserInfo(
     val password: String,
     val webUrl: String,
     val expiryDate: String,
+    val lastContentUpdate: String,
 )
 
 @HiltViewModel

@@ -17,7 +17,7 @@ class MediaOnlineRepositoryImpl
     private val iptvService: IptvService,
     private val categoryDao: CategoryDao,
     private val streamsDao: StreamsDao,
-    localDatastore: LocalDatastore,
+    private val localDatastore: LocalDatastore,
 ) : MediaOnlineRepository {
     companion object {
         private const val LIMIT = 5
@@ -63,6 +63,7 @@ class MediaOnlineRepositoryImpl
                 MediaLoadingType.VideoOnDemand,
                 LoadingState(100, LoadingStatus.Complete)
             )
+            localDatastore.setLastContentUpdate(System.currentTimeMillis())
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")

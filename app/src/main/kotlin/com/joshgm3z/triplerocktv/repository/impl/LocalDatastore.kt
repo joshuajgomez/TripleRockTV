@@ -18,6 +18,7 @@ class LocalDatastore @Inject constructor(
         private val USERNAME = stringPreferencesKey("username")
         private val PASSWORD = stringPreferencesKey("password")
         private val SERVER_URL = stringPreferencesKey("server_url")
+        private val LAST_CONTENT_UPDATE = stringPreferencesKey("last_content_update")
         private val SERVER_PORT = stringPreferencesKey("server_port")
         private val EXPIRY_DATE = stringPreferencesKey("expiry_date")
     }
@@ -50,8 +51,15 @@ class LocalDatastore @Inject constructor(
                     password = it[PASSWORD] ?: "",
                     webUrl = it[SERVER_URL] ?: "",
                     expiryDate = it[EXPIRY_DATE] ?: "",
+                    lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
                 )
             )
+        }
+    }
+
+    suspend fun setLastContentUpdate(date: Long) {
+        dataStore.edit { preferences ->
+            preferences[LAST_CONTENT_UPDATE] = date.toString()
         }
     }
 

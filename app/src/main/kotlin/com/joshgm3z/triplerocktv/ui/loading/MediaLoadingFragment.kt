@@ -70,7 +70,7 @@ class MediaLoadingFragment : Fragment() {
                         if (it.map.values.all { state -> state.percent == 100 })
 
                             findNavController().navigate(
-                                R.id.action_mediaLoadingFragment_to_mainBrowseFragment
+                                R.id.action_mediaLoading_to_browse
                             )
                     }
                 }
