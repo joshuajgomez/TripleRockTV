@@ -4,5 +4,11 @@
         <attr name="android:text" />
         <attr name="android:src" />
     </declare-styleable>
+    <declare-styleable name="ProgressBarWithText">
+        <attr name="android:text" />
+        <attr name="android:progress" />
+        <attr name="isError" format="boolean" />
+        <attr name="isComplete" format="boolean" />
+    </declare-styleable>
 
 </resources>
