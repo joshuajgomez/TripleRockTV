@@ -10,6 +10,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.FragmentMediaLoadingBinding
+import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -48,16 +49,16 @@ class MediaLoadingFragment : Fragment() {
                             when (type) {
                                 MediaLoadingType.VideoOnDemand -> binding.pbwtVod
                                 MediaLoadingType.LiveTv -> binding.pbwtLiveTv
-                                MediaLoadingType.EPG -> binding.pbwtEpg
                                 MediaLoadingType.Series -> binding.pbwtSeries
+                                MediaLoadingType.EPG -> binding.pbwtEpg
                             }.let { view -> view.loadingState = state }
                         }
-                        if (it.map.values.all { state -> state.percent == 100 }) {
+                        if (it.map.values.all { state -> state.status == LoadingStatus.Complete }) {
                             binding.tvStatus.text = "Download complete"
                             delay(2000)
-                            /*findNavController().navigate(
+                            findNavController().navigate(
                                 R.id.action_mediaLoading_to_browse
-                            )*/
+                            )
                         }
                     }
                 }
