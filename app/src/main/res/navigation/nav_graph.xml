@@ -3,17 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/mediaLoginFragment">
+    app:startDestination="@id/loginFragment">
 
     <fragment
-        android:id="@+id/mediaLoginFragment"
+        android:id="@+id/loginFragment"
         android:name="com.joshgm3z.triplerocktv.ui.login.LoginFragment"
         android:label="MediaLoginFragment"
         tools:layout="@layout/fragment_login">
         <action
-            android:id="@+id/action_mediaLoginFragment_to_mediaLoadingFragment"
+            android:id="@+id/action_login_to_mediaLoading"
             app:destination="@id/mediaLoadingFragment"
-            app:popUpTo="@id/mediaLoginFragment"
+            app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
@@ -23,15 +23,38 @@
         android:label="MediaLoadingFragment"
         tools:layout="@layout/fragment_media_loading">
         <action
-            android:id="@+id/action_mediaLoadingFragment_to_mainBrowseFragment"
-            app:destination="@id/mainBrowseFragment"
+            android:id="@+id/action_mediaLoading_to_browse"
+            app:destination="@id/browseFragment"
             app:popUpTo="@id/mediaLoadingFragment"
             app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
-        android:id="@+id/mainBrowseFragment"
+        android:id="@+id/settingsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.settings.SettingsFragment"
+        android:label="SettingsFragment"
+        tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settings_to_mediaLoading"
+            app:destination="@id/mediaLoadingFragment"
+            app:popUpTo="@id/settingsFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_settings_to_login"
+            app:destination="@id/mediaLoadingFragment"
+            app:popUpTo="@id/settingsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/browseFragment"
         android:name="com.joshgm3z.triplerocktv.ui.browse.BrowseFragment"
-        android:label="MainBrowseFragment" />
+        android:label="BrowseFragment">
+        <action
+            android:id="@+id/action_browse_to_settings"
+            app:destination="@id/settingsFragment"
+            app:popUpTo="@id/browseFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
 
 </navigation>

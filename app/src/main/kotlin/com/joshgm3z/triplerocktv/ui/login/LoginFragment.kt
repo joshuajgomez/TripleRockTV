@@ -54,7 +54,7 @@ class LoginFragment : Fragment() {
         binding.tvSuccess.visibility = View.VISIBLE
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.action_mediaLoginFragment_to_mediaLoadingFragment)
+            findNavController().navigate(R.id.action_login_to_mediaLoading)
         }
     }
 
