@@ -34,7 +34,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:progress="45"
             android:text="Video On Demand"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -54,7 +53,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Series"
-            app:isError="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pbwt_live_tv" />
 
@@ -64,7 +62,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="EPG"
-            app:isComplete="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/pbwt_series" />
 
