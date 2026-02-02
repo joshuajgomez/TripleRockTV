@@ -21,7 +21,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class MainBrowseFragment : BrowseSupportFragment() {
+class BrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
     private lateinit var rowsAdapter: ArrayObjectAdapter
@@ -93,6 +93,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance() = MainBrowseFragment()
+        fun newInstance() = BrowseFragment()
     }
 }
