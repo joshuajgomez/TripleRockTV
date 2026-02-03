@@ -12,9 +12,11 @@ import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
+import androidx.leanback.widget.SearchOrbView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -51,6 +53,17 @@ class BrowseFragment : BrowseSupportFragment() {
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
+
+        searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
+        val settingsIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_settings)
+        titleViewAdapter.searchAffordanceView.let {
+            if (it is SearchOrbView) {
+                it.orbIcon = settingsIcon
+            }
+        }
+        setOnSearchClickedListener {
+            findNavController().navigate(R.id.action_browse_to_settings)
+        }
     }
 
     private fun setupEventListeners() {
