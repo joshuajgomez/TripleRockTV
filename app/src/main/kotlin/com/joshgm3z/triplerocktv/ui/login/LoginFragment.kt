@@ -12,6 +12,7 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.FragmentLoginBinding
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
+import com.joshgm3z.triplerocktv.ui.common.LoginButton
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -35,22 +36,20 @@ class LoginFragment : Fragment() {
     }
 
     fun showLoading() {
-        binding.loading.visibility = View.VISIBLE
-        binding.tvError.visibility = View.GONE
+        binding.loginButton.state = LoginButton.State.SigningIn
+        binding.lvError.visibility = View.GONE
         enableViews(false)
     }
 
     fun showLoginFailed(message: String?) {
-        binding.loading.visibility = View.GONE
-        binding.tvError.visibility = View.VISIBLE
+        binding.loginButton.state = LoginButton.State.Initial
+        binding.lvError.visibility = View.VISIBLE
         binding.tvError.text = message
         enableViews(true)
     }
 
     fun showLoginSuccess() {
-        binding.loading.visibility = View.GONE
-        binding.tvSuccess.visibility = View.VISIBLE
-        binding.tvSuccess.visibility = View.VISIBLE
+        binding.loginButton.state = LoginButton.State.Success
         lifecycleScope.launch {
             delay(2000)
             findNavController().navigate(R.id.action_login_to_mediaLoading)
@@ -58,7 +57,6 @@ class LoginFragment : Fragment() {
     }
 
     fun enableViews(enable: Boolean) = listOf(
-        binding.login,
         binding.etServerUrl,
         binding.etUsername,
         binding.etPassword
@@ -96,7 +94,7 @@ class LoginFragment : Fragment() {
             true
         }
 
-        binding.login.setOnClickListener {
+        binding.loginButton.setOnClickListener {
             if (isInputValid()) loginViewModel.onLoginClick(
                 binding.etServerUrl.text.toString().trim(),
                 binding.etUsername.text.toString().trim(),

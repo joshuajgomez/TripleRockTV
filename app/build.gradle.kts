@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.annotation)
+    implementation(libs.google.material)
     kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
