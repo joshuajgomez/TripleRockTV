@@ -7,8 +7,8 @@
     tools:context=".ui.loading.MediaLoadingFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="500dp"
-        android:layout_height="200dp"
+        android:layout_width="@dimen/container_width"
+        android:layout_height="@dimen/container_height"
         android:layout_gravity="center">
 
         <TextView
