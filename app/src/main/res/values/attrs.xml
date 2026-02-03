@@ -11,4 +11,13 @@
         <attr name="isComplete" format="boolean" />
     </declare-styleable>
 
+
+    <declare-styleable name="LoginButton">
+        <attr name="loginState" format="enum">
+            <enum name="initial" value="0" />
+            <enum name="signingIn" value="1" />
+            <enum name="success" value="2" />
+        </attr>
+    </declare-styleable>
+
 </resources>
