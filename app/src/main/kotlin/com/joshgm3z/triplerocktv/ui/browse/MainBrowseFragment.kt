@@ -43,7 +43,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest { uiState ->
-                    updateRows(uiState.browseMap)
+                    updateRows(uiState)
                 }
             }
         }
@@ -90,19 +90,24 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun updateRows(browseMap: Map<BrowseType, List<VodCategory>>) {
+    private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
-
-        // Map categories to rows
-        browseMap.forEach { (browseType, categories) ->
-            val header = HeaderItem(browseType.ordinal.toLong(), browseType.name)
-            val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
-
-            listRowAdapter.addAll(0, categories)
-
-            rowsAdapter.add(ListRow(header, listRowAdapter))
-        }
+        addRow(0, "Video on demand", uiState.vodCategories)
+        addRow(1, "Series", uiState.seriesCategories)
+        addRow(2, "Live TV", uiState.liveTvCategories)
+        addRow(3, "EPG", uiState.epgCategories)
         addSettingsRow()
+    }
+
+    private fun addRow(
+        id: Long,
+        header: String,
+        categories: List<Any>
+    ) {
+        val header = HeaderItem(id, header)
+        val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
+        listRowAdapter.addAll(0, categories)
+        rowsAdapter.add(ListRow(header, listRowAdapter))
     }
 
     private fun addSettingsRow() {

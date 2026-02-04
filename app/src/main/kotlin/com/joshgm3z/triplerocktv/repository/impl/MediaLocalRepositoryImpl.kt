@@ -2,6 +2,12 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import android.util.Log
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
+import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
@@ -11,6 +17,9 @@ import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
     private val vodCategoryDao: VodCategoryDao,
+    private val seriesCategoryDao: SeriesCategoryDao,
+    private val liveTvCategoryDao: LiveTvCategoryDao,
+    private val epgListingDao: EpgListingDao,
     private val vodStreamsDao: VodStreamsDao,
 ) : MediaLocalRepository {
     override suspend fun fetchAllCategories(): Map<BrowseType, List<VodCategory>> {
@@ -22,6 +31,18 @@ class MediaLocalRepositoryImpl @Inject constructor(
         )
     }
 
+    override suspend fun fetchVodCategories(): List<VodCategory> =
+        vodCategoryDao.getAllCategories()
+
+    override suspend fun fetchSeriesCategories(): List<SeriesCategory> =
+        seriesCategoryDao.getAllCategories()
+
+    override suspend fun fetchLiveTvCategories(): List<LiveTvCategory> =
+        liveTvCategoryDao.getAllCategories()
+
+    override suspend fun fetchIptvEpgCategories(): List<IptvEpgListing> =
+        epgListingDao.getAllEpgListings()
+
     companion object {
         private const val TAG: String = "MediaLocalRepositoryImpl"
     }
@@ -32,10 +53,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         onError: (String) -> Unit
     ) {
         Log.i(TAG, "fetchCategories: entry")
-        vodCategoryDao.getAllCategories().collect { categories ->
-            Log.i(TAG, "fetchCategories: $categories")
-            onSuccess(categories)
-        }
+        onSuccess(vodCategoryDao.getAllCategories())
     }
 
     override suspend fun searchStreamByName(
