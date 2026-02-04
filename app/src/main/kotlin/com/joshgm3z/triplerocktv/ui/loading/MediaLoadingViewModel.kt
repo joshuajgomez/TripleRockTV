@@ -44,6 +44,7 @@ class MediaLoadingViewModel
                         val updatedMap = when (this) {
                             is MediaLoadingUiState.Update -> {
                                 Logger.debug("fetchContent: found map $map")
+                                if (!map.containsKey(type)) return@with
                                 map.toMutableMap()
                                     .apply { set(type, state) }
                             }
@@ -52,7 +53,7 @@ class MediaLoadingViewModel
                                 Logger.debug("fetchContent: new map")
                                 val map = hashMapOf(
                                     MediaLoadingType.VideoOnDemand to LoadingState(),
-//                                    MediaLoadingType.Series to LoadingState(),
+                                    MediaLoadingType.Series to LoadingState(),
 //                                    MediaLoadingType.LiveTv to LoadingState(),
 //                                    MediaLoadingType.EPG to LoadingState(),
                                 )
