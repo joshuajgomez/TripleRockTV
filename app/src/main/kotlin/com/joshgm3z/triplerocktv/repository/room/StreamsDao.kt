@@ -11,6 +11,9 @@ interface StreamsDao {
     @Query("SELECT * FROM streams WHERE categoryId = :categoryId LIMIT 30")
     fun getAllStreams(categoryId: Int): List<StreamEntity>
 
+    @Query("SELECT * FROM streams WHERE name LIKE :streamName LIMIT 30")
+    fun searchStreams(streamName: String): List<StreamEntity>
+
     @Query("SELECT * FROM streams WHERE streamId = :streamId")
     fun getStream(streamId: Int): Flow<StreamEntity>
 

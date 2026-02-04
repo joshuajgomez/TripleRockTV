@@ -30,15 +30,11 @@ class MediaLocalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun fetchAllMediaData(
-        categoryId: Int,
-        onSuccess: (List<StreamEntity>) -> Unit,
-        onError: (String) -> Unit
+    override suspend fun searchStreamByName(
+        name: String,
+        onSearchResult: (List<StreamEntity>) -> Unit
     ) {
-        /*streamsDao.getAllStreams(categoryId).collect { streams ->
-            Log.i(TAG, "fetchAllMediaData: $streams")
-            onSuccess(streams)
-        }*/
+        onSearchResult(streamsDao.searchStreams(name))
     }
 
     override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
