@@ -1,15 +1,11 @@
 package com.joshgm3z.triplerocktv.ui.browse
 
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.compose.animation.with
-import androidx.core.content.ContextCompat
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
-import com.joshgm3z.triplerocktv.repository.room.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 
 class CategoryPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -23,7 +19,7 @@ class CategoryPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        val category = item as CategoryEntity
+        val category = item as VodCategory
         val cardView = viewHolder.view as ImageCardView
 
         // Set the title/text

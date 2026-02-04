@@ -2,18 +2,18 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import android.util.Log
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.room.CategoryDao
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
-import com.joshgm3z.triplerocktv.repository.room.StreamEntity
-import com.joshgm3z.triplerocktv.repository.room.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
 import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
-    private val categoryDao: CategoryDao,
+    private val vodCategoryDao: VodCategoryDao,
     private val streamsDao: StreamsDao,
 ) : MediaLocalRepository {
-    override suspend fun fetchAllCategories(): Map<BrowseType, List<CategoryEntity>> {
+    override suspend fun fetchAllCategories(): Map<BrowseType, List<VodCategory>> {
         return mapOf(
             BrowseType.VideoOnDemand to emptyList(),
             BrowseType.Series to emptyList(),
@@ -28,11 +28,11 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun fetchCategories(
         browseType: BrowseType,
-        onSuccess: (List<CategoryEntity>) -> Unit,
+        onSuccess: (List<VodCategory>) -> Unit,
         onError: (String) -> Unit
     ) {
         Log.i(TAG, "fetchCategories: entry")
-        categoryDao.getAllCategories().collect { categories ->
+        vodCategoryDao.getAllCategories().collect { categories ->
             Log.i(TAG, "fetchCategories: $categories")
             onSuccess(categories)
         }

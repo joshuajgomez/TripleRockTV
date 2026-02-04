@@ -2,8 +2,8 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
-import com.joshgm3z.triplerocktv.repository.room.CategoryDao
-import com.joshgm3z.triplerocktv.repository.room.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val streamsDao: StreamsDao,
-    private val categoryDao: CategoryDao,
+    private val vodCategoryDao: VodCategoryDao,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -57,7 +57,7 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
         localDataStore.clearAllData()
         streamsDao.deleteAllStreams()
-        categoryDao.deleteAllCategories()
+        vodCategoryDao.deleteAllCategories()
 
         delay(1000)
         onLogoutComplete()

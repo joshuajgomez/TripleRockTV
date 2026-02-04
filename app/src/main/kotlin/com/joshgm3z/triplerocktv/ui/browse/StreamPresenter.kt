@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
 
 class StreamPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
