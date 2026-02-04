@@ -1,8 +1,8 @@
-package com.joshgm3z.triplerocktv.ui.browse
+package com.joshgm3z.triplerocktv.ui.settings
 
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.joshgm3z.triplerocktv.ui.settings.SettingCardView
+import com.joshgm3z.triplerocktv.ui.browse.SettingItem
 
 class SettingsItemPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
