@@ -32,19 +32,16 @@ class LoginFragment : Fragment() {
     ): View {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
-
     }
 
     fun showLoading() {
         binding.loginButton.state = LoginButton.State.SigningIn
-        binding.lvError.visibility = View.GONE
         enableViews(false)
     }
 
     fun showLoginFailed(message: String?) {
         binding.loginButton.state = LoginButton.State.Initial
-        binding.lvError.visibility = View.VISIBLE
-        binding.tvError.text = message
+        binding.errorCard.text = message
         enableViews(true)
     }
 
@@ -68,9 +65,9 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.etServerUrl.setText(Secrets.Companion.webUrl)
-        binding.etUsername.setText(Secrets.Companion.username)
-        binding.etPassword.setText(Secrets.Companion.password)
+        binding.etServerUrl.setText(Secrets.webUrl)
+        binding.etUsername.setText(Secrets.username)
+        binding.etPassword.setText(Secrets.password)
 
         lifecycleScope.launch {
             loginViewModel.uiState.collectLatest {
