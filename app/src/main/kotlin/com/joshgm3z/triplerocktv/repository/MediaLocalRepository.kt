@@ -6,6 +6,8 @@ import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 
 interface MediaLocalRepository {
 
+    suspend fun fetchAllCategories(): Map<BrowseType, List<CategoryEntity>>
+
     suspend fun fetchCategories(
         browseType: BrowseType,
         onSuccess: (List<CategoryEntity>) -> Unit,

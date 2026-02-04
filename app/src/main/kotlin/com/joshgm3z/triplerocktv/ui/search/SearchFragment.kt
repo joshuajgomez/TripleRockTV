@@ -12,7 +12,7 @@ import androidx.leanback.widget.ObjectAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.joshgm3z.triplerocktv.ui.browse.SearchPresenter
+import com.joshgm3z.triplerocktv.ui.search.SearchPresenter
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

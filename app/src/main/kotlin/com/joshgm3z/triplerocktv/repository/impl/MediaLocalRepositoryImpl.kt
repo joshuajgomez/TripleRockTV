@@ -13,6 +13,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val categoryDao: CategoryDao,
     private val streamsDao: StreamsDao,
 ) : MediaLocalRepository {
+    override suspend fun fetchAllCategories(): Map<BrowseType, List<CategoryEntity>> {
+        return mapOf(
+            BrowseType.VideoOnDemand to emptyList(),
+            BrowseType.Series to emptyList(),
+            BrowseType.EPG to emptyList(),
+            BrowseType.LiveTV to emptyList(),
+        )
+    }
 
     companion object {
         private const val TAG: String = "MediaLocalRepositoryImpl"

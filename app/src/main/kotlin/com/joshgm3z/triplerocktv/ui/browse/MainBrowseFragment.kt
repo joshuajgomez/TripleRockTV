@@ -12,26 +12,40 @@ import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
-import androidx.leanback.widget.SearchOrbView
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+data class SettingItem(
+    val title: String,
+    val iconRes: Int,
+)
+
 @AndroidEntryPoint
-class BrowseFragment : BrowseSupportFragment() {
+class MainBrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupUI()
         setupEventListeners()
-        observeViewModel()
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.uiState.collectLatest { uiState ->
+                    updateRows(uiState.browseMap)
+                }
+            }
+        }
         prepareEntranceTransition()
     }
 
@@ -52,15 +66,6 @@ class BrowseFragment : BrowseSupportFragment() {
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
-
-        searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
-        val settingsIcon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_settings)
-        titleViewAdapter.searchAffordanceView.let {
-            if (it is SearchOrbView) {
-                it.orbIcon = settingsIcon
-            }
-        }
-
     }
 
     private fun setupEventListeners() {
@@ -70,39 +75,47 @@ class BrowseFragment : BrowseSupportFragment() {
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
             // Handle item click if needed
-        }
-    }
+            when (item) {
+                is SettingItem -> {
+                    when (item.title) {
+                        "Sign out" -> loginViewModel.onLogoutClick {
+                            findNavController().navigate(R.id.action_browse_to_login)
+                        }
 
-    private fun observeViewModel() {
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collectLatest { uiState ->
-                    updateRows(uiState)
+                        else -> findNavController().navigate(R.id.action_browse_to_mediaLoading)
+                    }
                 }
             }
         }
     }
 
-    private fun updateRows(uiState: BrowseUiState) {
+    private fun updateRows(browseMap: Map<BrowseType, List<CategoryEntity>>) {
         rowsAdapter.clear()
 
         // Map categories to rows
-        uiState.contentMap.forEach { (category, streams) ->
-            val header = HeaderItem(category.categoryId.toLong(), category.categoryName)
-            val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
+        browseMap.forEach { (browseType, categories) ->
+            val header = HeaderItem(browseType.ordinal.toLong(), browseType.name)
+            val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
 
-            listRowAdapter.addAll(0, streams)
+            listRowAdapter.addAll(0, categories)
 
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
+        addSettingsRow()
+    }
 
-        if (uiState.contentMap.isNotEmpty()) {
-            startEntranceTransition()
-        }
+    private fun addSettingsRow() {
+        val SETTINGS_ID = -1L
+        val header = HeaderItem(SETTINGS_ID, "Settings")
+        // We add a ListRow with an empty adapter because we only care about the header click
+        val adapter = ArrayObjectAdapter(SettingsItemPresenter())
+        adapter.add(SettingItem("Update", R.drawable.icon_download))
+        adapter.add(SettingItem("Sign out", R.drawable.icon_logout))
+        rowsAdapter.add(ListRow(header, adapter))
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = BrowseFragment()
+        fun newInstance() = MainBrowseFragment()
     }
 }
