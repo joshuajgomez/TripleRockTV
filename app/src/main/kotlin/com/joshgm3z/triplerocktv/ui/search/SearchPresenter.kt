@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class SearchPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -18,7 +18,7 @@ class SearchPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        val stream = item as StreamEntity
+        val stream = item as VodStream
         val cardView = viewHolder.view as ImageCardView
 
         // Set the title/text

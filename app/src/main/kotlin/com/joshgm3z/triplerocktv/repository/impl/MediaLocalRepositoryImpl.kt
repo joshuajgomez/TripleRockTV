@@ -4,14 +4,14 @@ import android.util.Log
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
     private val vodCategoryDao: VodCategoryDao,
-    private val streamsDao: StreamsDao,
+    private val vodStreamsDao: VodStreamsDao,
 ) : MediaLocalRepository {
     override suspend fun fetchAllCategories(): Map<BrowseType, List<VodCategory>> {
         return mapOf(
@@ -40,21 +40,21 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun searchStreamByName(
         name: String,
-        onSearchResult: (List<StreamEntity>) -> Unit
+        onSearchResult: (List<VodStream>) -> Unit
     ) {
-        onSearchResult(streamsDao.searchStreams(name))
+        onSearchResult(vodStreamsDao.searchStreams(name))
     }
 
-    override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
-        return streamsDao.getAllStreams(categoryId)
+    override suspend fun fetchStreams(categoryId: Int): List<VodStream> {
+        return vodStreamsDao.getAllStreams(categoryId)
     }
 
     override suspend fun fetchMediaDataById(
         streamId: Int,
-        onSuccess: (StreamEntity) -> Unit,
+        onSuccess: (VodStream) -> Unit,
         onError: (String) -> Unit
     ) {
-        streamsDao.getStream(streamId).collect { stream ->
+        vodStreamsDao.getStream(streamId).collect { stream ->
             Log.i(TAG, "fetchMediaDataById: $stream")
             onSuccess(stream)
         }

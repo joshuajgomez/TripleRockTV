@@ -7,7 +7,7 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class StreamPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -16,7 +16,7 @@ class StreamPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
-        val stream = item as StreamEntity
+        val stream = item as VodStream
         val view = viewHolder.view
         val icon = view.findViewById<ImageView>(R.id.streamIcon)
         val name = view.findViewById<TextView>(R.id.streamName)

@@ -1,8 +1,8 @@
 {
   "formatVersion": 1,
   "database": {
-    "version": 8,
-    "identityHash": "091e8b88b25f9708d1f290bdac20ce58",
+    "version": 9,
+    "identityHash": "d71e7660494e136a41bd751dbb712799",
     "entities": [
       {
         "tableName": "vod_category",
@@ -94,6 +94,42 @@
         }
       },
       {
+        "tableName": "series_category",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER NOT NULL, `categoryName` TEXT NOT NULL, `parentId` INTEGER NOT NULL, `count` INTEGER NOT NULL, PRIMARY KEY(`categoryId`))",
+        "fields": [
+          {
+            "fieldPath": "categoryId",
+            "columnName": "categoryId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "categoryName",
+            "columnName": "categoryName",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "parentId",
+            "columnName": "parentId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "count",
+            "columnName": "count",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "categoryId"
+          ]
+        }
+      },
+      {
         "tableName": "series_stream",
         "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `cover` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` TEXT NOT NULL, PRIMARY KEY(`seriesId`))",
         "fields": [
@@ -172,7 +208,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '091e8b88b25f9708d1f290bdac20ce58')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd71e7660494e136a41bd751dbb712799')"
     ]
   }
 }

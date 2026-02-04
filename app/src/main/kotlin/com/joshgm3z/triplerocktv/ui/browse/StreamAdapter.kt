@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
-class StreamAdapter : ListAdapter<StreamEntity, StreamAdapter.StreamViewHolder>(StreamDiffCallback()) {
+class StreamAdapter : ListAdapter<VodStream, StreamAdapter.StreamViewHolder>(StreamDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StreamViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false)
@@ -39,7 +39,7 @@ class StreamAdapter : ListAdapter<StreamEntity, StreamAdapter.StreamViewHolder>(
             }
         }
 
-        fun bind(stream: StreamEntity) {
+        fun bind(stream: VodStream) {
             nameTextView.text = stream.name
             Glide.with(itemView.context)
                 .load(stream.streamIcon)
@@ -48,12 +48,12 @@ class StreamAdapter : ListAdapter<StreamEntity, StreamAdapter.StreamViewHolder>(
         }
     }
 
-    class StreamDiffCallback : DiffUtil.ItemCallback<StreamEntity>() {
-        override fun areItemsTheSame(oldItem: StreamEntity, newItem: StreamEntity): Boolean {
+    class StreamDiffCallback : DiffUtil.ItemCallback<VodStream>() {
+        override fun areItemsTheSame(oldItem: VodStream, newItem: VodStream): Boolean {
             return oldItem.streamId == newItem.streamId
         }
 
-        override fun areContentsTheSame(oldItem: StreamEntity, newItem: StreamEntity): Boolean {
+        override fun areContentsTheSame(oldItem: VodStream, newItem: VodStream): Boolean {
             return oldItem == newItem
         }
     }
