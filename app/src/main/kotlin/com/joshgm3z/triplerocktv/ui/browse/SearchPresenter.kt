@@ -5,6 +5,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 
 class SearchPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -21,7 +22,7 @@ class SearchPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
-        (viewHolder.view as TextView).text = item as String
+        (viewHolder.view as TextView).text = (item as StreamEntity).name
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

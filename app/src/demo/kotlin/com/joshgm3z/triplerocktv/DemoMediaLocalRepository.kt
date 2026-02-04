@@ -20,17 +20,11 @@ constructor() : MediaLocalRepository {
         onSuccess(categoryEntityList)
     }
 
-    override suspend fun fetchAllMediaData(
-        categoryId: Int,
-        onSuccess: (List<StreamEntity>) -> Unit,
-        onError: (String) -> Unit
+    override suspend fun searchStreamByName(
+        name: String,
+        onSearchResult: (List<StreamEntity>) -> Unit
     ) {
-        delay(100)
-        when (categoryId) {
-            122 -> onSuccess(streamsCategory122)
-            56 -> onSuccess(streamEntityCategory56)
-            43 -> onSuccess(streamEntityCategory43)
-        }
+        onSearchResult(allStreams.filter { it.name.contains(name) })
     }
 
     override suspend fun fetchStreams(categoryId: Int): List<StreamEntity> {
@@ -48,17 +42,11 @@ constructor() : MediaLocalRepository {
         onError: (String) -> Unit
     ) {
         delay(100)
-        var streamEntity = streamsCategory122.find { it.streamId == streamId }
-        if (streamEntity == null)
-            streamEntity = streamEntityCategory56.find { it.streamId == streamId }
-        if (streamEntity == null)
-            streamEntity = streamEntityCategory43.find { it.streamId == streamId }
-
-        if (streamEntity == null)
-            onError("Cannot find info")
-        else
-            onSuccess(streamEntity)
-
+        allStreams
+            .firstOrNull { it.streamId == streamId }
+            .let {
+                onSuccess(it ?: return onError("Cannot find info"))
+            }
     }
 
     private val categoryEntityList = listOf(
@@ -191,4 +179,5 @@ constructor() : MediaLocalRepository {
         ),
     )
 
+    private val allStreams = streamsCategory122 + streamEntityCategory56 + streamEntityCategory43
 }
