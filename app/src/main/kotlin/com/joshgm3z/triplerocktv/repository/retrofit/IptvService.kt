@@ -20,7 +20,7 @@ interface IptvService {
     suspend fun getLiveStreams(
         @Query("username") username: String,
         @Query("password") password: String,
-        @Query("category_id") categoryId: String,
+        @Query("category_id") categoryId: Int,
         @Query("action") action: String = "get_live_streams"
     ): List<IptvStream>
 

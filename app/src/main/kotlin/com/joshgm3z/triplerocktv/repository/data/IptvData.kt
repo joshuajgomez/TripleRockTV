@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.repository.data
 
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 
 data class IptvCategory(
     @SerializedName("category_id") val categoryId: Int,
@@ -35,17 +36,4 @@ data class IptvSeries(
 
 data class IptvEpgResponse(
     @SerializedName("epg_listings") val epgListings: List<IptvEpgListing>
-)
-
-data class IptvEpgListing(
-    @SerializedName("id") val id: String,
-    @SerializedName("epg_id") val epgId: String?,
-    @SerializedName("title") val title: String?,
-    @SerializedName("lang") val lang: String?,
-    @SerializedName("start") val start: String?,
-    @SerializedName("end") val end: String?,
-    @SerializedName("description") val description: String?,
-    @SerializedName("channel_id") val channelId: String?,
-    @SerializedName("start_timestamp") val startTimestamp: String?,
-    @SerializedName("stop_timestamp") val stopTimestamp: String?
 )

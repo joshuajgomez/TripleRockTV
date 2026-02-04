@@ -54,7 +54,7 @@ class MediaLoadingFragment : Fragment() {
                                 MediaLoadingType.EPG -> binding.pbwtEpg
                             }.let { view -> view.loadingState = state }
                         }
-                        if (it.map.values.all { state -> state.status == LoadingStatus.Complete }) {
+                        if (it.map.values.all { state -> state.status != LoadingStatus.Initial }) {
                             binding.tvStatus.text = "Download complete"
                             delay(2000)
                             findNavController().navigate(
