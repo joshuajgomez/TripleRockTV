@@ -48,22 +48,23 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
-            android:id="@+id/pbwt_live_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:text="Live TV"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbwt_vod" />
-
-        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
             android:id="@+id/pbwt_series"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:text="Series"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbwt_live_tv" />
+            app:layout_constraintTop_toBottomOf="@id/pbwt_vod" />
+
+        <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
+            android:id="@+id/pbwt_live_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="Live TV"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/pbwt_series" />
+
 
         <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
             android:id="@+id/pbwt_epg"
@@ -72,7 +73,7 @@
             android:layout_marginTop="20dp"
             android:text="EPG"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pbwt_series" />
+            app:layout_constraintTop_toBottomOf="@id/pbwt_live_tv" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
