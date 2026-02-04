@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MediaUiState(
-    val streamEntity: StreamEntity?,
+    val vodStream: VodStream?,
 )
 
 @HiltViewModel
@@ -33,11 +33,11 @@ class MediaInfoViewModel
     init {
         viewModelScope.launch {
             repository.fetchMediaDataById(
-                StreamEntity.sample().streamId,
+                VodStream.sample().streamId,
                 onSuccess = { streamEntity ->
                     Log.i(TAG, "fetchMediaDataById.onSuccess $streamEntity")
                     _uiState.update {
-                        it.copy(streamEntity = streamEntity)
+                        it.copy(vodStream = streamEntity)
                     }
                 },
                 onError = {},

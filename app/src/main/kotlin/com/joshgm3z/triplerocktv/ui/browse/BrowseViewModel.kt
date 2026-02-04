@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 data class BrowseUiState(
     var selectedBrowseType: BrowseType? = null,
-    val contentMap: Map<VodCategory, List<StreamEntity>> = emptyMap(),
+    val contentMap: Map<VodCategory, List<VodStream>> = emptyMap(),
     val browseMap: Map<BrowseType, List<VodCategory>> = mapOf(
         BrowseType.VideoOnDemand to emptyList(),
         BrowseType.Series to emptyList(),

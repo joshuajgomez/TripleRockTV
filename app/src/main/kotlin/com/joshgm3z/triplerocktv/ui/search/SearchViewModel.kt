@@ -3,7 +3,7 @@ package com.joshgm3z.triplerocktv.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +13,7 @@ import javax.inject.Inject
 sealed class SearchUiState {
     object Initial : SearchUiState()
     object Loading : SearchUiState()
-    data class Result(val query: String, val list: List<StreamEntity>) : SearchUiState()
+    data class Result(val query: String, val list: List<VodStream>) : SearchUiState()
 }
 
 @HiltViewModel

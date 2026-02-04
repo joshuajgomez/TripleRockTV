@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joshgm3z.triplerocktv.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -30,11 +30,11 @@ class DatabaseModule {
 
     @Provides
     fun provideCategoryDao(appDatabase: AppDatabase): VodCategoryDao {
-        return appDatabase.categoryDao()
+        return appDatabase.vodCategoryDao()
     }
 
     @Provides
-    fun provideStreamDao(appDatabase: AppDatabase): StreamsDao {
-        return appDatabase.streamsDao()
+    fun provideStreamDao(appDatabase: AppDatabase): VodStreamsDao {
+        return appDatabase.vodStreamsDao()
     }
 }

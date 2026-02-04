@@ -8,8 +8,8 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class EPGFetcher
 constructor(
     private val iptvService: IptvService,
     private val vodCategoryDao: VodCategoryDao,
-    private val streamsDao: StreamsDao,
+    private val vodStreamsDao: VodStreamsDao,
 ) {
     suspend fun fetchVod(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
@@ -45,8 +45,8 @@ constructor(
         val vodStreams = iptvService.getVodStreams(username, password, vodCategory.categoryId)
 
         vodCategoryDao.insert(vodCategory.apply { count = vodStreams.size })
-        streamsDao.insertStreams(vodStreams.map {
-            StreamEntity(
+        vodStreamsDao.insertStreams(vodStreams.map {
+            VodStream(
                 num = it.num,
                 name = it.name,
                 streamType = it.streamType,

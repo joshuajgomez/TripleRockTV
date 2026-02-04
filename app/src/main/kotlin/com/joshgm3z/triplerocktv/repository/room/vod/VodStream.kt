@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.repository.room.vod
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
-@Entity(tableName = "streams")
-data class StreamEntity(
+@Entity(tableName = "vod_stream")
+data class VodStream(
     @PrimaryKey val streamId: Int,
     val num: Int,
     val name: String,
@@ -14,7 +14,7 @@ data class StreamEntity(
     val added: String
 ) {
     companion object {
-        fun sample(): StreamEntity = StreamEntity(
+        fun sample(): VodStream = VodStream(
             streamId = 20642,
             num = 1,
             name = "Wonder Woman 1984 (2020)(4K)",

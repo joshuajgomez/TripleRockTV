@@ -7,10 +7,10 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesEntity
-import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
@@ -18,8 +18,8 @@ class SeriesFetcher
 @Inject
 constructor(
     private val iptvService: IptvService,
-    private val vodCategoryDao: VodCategoryDao,
-    private val streamsDao: StreamsDao,
+    private val seriesCategoryDao: SeriesCategoryDao,
+    private val seriesStreamsDao: SeriesStreamsDao,
 ) {
     suspend fun fetchSeries(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
@@ -28,7 +28,10 @@ constructor(
         Logger.entry()
         val categories = fetchSeriesCategories().subList(0, LIMIT)
         val total = categories.size
-        if (total == 0) {
+        if (total > 0) {
+            seriesCategoryDao.deleteAllCategories()
+            seriesStreamsDao.deleteAllStreams()
+        } else {
             onError("Unable to fetch series categories.", "No categories found.")
             return
         }
@@ -49,9 +52,9 @@ constructor(
         )
     }
 
-    private suspend fun fetchSeriesCategories(): List<VodCategory> =
+    private suspend fun fetchSeriesCategories(): List<SeriesCategory> =
         iptvService.getSeriesCategories(username, password).map {
-            VodCategory(
+            SeriesCategory(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
                 parentId = it.parentId
@@ -60,13 +63,13 @@ constructor(
             Logger.debug("fetchSeriesCategories: $this")
         }
 
-    private suspend fun fetchAndStoreSeries(vodCategory: VodCategory) {
+    private suspend fun fetchAndStoreSeries(vodCategory: SeriesCategory) {
         val series = iptvService.getSeries(username, password, vodCategory.categoryId)
         Logger.debug("fetchAndStoreSeries: $series")
 
-        vodCategoryDao.insert(vodCategory.apply { count = series.size })
-        streamsDao.insertSeries(series.map {
-            SeriesEntity(
+        seriesCategoryDao.insert(vodCategory.apply { count = series.size })
+        seriesStreamsDao.insertStreams(series.map {
+            SeriesStream(
                 num = it.num,
                 name = it.name,
                 categoryId = it.categoryId,
