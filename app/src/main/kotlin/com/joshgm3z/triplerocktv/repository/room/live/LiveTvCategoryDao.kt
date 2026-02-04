@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LiveTvCategoryDao {
     @Query("SELECT * FROM live_tv_category")
-    fun getAllCategories(): Flow<List<LiveTvCategory>>
+    fun getAllCategories(): List<LiveTvCategory>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(liveCategory: LiveTvCategory)
