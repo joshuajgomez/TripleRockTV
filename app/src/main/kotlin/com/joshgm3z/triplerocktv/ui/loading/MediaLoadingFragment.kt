@@ -43,7 +43,7 @@ class MediaLoadingFragment : Fragment() {
             viewModel.uiState.collectLatest {
                 when (it) {
                     is MediaLoadingUiState.Initial -> {}
-                    is MediaLoadingUiState.Error -> {}
+                    is MediaLoadingUiState.Error -> showError(it.message, it.summary)
                     is MediaLoadingUiState.Update -> {
                         it.map.forEach { (type, state) ->
                             when (type) {
@@ -64,6 +64,10 @@ class MediaLoadingFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun showError(message: String, summary: String) {
+        binding.errorCard.text = message + "\n" + summary
     }
 
     override fun onDestroyView() {

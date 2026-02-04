@@ -4,6 +4,9 @@
         <attr name="android:text" />
         <attr name="android:src" />
     </declare-styleable>
+    <declare-styleable name="ErrorCard">
+        <attr name="android:text" />
+    </declare-styleable>
     <declare-styleable name="ProgressBarWithText">
         <attr name="android:text" />
         <attr name="android:progress" />

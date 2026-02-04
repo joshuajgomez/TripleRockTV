@@ -29,6 +29,15 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
+        <com.joshgm3z.triplerocktv.ui.common.ErrorCard
+            android:id="@+id/error_card"
+            android:layout_width="230dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="30dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_status" />
+
         <com.joshgm3z.triplerocktv.ui.common.ProgressBarWithText
             android:id="@+id/pbwt_vod"
             android:layout_width="wrap_content"
