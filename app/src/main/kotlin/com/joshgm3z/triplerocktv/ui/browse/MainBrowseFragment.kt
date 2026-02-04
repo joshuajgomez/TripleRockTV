@@ -17,7 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
 import com.joshgm3z.triplerocktv.ui.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -90,7 +90,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun updateRows(browseMap: Map<BrowseType, List<CategoryEntity>>) {
+    private fun updateRows(browseMap: Map<BrowseType, List<VodCategory>>) {
         rowsAdapter.clear()
 
         // Map categories to rows

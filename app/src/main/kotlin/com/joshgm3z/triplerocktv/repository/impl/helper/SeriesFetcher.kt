@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.repository.impl
+package com.joshgm3z.triplerocktv.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
@@ -7,10 +7,10 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.room.CategoryDao
-import com.joshgm3z.triplerocktv.repository.room.CategoryEntity
-import com.joshgm3z.triplerocktv.repository.room.SeriesEntity
-import com.joshgm3z.triplerocktv.repository.room.StreamsDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
@@ -18,7 +18,7 @@ class SeriesFetcher
 @Inject
 constructor(
     private val iptvService: IptvService,
-    private val categoryDao: CategoryDao,
+    private val vodCategoryDao: VodCategoryDao,
     private val streamsDao: StreamsDao,
 ) {
     suspend fun fetchSeries(
@@ -49,9 +49,9 @@ constructor(
         )
     }
 
-    private suspend fun fetchSeriesCategories(): List<CategoryEntity> =
+    private suspend fun fetchSeriesCategories(): List<VodCategory> =
         iptvService.getSeriesCategories(username, password).map {
-            CategoryEntity(
+            VodCategory(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
                 parentId = it.parentId
@@ -60,11 +60,11 @@ constructor(
             Logger.debug("fetchSeriesCategories: $this")
         }
 
-    private suspend fun fetchAndStoreSeries(categoryEntity: CategoryEntity) {
-        val series = iptvService.getSeries(username, password, categoryEntity.categoryId)
+    private suspend fun fetchAndStoreSeries(vodCategory: VodCategory) {
+        val series = iptvService.getSeries(username, password, vodCategory.categoryId)
         Logger.debug("fetchAndStoreSeries: $series")
 
-        categoryDao.insert(categoryEntity.apply { count = series.size })
+        vodCategoryDao.insert(vodCategory.apply { count = series.size })
         streamsDao.insertSeries(series.map {
             SeriesEntity(
                 num = it.num,

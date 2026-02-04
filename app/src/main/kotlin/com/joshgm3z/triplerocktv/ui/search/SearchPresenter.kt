@@ -4,7 +4,7 @@ import android.view.ViewGroup
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.joshgm3z.triplerocktv.repository.room.StreamEntity
+import com.joshgm3z.triplerocktv.repository.room.vod.StreamEntity
 
 class SearchPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {

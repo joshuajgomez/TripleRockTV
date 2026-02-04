@@ -1,10 +1,10 @@
-package com.joshgm3z.triplerocktv.repository.room
+package com.joshgm3z.triplerocktv.repository.room.vod
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.joshgm3z.triplerocktv.repository.data.IptvSeries
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
