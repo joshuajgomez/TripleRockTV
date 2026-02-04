@@ -6,10 +6,7 @@ import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
+import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
@@ -17,44 +14,32 @@ class EPGFetcher
 @Inject
 constructor(
     private val iptvService: IptvService,
-    private val vodCategoryDao: VodCategoryDao,
-    private val vodStreamsDao: VodStreamsDao,
+    private val epgListingDao: EpgListingDao,
 ) {
-    suspend fun fetchVod(
+    suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
+        val epgListings = iptvService.getShortEpg(
+            username = username,
+            password = password,
+            streamId = 20642
+        ).epgListings
+        Logger.info("getShortEpg = $epgListings")
+        if (epgListings.isNotEmpty()) {
+            epgListingDao.deleteAllEpgListings()
+            epgListingDao.insertAll(epgListings)
+        } else {
+            onFetch(
+                MediaLoadingType.EPG,
+                LoadingState(0, LoadingStatus.Error)
+            )
+            return
+        }
         onFetch(
             MediaLoadingType.EPG,
             LoadingState(100, LoadingStatus.Complete)
         )
-    }
-
-    private suspend fun fetchCategories(): List<VodCategory> =
-        iptvService.getVodCategories(username, password).map {
-            VodCategory(
-                categoryId = it.categoryId,
-                categoryName = it.categoryName,
-                parentId = it.parentId
-            )
-        }
-
-
-    private suspend fun fetchAndStoreContent(vodCategory: VodCategory) {
-        val vodStreams = iptvService.getVodStreams(username, password, vodCategory.categoryId)
-
-        vodCategoryDao.insert(vodCategory.apply { count = vodStreams.size })
-        vodStreamsDao.insertStreams(vodStreams.map {
-            VodStream(
-                num = it.num,
-                name = it.name,
-                streamType = it.streamType,
-                streamId = it.streamId,
-                streamIcon = it.streamIcon,
-                categoryId = it.categoryId,
-                added = it.added,
-            )
-        })
     }
 }

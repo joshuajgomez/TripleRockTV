@@ -54,8 +54,8 @@ class MediaLoadingViewModel
                                 val map = hashMapOf(
                                     MediaLoadingType.VideoOnDemand to LoadingState(),
                                     MediaLoadingType.Series to LoadingState(),
-//                                    MediaLoadingType.LiveTv to LoadingState(),
-//                                    MediaLoadingType.EPG to LoadingState(),
+                                    MediaLoadingType.LiveTv to LoadingState(),
+                                    MediaLoadingType.EPG to LoadingState(),
                                 )
                                 map.apply { set(type, state) }
                             }

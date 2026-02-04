@@ -21,7 +21,7 @@ constructor(
     private val vodCategoryDao: VodCategoryDao,
     private val vodStreamsDao: VodStreamsDao,
 ) {
-    suspend fun fetchVod(
+    suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
@@ -33,7 +33,10 @@ constructor(
             vodCategoryDao.deleteAllCategories()
             vodStreamsDao.deleteAllStreams()
         } else {
-            onError("Unable to fetch vod categories.", "No categories found.")
+            onFetch(
+                MediaLoadingType.VideoOnDemand,
+                LoadingState(0, LoadingStatus.Error)
+            )
             return
         }
 

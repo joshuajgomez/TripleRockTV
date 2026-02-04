@@ -21,7 +21,7 @@ constructor(
     private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
 ) {
-    suspend fun fetchSeries(
+    suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
@@ -32,7 +32,10 @@ constructor(
             seriesCategoryDao.deleteAllCategories()
             seriesStreamsDao.deleteAllStreams()
         } else {
-            onError("Unable to fetch series categories.", "No categories found.")
+            onFetch(
+                MediaLoadingType.Series,
+                LoadingState(0, LoadingStatus.Error)
+            )
             return
         }
 

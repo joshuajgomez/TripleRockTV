@@ -3,6 +3,11 @@ package com.joshgm3z.triplerocktv.di
 import android.content.Context
 import androidx.room.Room
 import com.joshgm3z.triplerocktv.repository.room.AppDatabase
+import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import dagger.Module
@@ -29,12 +34,37 @@ class DatabaseModule {
     }
 
     @Provides
-    fun provideCategoryDao(appDatabase: AppDatabase): VodCategoryDao {
+    fun provideVodCategoryDao(appDatabase: AppDatabase): VodCategoryDao {
         return appDatabase.vodCategoryDao()
     }
 
     @Provides
-    fun provideStreamDao(appDatabase: AppDatabase): VodStreamsDao {
+    fun provideVodStreamDao(appDatabase: AppDatabase): VodStreamsDao {
         return appDatabase.vodStreamsDao()
+    }
+
+    @Provides
+    fun provideSeriesCategoryDao(appDatabase: AppDatabase): SeriesCategoryDao {
+        return appDatabase.seriesCategoryDao()
+    }
+
+    @Provides
+    fun provideSeriesStreamDao(appDatabase: AppDatabase): SeriesStreamsDao {
+        return appDatabase.seriesStreamsDao()
+    }
+
+    @Provides
+    fun provideLiveTvCategoryDao(appDatabase: AppDatabase): LiveTvCategoryDao {
+        return appDatabase.liveTvCategoryDao()
+    }
+
+    @Provides
+    fun provideLiveTvStreamDao(appDatabase: AppDatabase): LiveTvStreamsDao {
+        return appDatabase.liveTvStreamsDao()
+    }
+
+    @Provides
+    fun provideEpgListingDao(appDatabase: AppDatabase): EpgListingDao {
+        return appDatabase.epgListingDao()
     }
 }
