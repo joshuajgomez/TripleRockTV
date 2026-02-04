@@ -1,13 +1,9 @@
-package com.joshgm3z.triplerocktv.ui.browse
+package com.joshgm3z.triplerocktv.ui.search
 
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.compose.animation.with
-import androidx.core.content.ContextCompat
 import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamEntity
 
 class SearchPresenter : Presenter() {

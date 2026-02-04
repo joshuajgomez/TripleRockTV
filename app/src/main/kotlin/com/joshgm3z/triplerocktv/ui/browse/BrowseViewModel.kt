@@ -18,6 +18,12 @@ import javax.inject.Inject
 data class BrowseUiState(
     var selectedBrowseType: BrowseType? = null,
     val contentMap: Map<CategoryEntity, List<StreamEntity>> = emptyMap(),
+    val browseMap: Map<BrowseType, List<CategoryEntity>> = mapOf(
+        BrowseType.VideoOnDemand to emptyList(),
+        BrowseType.Series to emptyList(),
+        BrowseType.EPG to emptyList(),
+        BrowseType.LiveTV to emptyList(),
+    ),
     var isLoading: Boolean = true,
     var errorMessage: String? = null,
     var username: String? = null,
@@ -46,6 +52,9 @@ class BrowseViewModel
             localDatastore.getLoginCredentials { userInfo ->
                 _uiState.update { it.copy(username = userInfo.username) }
             }
+        }
+        viewModelScope.launch {
+            _uiState.update { it.copy(browseMap = repository.fetchAllCategories()) }
         }
     }
 

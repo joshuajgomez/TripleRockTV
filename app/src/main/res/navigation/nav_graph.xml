@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/searchFragment">
+    app:startDestination="@id/browseFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -48,11 +48,16 @@
 
     <fragment
         android:id="@+id/browseFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.browse.BrowseFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.browse.MainBrowseFragment"
         android:label="BrowseFragment">
         <action
-            android:id="@+id/action_browse_to_settings"
-            app:destination="@id/settingsFragment"
+            android:id="@+id/action_browse_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/browseFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_browse_to_mediaLoading"
+            app:destination="@id/mediaLoadingFragment"
             app:popUpTo="@id/browseFragment"
             app:popUpToInclusive="true" />
     </fragment>

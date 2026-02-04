@@ -10,6 +10,13 @@ import javax.inject.Inject
 class DemoMediaLocalRepository
 @Inject
 constructor() : MediaLocalRepository {
+    override suspend fun fetchAllCategories()
+            : Map<BrowseType, List<CategoryEntity>> = mapOf(
+        BrowseType.VideoOnDemand to categoryEntityList.subList(0, 1),
+        BrowseType.LiveTV to categoryEntityList.subList(1, 2),
+        BrowseType.Series to categoryEntityList.subList(2, 2),
+        BrowseType.EPG to categoryEntityList.subList(0, 0),
+    )
 
     override suspend fun fetchCategories(
         browseType: BrowseType,
