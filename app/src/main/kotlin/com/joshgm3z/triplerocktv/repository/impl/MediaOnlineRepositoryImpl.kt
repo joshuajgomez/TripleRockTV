@@ -18,18 +18,19 @@ class MediaOnlineRepositoryImpl
     private val categoryDao: CategoryDao,
     private val streamsDao: StreamsDao,
     private val localDatastore: LocalDatastore,
+    private val seriesFetcher: SeriesFetcher,
 ) : MediaOnlineRepository {
     companion object {
-        private const val LIMIT = 5
+        const val LIMIT = 5
+        lateinit var username: String
+        lateinit var password: String
     }
 
-    private lateinit var username: String
-    private lateinit var password: String
 
     init {
         localDatastore.getLoginCredentials {
-            this.username = it.username
-            this.password = it.password
+            username = it.username
+            password = it.password
         }
     }
 
@@ -37,38 +38,59 @@ class MediaOnlineRepositoryImpl
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
+        Logger.entry()
         try {
-            val categories = fetchCategories().subList(0, LIMIT)
-            val total = categories.size
-            if (total > 0) {
-                // Clear existing data only if network call is successful
-                categoryDao.deleteAllCategories()
-                streamsDao.deleteAllStreams()
-            } else {
-                onError("Unable to fetch categories.", "No categories found.")
-                return
-            }
-
-            categories.forEachIndexed { index, it ->
-                fetchAndStoreContent(it)
-                onFetch(
-                    MediaLoadingType.VideoOnDemand,
-                    LoadingState(
-                        percent = (index.toFloat() / total * 100).toInt(),
-                        status = LoadingStatus.Ongoing
-                    )
-                )
-            }
-            onFetch(
-                MediaLoadingType.VideoOnDemand,
-                LoadingState(100, LoadingStatus.Complete)
-            )
-            localDatastore.setLastContentUpdate(System.currentTimeMillis())
+            fetchVod(onFetch, onError)
+            seriesFetcher.fetchSeries(onFetch, onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
+        } finally {
+            localDatastore.setLastContentUpdate(System.currentTimeMillis())
         }
     }
+
+    private suspend fun fetchVod(
+        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onError: (String, String) -> Unit
+    ) {
+        Logger.entry()
+        val categories = fetchCategories().subList(0, LIMIT)
+        val total = categories.size
+        if (total > 0) {
+            // Clear existing data only if network call is successful
+            categoryDao.deleteAllCategories()
+            streamsDao.deleteAllStreams()
+        } else {
+            onError("Unable to fetch categories.", "No categories found.")
+            return
+        }
+
+        categories.forEachIndexed { index, it ->
+            fetchAndStoreContent(it)
+            onFetch(
+                MediaLoadingType.VideoOnDemand,
+                LoadingState(
+                    percent = (index.toFloat() / total * 100).toInt(),
+                    status = LoadingStatus.Ongoing
+                )
+            )
+        }
+        onFetch(
+            MediaLoadingType.VideoOnDemand,
+            LoadingState(100, LoadingStatus.Complete)
+        )
+    }
+
+    private suspend fun fetchCategories(): List<CategoryEntity> =
+        iptvService.getVodCategories(username, password).map {
+            CategoryEntity(
+                categoryId = it.categoryId,
+                categoryName = it.categoryName,
+                parentId = it.parentId
+            )
+        }
+
 
     private suspend fun fetchAndStoreContent(categoryEntity: CategoryEntity) {
         val vodStreams = iptvService.getVodStreams(username, password, categoryEntity.categoryId)
@@ -85,15 +107,5 @@ class MediaOnlineRepositoryImpl
                 added = it.added,
             )
         })
-    }
-
-    private suspend fun fetchCategories(): List<CategoryEntity> {
-        return iptvService.getVodCategories(username, password).map {
-            CategoryEntity(
-                categoryId = it.categoryId,
-                categoryName = it.categoryName,
-                parentId = it.parentId
-            )
-        }
     }
 }

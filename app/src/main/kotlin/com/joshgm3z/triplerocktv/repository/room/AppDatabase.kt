@@ -6,9 +6,10 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         CategoryEntity::class,
-        StreamEntity::class
+        StreamEntity::class,
+        SeriesEntity::class,
     ],
-    version = 6
+    version = 7
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDao(): CategoryDao

@@ -32,3 +32,20 @@ data class IptvSeries(
     @SerializedName("rating") val rating: String?,
     @SerializedName("category_id") val categoryId: String
 )
+
+data class IptvEpgResponse(
+    @SerializedName("epg_listings") val epgListings: List<IptvEpgListing>
+)
+
+data class IptvEpgListing(
+    @SerializedName("id") val id: String,
+    @SerializedName("epg_id") val epgId: String?,
+    @SerializedName("title") val title: String?,
+    @SerializedName("lang") val lang: String?,
+    @SerializedName("start") val start: String?,
+    @SerializedName("end") val end: String?,
+    @SerializedName("description") val description: String?,
+    @SerializedName("channel_id") val channelId: String?,
+    @SerializedName("start_timestamp") val startTimestamp: String?,
+    @SerializedName("stop_timestamp") val stopTimestamp: String?
+)

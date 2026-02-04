@@ -45,6 +45,7 @@ class MediaLoadingFragment : Fragment() {
                     is MediaLoadingUiState.Initial -> {}
                     is MediaLoadingUiState.Error -> showError(it.message, it.summary)
                     is MediaLoadingUiState.Update -> {
+                        showError("")
                         it.map.forEach { (type, state) ->
                             when (type) {
                                 MediaLoadingType.VideoOnDemand -> binding.pbwtVod
@@ -66,8 +67,8 @@ class MediaLoadingFragment : Fragment() {
         }
     }
 
-    private fun showError(message: String, summary: String) {
-        binding.errorCard.text = message + "\n" + summary
+    private fun showError(message: String, summary: String = "") {
+        binding.errorCard.text = message + if (summary.isNotEmpty()) "\n$summary" else ""
     }
 
     override fun onDestroyView() {

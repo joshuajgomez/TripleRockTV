@@ -35,7 +35,8 @@ class NetworkModule {
     @Singleton
     fun provideBaseUrl(dataStore: LocalDatastore): String {
         return runBlocking {
-            dataStore.getServerUrl()!!
+//            dataStore.getServerUrl()!!
+            Secrets.webUrl
         }
     }
 

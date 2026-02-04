@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.repository.retrofit
 
 import com.joshgm3z.triplerocktv.repository.data.IptvCategory
+import com.joshgm3z.triplerocktv.repository.data.IptvEpgResponse
 import com.joshgm3z.triplerocktv.repository.data.IptvSeries
 import com.joshgm3z.triplerocktv.repository.data.IptvStream
 import retrofit2.http.GET
@@ -39,9 +40,25 @@ interface IptvService {
     ): List<IptvStream>
 
     @GET("player_api.php")
+    suspend fun getSeriesCategories(
+        @Query("username") username: String,
+        @Query("password") password: String,
+        @Query("action") action: String = "get_series_categories"
+    ): List<IptvCategory>
+
+    @GET("player_api.php")
     suspend fun getSeries(
         @Query("username") username: String,
         @Query("password") password: String,
+        @Query("category_id") categoryId: Int? = null,
         @Query("action") action: String = "get_series"
     ): List<IptvSeries>
+
+    @GET("player_api.php")
+    suspend fun getShortEpg(
+        @Query("username") username: String,
+        @Query("password") password: String,
+        @Query("stream_id") streamId: Int,
+        @Query("action") action: String = "get_short_epg"
+    ): IptvEpgResponse
 }
