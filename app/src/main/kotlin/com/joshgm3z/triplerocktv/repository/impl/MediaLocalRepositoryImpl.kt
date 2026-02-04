@@ -12,7 +12,7 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
