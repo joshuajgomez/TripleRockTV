@@ -5,7 +5,7 @@ import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 
 interface MediaLocalRepository {
 

@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse
+package com.joshgm3z.triplerocktv.ui.browse.category
 
 import android.os.Bundle
 import android.view.View
@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
 import com.joshgm3z.triplerocktv.ui.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse
+package com.joshgm3z.triplerocktv.ui.browse.category
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
