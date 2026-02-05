@@ -16,6 +16,8 @@ class DemoData {
         val sampleVideoUrl2 =
             "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4"
 
+        val sampleVideoUr2 = "https://tv.balkanweb.com/news24/livestream/playlist.m3u8"
+
         val sampleVodStreams = listOf(
             VodStream(
                 streamId = 10001,
