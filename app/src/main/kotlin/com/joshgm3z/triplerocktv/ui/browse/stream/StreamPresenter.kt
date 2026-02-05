@@ -1,8 +1,9 @@
 package com.joshgm3z.triplerocktv.ui.browse.stream
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import androidx.leanback.widget.ImageCardView
+import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
@@ -12,13 +13,9 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class StreamPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val cardView = ImageCardView(parent.context).apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-            // Set dimensions for the card
-            setMainImageDimensions(300, 380)
-        }
-        return ViewHolder(cardView)
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.view_stream_card, parent, false)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
@@ -34,19 +31,19 @@ class StreamPresenter : Presenter() {
             is SeriesStream -> item.cover
             else -> "Unknown"
         }
-        val cardView = viewHolder.view as ImageCardView
+        val titleView = viewHolder.view.findViewById<TextView>(R.id.stream_title)
+        val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
 
-        cardView.titleText = title
-        Glide.with(cardView.context)
+        titleView.text = title
+        Glide.with(imageView.context)
             .load(imageUri) // Replace with your actual field name
             .placeholder(R.drawable.ic_video_file)
             .centerCrop()
-            .into(cardView.mainImageView)
+            .into(imageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val cardView = viewHolder.view as ImageCardView
-        Glide.with(cardView.context).clear(cardView.mainImageView)
-        cardView.mainImage = null
+        val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
+        Glide.with(imageView.context).clear(imageView)
     }
 }
