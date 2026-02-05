@@ -69,7 +69,10 @@ constructor(
     private suspend fun fetchAndStoreContent(vodCategory: VodCategory) {
         val vodStreams = iptvService.getVodStreams(username, password, vodCategory.categoryId)
 
-        vodCategoryDao.insert(vodCategory.apply { count = vodStreams.size })
+        vodCategoryDao.insert(vodCategory.apply {
+            count = vodStreams.size
+            firstStreamIcon = vodStreams.firstOrNull()?.streamIcon
+        })
         vodStreamsDao.insertStreams(vodStreams.map {
             VodStream(
                 num = it.num,

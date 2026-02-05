@@ -71,7 +71,10 @@ constructor(
     private suspend fun fetchAndStoreContent(liveTvCategory: LiveTvCategory) {
         val liveStreams = iptvService.getLiveStreams(username, password, liveTvCategory.categoryId)
         Logger.info("getLiveStreams = $liveStreams")
-        liveTvCategoryDao.insert(liveTvCategory.apply { count = liveStreams.size })
+        liveTvCategoryDao.insert(liveTvCategory.apply {
+            count = liveStreams.size
+            firstStreamIcon = liveStreams.firstOrNull()?.streamIcon
+        })
         liveTvStreamsDao.insertStreams(liveStreams.map {
             LiveTvStream(
                 num = it.num,

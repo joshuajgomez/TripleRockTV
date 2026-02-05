@@ -9,7 +9,9 @@ import com.joshgm3z.triplerocktv.R
 
 class CategoryCardView(context: Context) : BaseCardView(context) {
     val iconView: ImageView
+    val imageView: ImageView
     val titleView: TextView
+    val countView: TextView
 
     init {
         // 1. Set card focus properties
@@ -20,7 +22,9 @@ class CategoryCardView(context: Context) : BaseCardView(context) {
         LayoutInflater.from(context).inflate(R.layout.view_category_card, this)
 
         iconView = findViewById(R.id.iv_icon)
+        imageView = findViewById(R.id.iv_poster)
         titleView = findViewById(R.id.tv_title)
+        countView = findViewById(R.id.tv_count)
 
         // Optional: Set a specific card type for behavior
         cardType = CARD_TYPE_MAIN_ONLY
