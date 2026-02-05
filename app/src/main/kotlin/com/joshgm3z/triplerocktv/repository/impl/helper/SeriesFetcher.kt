@@ -70,7 +70,10 @@ constructor(
         val series = iptvService.getSeries(username, password, vodCategory.categoryId)
         Logger.debug("fetchAndStoreSeries: $series")
 
-        seriesCategoryDao.insert(vodCategory.apply { count = series.size })
+        seriesCategoryDao.insert(vodCategory.apply {
+            count = series.size
+            firstStreamIcon = series.firstOrNull()?.cover
+        })
         seriesStreamsDao.insertStreams(series.map {
             SeriesStream(
                 num = it.num,

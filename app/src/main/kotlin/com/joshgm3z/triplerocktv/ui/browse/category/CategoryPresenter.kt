@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.browse.category
 
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
+import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
@@ -22,12 +23,32 @@ class CategoryPresenter : Presenter() {
             is LiveTvCategory -> item.categoryName
             else -> "Unknown"
         }
+        val streamIcon = when (item) {
+            is VodCategory -> item.firstStreamIcon
+            is SeriesCategory -> item.firstStreamIcon
+            is LiveTvCategory -> item.firstStreamIcon
+            else -> null
+        }
+        val count = when (item) {
+            is VodCategory -> item.count
+            is SeriesCategory -> item.count
+            is LiveTvCategory -> item.count
+            else -> 0
+        }
         val cardView = viewHolder.view as CategoryCardView
         cardView.titleView.text = title
+        cardView.countView.text = "$count videos"
+        streamIcon?.let {
+            Glide.with(cardView)
+                .load(it)
+                .into(cardView.imageView)
+        }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val cardView = viewHolder.view as CategoryCardView
         cardView.iconView.setImageResource(-1)
+        Glide.with(cardView)
+            .clear(cardView.imageView)
     }
 }

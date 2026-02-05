@@ -9,4 +9,5 @@ data class LiveTvCategory(
     val categoryName: String,
     val parentId: Int,
     var count: Int = 0,
+    var firstStreamIcon: String? = null,
 )

@@ -3,7 +3,7 @@
     <!-- The background (empty track) -->
     <item android:id="@android:id/background">
         <shape>
-            <solid android:color="@color/cardview_dark_background" /> <!-- Light grey/transparent -->
+            <solid android:color="@color/gray2" /> <!-- Light grey/transparent -->
             <corners android:radius="4dp" />
         </shape>
     </item>
@@ -14,7 +14,7 @@
             android:clipOrientation="horizontal"
             android:gravity="left">
             <shape>
-                <solid android:color="@color/black" />
+                <solid android:color="@color/gray" />
                 <corners android:radius="4dp" />
             </shape>
         </clip>
