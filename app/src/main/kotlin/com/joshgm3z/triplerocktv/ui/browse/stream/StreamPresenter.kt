@@ -34,23 +34,19 @@ class StreamPresenter : Presenter() {
             is SeriesStream -> item.cover
             else -> "Unknown"
         }
-
-
         val cardView = viewHolder.view as ImageCardView
 
-        // Set the title/text
         cardView.titleText = title
-
-        // Load the image using Glide
-        // Assuming StreamEntity has an 'imageUrl' or 'thumbnail' field
         Glide.with(cardView.context)
             .load(imageUri) // Replace with your actual field name
+            .placeholder(R.drawable.ic_video_file)
             .centerCrop()
             .into(cardView.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val icon = viewHolder.view.findViewById<ImageView>(R.id.streamIcon)
-        Glide.with(viewHolder.view).clear(icon)
+        val cardView = viewHolder.view as ImageCardView
+        Glide.with(cardView.context).clear(cardView.mainImageView)
+        cardView.mainImage = null
     }
 }

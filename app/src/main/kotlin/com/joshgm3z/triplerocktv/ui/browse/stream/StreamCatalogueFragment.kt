@@ -36,10 +36,18 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        progressBarManager.show()
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 streamAdapter.clear()
-                streamAdapter.addAll(0, it)
+                it?.let {
+                    progressBarManager.hide()
+                    if (it.isEmpty()) {
+                        title = "No titles found"
+                    } else {
+                        streamAdapter.addAll(0, it)
+                    }
+                }
             }
         }
         viewModel.fetchStreams(args.categoryId, args.browseType)
