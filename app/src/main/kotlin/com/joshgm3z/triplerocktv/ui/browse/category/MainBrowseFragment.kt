@@ -61,7 +61,9 @@ class MainBrowseFragment : BrowseSupportFragment() {
         title = "3Rock TV"
         // Initialize BackgroundManager
         backgroundManager = BackgroundManager.getInstance(requireActivity())
-        backgroundManager.attach(requireActivity().window)
+        if (backgroundManager.isAttached) {
+            backgroundManager.attach(requireActivity().window)
+        }
 
         // Set a solid background color for the entire fragment
         backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
