@@ -83,5 +83,17 @@
             android:name="streamId"
             android:defaultValue="20642"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailsFragment_to_playbackFragment"
+            app:destination="@id/playbackFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/playbackFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.player.PlaybackFragment"
+        android:label="PlaybackFragment">
+        <argument
+            android:name="streamId"
+            app:argType="integer" />
     </fragment>
 </navigation>

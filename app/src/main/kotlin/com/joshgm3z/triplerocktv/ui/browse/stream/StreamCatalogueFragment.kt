@@ -39,9 +39,11 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
             when (item) {
                 is VodStream -> {
+                    val directions = StreamCatalogueFragmentDirections
+                        .actionStreamsCatalogueToDetails()
+                    directions.setStreamId(item.streamId)
                     findNavController().navigate(
-                        StreamCatalogueFragmentDirections
-                            .actionStreamsCatalogueToDetails(item.streamId)
+                        directions
                     )
                 }
             }
