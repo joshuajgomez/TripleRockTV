@@ -6,8 +6,12 @@ import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
@@ -21,6 +25,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val liveTvCategoryDao: LiveTvCategoryDao,
     private val epgListingDao: EpgListingDao,
     private val vodStreamsDao: VodStreamsDao,
+    private val seriesStreamsDao: SeriesStreamsDao,
+    private val liveTvStreamsDao: LiveTvStreamsDao,
 ) : MediaLocalRepository {
     override suspend fun fetchAllCategories(): Map<BrowseType, List<VodCategory>> {
         return mapOf(
@@ -63,9 +69,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
         onSearchResult(vodStreamsDao.searchStreams(name))
     }
 
-    override suspend fun fetchStreams(categoryId: Int): List<VodStream> {
-        return vodStreamsDao.getAllStreams(categoryId)
-    }
+    override suspend fun fetchStreams(categoryId: Int, browseType: BrowseType): List<Any> =
+        when (browseType) {
+            BrowseType.VideoOnDemand -> vodStreamsDao.getAllStreams(categoryId)
+            BrowseType.Series -> seriesStreamsDao.getAllStreams(categoryId)
+            BrowseType.LiveTV -> liveTvStreamsDao.getAllStreams(categoryId)
+            else -> emptyList()
+        }
 
     override suspend fun fetchMediaDataById(
         streamId: Int,

@@ -60,10 +60,29 @@
             app:destination="@id/mediaLoadingFragment"
             app:popUpTo="@id/browseFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_browse_to_streamCatalogue"
+            app:destination="@id/streamsCatalogue"
+            app:popUpTo="@id/browseFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.joshgm3z.triplerocktv.ui.search.SearchFragment"
         android:label="SearchFragment" />
+
+    <fragment
+        android:id="@+id/streamsCatalogue"
+        android:name="com.joshgm3z.triplerocktv.ui.browse.stream.StreamCatalogueFragment"
+        android:label="StreamCatalogueFragment">
+        <argument
+            android:name="categoryId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+        <argument
+            android:name="seriesCategoryId"
+            android:defaultValue="-1"
+            app:argType="integer" />
+    </fragment>
 </navigation>

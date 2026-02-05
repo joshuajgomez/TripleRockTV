@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
     kotlin("kapt")
     id("androidx.room")
+    id("androidx.navigation.safeargs")
 }
 
 android {

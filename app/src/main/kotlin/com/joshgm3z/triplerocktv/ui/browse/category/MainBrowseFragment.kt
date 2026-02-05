@@ -17,6 +17,9 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
+import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
 import com.joshgm3z.triplerocktv.ui.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
@@ -79,12 +82,34 @@ class MainBrowseFragment : BrowseSupportFragment() {
                 is SettingItem -> {
                     when (item.title) {
                         "Sign out" -> loginViewModel.onLogoutClick {
-                            findNavController().navigate(R.id.action_browse_to_login)
+                            val action = MainBrowseFragmentDirections.actionBrowseToLogin()
+                            findNavController().navigate(action)
                         }
 
-                        else -> findNavController().navigate(R.id.action_browse_to_mediaLoading)
+                        else -> findNavController().navigate(
+                            MainBrowseFragmentDirections.actionBrowseToMediaLoading()
+                        )
                     }
                 }
+
+                is VodCategory -> findNavController().navigate(
+                    MainBrowseFragmentDirections
+                        .actionBrowseToStreamCatalogue()
+                        .setCategoryId(item.categoryId)
+                )
+
+                is LiveTvCategory -> findNavController().navigate(
+                    MainBrowseFragmentDirections
+                        .actionBrowseToStreamCatalogue()
+                        .setCategoryId(item.categoryId)
+                )
+
+                is SeriesCategory -> findNavController().navigate(
+                    MainBrowseFragmentDirections
+                        .actionBrowseToStreamCatalogue()
+                        .setSeriesCategoryId(item.categoryId)
+                )
+
             }
         }
     }

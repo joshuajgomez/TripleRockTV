@@ -30,7 +30,7 @@ interface MediaLocalRepository {
         onSearchResult: (List<VodStream>) -> Unit
     )
 
-    suspend fun fetchStreams(categoryId: Int): List<VodStream>
+    suspend fun fetchStreams(categoryId: Int, browseType: BrowseType): List<Any>
 
     suspend fun fetchMediaDataById(
         streamId: Int,

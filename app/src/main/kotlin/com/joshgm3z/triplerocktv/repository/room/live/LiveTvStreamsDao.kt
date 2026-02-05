@@ -15,6 +15,9 @@ interface LiveTvStreamsDao {
     @Query("SELECT * FROM live_tv_stream WHERE streamId = :streamId")
     fun getStream(streamId: Int): Flow<LiveTvStream>
 
+    @Query("SELECT * FROM live_tv_stream WHERE categoryId = :categoryId")
+    fun getAllStreams(categoryId: Int): List<LiveTvStream>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<LiveTvStream>)
 
