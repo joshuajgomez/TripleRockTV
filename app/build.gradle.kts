@@ -91,4 +91,9 @@ dependencies {
     kapt(libs.room.compiler)
 
     implementation(libs.glide)
+
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.leanback)
+    implementation(libs.androidx.media3.hls)
 }
