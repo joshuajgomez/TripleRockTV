@@ -16,7 +16,7 @@ class StreamPresenter : Presenter() {
             isFocusable = true
             isFocusableInTouchMode = true
             // Set dimensions for the card
-            setMainImageDimensions(300, 150)
+            setMainImageDimensions(300, 380)
         }
         return ViewHolder(cardView)
     }
