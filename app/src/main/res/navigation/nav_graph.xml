@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/browseFragment">
+    app:startDestination="@id/detailsFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -70,5 +70,18 @@
             android:name="browseType"
             android:defaultValue="VideoOnDemand"
             app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
+        <action
+            android:id="@+id/action_streamsCatalogue_to_details"
+            app:destination="@id/detailsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/detailsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.details.DetailsFragment"
+        android:label="DetailsFragment">
+        <argument
+            android:name="streamId"
+            android:defaultValue="20642"
+            app:argType="integer" />
     </fragment>
 </navigation>

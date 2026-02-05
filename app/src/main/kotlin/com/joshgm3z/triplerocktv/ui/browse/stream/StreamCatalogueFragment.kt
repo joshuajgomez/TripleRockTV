@@ -5,9 +5,12 @@ import android.view.View
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -32,6 +35,17 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         // You would typically set your adapter here
         adapter = streamAdapter
         title = args.categoryName
+
+        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
+            when (item) {
+                is VodStream -> {
+                    findNavController().navigate(
+                        StreamCatalogueFragmentDirections
+                            .actionStreamsCatalogueToDetails(item.streamId)
+                    )
+                }
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
