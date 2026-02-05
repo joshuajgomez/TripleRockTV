@@ -23,12 +23,12 @@ data class BrowseUiState(
     var errorMessage: String? = null,
 )
 
-enum class BrowseType(val value: Int) {
-    Home(0),
-    VideoOnDemand(1),
-    LiveTV(2),
-    EPG(3),
-    Series(4),
+enum class BrowseType {
+    Home,
+    VideoOnDemand,
+    LiveTV,
+    EPG,
+    Series,
 }
 
 @HiltViewModel
