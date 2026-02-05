@@ -9,10 +9,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VodStreamsDao {
-    @Query("SELECT * FROM vod_stream WHERE categoryId = :categoryId LIMIT 30")
+    @Query("SELECT * FROM vod_stream WHERE categoryId = :categoryId")
     fun getAllStreams(categoryId: Int): List<VodStream>
 
-    @Query("SELECT * FROM vod_stream WHERE name LIKE :streamName LIMIT 30")
+    @Query("SELECT * FROM vod_stream WHERE name LIKE :streamName")
     fun searchStreams(streamName: String): List<VodStream>
 
     @Query("SELECT * FROM vod_stream WHERE streamId = :streamId")
