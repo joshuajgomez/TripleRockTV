@@ -8,13 +8,17 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
+import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.DetailsOverviewRow
 import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
+import androidx.leanback.widget.OnActionClickedListener
+import androidx.leanback.widget.SparseArrayObjectAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
@@ -42,6 +46,13 @@ class DetailsFragment : DetailsSupportFragment() {
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter = FullWidthDetailsOverviewRowPresenter(VodDetailsDescriptionPresenter())
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.black)
+
+        detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
+            if (action.id == ACTION_PLAY) {
+                val navAction = DetailsFragmentDirections.actionDetailsFragmentToPlaybackFragment(args.streamId)
+                findNavController().navigate(navAction)
+            }
+        }
         
         presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
         rowsAdapter = ArrayObjectAdapter(presenterSelector)
@@ -65,6 +76,10 @@ class DetailsFragment : DetailsSupportFragment() {
 
     private fun updateDetails(stream: VodStream) {
         val detailsRow = DetailsOverviewRow(stream)
+
+        val actionAdapter = SparseArrayObjectAdapter()
+        actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
+        detailsRow.actionsAdapter = actionAdapter
         
         Glide.with(requireContext())
             .asBitmap()
@@ -80,5 +95,9 @@ class DetailsFragment : DetailsSupportFragment() {
             })
 
         rowsAdapter.add(detailsRow)
+    }
+
+    companion object {
+        private const val ACTION_PLAY = 1L
     }
 }

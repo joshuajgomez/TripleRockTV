@@ -11,6 +11,11 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 class DemoData {
     companion object {
 
+        val sampleVideoUrl1 =
+            "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
+        val sampleVideoUrl2 =
+            "http://commondatastorage.googleapis.com/android-tv/Sample%20videos/Zeitgeist/Zeitgeist%202010_%20Year%20in%20Review.mp4"
+
         val sampleVodStreams = listOf(
             VodStream(
                 streamId = 10001,
