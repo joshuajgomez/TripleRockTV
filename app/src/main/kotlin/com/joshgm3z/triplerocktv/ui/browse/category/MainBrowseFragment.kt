@@ -61,7 +61,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         title = "3Rock TV"
         // Initialize BackgroundManager
         backgroundManager = BackgroundManager.getInstance(requireActivity())
-        if (backgroundManager.isAttached) {
+        if (!backgroundManager.isAttached) {
             backgroundManager.attach(requireActivity().window)
         }
 
