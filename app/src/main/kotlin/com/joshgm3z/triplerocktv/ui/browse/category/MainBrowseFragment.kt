@@ -21,7 +21,7 @@ import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
-import com.joshgm3z.triplerocktv.ui.settings.SettingsItemPresenter
+import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -52,7 +52,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
         prepareEntranceTransition()
     }
 
-    private lateinit var backgroundManager: BackgroundManager
 
     private fun setupUI() {
         brandColor = ContextCompat.getColor(requireContext(), R.color.black)
@@ -60,20 +59,23 @@ class MainBrowseFragment : BrowseSupportFragment() {
         isHeadersTransitionOnBackEnabled = true
         title = "3Rock TV"
         // Initialize BackgroundManager
-        backgroundManager = BackgroundManager.getInstance(requireActivity())
+        val backgroundManager = BackgroundManager.getInstance(requireActivity())
         if (!backgroundManager.isAttached) {
             backgroundManager.attach(requireActivity().window)
         }
-
         // Set a solid background color for the entire fragment
         backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
-
+        searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
     }
 
     private fun setupEventListeners() {
+        setOnSearchClickedListener {
+            // Navigate to your search fragment/activity
+            findNavController().navigate(MainBrowseFragmentDirections.actionBrowseToSearch())
+        }
         onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
             // Handle item selection if needed
         }
