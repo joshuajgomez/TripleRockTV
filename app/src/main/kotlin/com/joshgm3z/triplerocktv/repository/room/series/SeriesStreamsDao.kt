@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeriesStreamsDao {
 
-    @Query("SELECT * FROM series_stream WHERE name LIKE :streamName LIMIT 30")
+    @Query("SELECT * FROM series_stream WHERE name LIKE :streamName")
     fun searchStreams(streamName: String): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
