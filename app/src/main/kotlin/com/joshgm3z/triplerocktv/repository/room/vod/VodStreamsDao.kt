@@ -16,7 +16,7 @@ interface VodStreamsDao {
     fun searchStreams(streamName: String): List<VodStream>
 
     @Query("SELECT * FROM vod_stream WHERE streamId = :streamId")
-    fun getStream(streamId: Int): Flow<VodStream>
+    fun getStream(streamId: Int): VodStream
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<VodStream>)

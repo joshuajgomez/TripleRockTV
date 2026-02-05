@@ -9,27 +9,4 @@ data class LiveTvCategory(
     val categoryName: String,
     val parentId: Int,
     var count: Int = 0,
-){
-    companion object{
-        fun samples(): List<LiveTvCategory> = listOf(
-            LiveTvCategory(
-                categoryId = 122,
-                categoryName = "ENGLISH (4K)",
-                parentId = 0,
-                count = 3
-            ),
-            LiveTvCategory(
-                categoryId = 56,
-                categoryName = "OSCAR WINNING MOVIES",
-                parentId = 0,
-                count = 2
-            ),
-            LiveTvCategory(
-                categoryId = 43,
-                categoryName = "ENGLISH FHD (2026)",
-                parentId = 0,
-                count = 1
-            ),
-        )
-    }
-}
+)

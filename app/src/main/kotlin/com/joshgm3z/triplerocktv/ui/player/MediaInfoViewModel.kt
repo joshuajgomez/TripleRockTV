@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.player
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class MediaUiState(
-    val vodStream: VodStream?,
+    val vodStream: Any?,
 )
 
 @HiltViewModel
@@ -32,16 +31,13 @@ class MediaInfoViewModel
 
     init {
         viewModelScope.launch {
-            repository.fetchMediaDataById(
-                VodStream.sample().streamId,
-                onSuccess = { streamEntity ->
-                    Log.i(TAG, "fetchMediaDataById.onSuccess $streamEntity")
-                    _uiState.update {
-                        it.copy(vodStream = streamEntity)
-                    }
-                },
-                onError = {},
-            )
+            _uiState.update {
+                it.copy(
+                    vodStream = repository.fetchStream(
+                        VodStream.sample().streamId
+                    )
+                )
+            }
         }
     }
 }
