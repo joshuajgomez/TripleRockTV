@@ -31,6 +31,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
         // You would typically set your adapter here
         adapter = streamAdapter
+        title = args.categoryName
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

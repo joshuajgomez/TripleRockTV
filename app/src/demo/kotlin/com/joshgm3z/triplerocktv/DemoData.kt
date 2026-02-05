@@ -22,6 +22,15 @@ class DemoData {
                 added = "1625012046"
             ),
             VodStream(
+                streamId = 10042,
+                num = 2,
+                name = "Breaking Bad S01E01",
+                streamType = "series",
+                streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
+                categoryId = 101,
+                added = "1625112046"
+            ),
+            VodStream(
                 streamId = 10002,
                 num = 2,
                 name = "Breaking Bad S01E01",
