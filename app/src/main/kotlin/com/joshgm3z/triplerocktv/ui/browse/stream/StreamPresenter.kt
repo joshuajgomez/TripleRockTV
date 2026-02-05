@@ -1,9 +1,8 @@
 package com.joshgm3z.triplerocktv.ui.browse.stream
 
-import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.leanback.widget.ImageCardView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
@@ -13,8 +12,13 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class StreamPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_stream, parent, false)
-        return ViewHolder(view)
+        val cardView = ImageCardView(parent.context).apply {
+            isFocusable = true
+            isFocusableInTouchMode = true
+            // Set dimensions for the card
+            setMainImageDimensions(300, 150)
+        }
+        return ViewHolder(cardView)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
@@ -32,15 +36,17 @@ class StreamPresenter : Presenter() {
         }
 
 
-        val view = viewHolder.view
-        val icon = view.findViewById<ImageView>(R.id.streamIcon)
-        val name = view.findViewById<TextView>(R.id.streamName)
+        val cardView = viewHolder.view as ImageCardView
 
-        name.text = title
-        Glide.with(viewHolder.view)
-            .load(imageUri)
-            .placeholder(android.R.drawable.ic_menu_report_image)
-            .into(icon)
+        // Set the title/text
+        cardView.titleText = title
+
+        // Load the image using Glide
+        // Assuming StreamEntity has an 'imageUrl' or 'thumbnail' field
+        Glide.with(cardView.context)
+            .load(imageUri) // Replace with your actual field name
+            .centerCrop()
+            .into(cardView.mainImageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

@@ -98,6 +98,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
                     MainBrowseFragmentDirections
                         .actionBrowseToStreamCatalogue()
                         .setCategoryId(item.categoryId)
+                        .setCategoryName(item.categoryName)
                         .setBrowseType(BrowseType.VideoOnDemand)
                 )
 
@@ -105,12 +106,15 @@ class MainBrowseFragment : BrowseSupportFragment() {
                     MainBrowseFragmentDirections
                         .actionBrowseToStreamCatalogue()
                         .setCategoryId(item.categoryId)
+                        .setCategoryName(item.categoryName)
                         .setBrowseType(BrowseType.LiveTV)
                 )
 
                 is SeriesCategory -> findNavController().navigate(
                     MainBrowseFragmentDirections
                         .actionBrowseToStreamCatalogue()
+                        .setCategoryId(item.categoryId)
+                        .setCategoryName(item.categoryName)
                         .setBrowseType(BrowseType.Series)
                 )
 

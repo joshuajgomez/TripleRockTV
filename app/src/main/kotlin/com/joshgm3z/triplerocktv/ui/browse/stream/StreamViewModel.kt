@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +23,7 @@ constructor(
     val uiState = _uiState.asStateFlow()
 
     fun fetchStreams(categoryId: Int, browseType: BrowseType) {
+        Logger.debug("categoryId = [${categoryId}], browseType = [${browseType}]")
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = repository.fetchStreamsOfCategory(categoryId, browseType)
         }
