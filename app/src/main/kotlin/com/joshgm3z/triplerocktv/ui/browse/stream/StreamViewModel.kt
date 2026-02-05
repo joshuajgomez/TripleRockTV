@@ -19,7 +19,7 @@ constructor(
     private val repository: MediaLocalRepository,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<List<Any>>(emptyList())
+    private val _uiState = MutableStateFlow<List<Any>?>(null)
     val uiState = _uiState.asStateFlow()
 
     fun fetchStreams(categoryId: Int, browseType: BrowseType) {
