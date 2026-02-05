@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse
+package com.joshgm3z.triplerocktv.ui.browse.stream
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

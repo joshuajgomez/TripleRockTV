@@ -57,13 +57,10 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/action_browse_to_mediaLoading"
-            app:destination="@id/mediaLoadingFragment"
-            app:popUpTo="@id/browseFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/mediaLoadingFragment" />
         <action
             android:id="@+id/action_browse_to_streamCatalogue"
-            app:destination="@id/streamsCatalogue"
-            app:popUpTo="@id/browseFragment" />
+            app:destination="@id/streamsCatalogue" />
     </fragment>
 
     <fragment
