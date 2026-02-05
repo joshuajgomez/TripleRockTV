@@ -31,7 +31,7 @@ data class IptvSeries(
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("last_modified") val lastModified: String?,
     @SerializedName("rating") val rating: String?,
-    @SerializedName("category_id") val categoryId: String
+    @SerializedName("category_id") val categoryId: Int
 )
 
 data class IptvEpgResponse(

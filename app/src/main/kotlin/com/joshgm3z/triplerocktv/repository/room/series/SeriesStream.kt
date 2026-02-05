@@ -17,5 +17,5 @@ data class SeriesStream(
     val releaseDate: String?,
     val lastModified: String?,
     val rating: String?,
-    val categoryId: String
+    val categoryId: Int
 )

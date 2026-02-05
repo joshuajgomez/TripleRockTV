@@ -23,7 +23,7 @@ constructor(
 
     fun fetchStreams(categoryId: Int, browseType: BrowseType) {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = repository.fetchStreams(categoryId, browseType)
+            _uiState.value = repository.fetchStreamsOfCategory(categoryId, browseType)
         }
     }
 }

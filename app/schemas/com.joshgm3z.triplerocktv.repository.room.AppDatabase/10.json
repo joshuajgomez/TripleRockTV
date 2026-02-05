@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 10,
-    "identityHash": "cc65c0b6c15e83fbf840f2ff7dabe11e",
+    "identityHash": "0761f59ebf060b880d2a39ab3ca8ea8e",
     "entities": [
       {
         "tableName": "vod_category",
@@ -131,7 +131,7 @@
       },
       {
         "tableName": "series_stream",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `cover` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` TEXT NOT NULL, PRIMARY KEY(`seriesId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `cover` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` INTEGER NOT NULL, PRIMARY KEY(`seriesId`))",
         "fields": [
           {
             "fieldPath": "seriesId",
@@ -194,7 +194,7 @@
           {
             "fieldPath": "categoryId",
             "columnName": "categoryId",
-            "affinity": "TEXT",
+            "affinity": "INTEGER",
             "notNull": true
           }
         ],
@@ -360,7 +360,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'cc65c0b6c15e83fbf840f2ff7dabe11e')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0761f59ebf060b880d2a39ab3ca8ea8e')"
     ]
   }
 }

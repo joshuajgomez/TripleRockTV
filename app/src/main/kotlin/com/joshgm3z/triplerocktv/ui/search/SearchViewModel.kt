@@ -13,7 +13,7 @@ import javax.inject.Inject
 sealed class SearchUiState {
     object Initial : SearchUiState()
     object Loading : SearchUiState()
-    data class Result(val query: String, val list: List<VodStream>) : SearchUiState()
+    data class Result(val query: String, val list: List<Any>) : SearchUiState()
 }
 
 @HiltViewModel
@@ -32,9 +32,7 @@ constructor(
             return
         }
         viewModelScope.launch {
-            repository.searchStreamByName(text) {
-                _uiState.value = SearchUiState.Result(text, it)
-            }
+            _uiState.value = SearchUiState.Result(text, repository.searchStreamByName(text))
         }
     }
 }

@@ -31,6 +31,7 @@ enum class BrowseType {
     Series,
 }
 
+@Suppress("UNCHECKED_CAST")
 @HiltViewModel
 class BrowseViewModel
 @Inject constructor(
@@ -43,10 +44,10 @@ class BrowseViewModel
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
-                    vodCategories = repository.fetchVodCategories(),
-                    seriesCategories = repository.fetchSeriesCategories(),
-                    liveTvCategories = repository.fetchLiveTvCategories(),
-                    epgCategories = repository.fetchIptvEpgCategories(),
+                    vodCategories = repository.fetchCategories(BrowseType.VideoOnDemand) as List<VodCategory>,
+                    seriesCategories = repository.fetchCategories(BrowseType.Series) as List<SeriesCategory>,
+                    liveTvCategories = repository.fetchCategories(BrowseType.LiveTV) as List<LiveTvCategory>,
+                    epgCategories = repository.fetchEpgListings(),
                 )
             }
         }
