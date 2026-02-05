@@ -27,7 +27,7 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
         LiveTvStream::class,
         IptvEpgListing::class,
     ],
-    version = 10
+    version = 11
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun vodCategoryDao(): VodCategoryDao
