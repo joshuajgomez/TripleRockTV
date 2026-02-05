@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.settings
+package com.joshgm3z.triplerocktv.ui.browse.settings
 
 import android.content.Context
 import android.view.LayoutInflater
