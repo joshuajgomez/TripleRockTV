@@ -7,6 +7,8 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class StreamPresenter : Presenter() {
@@ -16,20 +18,33 @@ class StreamPresenter : Presenter() {
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
-        val stream = item as VodStream
+        val title = when (item) {
+            is VodStream -> item.name
+            is LiveTvStream -> item.name
+            is SeriesStream -> item.name
+            else -> "Unknown"
+        }
+        val imageUri = when (item) {
+            is VodStream -> item.streamIcon
+            is LiveTvStream -> item.streamIcon
+            is SeriesStream -> item.cover
+            else -> "Unknown"
+        }
+
+
         val view = viewHolder.view
         val icon = view.findViewById<ImageView>(R.id.streamIcon)
         val name = view.findViewById<TextView>(R.id.streamName)
 
-        name.text = stream.name
+        name.text = title
         Glide.with(viewHolder.view)
-            .load(stream.streamIcon)
+            .load(imageUri)
             .placeholder(android.R.drawable.ic_menu_report_image)
             .into(icon)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val icon = viewHolder.view.findViewById<ImageView>(R.id.streamIcon)
-        icon.setImageDrawable(null)
+        Glide.with(viewHolder.view).clear(icon)
     }
 }
