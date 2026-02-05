@@ -1,40 +1,44 @@
 package com.joshgm3z.triplerocktv.ui.player
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import androidx.compose.ui.semantics.error
+import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
-import androidx.leanback.media.MediaPlayerAdapter
 import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.ui.details.DetailsViewModel
-import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.getValue
 
 /**
  * A fragment for playing video content.
  */
+@UnstableApi
 @AndroidEntryPoint
 class PlaybackFragment : VideoSupportFragment() {
 
     private val viewModel: DetailsViewModel by viewModels()
-    private lateinit var transportControlGlue: PlaybackTransportControlGlue<MediaPlayerAdapter>
+    private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
     private val args by navArgs<PlaybackFragmentArgs>()
+    private var player: ExoPlayer? = null
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
-        val playerAdapter = MediaPlayerAdapter(requireActivity())
+
+        player = ExoPlayer.Builder(requireActivity()).build()
+        val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player!!, 16)
         playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
 
         transportControlGlue = PlaybackTransportControlGlue(requireActivity(), playerAdapter)
@@ -46,22 +50,28 @@ class PlaybackFragment : VideoSupportFragment() {
                 it?.let {
                     transportControlGlue.title = it.name
                     transportControlGlue.playWhenPrepared()
-                    playVideo(it.streamId, it.name)
-//                    playerAdapter.setDataSource(Uri.parse(""))
+                    playVideo(it.streamId)
                 }
             }
         }
     }
 
-    private fun playVideo(streamId: Int, streamName: String) {
+    private fun playVideo(streamId: Int) {
         val videoUrl =
             "${Secrets.webUrl}/live/${Secrets.username}/${Secrets.password}/$streamId.m3u8"
-
-
+        val mediaItem = MediaItem.fromUri(videoUrl)
+        player?.setMediaItem(mediaItem)
+        player?.prepare()
     }
 
     override fun onPause() {
         super.onPause()
         transportControlGlue.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player?.release()
+        player = null
     }
 }
