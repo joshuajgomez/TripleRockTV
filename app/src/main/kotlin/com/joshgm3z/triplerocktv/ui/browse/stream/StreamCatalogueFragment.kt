@@ -25,7 +25,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
         // Setup the grid presenter (e.g., 5 columns)
         val gridPresenter = VerticalGridPresenter().apply {
-            numberOfColumns = 5
+            numberOfColumns = 6
         }
         setGridPresenter(gridPresenter)
 
