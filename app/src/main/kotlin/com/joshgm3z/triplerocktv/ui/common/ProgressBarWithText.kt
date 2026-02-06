@@ -8,7 +8,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import androidx.core.content.withStyledAttributes
-import com.joshgm3z.triplerocktv.databinding.LayoutProgressBarWithTextBinding
+import com.joshgm3z.triplerocktv.databinding.ViewProgressBarWithTextBinding
 
 class ProgressBarWithText @JvmOverloads constructor(
     context: Context,
@@ -16,7 +16,7 @@ class ProgressBarWithText @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val binding = LayoutProgressBarWithTextBinding.inflate(
+    private val binding = ViewProgressBarWithTextBinding.inflate(
         LayoutInflater.from(context),
         this,
         true
