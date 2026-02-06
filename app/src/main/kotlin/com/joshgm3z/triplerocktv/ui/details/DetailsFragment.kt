@@ -44,7 +44,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
-            FullWidthDetailsOverviewRowPresenter(VodDetailsDescriptionPresenter())
+            FullWidthDetailsOverviewRowPresenter(DetailsDescriptionPresenter())
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.black)
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
@@ -76,7 +76,7 @@ class DetailsFragment : DetailsSupportFragment() {
     }
 
     private fun updateDetails(uiState: DetailsUiState) {
-        val detailsRow = DetailsOverviewRow(uiState.title)
+        val detailsRow = DetailsOverviewRow(uiState)
 
         val actionAdapter = SparseArrayObjectAdapter()
         actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
