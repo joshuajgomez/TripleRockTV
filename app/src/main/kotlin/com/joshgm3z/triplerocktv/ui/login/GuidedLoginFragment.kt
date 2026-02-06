@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.leanback.app.GuidedStepSupportFragment
 import androidx.leanback.widget.GuidanceStylist
 import androidx.leanback.widget.GuidedAction
+import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
@@ -22,10 +23,13 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
-    private val idServerUrl = 0L
-    private val idUsername = 1L
-    private val idPassword = 2L
-    private val idLogin = 3L
+    companion object {
+        val idServerUrl = 0L
+        val idUsername = 1L
+        val idPassword = 2L
+        val idLogin = 3L
+        val idStatus = 4L
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -40,29 +44,31 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         }
     }
 
-    fun showLoading() {
-        actions[idLogin.toInt()].description = ""
-        actions[idLogin.toInt()].title = "Signing in"
-        enableViews(false)
-    }
 
     private fun enableViews(enable: Boolean) {
-        actions.forEach {
+        listOf(
+            actions[idServerUrl.toInt()],
+            actions[idUsername.toInt()],
+            actions[idPassword.toInt()],
+            actions[idLogin.toInt()],
+        ).forEach {
             it.isEnabled = enable
             notifyActionChanged(it.id.toInt())
         }
     }
 
+    fun showLoading() {
+        showStatus(message = "Signing in")
+        enableViews(false)
+    }
+
     fun showLoginFailed(message: String?) {
-        actions[idLogin.toInt()].title = "Sign in"
-        actions[idLogin.toInt()].description = message
+        showStatus(message = "Sign in failed", description = message, icon = R.drawable.ic_error_orange)
         enableViews(true)
-        actions = actions
     }
 
     fun showLoginSuccess() {
-        actions[idLogin.toInt()].title = "Signed in"
-        notifyActionChanged(idLogin.toInt())
+        showStatus("Signed in", icon = R.drawable.ic_check_circle_green)
         lifecycleScope.launch {
             delay(2000)
             findNavController().navigate(R.id.action_login_to_mediaLoading)
@@ -110,9 +116,32 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idLogin)
-                .title("Login")
+                .title("Sign in")
+                .icon(R.drawable.ic_arrow_forward)
                 .build()
         )
+        actions.add(
+            GuidedAction.Builder(requireContext())
+                .id(idStatus)
+                .title("")
+                .focusable(false) // Prevents user from selecting it
+                .infoOnly(true)   // Styles it as informational text
+                .multilineDescription(true)
+                .build()
+        )
+    }
+
+    private fun showStatus(
+        message: String? = null,
+        description: String? = null,
+        icon: Int? = null
+    ) {
+        val action = actions[idStatus.toInt()]
+        action.title = message ?: ""
+        action.description = description ?: ""
+        action.icon = if (icon == null) null
+        else ContextCompat.getDrawable(requireContext(), icon)
+        notifyActionChanged(idStatus.toInt())
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
@@ -123,6 +152,10 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             // Handle login logic here
             loginViewModel.onLoginClick(serverUrl, username, password)
         }
+    }
+
+    override fun onCreateActionsStylist(): GuidedActionsStylist {
+        return LoginActionsStylist()
     }
 
     override fun onGuidedActionEditCanceled(action: GuidedAction) {
