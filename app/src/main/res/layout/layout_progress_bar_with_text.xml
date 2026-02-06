@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_container"
     android:layout_width="250dp"
-    android:layout_height="30dp"
+    android:layout_height="40dp"
     android:background="@drawable/text_progress_bg"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -18,5 +18,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="Sample progress" />
+        android:text="Sample progress"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>
