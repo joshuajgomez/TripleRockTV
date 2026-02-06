@@ -46,6 +46,9 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
                 }
             }
         }
+        copyInputToTitle(actions[idServerUrl.toInt()])
+        copyInputToTitle(actions[idUsername.toInt()])
+        copyInputToTitle(actions[idPassword.toInt()])
     }
 
 
@@ -193,6 +196,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
     private fun copyInputToTitle(action: GuidedAction) {
         if (action.id == idServerUrl || action.id == idUsername || action.id == idPassword) {
             val userInput = action.editTitle.toString()
+            if(userInput.isNullOrEmpty()) return
             action.title = userInput
 
             val position = findActionPositionById(action.id)
