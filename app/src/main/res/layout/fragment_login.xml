@@ -7,90 +7,100 @@
     tools:context=".ui.login.LoginFragment">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="@dimen/container_width"
-        android:layout_height="@dimen/container_height"
-        android:layout_gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="80dp"
-            android:layout_height="40dp"
-            android:src="@drawable/logo_3rocktv_cutout_xl"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cl_container"
+            android:layout_width="@dimen/container_width"
+            android:layout_height="@dimen/container_height"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="250dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="Sign with your IPTV credentials"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+            <ImageView
+                android:id="@+id/iv_logo"
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:src="@drawable/logo_3rocktv_cutout_xl"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <!--Error container-->
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="250dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Sign with your IPTV credentials"
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/iv_logo" />
+
+            <EditText
+                android:id="@+id/et_server_url"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:hint="Server URL"
+                android:inputType="textUri"
+                android:selectAllOnFocus="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <EditText
+                android:id="@+id/et_username"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Username"
+                android:inputType="textEmailAddress"
+                android:selectAllOnFocus="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/et_server_url" />
+
+            <EditText
+                android:id="@+id/et_password"
+                android:layout_width="230dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:hint="Password"
+                android:imeActionLabel="Sign in"
+                android:imeOptions="actionDone"
+                android:inputType="textPassword"
+                android:selectAllOnFocus="true"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/et_username" />
+
+            <com.joshgm3z.triplerocktv.ui.common.LoginButton
+                android:id="@+id/loginButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:loginState="initial" />
+
+            <ProgressBar
+                android:id="@+id/loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="32dp"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/loginButton"
+                app:layout_constraintStart_toEndOf="@id/loginButton"
+                app:layout_constraintTop_toTopOf="@id/loginButton" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
         <com.joshgm3z.triplerocktv.ui.common.ErrorCard
             android:id="@+id/error_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="30dp"
             android:text=""
-            app:layout_constraintBottom_toBottomOf="@+id/loginButton"
-            app:layout_constraintEnd_toStartOf="@+id/loginButton" />
-
-        <EditText
-            android:id="@+id/et_server_url"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:hint="Server URL"
-            android:inputType="textUri"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <EditText
-            android:id="@+id/et_username"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Username"
-            android:inputType="textEmailAddress"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/et_server_url" />
-
-        <EditText
-            android:id="@+id/et_password"
-            android:layout_width="230dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:hint="Password"
-            android:imeActionLabel="Sign in"
-            android:imeOptions="actionDone"
-            android:inputType="textPassword"
-            android:selectAllOnFocus="true"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_username" />
-
-        <com.joshgm3z.triplerocktv.ui.common.LoginButton
-            android:id="@+id/loginButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:loginState="initial" />
-
-        <ProgressBar
-            android:id="@+id/loading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="32dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@id/loginButton"
-            app:layout_constraintStart_toEndOf="@id/loginButton"
-            app:layout_constraintTop_toTopOf="@id/loginButton" />
-
+            app:layout_constraintEnd_toEndOf="@+id/cl_container"
+            app:layout_constraintStart_toStartOf="@+id/cl_container"
+            app:layout_constraintTop_toBottomOf="@+id/cl_container" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
