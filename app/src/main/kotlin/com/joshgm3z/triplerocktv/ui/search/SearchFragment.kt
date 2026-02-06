@@ -12,6 +12,11 @@ import androidx.leanback.widget.ObjectAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
+import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 import com.joshgm3z.triplerocktv.ui.browse.stream.StreamPresenter
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -46,7 +51,33 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
                 }
             }
         }
+        setupClickListeners()
     }
+
+    private fun setupClickListeners() = setOnItemViewClickedListener { _, item, _, _ ->
+        val action = SearchFragmentDirections.actionSearchToDetails()
+        when (item) {
+            is VodStream -> action.apply {
+                streamId = item.streamId
+                browseType = BrowseType.VideoOnDemand
+            }
+
+            is LiveTvStream -> action.apply {
+                streamId = item.streamId
+                browseType = BrowseType.LiveTV
+            }
+
+            is SeriesStream -> action.apply {
+                streamId = item.seriesId
+                browseType = BrowseType.Series
+            }
+
+            else -> return@setOnItemViewClickedListener
+        }.let {
+            findNavController().navigate(it)
+        }
+    }
+
 
     private fun showLoadingUi() {
         rowsAdapter.clear()

@@ -37,7 +37,6 @@ class StreamPresenter : Presenter() {
         titleView.text = title
         Glide.with(imageView.context)
             .load(imageUri) // Replace with your actual field name
-            .placeholder(R.drawable.ic_video_file)
             .centerCrop()
             .into(imageView)
     }
