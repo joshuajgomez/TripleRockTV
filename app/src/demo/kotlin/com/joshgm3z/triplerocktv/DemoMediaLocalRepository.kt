@@ -24,15 +24,24 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
         DemoData.getSampleIptvEpgListings()
 
-    override suspend fun searchStreamByName(name: String): List<Any> =
-        DemoData.allStreams.filter {
-            when (it) {
-                is VodStream -> it.name.contains(name, ignoreCase = true)
-                is SeriesStream -> it.name.contains(name, ignoreCase = true)
-                is LiveTvStream -> it.name.contains(name, ignoreCase = true)
-                else -> false
-            }
+    override suspend fun searchStreamByName(
+        name: String,
+        browseType: BrowseType
+    ): List<Any> = when (browseType) {
+        BrowseType.VideoOnDemand -> DemoData.sampleVodStreams.filter {
+            it.name.contains(name, ignoreCase = true)
         }
+
+        BrowseType.Series -> DemoData.getSampleSeriesStreams().filter {
+            it.name.contains(name, ignoreCase = true)
+        }
+
+        BrowseType.LiveTV -> DemoData.sampleLiveStreams.filter {
+            it.name.contains(name, ignoreCase = true)
+        }
+
+        else -> emptyList()
+    }
 
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
@@ -46,7 +55,10 @@ constructor() : MediaLocalRepository {
         else -> emptyList()
     }
 
-    override suspend fun fetchStream(streamId: Int): Any = DemoData.allStreams.first {
+    override suspend fun fetchStream(
+        streamId: Int,
+        browseType: BrowseType
+    ): Any = DemoData.allStreams.first {
         when (it) {
             is VodStream -> it.streamId == streamId
             is SeriesStream -> it.seriesId == streamId
