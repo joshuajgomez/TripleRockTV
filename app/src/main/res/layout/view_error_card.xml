@@ -6,8 +6,8 @@
     android:padding="10dp">
 
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
         android:src="@drawable/ic_error_white" />
 
     <LinearLayout
@@ -22,7 +22,8 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:hyphenationFrequency="full"
-            android:text="Something went wrong" />
+            android:text="Something went wrong"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     </LinearLayout>
 </LinearLayout>
