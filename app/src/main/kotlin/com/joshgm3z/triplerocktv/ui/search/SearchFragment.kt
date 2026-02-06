@@ -12,7 +12,7 @@ import androidx.leanback.widget.ObjectAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.joshgm3z.triplerocktv.ui.search.SearchPresenter
+import com.joshgm3z.triplerocktv.ui.browse.stream.StreamPresenter
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -34,7 +34,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // Set a title for the search fragment
-        title = "Movies"
+        title = "Movies, Series or Live TV"
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
@@ -63,15 +63,25 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     private fun updateSearchResult(result: SearchUiState.Result) {
         Logger.debug("result = [${result}]")
         rowsAdapter.clear()
-        if (result.list.isEmpty()) {
-            val header = HeaderItem(0, "No results found for '${result.query}'")
-            rowsAdapter.add(ListRow(header, ArrayObjectAdapter()))
-        } else {
-            val header = HeaderItem(0, "Search results for '${result.query}'")
-            val adapter = ArrayObjectAdapter(SearchPresenter())
-            adapter.addAll(0, result.list)
-            rowsAdapter.add(ListRow(header, adapter))
+        when {
+            result.isEmpty() -> {
+                val header = HeaderItem(0, "No results found for '${result.query}'")
+                rowsAdapter.add(ListRow(header, ArrayObjectAdapter()))
+            }
+
+            else -> {
+                if (result.vodStreams.isNotEmpty()) addResults("Video on demand", result.vodStreams)
+                if (result.liveTvStreams.isNotEmpty()) addResults("Live TV", result.liveTvStreams)
+                if (result.seriesStreams.isNotEmpty()) addResults("Series", result.seriesStreams)
+            }
         }
+    }
+
+    private fun addResults(headerText: String, result: List<Any>) {
+        val header = HeaderItem(0, "$headerText (${result.size})")
+        val adapter = ArrayObjectAdapter(StreamPresenter())
+        adapter.addAll(0, result)
+        rowsAdapter.add(ListRow(header, adapter))
     }
 
     override fun getResultsAdapter(): ObjectAdapter {
@@ -85,6 +95,6 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         // Handle query submission
-        return true
+        return false
     }
 }

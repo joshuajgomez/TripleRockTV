@@ -3,7 +3,10 @@ package com.joshgm3z.triplerocktv.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
+import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +16,14 @@ import javax.inject.Inject
 sealed class SearchUiState {
     object Initial : SearchUiState()
     object Loading : SearchUiState()
-    data class Result(val query: String, val list: List<Any>) : SearchUiState()
+    data class Result(
+        val query: String,
+        val vodStreams: List<VodStream>,
+        val liveTvStreams: List<LiveTvStream>,
+        val seriesStreams: List<SeriesStream>,
+    ) : SearchUiState() {
+        fun isEmpty() = vodStreams.isEmpty() && liveTvStreams.isEmpty() && seriesStreams.isEmpty()
+    }
 }
 
 @HiltViewModel
@@ -32,7 +42,21 @@ constructor(
             return
         }
         viewModelScope.launch {
-            _uiState.value = SearchUiState.Result(text, repository.searchStreamByName(text))
+            _uiState.value = SearchUiState.Result(
+                query = text,
+                vodStreams = repository.searchStreamByName(
+                    text,
+                    BrowseType.VideoOnDemand
+                ) as List<VodStream>,
+                seriesStreams = repository.searchStreamByName(
+                    text,
+                    BrowseType.Series
+                ) as List<SeriesStream>,
+                liveTvStreams = repository.searchStreamByName(
+                    text,
+                    BrowseType.LiveTV
+                ) as List<LiveTvStream>,
+            )
         }
     }
 }
