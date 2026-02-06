@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/error_rounded_card"
@@ -8,7 +9,7 @@
     <ImageView
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:src="@drawable/ic_error_white" />
+        android:src="@drawable/ic_error" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -22,8 +23,10 @@
             android:layout_marginStart="5dp"
             android:ellipsize="end"
             android:hyphenationFrequency="full"
-            android:text="Something went wrong"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:maxEms="20"
+            android:maxLines="3"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            tools:text="Something went wrong" />
 
     </LinearLayout>
 </LinearLayout>
