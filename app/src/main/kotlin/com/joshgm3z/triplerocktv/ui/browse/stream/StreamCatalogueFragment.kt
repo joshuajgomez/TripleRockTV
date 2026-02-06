@@ -10,7 +10,10 @@ import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
+import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -36,16 +39,27 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         adapter = streamAdapter
         title = args.categoryName
 
-        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
+        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
+            val action = StreamCatalogueFragmentDirections.actionStreamsCatalogueToDetails()
             when (item) {
-                is VodStream -> {
-                    val directions = StreamCatalogueFragmentDirections
-                        .actionStreamsCatalogueToDetails()
-                    directions.setStreamId(item.streamId)
-                    findNavController().navigate(
-                        directions
-                    )
+                is VodStream -> action.apply {
+                    streamId = item.streamId
+                    browseType = BrowseType.VideoOnDemand
                 }
+
+                is LiveTvStream -> action.apply {
+                    streamId = item.streamId
+                    browseType = BrowseType.LiveTV
+                }
+
+                is SeriesStream -> action.apply {
+                    streamId = item.seriesId
+                    browseType = BrowseType.Series
+                }
+
+                else -> return@OnItemViewClickedListener
+            }.let {
+                findNavController().navigate(it)
             }
         }
     }
