@@ -165,7 +165,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
 
     private fun isInputValid(): Boolean {
         val serverUrlEt = actions[idServerUrl.toInt()].editTitle
-        if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == defaultValueServerUrl) {
+        if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == "http://") {
             selectedActionPosition = idServerUrl.toInt()
             return false
         }
