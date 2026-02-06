@@ -12,6 +12,7 @@ import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -29,7 +30,9 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         val idPassword = 2L
         val idLogin = 3L
         val idStatus = 4L
-        val defaultValueServerUrl = "http://"
+        val defaultValueServerUrl = /*"http://"*/ Secrets.webUrl
+        val defaultValueUsername = /*""*/ Secrets.username
+        val defaultValuePassword = /*""*/ Secrets.password
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -103,7 +106,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             GuidedAction.Builder(requireContext())
                 .id(idUsername)
                 .title("Username")
-                .editTitle("")
+                .editTitle(defaultValueUsername)
                 .description("Enter your username")
                 .editable(true)
                 .build()
@@ -112,7 +115,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             GuidedAction.Builder(requireContext())
                 .id(idPassword)
                 .title("Password")
-                .editTitle("")
+                .editTitle(defaultValuePassword)
                 .description("Enter your password")
                 .editable(true)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
