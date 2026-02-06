@@ -82,7 +82,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idServerUrl)
-//                .title("Server URL")
+                .title("Server URL")
                 .editTitle("http://")
                 .description("Enter the server URL")
                 .editable(true)
@@ -91,7 +91,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idUsername)
-//                .title("Username")
+                .title("Username")
                 .editTitle("")
                 .description("Enter your username")
                 .editable(true)
@@ -100,7 +100,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idPassword)
-//                .title("Password")
+                .title("Password")
                 .editTitle("")
                 .description("Enter your password")
                 .editable(true)
@@ -122,6 +122,34 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             val password = actions[idPassword.toInt()].editTitle.toString()
             // Handle login logic here
             loginViewModel.onLoginClick(serverUrl, username, password)
+        }
+    }
+
+    override fun onGuidedActionEditCanceled(action: GuidedAction) {
+        super.onGuidedActionEditCanceled(action)
+        copyInputToTitle(action)
+    }
+
+    private fun copyInputToTitle(action: GuidedAction) {
+        if (action.id == idServerUrl || action.id == idUsername || action.id == idPassword) {
+            val userInput = action.editTitle.toString()
+            action.title = userInput
+
+            val position = findActionPositionById(action.id)
+            if (position != -1) {
+                notifyActionChanged(position)
+            }
+        }
+    }
+
+    override fun onGuidedActionEditedAndProceed(action: GuidedAction): Long {
+        copyInputToTitle(action)
+        // Return ACTION_NEXT to move to next field, or action.id to stay
+        return when (action.id) {
+            idServerUrl -> idUsername
+            idUsername -> idPassword
+            idPassword -> idLogin
+            else -> -1
         }
     }
 }
