@@ -17,10 +17,11 @@ import javax.inject.Inject
 class SeriesFetcher
 @Inject
 constructor(
-    private val iptvService: IptvService,
     private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
 ) {
+    lateinit var iptvService: IptvService
+
     suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
