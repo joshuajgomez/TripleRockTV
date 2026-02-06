@@ -51,11 +51,11 @@ class LocalDatastore @Inject constructor(
 
     suspend fun getUserInfo() = dataStore.data.firstOrNull()?.let {
         UserInfo(
-            username = it[USERNAME] ?: "",
-            password = it[PASSWORD] ?: "",
-            webUrl = it[SERVER_URL] ?: "",
-            expiryDate = it[EXPIRY_DATE] ?: "",
-            lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
+            username = it[USERNAME] ?: return null,
+            password = it[PASSWORD] ?: return null,
+            webUrl = it[SERVER_URL] ?: return null,
+            expiryDate = it[EXPIRY_DATE] ?: return null,
+            lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: return null,
         )
     }
 
