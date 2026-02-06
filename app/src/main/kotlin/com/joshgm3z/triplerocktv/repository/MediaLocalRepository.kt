@@ -13,5 +13,5 @@ interface MediaLocalRepository {
 
     suspend fun fetchStreamsOfCategory(categoryId: Int, browseType: BrowseType): List<Any>
 
-    suspend fun fetchStream(streamId: Int): Any
+    suspend fun fetchStream(streamId: Int, browseType: BrowseType): Any?
 }

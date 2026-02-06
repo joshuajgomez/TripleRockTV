@@ -44,17 +44,19 @@ class LocalDatastore @Inject constructor(
     fun getLoginCredentials(
         onFetch: (UserInfo) -> Unit
     ) = runBlocking {
-        dataStore.data.firstOrNull()?.let {
-            onFetch(
-                UserInfo(
-                    username = it[USERNAME] ?: "",
-                    password = it[PASSWORD] ?: "",
-                    webUrl = it[SERVER_URL] ?: "",
-                    expiryDate = it[EXPIRY_DATE] ?: "",
-                    lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
-                )
-            )
+        getUserInfo()?.let {
+            onFetch(it)
         }
+    }
+
+    suspend fun getUserInfo() = dataStore.data.firstOrNull()?.let {
+        UserInfo(
+            username = it[USERNAME] ?: "",
+            password = it[PASSWORD] ?: "",
+            webUrl = it[SERVER_URL] ?: "",
+            expiryDate = it[EXPIRY_DATE] ?: "",
+            lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
+        )
     }
 
     suspend fun setLastContentUpdate(date: Long) {

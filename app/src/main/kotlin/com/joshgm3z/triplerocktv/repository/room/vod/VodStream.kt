@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.repository.room.vod
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 @Entity(tableName = "vod_stream")
 data class VodStream(
@@ -24,4 +25,6 @@ data class VodStream(
             added = "1609012046"
         )
     }
+
+    fun videoUrl(userInfo: UserInfo) = "${userInfo.webUrl}/$streamType/${userInfo.username}/${userInfo.password}/$streamId.mkv"
 }

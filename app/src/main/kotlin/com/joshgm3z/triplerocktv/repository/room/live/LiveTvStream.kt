@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.repository.room.live
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 @Entity(tableName = "live_tv_stream")
 data class LiveTvStream(
@@ -24,4 +25,5 @@ data class LiveTvStream(
             added = "1609012046"
         )
     }
+    fun videoUrl(userInfo: UserInfo) = "${userInfo.webUrl}/$streamType/${userInfo.username}/${userInfo.password}/$streamId.m3u8"
 }

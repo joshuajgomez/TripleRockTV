@@ -83,6 +83,10 @@
             android:name="streamId"
             android:defaultValue="20642"
             app:argType="integer" />
+        <argument
+            android:name="browseType"
+            android:defaultValue="VideoOnDemand"
+            app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
         <action
             android:id="@+id/action_detailsFragment_to_playbackFragment"
             app:destination="@id/playbackFragment" />
@@ -95,5 +99,8 @@
         <argument
             android:name="streamId"
             app:argType="integer" />
+        <argument
+            android:name="browseType"
+            app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
     </fragment>
 </navigation>
