@@ -9,12 +9,14 @@ import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.ui.details.DetailsViewModel
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,8 +60,11 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private fun playVideo(streamId: Int) {
         val videoUrl =
-            "${Secrets.webUrl}/live/${Secrets.username}/${Secrets.password}/$streamId.m3u8"
-        val mediaItem = MediaItem.fromUri(videoUrl)
+            "${Secrets.webUrl}/movie/${Secrets.username}/${Secrets.password}/$streamId.mkv"
+        Logger.info("videoUrl=[$videoUrl]")
+        val mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
         player?.setMediaItem(mediaItem)
         player?.prepare()
     }
