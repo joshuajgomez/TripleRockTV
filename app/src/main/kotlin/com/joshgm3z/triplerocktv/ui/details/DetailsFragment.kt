@@ -24,7 +24,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,18 +41,22 @@ class DetailsFragment : DetailsSupportFragment() {
         super.onCreate(savedInstanceState)
 
         detailsBackground = DetailsSupportFragmentBackgroundController(this)
-        
+
         val presenterSelector = ClassPresenterSelector()
-        val detailsPresenter = FullWidthDetailsOverviewRowPresenter(VodDetailsDescriptionPresenter())
+        val detailsPresenter =
+            FullWidthDetailsOverviewRowPresenter(VodDetailsDescriptionPresenter())
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.black)
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             if (action.id == ACTION_PLAY) {
-                val navAction = DetailsFragmentDirections.actionDetailsFragmentToPlaybackFragment(args.streamId)
+                val navAction = DetailsFragmentDirections.actionDetailsFragmentToPlaybackFragment(
+                    args.streamId,
+                    args.browseType
+                )
                 findNavController().navigate(navAction)
             }
         }
-        
+
         presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
         rowsAdapter = ArrayObjectAdapter(presenterSelector)
         adapter = rowsAdapter
@@ -64,26 +67,24 @@ class DetailsFragment : DetailsSupportFragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.stream.collectLatest { stream ->
-                    stream?.let {
-                        updateDetails(it)
-                    }
+                viewModel.uiState.collectLatest {
+                    updateDetails(it)
                 }
             }
         }
-        viewModel.fetchStreamDetails(args.streamId)
+        viewModel.fetchStreamDetails(args.streamId, args.browseType)
     }
 
-    private fun updateDetails(stream: VodStream) {
-        val detailsRow = DetailsOverviewRow(stream)
+    private fun updateDetails(uiState: DetailsUiState) {
+        val detailsRow = DetailsOverviewRow(uiState.title)
 
         val actionAdapter = SparseArrayObjectAdapter()
         actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
         detailsRow.actionsAdapter = actionAdapter
-        
+
         Glide.with(requireContext())
             .asBitmap()
-            .load(stream.streamIcon)
+            .load(uiState.imageUrl)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     detailsRow.setImageBitmap(requireContext(), resource)

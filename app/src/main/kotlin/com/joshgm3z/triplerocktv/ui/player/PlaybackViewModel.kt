@@ -1,8 +1,9 @@
-package com.joshgm3z.triplerocktv.ui.details
+package com.joshgm3z.triplerocktv.ui.player
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
@@ -15,40 +16,42 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class DetailsUiState(
+data class PlaybackUiState(
     val title: String = "",
-    val imageUrl: String? = null,
+    val videoUrl: String = "",
 )
 
 @HiltViewModel
-class DetailsViewModel @Inject constructor(
-    private val repository: MediaLocalRepository
+class PlaybackViewModel @Inject constructor(
+    private val repository: MediaLocalRepository,
+    private val localDataStore: LocalDatastore,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DetailsUiState())
+    private val _uiState = MutableStateFlow(PlaybackUiState())
     val uiState = _uiState.asStateFlow()
 
     fun fetchStreamDetails(streamId: Int, browseType: BrowseType) {
         viewModelScope.launch(Dispatchers.IO) {
+            val userInfo = localDataStore.getUserInfo()!!
             when (val result = repository.fetchStream(streamId, browseType)) {
                 is VodStream -> _uiState.update {
                     it.copy(
                         title = result.name,
-                        imageUrl = result.streamIcon
+                        videoUrl = result.videoUrl(userInfo)
                     )
                 }
 
                 is LiveTvStream -> _uiState.update {
                     it.copy(
                         title = result.name,
-                        imageUrl = result.streamIcon
+                        videoUrl = result.videoUrl(userInfo)
                     )
                 }
 
                 is SeriesStream -> _uiState.update {
                     it.copy(
                         title = result.name,
-                        imageUrl = result.cover
+                        videoUrl = result.videoUrl(userInfo)
                     )
                 }
             }

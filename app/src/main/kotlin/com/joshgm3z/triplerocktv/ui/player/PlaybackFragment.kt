@@ -9,13 +9,10 @@ import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.navArgs
-import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
-import com.joshgm3z.triplerocktv.ui.details.DetailsViewModel
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -28,7 +25,8 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class PlaybackFragment : VideoSupportFragment() {
 
-    private val viewModel: DetailsViewModel by viewModels()
+    private val viewModel: PlaybackViewModel by viewModels()
+
     private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
     private val args by navArgs<PlaybackFragmentArgs>()
     private var player: ExoPlayer? = null
@@ -36,7 +34,6 @@ class PlaybackFragment : VideoSupportFragment() {
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
 
         player = ExoPlayer.Builder(requireActivity()).build()
@@ -46,21 +43,19 @@ class PlaybackFragment : VideoSupportFragment() {
         transportControlGlue = PlaybackTransportControlGlue(requireActivity(), playerAdapter)
         transportControlGlue.host = glueHost
 
-        viewModel.fetchStreamDetails(args.streamId)
+        viewModel.fetchStreamDetails(args.streamId, args.browseType)
         lifecycleScope.launch {
-            viewModel.stream.collectLatest {
-                it?.let {
-                    transportControlGlue.title = it.name
+            viewModel.uiState.collectLatest {
+                if (it.videoUrl.isNotEmpty()) {
+                    transportControlGlue.title = it.title
                     transportControlGlue.playWhenPrepared()
-                    playVideo(it.streamId)
+                    playVideo(it.videoUrl)
                 }
             }
         }
     }
 
-    private fun playVideo(streamId: Int) {
-        val videoUrl =
-            "${Secrets.webUrl}/movie/${Secrets.username}/${Secrets.password}/$streamId.mkv"
+    private fun playVideo(videoUrl: String) {
         Logger.info("videoUrl=[$videoUrl]")
         val mediaItem = MediaItem.Builder()
             .setUri(videoUrl)

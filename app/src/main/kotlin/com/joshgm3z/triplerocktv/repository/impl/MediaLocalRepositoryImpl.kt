@@ -53,6 +53,12 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun fetchStream(
         streamId: Int,
-    ): Any = vodStreamsDao.getStream(streamId)
+        browseType: BrowseType,
+    ): Any? = when (browseType) {
+        BrowseType.VideoOnDemand -> vodStreamsDao.getStream(streamId)
+        BrowseType.LiveTV -> liveTvStreamsDao.getStream(streamId)
+        BrowseType.Series -> seriesStreamsDao.getStream(streamId)
+        else -> null
+    }
 
 }
