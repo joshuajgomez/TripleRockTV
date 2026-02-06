@@ -24,7 +24,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.login.LoginFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.login.GuidedLoginFragment"
         android:label="MediaLoginFragment"
         tools:layout="@layout/fragment_login">
         <action
