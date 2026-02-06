@@ -29,6 +29,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         val idPassword = 2L
         val idLogin = 3L
         val idStatus = 4L
+        val defaultValueServerUrl = "http://"
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,7 +64,11 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
     }
 
     fun showLoginFailed(message: String?) {
-        showStatus(message = "Sign in failed", description = message, icon = R.drawable.ic_error_orange)
+        showStatus(
+            message = "Sign in failed",
+            description = message,
+            icon = R.drawable.ic_error_orange
+        )
         enableViews(true)
     }
 
@@ -89,7 +94,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             GuidedAction.Builder(requireContext())
                 .id(idServerUrl)
                 .title("Server URL")
-                .editTitle("http://")
+                .editTitle(defaultValueServerUrl)
                 .description("Enter the server URL")
                 .editable(true)
                 .build()
@@ -150,8 +155,27 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             val username = actions[idUsername.toInt()].editTitle.toString()
             val password = actions[idPassword.toInt()].editTitle.toString()
             // Handle login logic here
-            loginViewModel.onLoginClick(serverUrl, username, password)
+
+            if (isInputValid()) loginViewModel.onLoginClick(serverUrl, username, password)
         }
+    }
+
+    private fun isInputValid(): Boolean {
+        val serverUrlEt = actions[idServerUrl.toInt()].editTitle
+        if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == defaultValueServerUrl) {
+            selectedActionPosition = idServerUrl.toInt()
+            return false
+        }
+        if (actions[idUsername.toInt()].editTitle.isNullOrEmpty()) {
+            selectedActionPosition = idUsername.toInt()
+            return false
+        }
+        if (actions[idPassword.toInt()].editTitle.isNullOrEmpty()) {
+            selectedActionPosition = idPassword.toInt()
+            return false
+        }
+
+        return true
     }
 
     override fun onCreateActionsStylist(): GuidedActionsStylist {
