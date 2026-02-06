@@ -51,10 +51,8 @@
         android:name="com.joshgm3z.triplerocktv.ui.browse.category.MainBrowseFragment"
         android:label="BrowseFragment">
         <action
-            android:id="@+id/action_browse_to_login"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/browseFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/action_browse_to_confirmSignOutDialog"
+            app:destination="@id/signOutDialogFragment" />
         <action
             android:id="@+id/action_browse_to_mediaLoading"
             app:destination="@id/mediaLoadingFragment" />
@@ -125,5 +123,16 @@
         <argument
             android:name="browseType"
             app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/signOutDialogFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.confirm.ConfirmDialogFragment"
+        android:label="ConfirmDialogFragment">
+        <action
+            android:id="@+id/action_confirmSignOutDialog_to_login"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/signOutDialogFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

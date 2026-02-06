@@ -20,7 +20,6 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.ui.login.LoginViewModel
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -35,7 +34,6 @@ data class SettingItem(
 class MainBrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
-    private val loginViewModel: LoginViewModel by viewModels()
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -73,7 +71,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private fun setupEventListeners() {
         setOnSearchClickedListener {
-            // Navigate to your search fragment/activity
             findNavController().navigate(MainBrowseFragmentDirections.actionBrowseToSearch())
         }
         onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
@@ -85,42 +82,32 @@ class MainBrowseFragment : BrowseSupportFragment() {
             when (item) {
                 is SettingItem -> {
                     when (item.title) {
-                        "Sign out" -> loginViewModel.onLogoutClick {
-                            val action = MainBrowseFragmentDirections.actionBrowseToLogin()
-                            findNavController().navigate(action)
-                        }
-
-                        else -> findNavController().navigate(
-                            MainBrowseFragmentDirections.actionBrowseToMediaLoading()
-                        )
+                        "Sign out" -> MainBrowseFragmentDirections.actionBrowseToConfirmSignOutDialog()
+                        else -> MainBrowseFragmentDirections.actionBrowseToMediaLoading()
                     }
                 }
 
-                is VodCategory -> findNavController().navigate(
-                    MainBrowseFragmentDirections
-                        .actionBrowseToStreamCatalogue()
-                        .setCategoryId(item.categoryId)
-                        .setCategoryName(item.categoryName)
-                        .setBrowseType(BrowseType.VideoOnDemand)
-                )
+                is VodCategory -> MainBrowseFragmentDirections
+                    .actionBrowseToStreamCatalogue()
+                    .setCategoryId(item.categoryId)
+                    .setCategoryName(item.categoryName)
+                    .setBrowseType(BrowseType.VideoOnDemand)
 
-                is LiveTvCategory -> findNavController().navigate(
-                    MainBrowseFragmentDirections
-                        .actionBrowseToStreamCatalogue()
-                        .setCategoryId(item.categoryId)
-                        .setCategoryName(item.categoryName)
-                        .setBrowseType(BrowseType.LiveTV)
-                )
+                is LiveTvCategory -> MainBrowseFragmentDirections
+                    .actionBrowseToStreamCatalogue()
+                    .setCategoryId(item.categoryId)
+                    .setCategoryName(item.categoryName)
+                    .setBrowseType(BrowseType.LiveTV)
 
-                is SeriesCategory -> findNavController().navigate(
-                    MainBrowseFragmentDirections
-                        .actionBrowseToStreamCatalogue()
-                        .setCategoryId(item.categoryId)
-                        .setCategoryName(item.categoryName)
-                        .setBrowseType(BrowseType.Series)
-                )
 
-            }
+                is SeriesCategory -> MainBrowseFragmentDirections
+                    .actionBrowseToStreamCatalogue()
+                    .setCategoryId(item.categoryId)
+                    .setCategoryName(item.categoryName)
+                    .setBrowseType(BrowseType.Series)
+
+                else -> return@OnItemViewClickedListener
+            }.let { findNavController().navigate(it) }
         }
     }
 
