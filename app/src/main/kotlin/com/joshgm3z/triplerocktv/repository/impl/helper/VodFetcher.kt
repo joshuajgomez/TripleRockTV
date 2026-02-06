@@ -17,10 +17,11 @@ import javax.inject.Inject
 class VodFetcher
 @Inject
 constructor(
-    private val iptvService: IptvService,
     private val vodCategoryDao: VodCategoryDao,
     private val vodStreamsDao: VodStreamsDao,
 ) {
+    lateinit var iptvService: IptvService
+
     suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit

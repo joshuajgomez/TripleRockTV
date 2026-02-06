@@ -13,9 +13,10 @@ import javax.inject.Inject
 class EPGFetcher
 @Inject
 constructor(
-    private val iptvService: IptvService,
     private val epgListingDao: EpgListingDao,
 ) {
+    lateinit var iptvService: IptvService
+
     suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit

@@ -7,7 +7,12 @@ import com.joshgm3z.triplerocktv.repository.impl.helper.EPGFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.LiveTvFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.VodFetcher
+import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.util.Logger
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class MediaOnlineRepositoryImpl
@@ -24,12 +29,30 @@ class MediaOnlineRepositoryImpl
         lateinit var password: String
     }
 
-
     init {
         localDatastore.getLoginCredentials {
             username = it.username
             password = it.password
+            val iptvService = getIptvService(it.webUrl)
+            seriesFetcher.iptvService = iptvService
+            vodFetcher.iptvService = iptvService
+            liveTvFetcher.iptvService = iptvService
+            epgFetcher.iptvService = iptvService
         }
+    }
+
+    fun getIptvService(serverUrl: String): IptvService {
+        val okHttpClient = OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .build()
+        val retrofit = Retrofit.Builder()
+            .baseUrl(serverUrl)
+            .client(okHttpClient)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        return retrofit.create(IptvService::class.java)
     }
 
     override suspend fun fetchContent(
