@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/ll_login_button"
-    android:layout_width="200dp"
-    android:layout_height="30dp"
+    android:layout_width="230dp"
+    android:layout_height="50dp"
     android:background="@color/cardview_dark_background"
     android:gravity="center"
     android:orientation="horizontal"
@@ -14,16 +14,17 @@
         android:src="@drawable/ic_check_circle_green" />
 
     <ProgressBar
-        android:layout_marginStart="5dp"
         android:id="@+id/progress_indicator"
         android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:layout_marginStart="5dp" />
 
     <TextView
         android:id="@+id/tv_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="Default button" />
+        android:text="Default button"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>
