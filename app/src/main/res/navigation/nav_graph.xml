@@ -36,7 +36,7 @@
 
     <fragment
         android:id="@+id/mediaLoadingFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.loading.MediaLoadingFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.loading.GuidedLoadingFragment"
         android:label="MediaLoadingFragment"
         tools:layout="@layout/fragment_media_loading">
         <action
