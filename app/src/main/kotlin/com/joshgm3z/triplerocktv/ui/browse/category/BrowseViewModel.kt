@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.browse.category
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
@@ -11,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -35,10 +37,13 @@ enum class BrowseType {
 @HiltViewModel
 class BrowseViewModel
 @Inject constructor(
+    localDatastore: LocalDatastore,
     private val repository: MediaLocalRepository,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BrowseUiState())
     val uiState = _uiState.asStateFlow()
+
+    var isBlurSettingEnabled: Boolean = false
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -49,6 +54,11 @@ class BrowseViewModel
                     liveTvCategories = repository.fetchCategories(BrowseType.LiveTV) as List<LiveTvCategory>,
                     epgCategories = repository.fetchEpgListings(),
                 )
+            }
+        }
+        viewModelScope.launch {
+            localDatastore.blurSettingFlow().collectLatest {
+                isBlurSettingEnabled = it
             }
         }
     }

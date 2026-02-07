@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,13 +19,14 @@ data class CredentialUiState(
     var errorMessage: String? = null,
     var verificationSuccess: Boolean = false,
     var userInfo: UserInfo? = null,
+    var isBlurSettingEnabled: Boolean = false,
 )
 
 @HiltViewModel
 class SettingsViewModel
 @Inject
 constructor(
-    localDatastore: LocalDatastore,
+    private val localDatastore: LocalDatastore,
     private val repository: LoginRepository,
 ) : ViewModel() {
     private val _credentialState = MutableStateFlow(CredentialUiState())
@@ -33,8 +35,11 @@ constructor(
     init {
         Logger.entry()
         viewModelScope.launch {
-            localDatastore.getUserInfo()?.let { userInfo ->
-                _credentialState.update { it.copy(userInfo = userInfo) }
+            _credentialState.update {
+                it.copy(
+                    userInfo = localDatastore.getUserInfo(),
+                    isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
+                )
             }
         }
     }
@@ -65,4 +70,9 @@ constructor(
         }
     }
 
+    fun setBlurSetting(enabled: Boolean) {
+        viewModelScope.launch {
+            localDatastore.setBlurSetting(enabled)
+        }
+    }
 }
