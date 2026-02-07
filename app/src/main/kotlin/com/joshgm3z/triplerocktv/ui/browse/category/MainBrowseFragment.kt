@@ -21,6 +21,7 @@ import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -58,17 +59,17 @@ class MainBrowseFragment : BrowseSupportFragment() {
         backgroundManager = BackgroundManager.getInstance(requireActivity())
         if (!backgroundManager.isAttached) {
             backgroundManager.attach(requireActivity().window)
-            backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
+            backgroundManager.color = requireContext().getBackgroundColor()
         }
     }
 
     private fun setupUI() {
-        brandColor = ContextCompat.getColor(requireContext(), R.color.black)
+        brandColor = requireContext().getBackgroundColor()
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout)
 
-        searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
+        searchAffordanceColor = requireContext().getBackgroundColor()
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
         adapter = rowsAdapter
@@ -169,7 +170,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         super.onResume()
         if (!viewModel.isBlurSettingEnabled) {
             backgroundManager.drawable = null
-            backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
+            backgroundManager.color = requireContext().getBackgroundColor()
         }
     }
 }
