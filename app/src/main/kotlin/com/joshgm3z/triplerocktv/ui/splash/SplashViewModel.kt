@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -25,7 +26,7 @@ constructor(
 
     init {
         Logger.entry()
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             delay(1000)
             _navDirectionState.value = when {
                 localDatastore.getUserInfo() == null -> SplashScreenFragmentDirections.actionSplashToLogin()
