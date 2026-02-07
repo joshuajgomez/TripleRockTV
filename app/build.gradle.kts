@@ -96,4 +96,5 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.leanback)
     implementation(libs.androidx.media3.hls)
+    implementation("jp.wasabeef:glide-transformations:4.3.0")
 }

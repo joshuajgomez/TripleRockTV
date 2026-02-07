@@ -1,7 +1,10 @@
 package com.joshgm3z.triplerocktv.ui.browse.category
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
+import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BackgroundManager
@@ -16,12 +19,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
+import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -36,8 +44,11 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private val viewModel: BrowseViewModel by viewModels()
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
+    private lateinit var backgroundManager: BackgroundManager
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        prepareBackgroundManager()
         setupUI()
         setupEventListeners()
         viewLifecycleOwner.lifecycleScope.launch {
@@ -48,21 +59,36 @@ class MainBrowseFragment : BrowseSupportFragment() {
             }
         }
         prepareEntranceTransition()
+        updateBackgroundWithBlur(R.drawable.avatar_movie)
     }
 
+    private fun prepareBackgroundManager() {
+        backgroundManager = BackgroundManager.getInstance(requireActivity())
+        if (!backgroundManager.isAttached) {
+            backgroundManager.attach(requireActivity().window)
+        }
+    }
+
+    private fun updateBackgroundWithBlur(resourceId: Int) {
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(resourceId)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    backgroundManager.setBitmap(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
+    }
 
     private fun setupUI() {
         brandColor = ContextCompat.getColor(requireContext(), R.color.black)
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
         title = "3Rock TV"
-        // Initialize BackgroundManager
-        val backgroundManager = BackgroundManager.getInstance(requireActivity())
-        if (!backgroundManager.isAttached) {
-            backgroundManager.attach(requireActivity().window)
-        }
-        // Set a solid background color for the entire fragment
-        backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
+
         searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
 
         rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
