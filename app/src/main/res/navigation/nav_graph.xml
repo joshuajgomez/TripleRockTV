@@ -30,8 +30,7 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="com.joshgm3z.triplerocktv.ui.login.GuidedLoginFragment"
-        android:label="MediaLoginFragment"
-        tools:layout="@layout/fragment_login">
+        android:label="MediaLoginFragment">
         <action
             android:id="@+id/action_login_to_mediaLoading"
             app:destination="@id/mediaLoadingFragment"
@@ -42,8 +41,7 @@
     <fragment
         android:id="@+id/mediaLoadingFragment"
         android:name="com.joshgm3z.triplerocktv.ui.loading.GuidedLoadingFragment"
-        android:label="MediaLoadingFragment"
-        tools:layout="@layout/fragment_media_loading">
+        android:label="MediaLoadingFragment">
         <action
             android:id="@+id/action_mediaLoading_to_browse"
             app:destination="@id/browseFragment"
