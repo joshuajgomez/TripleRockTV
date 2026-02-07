@@ -4,7 +4,6 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SeriesStreamsDao {
@@ -13,7 +12,7 @@ interface SeriesStreamsDao {
     fun searchStreams(streamName: String): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
-    fun getStream(seriesId: Int): Flow<SeriesStream>
+    fun getStream(seriesId: Int): SeriesStream
 
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
     fun getAllStreams(categoryId: Int): List<SeriesStream>
