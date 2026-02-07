@@ -70,5 +70,5 @@ constructor(
     }
 
     fun blurSettingFlow(): Flow<Boolean> =
-        dataStore.data.map { preferences -> preferences[BLUR_SETTING] ?: false }
+        dataStore.data.map { preferences -> preferences[BLUR_SETTING] ?: true }
 }
