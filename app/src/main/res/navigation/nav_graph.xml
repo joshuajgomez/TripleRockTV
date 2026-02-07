@@ -47,6 +47,11 @@
             app:destination="@id/browseFragment"
             app:popUpTo="@id/browseFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_loading_to_error"
+            app:destination="@id/errorFragment"
+            app:popUpTo="@id/mediaLoadingFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

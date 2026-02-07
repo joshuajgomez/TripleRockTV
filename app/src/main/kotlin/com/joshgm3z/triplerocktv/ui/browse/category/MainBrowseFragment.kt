@@ -147,6 +147,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         header: String,
         categories: List<Any>
     ) {
+        if (categories.isEmpty()) return
         val header = HeaderItem(id, header)
         val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
         listRowAdapter.addAll(0, categories)
