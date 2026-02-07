@@ -1,7 +1,9 @@
 <resources>
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
-        <!-- Removed browseRowsMarginStart and browseRowsMarginTop as they can interfere with
-             Leanback's internal transition logic and prevent the UI from minimizing correctly. -->
+        <item name="backgroundColor">@color/black</item>
+        <item name="primaryColor">@color/orange</item>
+        <item name="cardColor">@color/gray</item>
+        <item name="contentColor">@color/gray4</item>
     </style>
 </resources>

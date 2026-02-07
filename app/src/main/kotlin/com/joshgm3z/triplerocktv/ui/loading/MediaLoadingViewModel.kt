@@ -35,7 +35,6 @@ class MediaLoadingViewModel
     }
 
     fun fetchContent() {
-        _uiState.value = MediaLoadingUiState.Initial
         viewModelScope.launch {
             delay(1000)
             repository.fetchContent(

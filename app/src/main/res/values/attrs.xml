@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="DefaultButton">
-        <attr name="android:text" />
-        <attr name="android:src" />
-    </declare-styleable>
-    <declare-styleable name="ErrorCard">
-        <attr name="android:text" />
-    </declare-styleable>
-    <declare-styleable name="ProgressBarWithText">
-        <attr name="android:text" />
-        <attr name="android:progress" />
-        <attr name="isError" format="boolean" />
-        <attr name="isComplete" format="boolean" />
-    </declare-styleable>
-
-
-    <declare-styleable name="LoginButton">
-        <attr name="loginState" format="enum">
-            <enum name="initial" value="0" />
-            <enum name="signingIn" value="1" />
-            <enum name="success" value="2" />
-        </attr>
-    </declare-styleable>
-
+    <attr name="backgroundColor" format="color" />
+    <attr name="cardColor" format="color" />
+    <attr name="primaryColor" format="color" />
+    <attr name="contentColor" format="color" />
 </resources>
