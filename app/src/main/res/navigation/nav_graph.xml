@@ -67,6 +67,9 @@
         <action
             android:id="@+id/action_browse_to_search"
             app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_browse_to_settings"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -140,4 +143,14 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.settings.GuidedSettingsFragment"
+        android:label="SettingsFragment">
+        <action
+            android:id="@+id/action_settings_to_confirmSignOutDialog"
+            app:destination="@id/signOutDialogFragment" />
+    </fragment>
+
 </navigation>

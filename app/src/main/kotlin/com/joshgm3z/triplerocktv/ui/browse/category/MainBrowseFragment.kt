@@ -99,6 +99,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
             is SettingItem -> {
                 when (item.title) {
                     "Sign out" -> MainBrowseFragmentDirections.actionBrowseToConfirmSignOutDialog()
+                    "All settings" -> MainBrowseFragmentDirections.actionBrowseToSettings()
                     else -> MainBrowseFragmentDirections.actionBrowseToMediaLoading()
                 }
             }
@@ -186,6 +187,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         // We add a ListRow with an empty adapter because we only care about the header click
         val adapter = ArrayObjectAdapter(SettingsItemPresenter())
         adapter.add(SettingItem("Update", R.drawable.icon_download))
+        adapter.add(SettingItem("All settings", R.drawable.ic_settings))
         adapter.add(SettingItem("Sign out", R.drawable.icon_logout))
         rowsAdapter.add(ListRow(header, adapter))
     }
