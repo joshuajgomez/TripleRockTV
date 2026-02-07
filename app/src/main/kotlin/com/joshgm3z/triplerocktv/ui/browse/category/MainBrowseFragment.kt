@@ -135,6 +135,11 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }?.let { updateBackgroundWithBlur(it) }
     }
 
+    val colorFilter = android.graphics.PorterDuffColorFilter(
+        android.graphics.Color.argb(220, 0, 0, 0), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
+        android.graphics.PorterDuff.Mode.SRC_ATOP
+    )
+
     private fun updateBackgroundWithBlur(imageUri: String) {
         Glide.with(requireContext())
             .asBitmap()
@@ -142,6 +147,12 @@ class MainBrowseFragment : BrowseSupportFragment() {
             .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    val canvas = android.graphics.Canvas(resource)
+                    val paint = android.graphics.Paint()
+                    // Set color to black with 50% alpha (128)
+                    paint.colorFilter = colorFilter
+                    canvas.drawBitmap(resource, 0f, 0f, paint)
+
                     backgroundManager.setBitmap(resource)
                 }
 
