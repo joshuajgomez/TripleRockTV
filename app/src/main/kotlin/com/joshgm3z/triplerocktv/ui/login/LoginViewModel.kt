@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -67,9 +68,11 @@ class LoginViewModel
         _uiState.update {
             it.copy(loading = true, errorMessage = null)
         }
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.tryLogout {
-                onLogoutComplete()
+                viewModelScope.launch(Dispatchers.Main) {
+                    onLogoutComplete()
+                }
             }
         }
     }

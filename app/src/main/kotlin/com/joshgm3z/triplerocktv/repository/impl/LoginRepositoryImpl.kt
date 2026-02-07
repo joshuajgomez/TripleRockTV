@@ -2,6 +2,11 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
+import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import kotlinx.coroutines.delay
@@ -13,6 +18,11 @@ class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val vodStreamsDao: VodStreamsDao,
     private val vodCategoryDao: VodCategoryDao,
+    private val liveTvCategoryDao: LiveTvCategoryDao,
+    private val liveTvStreamsDao: LiveTvStreamsDao,
+    private val seriesCategoryDao: SeriesCategoryDao,
+    private val seriesStreamsDao: SeriesStreamsDao,
+    private val epgListingDao: EpgListingDao,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -59,6 +69,11 @@ class LoginRepositoryImpl @Inject constructor(
         localDataStore.clearAllData()
         vodStreamsDao.deleteAllStreams()
         vodCategoryDao.deleteAllCategories()
+        liveTvCategoryDao.deleteAllCategories()
+        liveTvStreamsDao.deleteAllStreams()
+        seriesCategoryDao.deleteAllCategories()
+        seriesStreamsDao.deleteAllStreams()
+        epgListingDao.deleteAllEpgListings()
 
         delay(1000)
         onLogoutComplete()

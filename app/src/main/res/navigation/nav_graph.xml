@@ -137,7 +137,7 @@
         <action
             android:id="@+id/action_confirmSignOutDialog_to_login"
             app:destination="@id/loginFragment"
-            app:popUpTo="@id/signOutDialogFragment"
+            app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
 </navigation>

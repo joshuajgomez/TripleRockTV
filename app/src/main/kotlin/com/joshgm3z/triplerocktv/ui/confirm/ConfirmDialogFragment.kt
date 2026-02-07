@@ -15,6 +15,11 @@ class ConfirmDialogFragment : GuidedStepSupportFragment() {
 
     private val loginViewModel: LoginViewModel by viewModels()
 
+    companion object{
+        const val idYes = 1L
+        const val idNo = 2L
+    }
+
     override fun onCreateGuidance(savedInstanceState: Bundle?): GuidanceStylist.Guidance {
         return GuidanceStylist.Guidance(
             "Sign out", // Title
@@ -27,13 +32,13 @@ class ConfirmDialogFragment : GuidedStepSupportFragment() {
     override fun onCreateActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(1)
+                .id(idYes)
                 .title("Yes")
                 .build()
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(2)
+                .id(idNo)
                 .title("No")
                 .build()
         )
@@ -41,14 +46,14 @@ class ConfirmDialogFragment : GuidedStepSupportFragment() {
 
     override fun onGuidedActionClicked(action: GuidedAction) {
         when (action.id) {
-            1L -> {
+            idYes -> {
                 // Handle confirmation
                 loginViewModel.onLogoutClick {
                     findNavController().navigate(ConfirmDialogFragmentDirections.actionConfirmSignOutDialogToLogin())
                 }
             }
 
-            2L -> {
+            idNo -> {
                 // Handle cancellation
                 parentFragmentManager.popBackStack()
             }
