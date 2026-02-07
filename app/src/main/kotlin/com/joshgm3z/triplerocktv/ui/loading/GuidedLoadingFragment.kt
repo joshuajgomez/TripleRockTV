@@ -31,6 +31,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
         val idLiveTv = 2L
         val idEpg = 3L
         val idStatus = 4L
+        var focusedId = -1L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                             }.let { id -> updateStatus(id, state) }
                         }
                         if (it.map.values.all { state -> state.status == LoadingStatus.Error || state.status == LoadingStatus.Complete }) {
+                            focusedId = -1
                             showOverallStatus(
                                 message = "Download complete",
                                 icon = R.drawable.ic_check_circle_green
@@ -76,7 +78,10 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
         val action = actions[toInt]
         when (loadingState.status) {
             LoadingStatus.Initial -> "Waiting"
-            LoadingStatus.Ongoing -> "Downloading ${loadingState.percent}%"
+            LoadingStatus.Ongoing -> {
+                focusedId = actionId
+                "Downloading ${loadingState.percent}%"
+            }
             LoadingStatus.Complete -> "Downloaded"
             LoadingStatus.Error -> "Download error"
         }.let { action.description = it }
