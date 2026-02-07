@@ -66,7 +66,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         brandColor = ContextCompat.getColor(requireContext(), R.color.black)
         headersState = HEADERS_ENABLED
         isHeadersTransitionOnBackEnabled = true
-        title = "3Rock TV"
+        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout)
 
         searchAffordanceColor = ContextCompat.getColor(requireContext(), R.color.black)
 
