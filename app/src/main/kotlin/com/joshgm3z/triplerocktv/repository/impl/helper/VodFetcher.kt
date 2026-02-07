@@ -20,6 +20,10 @@ constructor(
     private val vodCategoryDao: VodCategoryDao,
     private val vodStreamsDao: VodStreamsDao,
 ) {
+    val empty: Boolean
+        get() {
+            return vodCategoryDao.getAllCategories().isEmpty()
+        }
     lateinit var iptvService: IptvService
 
     suspend fun fetchContent(
