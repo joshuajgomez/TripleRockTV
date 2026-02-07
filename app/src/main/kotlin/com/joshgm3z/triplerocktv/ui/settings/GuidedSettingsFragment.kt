@@ -41,7 +41,15 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         lifecycleScope.launch {
             viewModel.credentialState.collectLatest {
                 it.userInfo?.let { userInfo -> updateCredentials(userInfo) }
+                updateBlurSettings(it.isBlurSettingEnabled)
             }
+        }
+    }
+
+    private fun updateBlurSettings(enabled: Boolean) {
+        findActionById(idBlur)?.let {
+            it.isChecked = enabled
+            notifyActionChanged(findActionPositionById(idBlur))
         }
     }
 
@@ -107,7 +115,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idCredential) // Main Action ID
-                .title("Login credentials")
+                .title("Sign in credentials")
                 .description("View and update credentials")
                 .enabled(false)
                 .subActions(getCredentialSubActions()) // Attach the sub-actions here
@@ -117,6 +125,8 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
             GuidedAction.Builder(requireContext())
                 .id(idBlur) // Main Action ID
                 .title("Enable blur effect")
+                .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
+                .checked(false)
                 .description("Uncheck this if app seems slow due to blur")
                 .build()
         )
@@ -191,15 +201,26 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
-        if (action.id == idLogin) {
-            val serverUrl = actions[idServerUrl.toInt()].editTitle.toString()
-            val username = actions[idUsername.toInt()].editTitle.toString()
-            val password = actions[idPassword.toInt()].editTitle.toString()
-            // Handle login logic here
+        when (action.id) {
+            idLogin -> {
+                val serverUrl = actions[idServerUrl.toInt()].editTitle.toString()
+                val username = actions[idUsername.toInt()].editTitle.toString()
+                val password = actions[idPassword.toInt()].editTitle.toString()
+                // Handle login logic here
 
-            if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
-        } else if (action.id == idSignout) {
-            findNavController().navigate(GuidedSettingsFragmentDirections.actionSettingsToConfirmSignOutDialog())
+                if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
+            }
+
+            idSignout -> {
+                findNavController().navigate(
+                    GuidedSettingsFragmentDirections
+                        .actionSettingsToConfirmSignOutDialog()
+                )
+            }
+
+            idBlur -> {
+                viewModel.setBlurSetting(action.isChecked)
+            }
         }
     }
 

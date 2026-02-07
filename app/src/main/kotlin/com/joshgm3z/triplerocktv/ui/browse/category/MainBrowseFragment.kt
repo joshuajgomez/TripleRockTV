@@ -1,10 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.browse.category
 
-import android.graphics.Bitmap
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import com.bumptech.glide.load.resource.bitmap.BitmapTransformation
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BackgroundManager
@@ -19,17 +16,12 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.CustomTarget
-import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
-import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -65,6 +57,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         backgroundManager = BackgroundManager.getInstance(requireActivity())
         if (!backgroundManager.isAttached) {
             backgroundManager.attach(requireActivity().window)
+            backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
         }
     }
 
@@ -127,38 +120,16 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }.let { findNavController().navigate(it) }
     }
 
-    private fun handleBlur(item: Any?) {
-        when (item) {
-            is VodCategory -> item.firstStreamIcon
-            is LiveTvCategory -> item.firstStreamIcon
-            is SeriesCategory -> item.firstStreamIcon
-            else -> null
-        }?.let { updateBackgroundWithBlur(it) }
-    }
-
-    val colorFilter = android.graphics.PorterDuffColorFilter(
-        android.graphics.Color.argb(220, 0, 0, 0), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
-        android.graphics.PorterDuff.Mode.SRC_ATOP
-    )
-
-    private fun updateBackgroundWithBlur(imageUri: String) {
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(imageUri)
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    val canvas = android.graphics.Canvas(resource)
-                    val paint = android.graphics.Paint()
-                    // Set color to black with 50% alpha (128)
-                    paint.colorFilter = colorFilter
-                    canvas.drawBitmap(resource, 0f, 0f, paint)
-
-                    backgroundManager.setBitmap(resource)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
+    private fun handleBlur(item: Any?) = when (item) {
+        is VodCategory -> item.firstStreamIcon
+        is LiveTvCategory -> item.firstStreamIcon
+        is SeriesCategory -> item.firstStreamIcon
+        else -> null
+    }?.let {
+        if (viewModel.isBlurSettingEnabled)
+            updateBackgroundWithBlur(requireContext(), it) {
+                backgroundManager.setBitmap(it)
+            }
     }
 
     private fun updateRows(uiState: BrowseUiState) {
@@ -192,8 +163,11 @@ class MainBrowseFragment : BrowseSupportFragment() {
         rowsAdapter.add(ListRow(header, adapter))
     }
 
-    companion object {
-        @JvmStatic
-        fun newInstance() = MainBrowseFragment()
+    override fun onResume() {
+        super.onResume()
+        if (!viewModel.isBlurSettingEnabled) {
+            backgroundManager.drawable = null
+            backgroundManager.color = ContextCompat.getColor(requireContext(), R.color.black)
+        }
     }
 }
