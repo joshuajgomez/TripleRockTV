@@ -68,4 +68,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         else -> null
     }
 
+    override suspend fun isContentEmpty(): Boolean = vodCategoryDao.getAllCategories().isEmpty()
+            && seriesCategoryDao.getAllCategories().isEmpty()
+            && liveTvCategoryDao.getAllCategories().isEmpty()
+            && epgListingDao.getAllEpgListings().isEmpty()
 }

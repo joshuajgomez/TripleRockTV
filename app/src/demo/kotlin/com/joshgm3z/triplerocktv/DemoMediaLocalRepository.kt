@@ -67,5 +67,5 @@ constructor() : MediaLocalRepository {
         }
     }
 
-
+    override suspend fun isContentEmpty(): Boolean = false
 }

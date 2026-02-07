@@ -15,6 +15,10 @@ class EPGFetcher
 constructor(
     private val epgListingDao: EpgListingDao,
 ) {
+    val empty: Boolean
+        get() {
+            return epgListingDao.getAllEpgListings().isEmpty()
+        }
     lateinit var iptvService: IptvService
 
     suspend fun fetchContent(
