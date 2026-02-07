@@ -48,6 +48,7 @@ class PlaybackFragment : VideoSupportFragment() {
             viewModel.uiState.collectLatest {
                 if (it.videoUrl.isNotEmpty()) {
                     transportControlGlue.title = it.title
+                    transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
                     playVideo(it.videoUrl)
                 }

@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +32,7 @@ class PlaybackViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     fun fetchStreamDetails(streamId: Int, browseType: BrowseType) {
+        Logger.debug("streamId = [${streamId}], browseType = [${browseType}]")
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
             when (val result = repository.fetchStream(streamId, browseType)) {
