@@ -34,6 +34,7 @@ data class SettingItem(
 class MainBrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
+
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private lateinit var backgroundManager: BackgroundManager
