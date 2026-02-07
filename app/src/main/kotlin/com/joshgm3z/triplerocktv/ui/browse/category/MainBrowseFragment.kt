@@ -59,7 +59,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
             }
         }
         prepareEntranceTransition()
-        updateBackgroundWithBlur(R.drawable.avatar_movie)
     }
 
     private fun prepareBackgroundManager() {
@@ -67,20 +66,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
         if (!backgroundManager.isAttached) {
             backgroundManager.attach(requireActivity().window)
         }
-    }
-
-    private fun updateBackgroundWithBlur(resourceId: Int) {
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(resourceId)
-            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    backgroundManager.setBitmap(resource)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {}
-            })
     }
 
     private fun setupUI() {
@@ -100,41 +85,68 @@ class MainBrowseFragment : BrowseSupportFragment() {
             findNavController().navigate(MainBrowseFragmentDirections.actionBrowseToSearch())
         }
         onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
-            // Handle item selection if needed
+            handleBlur(item)
         }
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
             // Handle item click if needed
-            when (item) {
-                is SettingItem -> {
-                    when (item.title) {
-                        "Sign out" -> MainBrowseFragmentDirections.actionBrowseToConfirmSignOutDialog()
-                        else -> MainBrowseFragmentDirections.actionBrowseToMediaLoading()
-                    }
+            handleClick(item)
+        }
+    }
+
+    private fun handleClick(item: Any?) {
+        when (item) {
+            is SettingItem -> {
+                when (item.title) {
+                    "Sign out" -> MainBrowseFragmentDirections.actionBrowseToConfirmSignOutDialog()
+                    else -> MainBrowseFragmentDirections.actionBrowseToMediaLoading()
+                }
+            }
+
+            is VodCategory -> MainBrowseFragmentDirections
+                .actionBrowseToStreamCatalogue()
+                .setCategoryId(item.categoryId)
+                .setCategoryName(item.categoryName)
+                .setBrowseType(BrowseType.VideoOnDemand)
+
+            is LiveTvCategory -> MainBrowseFragmentDirections
+                .actionBrowseToStreamCatalogue()
+                .setCategoryId(item.categoryId)
+                .setCategoryName(item.categoryName)
+                .setBrowseType(BrowseType.LiveTV)
+
+
+            is SeriesCategory -> MainBrowseFragmentDirections
+                .actionBrowseToStreamCatalogue()
+                .setCategoryId(item.categoryId)
+                .setCategoryName(item.categoryName)
+                .setBrowseType(BrowseType.Series)
+
+            else -> return
+        }.let { findNavController().navigate(it) }
+    }
+
+    private fun handleBlur(item: Any?) {
+        when (item) {
+            is VodCategory -> item.firstStreamIcon
+            is LiveTvCategory -> item.firstStreamIcon
+            is SeriesCategory -> item.firstStreamIcon
+            else -> null
+        }?.let { updateBackgroundWithBlur(it) }
+    }
+
+    private fun updateBackgroundWithBlur(imageUri: String) {
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(imageUri)
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                    backgroundManager.setBitmap(resource)
                 }
 
-                is VodCategory -> MainBrowseFragmentDirections
-                    .actionBrowseToStreamCatalogue()
-                    .setCategoryId(item.categoryId)
-                    .setCategoryName(item.categoryName)
-                    .setBrowseType(BrowseType.VideoOnDemand)
-
-                is LiveTvCategory -> MainBrowseFragmentDirections
-                    .actionBrowseToStreamCatalogue()
-                    .setCategoryId(item.categoryId)
-                    .setCategoryName(item.categoryName)
-                    .setBrowseType(BrowseType.LiveTV)
-
-
-                is SeriesCategory -> MainBrowseFragmentDirections
-                    .actionBrowseToStreamCatalogue()
-                    .setCategoryId(item.categoryId)
-                    .setCategoryName(item.categoryName)
-                    .setBrowseType(BrowseType.Series)
-
-                else -> return@OnItemViewClickedListener
-            }.let { findNavController().navigate(it) }
-        }
+                override fun onLoadCleared(placeholder: Drawable?) {}
+            })
     }
 
     private fun updateRows(uiState: BrowseUiState) {
