@@ -20,10 +20,6 @@ constructor(
     private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
 ) {
-    val empty: Boolean
-        get() {
-            return seriesCategoryDao.getAllCategories().isEmpty()
-        }
     lateinit var iptvService: IptvService
 
     suspend fun fetchContent(

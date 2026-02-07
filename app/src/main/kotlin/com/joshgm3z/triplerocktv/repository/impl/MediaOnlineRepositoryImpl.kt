@@ -9,6 +9,8 @@ import com.joshgm3z.triplerocktv.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.VodFetcher
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -17,6 +19,7 @@ import javax.inject.Inject
 
 class MediaOnlineRepositoryImpl
 @Inject constructor(
+    scope: CoroutineScope,
     private val localDatastore: LocalDatastore,
     private val seriesFetcher: SeriesFetcher,
     private val vodFetcher: VodFetcher,
@@ -30,15 +33,24 @@ class MediaOnlineRepositoryImpl
     }
 
     init {
-        localDatastore.getLoginCredentials {
+        scope.launch {
+            fetchIptvService()
+        }
+    }
+
+    private var iptvService: IptvService? = null
+
+    private suspend fun fetchIptvService() {
+        localDatastore.getUserInfo()?.let {
             username = it.username
             password = it.password
-            val iptvService = getIptvService(it.webUrl)
-            seriesFetcher.iptvService = iptvService
-            vodFetcher.iptvService = iptvService
-            liveTvFetcher.iptvService = iptvService
-            epgFetcher.iptvService = iptvService
+            iptvService = getIptvService(it.webUrl)
+            seriesFetcher.iptvService = iptvService!!
+            vodFetcher.iptvService = iptvService!!
+            liveTvFetcher.iptvService = iptvService!!
+            epgFetcher.iptvService = iptvService!!
         }
+        assert(iptvService != null)
     }
 
     fun getIptvService(serverUrl: String): IptvService {
@@ -60,6 +72,9 @@ class MediaOnlineRepositoryImpl
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
+        if (iptvService == null) {
+            fetchIptvService()
+        }
         try {
             vodFetcher.fetchContent(onFetch, onError)
             seriesFetcher.fetchContent(onFetch, onError)
