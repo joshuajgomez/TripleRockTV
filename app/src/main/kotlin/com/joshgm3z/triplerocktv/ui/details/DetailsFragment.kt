@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
@@ -23,8 +22,6 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -46,7 +43,6 @@ class DetailsFragment : DetailsSupportFragment() {
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
             FullWidthDetailsOverviewRowPresenter(DetailsDescriptionPresenter())
-        detailsPresenter.backgroundColor = requireContext().getBackgroundColor()
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             if (action.id == ACTION_PLAY) {
@@ -81,6 +77,8 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val actionAdapter = SparseArrayObjectAdapter()
         actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
+        actionAdapter.set(ACTION_FAVORITE.toInt(), Action(ACTION_FAVORITE, "Add to favorite"))
+        actionAdapter.set(ACTION_DOWNLOAD_SUBTITLE.toInt(), Action(ACTION_DOWNLOAD_SUBTITLE, "Download subtitle"))
         detailsRow.actionsAdapter = actionAdapter
 
         Glide.with(requireContext())
@@ -101,5 +99,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
     companion object {
         private const val ACTION_PLAY = 1L
+        private const val ACTION_FAVORITE = 2L
+        private const val ACTION_DOWNLOAD_SUBTITLE = 3L
     }
 }
