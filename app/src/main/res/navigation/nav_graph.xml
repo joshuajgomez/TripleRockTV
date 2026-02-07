@@ -129,6 +129,9 @@
         <argument
             android:name="browseType"
             app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
+        <action
+            android:id="@+id/action_playbackFragment_to_error"
+            app:destination="@id/errorFragment" />
     </fragment>
 
     <fragment
@@ -149,6 +152,15 @@
         <action
             android:id="@+id/action_settings_to_confirmSignOutDialog"
             app:destination="@id/signOutDialogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/errorFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.error.ErrorFragment"
+        android:label="ErrorFragment">
+        <argument
+            android:name="message"
+            app:argType="string" />
     </fragment>
 
 </navigation>
