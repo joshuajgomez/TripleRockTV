@@ -7,11 +7,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamUserResponse
 import com.joshgm3z.triplerocktv.ui.login.UserInfo
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
-class LocalDatastore @Inject constructor(
+class LocalDatastore
+@Inject
+constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     companion object {
@@ -37,25 +37,13 @@ class LocalDatastore @Inject constructor(
         }
     }
 
-    suspend fun getServerUrl(): String? {
-        return dataStore.data.map { it[SERVER_URL] }.firstOrNull()
-    }
-
-    fun getLoginCredentials(
-        onFetch: (UserInfo) -> Unit
-    ) = runBlocking {
-        getUserInfo()?.let {
-            onFetch(it)
-        }
-    }
-
     suspend fun getUserInfo() = dataStore.data.firstOrNull()?.let {
         UserInfo(
             username = it[USERNAME] ?: return null,
             password = it[PASSWORD] ?: return null,
             webUrl = it[SERVER_URL] ?: return null,
             expiryDate = it[EXPIRY_DATE] ?: return null,
-            lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: return null,
+            lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
         )
     }
 
