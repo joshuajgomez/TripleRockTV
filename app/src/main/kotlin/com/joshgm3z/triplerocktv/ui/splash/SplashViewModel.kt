@@ -33,7 +33,6 @@ constructor(
                 repository.isContentEmpty() -> SplashScreenFragmentDirections.actionSplashToLoading()
                 else -> SplashScreenFragmentDirections.actionSplashToBrowse()
             }
-            Logger.info("_navDirectionState.value = ${_navDirectionState.value}")
         }
     }
 }

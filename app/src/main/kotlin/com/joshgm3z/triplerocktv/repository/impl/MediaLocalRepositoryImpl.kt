@@ -10,6 +10,8 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.util.Logger
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -46,6 +48,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         BrowseType.Series -> seriesStreamsDao.searchStreams(name)
         BrowseType.LiveTV -> liveTvStreamsDao.searchStreams(name)
         else -> emptyList()
+    }.apply {
+        Logger.info("searchStreamByName($name, $browseType): $this")
     }
 
     override suspend fun fetchStreamsOfCategory(
