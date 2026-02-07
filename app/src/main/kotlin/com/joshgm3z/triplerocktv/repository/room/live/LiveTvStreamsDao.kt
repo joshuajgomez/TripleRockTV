@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface LiveTvStreamsDao {
 
-    @Query("SELECT * FROM live_tv_stream WHERE name LIKE :streamName")
+    @Query("SELECT * FROM live_tv_stream WHERE name LIKE '%' || :streamName || '%'")
     fun searchStreams(streamName: String): List<LiveTvStream>
 
     @Query("SELECT * FROM live_tv_stream WHERE streamId = :streamId")

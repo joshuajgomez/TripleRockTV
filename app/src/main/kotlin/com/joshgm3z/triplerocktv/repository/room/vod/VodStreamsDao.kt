@@ -12,7 +12,7 @@ interface VodStreamsDao {
     @Query("SELECT * FROM vod_stream WHERE categoryId = :categoryId")
     fun getAllStreams(categoryId: Int): List<VodStream>
 
-    @Query("SELECT * FROM vod_stream WHERE name LIKE :streamName")
+    @Query("SELECT * FROM vod_stream WHERE name LIKE '%' || :streamName || '%'")
     fun searchStreams(streamName: String): List<VodStream>
 
     @Query("SELECT * FROM vod_stream WHERE streamId = :streamId")
