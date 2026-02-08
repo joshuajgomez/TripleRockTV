@@ -1,0 +1,34 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory android:title="Performance">
+
+        <SwitchPreferenceCompat
+            android:key="switch_blur"
+            android:summary="Turn this off if app seems slow"
+            android:title="Enable blurred background" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Credentials">
+
+        <EditTextPreference
+            android:dialogTitle="Change server URL"
+            android:key="etp_server_url"
+            android:title="Server URL"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:dialogTitle="Change username"
+            android:key="etp_username"
+            android:title="Username"
+            app:useSimpleSummaryProvider="true" />
+
+        <EditTextPreference
+            android:dialogTitle="Change password"
+            android:key="etp_password"
+            android:title="Password"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
