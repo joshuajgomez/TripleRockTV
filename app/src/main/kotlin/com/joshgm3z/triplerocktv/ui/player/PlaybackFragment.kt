@@ -10,15 +10,11 @@ import androidx.leanback.media.PlaybackTransportControlGlue
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
-import androidx.media3.common.PlaybackException
-import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
-import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.util.Logger
-import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,7 +38,7 @@ class PlaybackFragment : VideoSupportFragment() {
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
 
         player = ExoPlayer.Builder(requireActivity()).build()
-        player?.addListener(listener)
+        player?.addListener(player!!.errorListener(this))
         val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player!!, 16)
         playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
 
@@ -73,36 +69,6 @@ class PlaybackFragment : VideoSupportFragment() {
             .build()
         player?.setMediaItem(mediaItem)
         player?.prepare()
-    }
-
-    val listener = object : Player.Listener {
-        override fun onPlayerError(error: PlaybackException) {
-            super.onPlayerError(error)
-
-            val errorMessage = when (error.errorCode) {
-                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
-                PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT ->
-                    "Network error: Please check your internet connection."
-
-                PlaybackException.ERROR_CODE_DECODER_INIT_FAILED,
-                PlaybackException.ERROR_CODE_DECODER_QUERY_FAILED ->
-                    "Video format not supported on this device."
-
-                PlaybackException.ERROR_CODE_REMOTE_ERROR ->
-                    "Server error: Could not reach the video stream."
-
-                PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
-                    player?.seekToDefaultPosition()
-                    player?.prepare()
-                    return // Try to recover for live streams
-                }
-
-                else -> "An unexpected playback error occurred: ${error.localizedMessage}"
-            }
-
-            val action = PlaybackFragmentDirections.actionPlaybackFragmentToError(errorMessage)
-            findNavController().navigate(action)
-        }
     }
 
     override fun onPause() {
