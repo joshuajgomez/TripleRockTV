@@ -57,10 +57,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private fun prepareBackgroundManager() {
         backgroundManager = BackgroundManager.getInstance(requireActivity())
-        if (!backgroundManager.isAttached) {
-            backgroundManager.attach(requireActivity().window)
-            backgroundManager.color = requireContext().getBackgroundColor()
-        }
     }
 
     private fun setupUI() {
@@ -170,7 +166,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
         super.onResume()
         if (!viewModel.isBlurSettingEnabled) {
             backgroundManager.drawable = null
-            backgroundManager.color = requireContext().getBackgroundColor()
         }
     }
 }

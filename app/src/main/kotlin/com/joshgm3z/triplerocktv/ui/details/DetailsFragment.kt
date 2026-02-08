@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
 import androidx.leanback.widget.Action
@@ -22,6 +23,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.joshgm3z.triplerocktv.ui.browse.category.updateBackgroundWithBlur
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -34,6 +36,8 @@ class DetailsFragment : DetailsSupportFragment() {
 
     private lateinit var detailsBackground: DetailsSupportFragmentBackgroundController
     private lateinit var rowsAdapter: ArrayObjectAdapter
+
+    private var backgroundImageUrl: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +63,15 @@ class DetailsFragment : DetailsSupportFragment() {
         adapter = rowsAdapter
     }
 
+    private fun handleBlur(imageUrl: String?) {
+        imageUrl ?: return
+        backgroundImageUrl = imageUrl
+        if (viewModel.isBlurSettingEnabled)
+            updateBackgroundWithBlur(requireContext(), imageUrl) {
+                BackgroundManager.getInstance(requireActivity()).setBitmap(it)
+            }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -73,12 +86,16 @@ class DetailsFragment : DetailsSupportFragment() {
     }
 
     private fun updateDetails(uiState: DetailsUiState) {
+        handleBlur(uiState.imageUrl)
         val detailsRow = DetailsOverviewRow(uiState)
 
         val actionAdapter = SparseArrayObjectAdapter()
         actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
         actionAdapter.set(ACTION_FAVORITE.toInt(), Action(ACTION_FAVORITE, "Add to favorite"))
-        actionAdapter.set(ACTION_DOWNLOAD_SUBTITLE.toInt(), Action(ACTION_DOWNLOAD_SUBTITLE, "Download subtitle"))
+        actionAdapter.set(
+            ACTION_DOWNLOAD_SUBTITLE.toInt(),
+            Action(ACTION_DOWNLOAD_SUBTITLE, "Download subtitle")
+        )
         detailsRow.actionsAdapter = actionAdapter
 
         Glide.with(requireContext())
@@ -95,6 +112,14 @@ class DetailsFragment : DetailsSupportFragment() {
             })
 
         rowsAdapter.add(detailsRow)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        backgroundImageUrl ?: return
+        lifecycleScope.launch {
+            handleBlur(backgroundImageUrl)
+        }
     }
 
     companion object {
