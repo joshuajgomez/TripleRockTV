@@ -29,7 +29,8 @@
         android:maxLines="3"
         android:paddingHorizontal="8dp"
         android:paddingTop="45dp"
-        android:paddingBottom="12dp"
+        android:paddingBottom="15dp"
+        android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white"
         tools:text="Some movie (2025)" />
 </FrameLayout>
