@@ -1,5 +1,6 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.impl
 
+import com.joshgm3z.triplerocktv.DemoData
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
@@ -14,29 +15,29 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchCategories(
         browseType: BrowseType
     ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> DemoData.sampleVodCategory()
-        BrowseType.Series -> DemoData.getSampleSeriesCategories()
-        BrowseType.LiveTV -> DemoData.getSampleLiveTvCategories()
-        BrowseType.EPG -> DemoData.getSampleIptvEpgListings()
+        BrowseType.VideoOnDemand -> DemoData.Companion.sampleVodCategory()
+        BrowseType.Series -> DemoData.Companion.getSampleSeriesCategories()
+        BrowseType.LiveTV -> DemoData.Companion.getSampleLiveTvCategories()
+        BrowseType.EPG -> DemoData.Companion.getSampleIptvEpgListings()
         else -> emptyList()
     }
 
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
-        DemoData.getSampleIptvEpgListings()
+        DemoData.Companion.getSampleIptvEpgListings()
 
     override suspend fun searchStreamByName(
         name: String,
         browseType: BrowseType
     ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> DemoData.sampleVodStreams.filter {
+        BrowseType.VideoOnDemand -> DemoData.Companion.sampleVodStreams.filter {
             it.name.contains(name, ignoreCase = true)
         }
 
-        BrowseType.Series -> DemoData.getSampleSeriesStreams().filter {
+        BrowseType.Series -> DemoData.Companion.getSampleSeriesStreams().filter {
             it.name.contains(name, ignoreCase = true)
         }
 
-        BrowseType.LiveTV -> DemoData.sampleLiveStreams.filter {
+        BrowseType.LiveTV -> DemoData.Companion.sampleLiveStreams.filter {
             it.name.contains(name, ignoreCase = true)
         }
 
@@ -47,18 +48,18 @@ constructor() : MediaLocalRepository {
         categoryId: Int,
         browseType: BrowseType
     ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> DemoData.sampleVodStreams.filter { it.categoryId == categoryId }
-        BrowseType.Series -> DemoData.getSampleSeriesStreams()
+        BrowseType.VideoOnDemand -> DemoData.Companion.sampleVodStreams.filter { it.categoryId == categoryId }
+        BrowseType.Series -> DemoData.Companion.getSampleSeriesStreams()
             .filter { it.categoryId == categoryId }
 
-        BrowseType.LiveTV -> DemoData.sampleLiveStreams.filter { it.categoryId == categoryId }
+        BrowseType.LiveTV -> DemoData.Companion.sampleLiveStreams.filter { it.categoryId == categoryId }
         else -> emptyList()
     }
 
     override suspend fun fetchStream(
         streamId: Int,
         browseType: BrowseType
-    ): Any = DemoData.allStreams.first {
+    ): Any = DemoData.Companion.allStreams.first {
         when (it) {
             is VodStream -> it.streamId == streamId
             is SeriesStream -> it.seriesId == streamId

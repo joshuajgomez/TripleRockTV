@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.impl
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
