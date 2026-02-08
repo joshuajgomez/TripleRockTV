@@ -27,7 +27,7 @@
         tools:listitem="@layout/item_subtitle" />
 
     <com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleDownloaderView
-        android:id="@+id/ll_downloaded"
+        android:id="@+id/subtitle_downloader_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="vertical"
