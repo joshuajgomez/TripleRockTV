@@ -38,7 +38,18 @@ class PlaybackFragment : VideoSupportFragment() {
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
 
         player = ExoPlayer.Builder(requireActivity()).build()
-        player?.addListener(player!!.errorListener(this))
+        player?.addListener(
+            player!!.playerListener(
+                fragment = this,
+                onSubtitleTrackFound = {},
+                onSubtitleTextReceived = {},
+                onAudioTracksFound = {},
+            )
+        )
+        player?.trackSelectionParameters = player?.trackSelectionParameters!!
+            .buildUpon()
+            .setPreferredTextLanguage("en") // Or any specific language code
+            .build()
         val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player!!, 16)
         playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
 
