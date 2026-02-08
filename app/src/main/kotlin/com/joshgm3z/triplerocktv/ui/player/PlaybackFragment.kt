@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.player
 import android.os.Bundle
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
+import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
@@ -17,6 +18,7 @@ import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.util.Logger
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -46,6 +48,10 @@ class PlaybackFragment : VideoSupportFragment() {
 
         transportControlGlue = PlaybackTransportControlGlue(requireActivity(), playerAdapter)
         transportControlGlue.host = glueHost
+
+        BackgroundManager.getInstance(requireActivity()).apply {
+            drawable = null
+        }
 
         viewModel.fetchStreamDetails(args.streamId, args.browseType)
         lifecycleScope.launch {
