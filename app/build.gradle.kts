@@ -81,6 +81,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.annotation)
     implementation(libs.google.material)
+    implementation(libs.androidx.leanback.preference)
     kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
