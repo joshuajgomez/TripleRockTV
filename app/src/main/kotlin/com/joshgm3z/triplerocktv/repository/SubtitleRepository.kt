@@ -7,4 +7,5 @@ data class SubtitleData(
 
 interface SubtitleRepository {
     suspend fun findSubtitles(query: String): List<SubtitleData>
+    suspend fun storeSubtitle(subtitleData: SubtitleData)
 }

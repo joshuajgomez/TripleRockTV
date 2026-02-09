@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -37,12 +36,11 @@ class SubtitleSelectorFragment : DialogFragment() {
                 binding.subtitleDownloaderView.subtitleList = it
             }
         }
-        binding.subtitleDownloaderView.registerClickListener {
+        binding.subtitleDownloaderView.listenFindButtonClick {
             viewModel.onFindClicked("English 4k")
         }
-        lifecycleScope.launch {
-            delay(4000)
-            viewModel.onFindClicked("English 4k")
+        binding.subtitleDownloaderView.listenSubtitleClick {
+            viewModel.onSubtitleClicked(it)
         }
     }
 }

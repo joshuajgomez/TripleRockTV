@@ -10,4 +10,8 @@ constructor() : SubtitleRepository {
     override suspend fun findSubtitles(query: String): List<SubtitleData> {
         TODO("Not yet implemented")
     }
+
+    override suspend fun storeSubtitle(subtitleData: SubtitleData) {
+        TODO("Not yet implemented")
+    }
 }

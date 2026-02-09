@@ -25,4 +25,10 @@ constructor(
             _subtitleList.value = subtitleRepository.findSubtitles(query)
         }
     }
+
+    fun onSubtitleClicked(subtitleData: SubtitleData) {
+        viewModelScope.launch {
+            subtitleRepository.storeSubtitle(subtitleData)
+        }
+    }
 }

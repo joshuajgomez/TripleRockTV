@@ -39,14 +39,6 @@
             android:src="@drawable/ic_search" />
     </LinearLayout>
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_default_subtitle_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_text" />
-
     <TextView
         android:id="@+id/tv_error"
         android:layout_width="wrap_content"
@@ -55,5 +47,13 @@
         android:text="No subtitle found"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:visibility="gone" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_default_subtitle_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_text" />
 
 </LinearLayout>
