@@ -1,0 +1,61 @@
+{
+    "total_pages": 82,
+    "total_count": 4083,
+    "per_page": 50,
+    "page": 1,
+    "data": [
+        {
+            "id": "7569871",
+            "type": "subtitle",
+            "attributes": {
+                "subtitle_id": "7569871",
+                "language": "fr",
+                "download_count": 39,
+                "new_download_count": 15,
+                "hearing_impaired": false,
+                "hd": false,
+                "fps": 0.0,
+                "votes": 0,
+                "ratings": 0.0,
+                "from_trusted": false,
+                "foreign_parts_only": false,
+                "upload_date": "2024-01-09T17:02:52Z",
+                "ai_translated": false,
+                "nb_cd": 1,
+                "slug": "spirit-of-wonder-1-l-anneau-de-miss-china",
+                "machine_translated": false,
+                "release": "Spirit of Wonder 1 - L'Anneau de Miss China",
+                "comments": "",
+                "legacy_subtitle_id": 9852701,
+                "legacy_uploader_id": 7849254,
+                "uploader": {
+                    "uploader_id": null,
+                    "name": "Anonymous",
+                    "rank": "anonymous"
+                },
+                "feature_details": {
+                    "feature_id": 525138,
+                    "feature_type": "Movie",
+                    "year": 1992,
+                    "title": "Spirit of Wonder: Miss China's Ring",
+                    "movie_name": "1992 - Spirit of Wonder: Miss China's Ring",
+                    "imdb_id": 105456,
+                    "tmdb_id": 57198
+                },
+                "url": "https://www.opensubtitles.com/fr/subtitles/spirit-of-wonder-1-l-anneau-de-miss-china",
+                "related_links": [
+                    {
+                        "label": "All subtitles for spirit of wonder: miss china's ring",
+                        "url": "https://www.opensubtitles.com/fr/movies/spirit-of-wonder-1-l-anneau-de-miss-china",
+                        "img_url": "https://s5.opensubtitles.com/features/8/3/1/525138.jpg"
+                    }
+                ],
+                "files": [
+                    {
+                        "file_id": 8497296,
+                        "cd_number": 1,
+                        "file_name": "Spirit of Wonder 1 - LAnneau de Miss China"
+                    }
+                ]
+            }
+        },
