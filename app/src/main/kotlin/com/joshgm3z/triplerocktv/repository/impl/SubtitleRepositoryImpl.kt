@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
+import com.joshgm3z.triplerocktv.repository.retrofit.OpenSubtitlesDownloadRequest
 import com.joshgm3z.triplerocktv.repository.retrofit.OpenSubtitlesService
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.CoroutineScope
@@ -25,14 +26,14 @@ constructor(
             .create(OpenSubtitlesService::class.java)
     }
 
-    private var isAuthenticated = false
+    private var authToken: String? = null
 
     init {
         scope.launch {
             try {
                 val result = openSubtitlesService.login()
                 Logger.debug("result = [$result]")
-                isAuthenticated = result.status == 200
+                authToken = result.token
             } catch (e: Exception) {
                 e.printStackTrace()
             }
@@ -44,10 +45,11 @@ constructor(
         try {
             val response = openSubtitlesService.searchSubtitles(query = query)
             Logger.debug("response = [$response]")
-            return response.data.map {
+            return response.data.mapNotNull {
+                val fileId = it.attributes.files?.firstOrNull()?.fileId ?: return@mapNotNull null
                 SubtitleData(
-                    title = it.attributes.featureDetails?.title ?: "",
-                    url = it.attributes.url ?: ""
+                    title = it.attributes.featureDetails?.title ?: "Unknown",
+                    fileId = fileId,
                 )
             }
         } catch (e: HttpException) {
@@ -56,7 +58,17 @@ constructor(
         return emptyList()
     }
 
-    override suspend fun storeSubtitle(subtitleData: SubtitleData) {
-        TODO("Not yet implemented")
+    override suspend fun getSubtitleUrl(fileId: Int): String? {
+        val token = authToken ?: return null
+        return try {
+            val response = openSubtitlesService.download(
+                token = "Bearer $token",
+                body = OpenSubtitlesDownloadRequest(fileId)
+            )
+            response.link
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 }

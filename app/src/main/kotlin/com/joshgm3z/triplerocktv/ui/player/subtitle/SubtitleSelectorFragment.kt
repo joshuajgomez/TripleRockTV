@@ -43,7 +43,7 @@ class SubtitleSelectorFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.subtitleUiState.collectLatest {
-                Logger.debug("subtitleList = $it")
+                Logger.debug("subtitleUiState = $it")
                 binding.subtitleDownloaderView.subtitleList = it.downloadedSubtitleList
                 adapter.subtitleList = it.defaultSubtitleList ?: emptyList()
             }
