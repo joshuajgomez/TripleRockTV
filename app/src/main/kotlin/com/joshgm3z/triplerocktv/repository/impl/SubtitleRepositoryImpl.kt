@@ -49,6 +49,7 @@ constructor(
                 val fileId = it.attributes.files?.firstOrNull()?.fileId ?: return@mapNotNull null
                 SubtitleData(
                     title = it.attributes.featureDetails?.title ?: "Unknown",
+                    language = it.attributes.language,
                     fileId = fileId,
                 )
             }

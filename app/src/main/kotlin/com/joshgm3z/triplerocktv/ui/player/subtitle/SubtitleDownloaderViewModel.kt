@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,8 +13,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SubtitleUiState(
+    val defaultSubtitleList: List<SubtitleData>? = null,
     val downloadedSubtitleList: List<SubtitleData>? = null,
-    val defaultSubtitleList: List<SubtitleData>? = null
 )
 
 @HiltViewModel
@@ -35,11 +36,12 @@ constructor(
     }
 
     fun onSubtitleClicked(subtitleData: SubtitleData) {
+        Logger.debug("subtitleData = [${subtitleData}]")
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
+            Logger.debug("url = [${url}]")
             _subtitleUiState.update {
-                val list = it.defaultSubtitleList?.toMutableList() ?: return@launch
-                it.copy(defaultSubtitleList = list.apply { add(subtitleData.apply { copy(url = url) }) })
+                it.copy(defaultSubtitleList = listOf(subtitleData.copy(url = url)))
             }
         }
     }
