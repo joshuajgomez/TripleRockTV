@@ -18,10 +18,18 @@
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_margin="10dp"
-        android:background="?attr/cardColor"
+        android:background="@android:drawable/btn_default"
         android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:paddingHorizontal="10dp">
+        android:paddingHorizontal="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:descendantFocusability="blocksDescendants"
+        android:nextFocusUp="@id/rv_default_subtitle_list"
+        android:nextFocusDown="@id/rv_default_subtitle_list"
+        android:nextFocusLeft="@id/rv_default_subtitle_list"
+        android:nextFocusRight="@id/rv_default_subtitle_list">
 
         <TextView
             android:id="@+id/tv_find"
