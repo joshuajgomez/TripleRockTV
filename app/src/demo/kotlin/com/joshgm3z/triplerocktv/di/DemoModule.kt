@@ -1,8 +1,8 @@
 package com.joshgm3z.triplerocktv.di
 
-import com.joshgm3z.triplerocktv.impl.DemoLoginRepository
-import com.joshgm3z.triplerocktv.impl.DemoMediaLocalRepository
-import com.joshgm3z.triplerocktv.impl.DemoMediaOnlineRepository
+import com.joshgm3z.triplerocktv.impl.DemoLoginRepositoryImpl
+import com.joshgm3z.triplerocktv.impl.DemoMediaLocalRepositoryImpl
+import com.joshgm3z.triplerocktv.impl.DemoMediaOnlineRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoSubtitleRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
@@ -18,17 +18,17 @@ import dagger.hilt.components.SingletonComponent
 abstract class DemoBindingModule {
     @Binds
     abstract fun bindLoginRepository(
-        repo: DemoLoginRepository
+        repo: DemoLoginRepositoryImpl
     ): LoginRepository
 
     @Binds
     abstract fun bindMediaLocalRepository(
-        repo: DemoMediaLocalRepository
+        repo: DemoMediaLocalRepositoryImpl
     ): MediaLocalRepository
 
     @Binds
     abstract fun bindMediaOnlineRepository(
-        repo: DemoMediaOnlineRepository
+        repo: DemoMediaOnlineRepositoryImpl
     ): MediaOnlineRepository
 
     @Binds
