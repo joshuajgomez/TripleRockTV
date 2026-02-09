@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.impl
 
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class DemoSubtitleRepositoryImpl
@@ -26,5 +27,9 @@ constructor() : SubtitleRepository {
                 url = "https://example.com/german.srt",
             ),
         )
+    }
+
+    override suspend fun storeSubtitle(subtitleData: SubtitleData) {
+        delay(1000)
     }
 }

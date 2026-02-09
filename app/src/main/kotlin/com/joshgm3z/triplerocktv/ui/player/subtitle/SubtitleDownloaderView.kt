@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.databinding.ViewSubtitleDownloaderBinding
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 
@@ -19,7 +20,22 @@ class SubtitleDownloaderView @JvmOverloads constructor(
         true
     )
 
-    fun registerClickListener(onClick: () -> Unit) {
+    private val adapter = DownloadedSubtitleListAdapter().apply {
+        binding.rvDefaultSubtitleList.adapter = this
+        binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+    }
+
+    fun listenSubtitleClick(onSubtitleClicked: (SubtitleData) -> Unit) {
+        val listener = object : DownloadedSubtitleListClickListener {
+            override fun onSubtitleClicked(subtitleData: SubtitleData) {
+                onSubtitleClicked(subtitleData)
+            }
+        }
+        adapter.clickListener = listener
+    }
+
+
+    fun listenFindButtonClick(onClick: () -> Unit) {
         binding.llFindButton.setOnClickListener {
             onClick()
         }
@@ -27,18 +43,8 @@ class SubtitleDownloaderView @JvmOverloads constructor(
 
     var subtitleList: List<SubtitleData>? = null
         set(value) {
-            when {
-                value == null -> {}
-                value.isEmpty() -> {
-                    binding.rvDefaultSubtitleList.visibility = GONE
-                    binding.tvError.visibility = VISIBLE
-                }
-
-                else -> {
-                    binding.rvDefaultSubtitleList.visibility = VISIBLE
-                    binding.tvError.visibility = GONE
-                }
-            }
+            adapter.subtitleList = value ?: emptyList()
+            binding.tvError.visibility = if (value?.isEmpty() == true) VISIBLE else GONE
             field = value
         }
 }
