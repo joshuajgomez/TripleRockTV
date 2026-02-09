@@ -7,7 +7,7 @@ import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
-class DemoMediaOnlineRepository
+class DemoMediaOnlineRepositoryImpl
 @Inject
 constructor() : MediaOnlineRepository {
     override suspend fun fetchContent(

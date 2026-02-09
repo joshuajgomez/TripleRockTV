@@ -9,7 +9,7 @@ import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
 import javax.inject.Inject
 
-class DemoMediaLocalRepository
+class DemoMediaLocalRepositoryImpl
 @Inject
 constructor() : MediaLocalRepository {
     override suspend fun fetchCategories(

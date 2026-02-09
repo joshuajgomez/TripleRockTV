@@ -4,7 +4,7 @@ import com.joshgm3z.triplerocktv.repository.LoginRepository
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
-class DemoLoginRepository
+class DemoLoginRepositoryImpl
 @Inject
 constructor() : LoginRepository {
     override suspend fun tryLogin(
