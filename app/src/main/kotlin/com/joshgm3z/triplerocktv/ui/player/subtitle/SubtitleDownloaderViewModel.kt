@@ -36,11 +36,10 @@ constructor(
 
     fun onSubtitleClicked(subtitleData: SubtitleData) {
         viewModelScope.launch {
-            subtitleRepository.storeSubtitle(subtitleData)
+            val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             _subtitleUiState.update {
-                val list = it.defaultSubtitleList?.toMutableList() ?: mutableListOf()
-                it.copy(
-                    defaultSubtitleList = list.apply { add(subtitleData) })
+                val list = it.defaultSubtitleList?.toMutableList() ?: return@launch
+                it.copy(defaultSubtitleList = list.apply { add(subtitleData.apply { copy(url = url) }) })
             }
         }
     }

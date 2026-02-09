@@ -25,7 +25,39 @@ interface OpenSubtitlesService {
         @Header("Accept") accept: String = "application/json",
         @Body body: OpenSubtitlesLoginRequest = OpenSubtitlesLoginRequest(),
     ): OpenSubtitlesLoginResponse
+
+    @POST("download")
+    suspend fun download(
+        @Header("Authorization") token: String,
+        @Header("Api-Key") apiKey: String = Secrets.OPEN_SUBTITLES_API_KEY,
+        @Header("User-Agent") userAgent: String = "TripleRockTV v1.0",
+        @Header("Content-Type") contentType: String = "application/json",
+        @Header("Accept") accept: String = "application/json",
+        @Body body: OpenSubtitlesDownloadRequest,
+    ): OpenSubtitlesDownloadResponse
 }
+
+data class OpenSubtitlesDownloadRequest(
+    @SerializedName("file_id")
+    val fileId: Int
+)
+
+data class OpenSubtitlesDownloadResponse(
+    @SerializedName("link")
+    val link: String,
+    @SerializedName("file_name")
+    val fileName: String,
+    @SerializedName("requests")
+    val requests: Int,
+    @SerializedName("remaining")
+    val remaining: Int,
+    @SerializedName("message")
+    val message: String,
+    @SerializedName("reset_time")
+    val resetTime: String,
+    @SerializedName("reset_time_utc")
+    val resetTimeUtc: String,
+)
 
 data class OpenSubtitlesLoginRequest(
     val username: String = Secrets.OPEN_SUBTITLES_USERNAME,
