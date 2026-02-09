@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/subtitleFragment">
+    app:startDestination="@id/detailsFragment">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -139,6 +139,9 @@
             app:destination="@id/errorFragment"
             app:popUpTo="@id/playbackFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_playbackFragment_to_subtitleFragment"
+            app:destination="@id/subtitleFragment" />
     </fragment>
 
     <fragment
@@ -170,9 +173,14 @@
             app:argType="string" />
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/subtitleFragment"
         android:name="com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorFragment"
-        android:label="SubtitleFragment" />
+        android:label="SubtitleFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
+    </dialog>
+
 
 </navigation>

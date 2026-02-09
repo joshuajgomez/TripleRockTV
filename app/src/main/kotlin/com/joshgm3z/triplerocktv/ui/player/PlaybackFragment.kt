@@ -7,13 +7,17 @@ import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorFragment
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -29,8 +33,12 @@ class PlaybackFragment : VideoSupportFragment() {
     private val viewModel: PlaybackViewModel by viewModels()
 
     private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
+
     private val args by navArgs<PlaybackFragmentArgs>()
+
     private var player: ExoPlayer? = null
+
+    private var videoTitle: String? = null
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,7 +61,7 @@ class PlaybackFragment : VideoSupportFragment() {
         val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player!!, 16)
         playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
 
-        transportControlGlue = PlaybackTransportControlGlue(requireActivity(), playerAdapter)
+        transportControlGlue = createControlGlue(playerAdapter)
         transportControlGlue.host = glueHost
 
         BackgroundManager.getInstance(requireActivity()).apply {
@@ -65,9 +73,39 @@ class PlaybackFragment : VideoSupportFragment() {
             viewModel.uiState.collectLatest {
                 if (it.videoUrl.isNotEmpty()) {
                     transportControlGlue.title = it.title
+                    videoTitle = it.title
                     transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
                     playVideo(it.videoUrl)
+                }
+            }
+        }
+    }
+
+    private fun createControlGlue(
+        playerAdapter:
+        LeanbackPlayerAdapter
+    ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
+        return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
+            requireActivity(),
+            playerAdapter
+        ) {
+            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context)
+
+            override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
+                adapter.add(closedCaptioningAction)
+            }
+
+            override fun onActionClicked(action: Action) {
+                if (action === closedCaptioningAction) {
+                    videoTitle?.let { title ->
+                        findNavController().navigate(
+                            PlaybackFragmentDirections
+                                .actionPlaybackFragmentToSubtitleFragment(title)
+                        )
+                    }
+                } else {
+                    super.onActionClicked(action)
                 }
             }
         }

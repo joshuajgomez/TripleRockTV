@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
@@ -18,6 +19,8 @@ import kotlinx.coroutines.launch
 class SubtitleSelectorFragment : DialogFragment() {
 
     private val viewModel: SubtitleDownloaderViewModel by viewModels()
+
+    private val args by navArgs<SubtitleSelectorFragmentArgs>()
 
     private var _binding: LayoutSubtitleSelectorBinding? = null
     private val binding get() = _binding!!
@@ -46,7 +49,7 @@ class SubtitleSelectorFragment : DialogFragment() {
             }
         }
         binding.subtitleDownloaderView.listenFindButtonClick {
-            viewModel.onFindClicked("Wonder")
+            viewModel.onFindClicked(args.title)
         }
         binding.subtitleDownloaderView.listenSubtitleClick {
             viewModel.onSubtitleClicked(it)

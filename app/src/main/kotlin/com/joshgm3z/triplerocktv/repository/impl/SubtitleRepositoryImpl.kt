@@ -29,9 +29,13 @@ constructor(
 
     init {
         scope.launch {
-            val result = openSubtitlesService.login()
-            Logger.debug("result = [$result]")
-            isAuthenticated = result.status == 200
+            try {
+                val result = openSubtitlesService.login()
+                Logger.debug("result = [$result]")
+                isAuthenticated = result.status == 200
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
