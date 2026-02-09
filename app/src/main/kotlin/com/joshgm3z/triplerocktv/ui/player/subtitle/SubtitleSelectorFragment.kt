@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,22 +19,30 @@ class SubtitleSelectorFragment : DialogFragment() {
 
     private val viewModel: SubtitleDownloaderViewModel by viewModels()
 
-    private lateinit var binding: LayoutSubtitleSelectorBinding
+    private var _binding: LayoutSubtitleSelectorBinding? = null
+    private val binding get() = _binding!!
+
+    private lateinit var adapter: DownloadedSubtitleListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutSubtitleSelectorBinding.inflate(inflater)
+        _binding = LayoutSubtitleSelectorBinding.inflate(inflater)
+        adapter = DownloadedSubtitleListAdapter().apply {
+            binding.rvDefaultSubtitleList.adapter = this
+            binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+        }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewModel.subtitleList.collectLatest {
+            viewModel.subtitleUiState.collectLatest {
                 Logger.debug("subtitleList = $it")
-                binding.subtitleDownloaderView.subtitleList = it
+                binding.subtitleDownloaderView.subtitleList = it.downloadedSubtitleList
+                adapter.subtitleList = it.defaultSubtitleList ?: emptyList()
             }
         }
         binding.subtitleDownloaderView.listenFindButtonClick {
@@ -42,5 +51,10 @@ class SubtitleSelectorFragment : DialogFragment() {
         binding.subtitleDownloaderView.listenSubtitleClick {
             viewModel.onSubtitleClicked(it)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

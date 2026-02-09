@@ -9,4 +9,6 @@
     <color name="gray2">#282828</color>
     <color name="gray3">#717171</color>
     <color name="gray4">#A4A4A4</color>
+    <color name="subtitle_item_focused">#FF9800</color>
+    <color name="subtitle_item_default">#222222</color>
 </resources>
