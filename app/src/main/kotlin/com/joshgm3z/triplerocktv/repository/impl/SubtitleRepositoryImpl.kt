@@ -2,26 +2,54 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
-import com.joshgm3z.triplerocktv.repository.retrofit.SubdlService
-import com.joshgm3z.triplerocktv.repository.retrofit.SubdlSubtitleItem
+import com.joshgm3z.triplerocktv.repository.retrofit.OpenSubtitlesService
+import com.joshgm3z.triplerocktv.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
 class SubtitleRepositoryImpl
 @Inject
-constructor() : SubtitleRepository {
-    private val subdlService: SubdlService by lazy {
+constructor(
+    scope: CoroutineScope,
+) : SubtitleRepository {
+
+    private val openSubtitlesService: OpenSubtitlesService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.subdl.com/") // Replace with actual SubDL API base URL if different
+            .baseUrl("https://api.opensubtitles.com/api/v1/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
-            .create(SubdlService::class.java)
+            .create(OpenSubtitlesService::class.java)
+    }
+
+    private var isAuthenticated = false
+
+    init {
+        scope.launch {
+            val result = openSubtitlesService.login()
+            Logger.debug("result = [$result]")
+            isAuthenticated = result.status == 200
+        }
     }
 
     override suspend fun findSubtitles(query: String): List<SubtitleData> {
-        val response = subdlService.searchSubtitles(query)
-        return response.results.map { SubtitleData(title = it.title, url = it.url) }
+        Logger.debug("query = [${query}]")
+        try {
+            val response = openSubtitlesService.searchSubtitles(query = query)
+            Logger.debug("response = [$response]")
+            return response.data.map {
+                SubtitleData(
+                    title = it.attributes.featureDetails?.title ?: "",
+                    url = it.attributes.url ?: ""
+                )
+            }
+        } catch (e: HttpException) {
+            e.printStackTrace()
+        }
+        return emptyList()
     }
 
     override suspend fun storeSubtitle(subtitleData: SubtitleData) {

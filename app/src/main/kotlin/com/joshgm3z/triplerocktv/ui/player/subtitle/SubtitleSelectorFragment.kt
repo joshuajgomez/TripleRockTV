@@ -46,7 +46,7 @@ class SubtitleSelectorFragment : DialogFragment() {
             }
         }
         binding.subtitleDownloaderView.listenFindButtonClick {
-            viewModel.onFindClicked("English 4k")
+            viewModel.onFindClicked("Wonder")
         }
         binding.subtitleDownloaderView.listenSubtitleClick {
             viewModel.onSubtitleClicked(it)
