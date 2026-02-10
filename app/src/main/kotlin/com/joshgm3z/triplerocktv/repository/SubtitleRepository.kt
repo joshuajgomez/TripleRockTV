@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.repository
 data class SubtitleData(
     val title: String,
     val language: String? = null,
-    val fileId: Int,
-    val downloadCount: Int,
+    val fileId: Int = 0,
+    val downloadCount: Int = 0,
     val url: String? = null,
 )
 
