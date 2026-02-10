@@ -123,7 +123,7 @@ data class OpenSubtitlesAttributes(
     @SerializedName("feature_details")
     val featureDetails: FeatureDetails?,
     @SerializedName("files")
-    val files: List<OpenSubtitleFile?>?
+    val files: List<OpenSubtitleFile>?
 )
 
 data class FeatureDetails(
