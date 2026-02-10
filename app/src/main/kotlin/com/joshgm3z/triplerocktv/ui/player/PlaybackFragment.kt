@@ -1,6 +1,8 @@
 package com.joshgm3z.triplerocktv.ui.player
 
 import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BackgroundManager
@@ -12,12 +14,13 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.SubtitleView
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorFragment
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -40,6 +43,8 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private var videoTitle: String? = null
 
+    private var subtitleView: SubtitleView? = null
+
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,11 +54,17 @@ class PlaybackFragment : VideoSupportFragment() {
         player?.addListener(
             player!!.playerListener(
                 fragment = this,
-                onSubtitleTrackFound = {},
-                onSubtitleTextReceived = {},
+                onSubtitleTrackFound = {
+                    // Could enable UI for subtitle selection if needed
+                },
                 onAudioTracksFound = {},
             )
         )
+        subtitleView = SubtitleView(requireContext()).apply {
+            setUserDefaultStyle()
+            setUserDefaultTextSize()
+        }
+        player?.addListener(subtitleListener)
         player?.trackSelectionParameters = player?.trackSelectionParameters!!
             .buildUpon()
             .setPreferredTextLanguage("en") // Or any specific language code
@@ -118,6 +129,33 @@ class PlaybackFragment : VideoSupportFragment() {
             .build()
         player?.setMediaItem(mediaItem)
         player?.prepare()
+    }
+
+    private fun ensureSubtitleView() {
+        if (subtitleView != null) return
+        subtitleView = SubtitleView(requireContext()).apply {
+            // This links the view to the player's output automatically
+            setUserDefaultStyle()
+            setUserDefaultTextSize()
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        ensureSubtitleView()
+
+        subtitleView?.let { sv ->
+            val parent = view as? ViewGroup ?: return
+
+            // Add to view hierarchy
+            parent.addView(sv)
+        }
+    }
+
+    val subtitleListener = object : Player.Listener {
+        override fun onCues(cueGroup: androidx.media3.common.text.CueGroup) {
+            subtitleView?.setCues(cueGroup.cues)
+        }
     }
 
     override fun onPause() {
