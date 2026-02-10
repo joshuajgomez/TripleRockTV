@@ -39,37 +39,32 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private val args by navArgs<PlaybackFragmentArgs>()
 
-    private var player: ExoPlayer? = null
+    private val player: ExoPlayer by lazy {
+        ExoPlayer.Builder(requireContext()).build()
+    }
 
     private var videoTitle: String? = null
 
-    private var subtitleView: SubtitleView? = null
+    private val subtitleView: SubtitleView by lazy {
+        SubtitleView(requireContext()).apply {
+            setUserDefaultStyle()
+            setUserDefaultTextSize()
+        }
+    }
 
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
 
-        player = ExoPlayer.Builder(requireActivity()).build()
-        player?.addListener(
-            player!!.playerListener(
-                fragment = this,
-                onSubtitleTrackFound = {
-                    // Could enable UI for subtitle selection if needed
-                },
-                onAudioTracksFound = {},
-            )
-        )
-        subtitleView = SubtitleView(requireContext()).apply {
-            setUserDefaultStyle()
-            setUserDefaultTextSize()
-        }
-        player?.addListener(subtitleListener)
-        player?.trackSelectionParameters = player?.trackSelectionParameters!!
+        player.addListener(errorListener(this))
+        player.addListener(subtitleListener)
+
+        player.trackSelectionParameters = player.trackSelectionParameters
             .buildUpon()
             .setPreferredTextLanguage("en") // Or any specific language code
             .build()
-        val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player!!, 16)
+        val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player, 16)
         playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
 
         transportControlGlue = createControlGlue(playerAdapter)
@@ -127,24 +122,13 @@ class PlaybackFragment : VideoSupportFragment() {
         val mediaItem = MediaItem.Builder()
             .setUri(videoUrl)
             .build()
-        player?.setMediaItem(mediaItem)
-        player?.prepare()
-    }
-
-    private fun ensureSubtitleView() {
-        if (subtitleView != null) return
-        subtitleView = SubtitleView(requireContext()).apply {
-            // This links the view to the player's output automatically
-            setUserDefaultStyle()
-            setUserDefaultTextSize()
-        }
+        player.setMediaItem(mediaItem)
+        player.prepare()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        ensureSubtitleView()
-
-        subtitleView?.let { sv ->
+        subtitleView.let { sv ->
             val parent = view as? ViewGroup ?: return
 
             // Add to view hierarchy
@@ -154,7 +138,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
     val subtitleListener = object : Player.Listener {
         override fun onCues(cueGroup: androidx.media3.common.text.CueGroup) {
-            subtitleView?.setCues(cueGroup.cues)
+            subtitleView.setCues(cueGroup.cues)
         }
     }
 
@@ -165,7 +149,6 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        player?.release()
-        player = null
+        player.release()
     }
 }
