@@ -5,20 +5,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class SubtitleSelectorFragment : DialogFragment() {
 
-    private val viewModel: SubtitleDownloaderViewModel by viewModels()
+    private val viewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private val args by navArgs<SubtitleSelectorFragmentArgs>()
 
