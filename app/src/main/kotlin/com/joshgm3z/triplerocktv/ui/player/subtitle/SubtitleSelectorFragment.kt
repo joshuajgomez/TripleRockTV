@@ -7,12 +7,14 @@ import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -55,6 +57,10 @@ class SubtitleSelectorFragment : DialogFragment() {
         }
         binding.subtitleDownloaderView.listenSubtitleClick {
             viewModel.onSubtitleClicked(it)
+            lifecycleScope.launch {
+                delay(1000)
+                findNavController().popBackStack()
+            }
         }
     }
 
