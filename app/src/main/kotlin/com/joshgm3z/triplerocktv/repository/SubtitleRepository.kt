@@ -4,6 +4,7 @@ data class SubtitleData(
     val title: String,
     val language: String? = null,
     val fileId: Int,
+    val downloadCount: Int,
     val url: String? = null,
 )
 

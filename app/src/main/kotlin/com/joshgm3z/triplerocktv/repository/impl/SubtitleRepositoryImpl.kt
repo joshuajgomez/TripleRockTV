@@ -45,14 +45,20 @@ constructor(
         try {
             val response = openSubtitlesService.searchSubtitles(query = query)
             Logger.debug("response = [$response]")
-            return response.data.mapNotNull {
-                val fileId = it.attributes.files?.firstOrNull()?.fileId ?: return@mapNotNull null
-                SubtitleData(
-                    title = it.attributes.featureDetails?.title ?: "Unknown",
-                    language = it.attributes.language,
-                    fileId = fileId,
-                )
+            val list = mutableListOf<SubtitleData>()
+            response.data.map {
+                it.attributes.files?.map { file ->
+                    list.add(
+                        SubtitleData(
+                            title = file.fileName,
+                            language = it.attributes.language,
+                            fileId = file.fileId,
+                            downloadCount = it.attributes.downloadCount,
+                        )
+                    )
+                } ?: emptyList()
             }
+            return list
         } catch (e: HttpException) {
             e.printStackTrace()
         }
