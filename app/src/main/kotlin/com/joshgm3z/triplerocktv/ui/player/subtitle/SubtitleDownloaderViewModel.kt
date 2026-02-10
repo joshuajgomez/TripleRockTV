@@ -49,7 +49,10 @@ constructor(
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             Logger.debug("url = [${url}]")
             _subtitleUiState.update {
-                it.copy(currentSubtitle = subtitleData.copy(url = url))
+                it.copy(
+                    currentSubtitle = subtitleData.copy(url = url),
+                    defaultSubtitleList = listOf(subtitleData.copy(url = url))
+                )
             }
         }
     }

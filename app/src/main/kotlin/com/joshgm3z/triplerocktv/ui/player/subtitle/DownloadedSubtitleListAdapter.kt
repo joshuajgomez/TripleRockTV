@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.databinding.ItemDownloadedSubtitleBinding
 import com.joshgm3z.triplerocktv.repository.SubtitleData
+import com.joshgm3z.triplerocktv.util.languageName
 
 class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleListViewHolder>() {
 
@@ -33,7 +34,8 @@ class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleLis
         position: Int
     ) {
         val data = subtitleList[position]
-        holder.text = "${data.language}: ${data.title}"
+        holder.text = data.title
+        holder.language = data.language.languageName()
         holder.listenClickEvent {
             clickListener?.onSubtitleClicked(data)
         }
@@ -49,6 +51,12 @@ class DownloadedSubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder
     var text: String = ""
         set(value) {
             binding.tvTitle.text = value
+            field = value
+        }
+
+    var language: String = ""
+        set(value) {
+            binding.tvLanguage.text = value
             field = value
         }
 
