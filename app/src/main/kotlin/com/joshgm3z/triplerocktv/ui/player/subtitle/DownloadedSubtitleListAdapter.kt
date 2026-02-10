@@ -32,9 +32,10 @@ class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleLis
         holder: DownloadedSubtitleListViewHolder,
         position: Int
     ) {
-        holder.text = subtitleList[position].title
+        val data = subtitleList[position]
+        holder.text = "${data.language}: ${data.title}"
         holder.listenClickEvent {
-            clickListener?.onSubtitleClicked(subtitleList[position])
+            clickListener?.onSubtitleClicked(data)
         }
     }
 

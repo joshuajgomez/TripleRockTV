@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
@@ -13,6 +14,7 @@ import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.PlaybackControlsRow
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.C.SELECTION_FLAG_DEFAULT
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -21,10 +23,15 @@ import androidx.media3.ui.SubtitleView
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.SubtitleData
+import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleDownloaderViewModel
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import androidx.core.net.toUri
+import androidx.media3.common.text.CueGroup
 
 /**
  * A fragment for playing video content.
@@ -34,6 +41,7 @@ import kotlinx.coroutines.launch
 class PlaybackFragment : VideoSupportFragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
+    private val subtitleViewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
 
@@ -59,16 +67,13 @@ class PlaybackFragment : VideoSupportFragment() {
 
         player.addListener(errorListener(this))
         player.addListener(subtitleListener)
-        player.addListener(viewModel.subtitleTrackListener)
+        player.addListener(subtitleViewModel.subtitleTrackListener)
 
-        player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setPreferredTextLanguage("en") // Or any specific language code
-            .build()
-        val playerAdapter = LeanbackPlayerAdapter(requireActivity(), player, 16)
-        playerAdapter.setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
+        LeanbackPlayerAdapter(requireContext(), player, 16).apply {
+            setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
+            transportControlGlue = createControlGlue(this)
+        }
 
-        transportControlGlue = createControlGlue(playerAdapter)
         transportControlGlue.host = glueHost
 
         BackgroundManager.getInstance(requireActivity()).apply {
@@ -87,6 +92,49 @@ class PlaybackFragment : VideoSupportFragment() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            subtitleViewModel.subtitleUiState.collectLatest { it ->
+                Logger.debug("subtitleUiState updated")
+                it.currentSubtitle?.let {
+                    loadSubtitle(it)
+                }
+            }
+        }
+    }
+
+    private fun loadSubtitle(subtitleData: SubtitleData) {
+        Logger.debug("subtitleData = [${subtitleData}]")
+        val currentMediaItem = player.currentMediaItem ?: return
+        val currentPosition = player.currentPosition
+        val playWhenReady = player.playWhenReady
+
+        // 1. Create the subtitle configuration
+        subtitleData.url ?: return
+        val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url.toUri())
+            .setMimeType("application/x-subrip")
+            .setLanguage(subtitleData.language)
+            .setSelectionFlags(SELECTION_FLAG_DEFAULT)
+            .build()
+        player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setPreferredTextLanguage(subtitleData.language) // Or any specific language code
+            .build()
+        // 2. Rebuild the MediaItem with the new subtitle
+        val updatedMediaItem = currentMediaItem.buildUpon()
+            .setSubtitleConfigurations(listOf(subtitleConfig))
+            .build()
+
+        // 3. Update the player
+        player.setMediaItem(
+            updatedMediaItem,
+            false
+        ) // false means don't reset position, but seek is safer
+        player.prepare()
+        player.seekTo(currentPosition)
+        player.playWhenReady = playWhenReady
+
+        Logger.info("Subtitle loaded from: ${subtitleData.url}")
     }
 
     private fun createControlGlue(
@@ -138,7 +186,7 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     val subtitleListener = object : Player.Listener {
-        override fun onCues(cueGroup: androidx.media3.common.text.CueGroup) {
+        override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
         }
     }
