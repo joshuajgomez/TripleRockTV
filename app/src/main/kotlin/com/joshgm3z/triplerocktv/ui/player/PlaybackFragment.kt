@@ -59,6 +59,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
         player.addListener(errorListener(this))
         player.addListener(subtitleListener)
+        player.addListener(viewModel.subtitleTrackListener)
 
         player.trackSelectionParameters = player.trackSelectionParameters
             .buildUpon()
