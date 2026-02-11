@@ -22,7 +22,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
 
-    private val viewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val viewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private val args by navArgs<SubtitleSelectorFragmentArgs>()
 
@@ -47,6 +47,7 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         adapter = SubtitleListAdapter().apply {
             binding.rvDefaultSubtitleList.adapter = this
             binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+            clickListener = this@SubtitleSelectorFragment
         }
         return binding.root
     }
@@ -56,13 +57,14 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         lifecycleScope.launch {
             viewModel.subtitleUiState.collectLatest {
                 Logger.debug("subtitleUiState = $it")
-                adapter.subtitleList = it.defaultSubtitleList ?: emptyList()
+                adapter.subtitleList = it ?: emptyList()
             }
         }
         binding.llFindButton.setOnClickListener {
-            viewModel.onFindClicked(args.title)
+            val action = SubtitleSelectorFragmentDirections.toSubtitleDownload()
+            action.keyword = args.title
+            findNavController().navigate(action)
         }
-        adapter.clickListener = this
     }
 
     override fun onDestroyView() {

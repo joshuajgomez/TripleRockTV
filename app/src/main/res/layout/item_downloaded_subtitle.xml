@@ -12,7 +12,7 @@
         android:id="@+id/tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="?attr/cardColor"
+        android:background="@color/gray2"
         android:paddingHorizontal="5dp"
         android:text="Korean"
         android:textAppearance="?android:attr/textAppearanceSmall" />

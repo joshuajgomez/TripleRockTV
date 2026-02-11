@@ -25,7 +25,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.SubtitleData
-import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleDownloaderViewModel
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -33,6 +32,7 @@ import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleInfo
+import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorViewModel
 
 /**
  * A fragment for playing video content.
@@ -42,7 +42,9 @@ import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleInfo
 class PlaybackFragment : VideoSupportFragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
-    private val subtitleViewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val subtitleViewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(
+        R.id.nav_graph
+    )
 
     private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
 
@@ -105,6 +107,13 @@ class PlaybackFragment : VideoSupportFragment() {
                         else -> Logger.warn("Unknown subtitleToLoad type: ${it::class.java}")
                     }
                 }
+            }
+        }
+
+        lifecycleScope.launch {
+            subtitleViewModel.enableCaptionsButton.collectLatest {
+                Logger.debug("enableCaptionsButton $it")
+
             }
         }
     }
