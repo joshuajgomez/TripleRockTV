@@ -41,7 +41,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                 when (it) {
                     is MediaLoadingUiState.Initial -> {}
                     is MediaLoadingUiState.Error -> findNavController().navigate(
-                        GuidedLoadingFragmentDirections.actionLoadingToError("${it.message}\n${it.summary}")
+                        GuidedLoadingFragmentDirections.toError("${it.message}\n${it.summary}")
                     )
 
                     is MediaLoadingUiState.Update -> {
@@ -60,7 +60,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                                 icon = R.drawable.ic_check_circle_green
                             )
                             delay(2000)
-                            findNavController().navigate(GuidedLoadingFragmentDirections.actionMediaLoadingToBrowse())
+                            findNavController().navigate(GuidedLoadingFragmentDirections.toBrowse())
                         }
                     }
                 }

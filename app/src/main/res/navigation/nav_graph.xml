@@ -11,17 +11,17 @@
         android:label="SplashScreenFragment"
         tools:layout="@layout/fragment_splash_screen">
         <action
-            android:id="@+id/action_splash_to_login"
+            android:id="@+id/toLogin"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_splash_to_browse"
+            android:id="@+id/toBrowse"
             app:destination="@id/browseFragment"
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_splash_to_loading"
+            android:id="@+id/toLoading"
             app:destination="@id/mediaLoadingFragment"
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
@@ -32,7 +32,7 @@
         android:name="com.joshgm3z.triplerocktv.ui.login.GuidedLoginFragment"
         android:label="MediaLoginFragment">
         <action
-            android:id="@+id/action_login_to_mediaLoading"
+            android:id="@+id/toMediaLoading"
             app:destination="@id/mediaLoadingFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true" />
@@ -43,12 +43,12 @@
         android:name="com.joshgm3z.triplerocktv.ui.loading.GuidedLoadingFragment"
         android:label="MediaLoadingFragment">
         <action
-            android:id="@+id/action_mediaLoading_to_browse"
+            android:id="@+id/toBrowse"
             app:destination="@id/browseFragment"
             app:popUpTo="@id/browseFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/action_loading_to_error"
+            android:id="@+id/toError"
             app:destination="@id/errorFragment"
             app:popUpTo="@id/mediaLoadingFragment"
             app:popUpToInclusive="true" />
@@ -59,19 +59,19 @@
         android:name="com.joshgm3z.triplerocktv.ui.browse.category.MainBrowseFragment"
         android:label="BrowseFragment">
         <action
-            android:id="@+id/action_browse_to_confirmSignOutDialog"
+            android:id="@+id/toConfirmSignOutDialog"
             app:destination="@id/signOutDialogFragment" />
         <action
-            android:id="@+id/action_browse_to_mediaLoading"
+            android:id="@+id/toMediaLoading"
             app:destination="@id/mediaLoadingFragment" />
         <action
-            android:id="@+id/action_browse_to_streamCatalogue"
+            android:id="@+id/toStreamCatalogue"
             app:destination="@id/streamsCatalogue" />
         <action
-            android:id="@+id/action_browse_to_search"
+            android:id="@+id/toSearch"
             app:destination="@id/searchFragment" />
         <action
-            android:id="@+id/action_browse_to_settings"
+            android:id="@+id/toSettings"
             app:destination="@id/settingsFragment" />
     </fragment>
 
@@ -80,7 +80,7 @@
         android:name="com.joshgm3z.triplerocktv.ui.search.SearchFragment"
         android:label="SearchFragment">
         <action
-            android:id="@+id/action_search_to_details"
+            android:id="@+id/toDetails"
             app:destination="@id/detailsFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true" />
@@ -103,7 +103,7 @@
             android:defaultValue="VideoOnDemand"
             app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
         <action
-            android:id="@+id/action_streamsCatalogue_to_details"
+            android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
     </fragment>
 
@@ -120,7 +120,7 @@
             android:defaultValue="VideoOnDemand"
             app:argType="com.joshgm3z.triplerocktv.ui.browse.category.BrowseType" />
         <action
-            android:id="@+id/action_detailsFragment_to_playbackFragment"
+            android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
     </fragment>
 
@@ -149,7 +149,7 @@
         android:name="com.joshgm3z.triplerocktv.ui.confirm.ConfirmDialogFragment"
         android:label="ConfirmDialogFragment">
         <action
-            android:id="@+id/action_confirmSignOutDialog_to_login"
+            android:id="@+id/toLogin"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
@@ -160,7 +160,7 @@
         android:name="com.joshgm3z.triplerocktv.ui.settings.GuidedSettingsFragment"
         android:label="SettingsFragment">
         <action
-            android:id="@+id/action_settings_to_confirmSignOutDialog"
+            android:id="@+id/toConfirmSignOutDialog"
             app:destination="@id/signOutDialogFragment" />
     </fragment>
 

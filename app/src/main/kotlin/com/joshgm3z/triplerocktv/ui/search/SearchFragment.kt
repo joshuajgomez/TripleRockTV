@@ -55,7 +55,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     }
 
     private fun setupClickListeners() = setOnItemViewClickedListener { _, item, _, _ ->
-        val action = SearchFragmentDirections.actionSearchToDetails()
+        val action = SearchFragmentDirections.toDetails()
         when (item) {
             is VodStream -> action.apply {
                 streamId = item.streamId

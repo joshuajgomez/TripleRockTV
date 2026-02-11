@@ -50,7 +50,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             if (action.id == ACTION_PLAY) {
-                val navAction = DetailsFragmentDirections.actionDetailsFragmentToPlaybackFragment(
+                val navAction = DetailsFragmentDirections.toPlayback(
                     args.streamId,
                     args.browseType
                 )
