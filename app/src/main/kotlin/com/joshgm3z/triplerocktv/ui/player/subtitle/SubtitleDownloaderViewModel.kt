@@ -45,7 +45,7 @@ constructor(
     private val _subtitleUiState = MutableStateFlow(SubtitleUiState())
     val subtitleUiState = _subtitleUiState.asStateFlow()
 
-    var subtitleToLoad = MutableStateFlow<SubtitleData?>(null)
+    var subtitleToLoad = MutableStateFlow<Any?>(null)
 
     fun onFindClicked(query: String) {
         viewModelScope.launch {
@@ -55,12 +55,19 @@ constructor(
         }
     }
 
-    fun onSubtitleClicked(subtitleData: SubtitleData) {
-        Logger.debug("subtitleData = [${subtitleData}]")
+    fun onSubtitleClicked(subtitle: Any) {
+        Logger.debug("subtitle = [${subtitle}]")
         viewModelScope.launch {
-            val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
-            Logger.debug("url = [${url}]")
-            subtitleToLoad.value = subtitleData.copy(url = url)
+            subtitleToLoad.value = when (subtitle) {
+                is SubtitleData -> {
+                    val url = subtitleRepository.getSubtitleUrl(subtitle.fileId)
+                    Logger.debug("url = [${url}]")
+                    subtitle.copy(url = url)
+                }
+
+                is SubtitleInfo -> subtitle
+                else -> return@launch
+            }
         }
     }
 

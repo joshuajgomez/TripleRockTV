@@ -36,7 +36,7 @@ fun errorListener(
             else -> "An unexpected playback error occurred: ${error.localizedMessage}"
         }
 
-        val action = PlaybackFragmentDirections.actionPlaybackFragmentToError(errorMessage)
+        val action = PlaybackFragmentDirections.toError(errorMessage)
         findNavController(fragment).navigate(action)
     }
 }
