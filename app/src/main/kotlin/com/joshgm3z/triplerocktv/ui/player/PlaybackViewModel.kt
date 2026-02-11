@@ -22,16 +22,6 @@ data class PlaybackUiState(
     val videoUrl: String = "",
 )
 
-data class SubtitleInfo(
-    val groupIndex: Int,
-    val trackIndexInGroup: Int,
-    val mimeType: String?,
-    val language: String?,
-    val label: String?,
-    val roleFlags: Int,
-    val isSupported: Boolean
-)
-
 @HiltViewModel
 class PlaybackViewModel @Inject constructor(
     private val repository: MediaLocalRepository,

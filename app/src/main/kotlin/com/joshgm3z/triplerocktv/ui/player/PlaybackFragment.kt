@@ -94,9 +94,10 @@ class PlaybackFragment : VideoSupportFragment() {
         }
 
         lifecycleScope.launch {
-            subtitleViewModel.subtitleUiState.collectLatest { it ->
+            subtitleViewModel.subtitleToLoad.collectLatest { it ->
                 Logger.debug("subtitleUiState updated")
-                it.currentSubtitle?.let {
+                it?.let {
+                    subtitleViewModel.subtitleToLoad.value = null
                     loadSubtitle(it)
                 }
             }
@@ -114,6 +115,7 @@ class PlaybackFragment : VideoSupportFragment() {
         val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url.toUri())
             .setMimeType("application/x-subrip")
             .setLanguage(subtitleData.language)
+            .setLabel(subtitleData.title)
             .setSelectionFlags(SELECTION_FLAG_DEFAULT)
             .build()
         player.trackSelectionParameters = player.trackSelectionParameters

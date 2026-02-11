@@ -29,14 +29,14 @@ class SubtitleSelectorFragment : DialogFragment() {
     private var _binding: LayoutSubtitleSelectorBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: DownloadedSubtitleListAdapter
+    private lateinit var adapter: SubtitleListAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = LayoutSubtitleSelectorBinding.inflate(inflater)
-        adapter = DownloadedSubtitleListAdapter().apply {
+        adapter = SubtitleListAdapter().apply {
             binding.rvDefaultSubtitleList.adapter = this
             binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
         }
