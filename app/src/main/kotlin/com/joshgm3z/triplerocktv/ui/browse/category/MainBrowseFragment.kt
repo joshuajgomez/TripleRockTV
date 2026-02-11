@@ -73,7 +73,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private fun setupEventListeners() {
         setOnSearchClickedListener {
-            findNavController().navigate(MainBrowseFragmentDirections.actionBrowseToSearch())
+            findNavController().navigate(MainBrowseFragmentDirections.toSearch())
         }
         onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
             handleBlur(item)
@@ -89,27 +89,27 @@ class MainBrowseFragment : BrowseSupportFragment() {
         when (item) {
             is SettingItem -> {
                 when (item.title) {
-                    "Sign out" -> MainBrowseFragmentDirections.actionBrowseToConfirmSignOutDialog()
-                    "All settings" -> MainBrowseFragmentDirections.actionBrowseToSettings()
-                    else -> MainBrowseFragmentDirections.actionBrowseToMediaLoading()
+                    "Sign out" -> MainBrowseFragmentDirections.toConfirmSignOutDialog()
+                    "All settings" -> MainBrowseFragmentDirections.toSettings()
+                    else -> MainBrowseFragmentDirections.toMediaLoading()
                 }
             }
 
             is VodCategory -> MainBrowseFragmentDirections
-                .actionBrowseToStreamCatalogue()
+                .toStreamCatalogue()
                 .setCategoryId(item.categoryId)
                 .setCategoryName(item.categoryName)
                 .setBrowseType(BrowseType.VideoOnDemand)
 
             is LiveTvCategory -> MainBrowseFragmentDirections
-                .actionBrowseToStreamCatalogue()
+                .toStreamCatalogue()
                 .setCategoryId(item.categoryId)
                 .setCategoryName(item.categoryName)
                 .setBrowseType(BrowseType.LiveTV)
 
 
             is SeriesCategory -> MainBrowseFragmentDirections
-                .actionBrowseToStreamCatalogue()
+                .toStreamCatalogue()
                 .setCategoryId(item.categoryId)
                 .setCategoryName(item.categoryName)
                 .setBrowseType(BrowseType.Series)

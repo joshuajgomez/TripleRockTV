@@ -82,7 +82,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         showStatus("Signed in", icon = R.drawable.ic_check_circle_green)
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(R.id.action_login_to_mediaLoading)
+            findNavController().navigate(GuidedLoginFragmentDirections.toMediaLoading())
         }
     }
 
@@ -91,7 +91,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
             "Sign in", // Title
             "Sign in using your IPTV credentials", // Description
             "", // Breadcrumb
-            ContextCompat.getDrawable(context, R.drawable.logo_3rocktv_cutout) // Icon
+            ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout) // Icon
         )
     }
 

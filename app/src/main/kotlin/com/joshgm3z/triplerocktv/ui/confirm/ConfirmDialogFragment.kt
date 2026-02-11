@@ -49,7 +49,7 @@ class ConfirmDialogFragment : GuidedStepSupportFragment() {
             idYes -> {
                 // Handle confirmation
                 loginViewModel.onLogoutClick {
-                    findNavController().navigate(ConfirmDialogFragmentDirections.actionConfirmSignOutDialogToLogin())
+                    findNavController().navigate(ConfirmDialogFragmentDirections.toLogin())
                 }
             }
 

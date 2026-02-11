@@ -40,7 +40,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         title = args.categoryName
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
-            val action = StreamCatalogueFragmentDirections.actionStreamsCatalogueToDetails()
+            val action = StreamCatalogueFragmentDirections.toDetails()
             when (item) {
                 is VodStream -> action.apply {
                     streamId = item.streamId

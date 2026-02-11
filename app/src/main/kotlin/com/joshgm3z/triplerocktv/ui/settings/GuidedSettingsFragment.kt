@@ -213,8 +213,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
 
             idSignout -> {
                 findNavController().navigate(
-                    GuidedSettingsFragmentDirections
-                        .actionSettingsToConfirmSignOutDialog()
+                    GuidedSettingsFragmentDirections.toConfirmSignOutDialog()
                 )
             }
 
