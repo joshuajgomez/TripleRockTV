@@ -4,13 +4,13 @@ import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.C
+import androidx.media3.common.C.FORMAT_HANDLED
 import androidx.media3.common.Format
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
-import com.joshgm3z.triplerocktv.ui.player.SubtitleInfo
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,9 +20,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SubtitleUiState(
-    val currentSubtitle: SubtitleData? = null,
-    val defaultSubtitleList: List<SubtitleData>? = null,
+    val defaultSubtitleList: List<SubtitleInfo>? = null,
     val downloadedSubtitleList: List<SubtitleData>? = null,
+)
+
+data class SubtitleInfo(
+    val groupIndex: Int,
+    val trackIndexInGroup: Int,
+    val mimeType: String?,
+    val language: String?,
+    val label: String?,
+    val roleFlags: Int,
+    val isSupported: Boolean,
+    val isSelected: Boolean,
 )
 
 @HiltViewModel
@@ -34,6 +44,8 @@ constructor(
 
     private val _subtitleUiState = MutableStateFlow(SubtitleUiState())
     val subtitleUiState = _subtitleUiState.asStateFlow()
+
+    var subtitleToLoad = MutableStateFlow<SubtitleData?>(null)
 
     fun onFindClicked(query: String) {
         viewModelScope.launch {
@@ -48,12 +60,7 @@ constructor(
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             Logger.debug("url = [${url}]")
-            _subtitleUiState.update {
-                it.copy(
-                    currentSubtitle = subtitleData.copy(url = url),
-                    defaultSubtitleList = listOf(subtitleData.copy(url = url))
-                )
-            }
+            subtitleToLoad.value = subtitleData.copy(url = url)
         }
     }
 
@@ -62,6 +69,9 @@ constructor(
             super.onTracksChanged(tracks)
             val subtitleTracks = listSubtitleTracks(tracks)
             Logger.debug("subtitleTracks = [$subtitleTracks]")
+            _subtitleUiState.update {
+                it.copy(defaultSubtitleList = subtitleTracks)
+            }
         }
     }
 
@@ -80,8 +90,8 @@ constructor(
                     val roleFlags = format.roleFlags
                     // group.isTrackSupported(i) returns an Int support level in Media3 (>= C.FORMAT_HANDLED means supported)
                     val isSupported = when (group.getTrackSupport(i)) {
-                        1 -> false
-                        else -> true // unsupported/supported values differ between ExoPlayer versions — adjust if necessary
+                        FORMAT_HANDLED -> true
+                        else -> false // unsupported/supported values differ between ExoPlayer versions — adjust if necessary
                     }
 
                     result += SubtitleInfo(
@@ -91,7 +101,8 @@ constructor(
                         language = language,
                         label = label,
                         roleFlags = roleFlags,
-                        isSupported = isSupported
+                        isSupported = isSupported,
+                        isSelected = group.isTrackSelected(i)
                     )
 
                     Logger.debug(
