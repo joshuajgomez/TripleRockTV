@@ -3,15 +3,17 @@ package com.joshgm3z.triplerocktv.ui.player.subtitle
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
+import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleDownloaderBinding
+import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -20,16 +22,17 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
+class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClickListener {
 
     private val viewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
-    private val args by navArgs<SubtitleSelectorFragmentArgs>()
-
-    private var _binding: LayoutSubtitleSelectorBinding? = null
+    private var _binding: LayoutSubtitleDownloaderBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: SubtitleListAdapter
+    private val adapter = DownloadedSubtitleListAdapter().apply {
+        binding.rvDefaultSubtitleList.adapter = this
+        binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+    }
 
     override fun onStart() {
         super.onStart()
@@ -43,11 +46,7 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = LayoutSubtitleSelectorBinding.inflate(inflater)
-        adapter = SubtitleListAdapter().apply {
-            binding.rvDefaultSubtitleList.adapter = this
-            binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
-        }
+        _binding = LayoutSubtitleDownloaderBinding.inflate(inflater)
         return binding.root
     }
 
@@ -56,11 +55,9 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         lifecycleScope.launch {
             viewModel.subtitleUiState.collectLatest {
                 Logger.debug("subtitleUiState = $it")
-                adapter.subtitleList = it.defaultSubtitleList ?: emptyList()
+                adapter.subtitleList = it.downloadedSubtitleList ?: emptyList()
+                binding.tvError.visibility = if (adapter.subtitleList.isEmpty()) VISIBLE else GONE
             }
-        }
-        binding.llFindButton.setOnClickListener {
-            viewModel.onFindClicked(args.title)
         }
         adapter.clickListener = this
     }
@@ -70,8 +67,8 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         _binding = null
     }
 
-    override fun onSubtitleClicked(subtitleInfo: SubtitleInfo) {
-        viewModel.onSubtitleClicked(subtitleInfo)
+    override fun onSubtitleClicked(subtitleData: SubtitleData) {
+        viewModel.onSubtitleClicked(subtitleData)
         lifecycleScope.launch {
             delay(1000)
             findNavController().popBackStack()
