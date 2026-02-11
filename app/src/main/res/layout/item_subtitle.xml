@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@drawable/default_list_item_bg"
+    android:layout_height="wrap_content"
+    android:background="@drawable/list_item_bg_color_selector"
     android:clickable="true"
     android:focusable="true"
-    android:focusableInTouchMode="true"
-    android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="5dp">
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="8dp">
 
     <RadioButton
+        android:focusable="false"
+        android:clickable="false"
         android:id="@+id/rb_subtitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
@@ -19,17 +20,20 @@
         android:id="@+id/tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:background="@color/gray2"
         android:paddingHorizontal="5dp"
-        android:text="Korean" />
+        android:text="Korean"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="The.Equalizer.2.2018.HYBRID.2160p.BluRay.REMUX.HEVC.DV.TrueHD.Atmos.7.1-Flights"
+        android:layout_marginStart="5dp"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="The.Equalizer.2.2018.HYBRID.2160p.BluRay.REMUX.HEVC.DV.TrueHD.Atmos.7.1-Flights Atmos.7.1-Flights Atmos.7.1-Flights Atmos.7.1-Flights "
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>
