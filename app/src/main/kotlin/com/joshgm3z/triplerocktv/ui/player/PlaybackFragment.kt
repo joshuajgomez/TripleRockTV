@@ -178,7 +178,7 @@ class PlaybackFragment : VideoSupportFragment() {
             override fun onActionClicked(action: Action) {
                 if (action === closedCaptioningAction) {
                     videoTitle?.let { title ->
-                        val action = PlaybackFragmentDirections.toSubtitle()
+                        val action = PlaybackFragmentDirections.toSubtitleSelector()
                         action.title = title
                         findNavController().navigate(action)
                     }
