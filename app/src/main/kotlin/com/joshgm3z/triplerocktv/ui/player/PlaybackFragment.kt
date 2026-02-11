@@ -32,6 +32,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.media3.common.text.CueGroup
+import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleInfo
 
 /**
  * A fragment for playing video content.
@@ -98,10 +99,30 @@ class PlaybackFragment : VideoSupportFragment() {
                 Logger.debug("subtitleUiState updated")
                 it?.let {
                     subtitleViewModel.subtitleToLoad.value = null
-                    loadSubtitle(it)
+                    when (it) {
+                        is SubtitleData -> loadSubtitle(it)
+                        is SubtitleInfo -> switchSubtitle(it)
+                        else -> Logger.warn("Unknown subtitleToLoad type: ${it::class.java}")
+                    }
                 }
             }
         }
+    }
+
+    private fun switchSubtitle(subtitleInfo: SubtitleInfo) {
+        val currentMediaItem = player.currentMediaItem ?: return
+        val currentPosition = player.currentPosition
+        val playWhenReady = player.playWhenReady
+
+        player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setPreferredTextLanguage(subtitleInfo.language)
+            .build()
+
+        player.setMediaItem(currentMediaItem, false)
+        player.prepare()
+        player.seekTo(currentPosition)
+        player.playWhenReady = playWhenReady
     }
 
     private fun loadSubtitle(subtitleData: SubtitleData) {
@@ -147,7 +168,8 @@ class PlaybackFragment : VideoSupportFragment() {
             requireActivity(),
             playerAdapter
         ) {
-            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context)
+            private val closedCaptioningAction =
+                PlaybackControlsRow.ClosedCaptioningAction(context)
 
             override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
                 adapter.add(closedCaptioningAction)
@@ -156,10 +178,8 @@ class PlaybackFragment : VideoSupportFragment() {
             override fun onActionClicked(action: Action) {
                 if (action === closedCaptioningAction) {
                     videoTitle?.let { title ->
-                        findNavController().navigate(
-                            PlaybackFragmentDirections
-                                .actionPlaybackFragmentToSubtitleFragment(title)
-                        )
+                        val action = PlaybackFragmentDirections.toSubtitle(title)
+                        findNavController().navigate(action)
                     }
                 } else {
                     super.onActionClicked(action)
