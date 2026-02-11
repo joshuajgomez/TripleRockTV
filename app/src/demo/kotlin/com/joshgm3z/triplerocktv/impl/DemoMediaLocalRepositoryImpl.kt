@@ -59,7 +59,7 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchStream(
         streamId: Int,
         browseType: BrowseType
-    ): Any = DemoData.Companion.allStreams.first {
+    ): Any? = DemoData.allStreams.firstOrNull {
         when (it) {
             is VodStream -> it.streamId == streamId
             is SeriesStream -> it.seriesId == streamId

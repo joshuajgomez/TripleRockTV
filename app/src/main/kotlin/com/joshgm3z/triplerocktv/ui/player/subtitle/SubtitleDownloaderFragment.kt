@@ -7,9 +7,11 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleDownloaderBinding
@@ -24,14 +26,19 @@ import kotlin.getValue
 @AndroidEntryPoint
 class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClickListener {
 
-    private val viewModel: SubtitleDownloaderViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val args: SubtitleDownloaderFragmentArgs by navArgs()
+
+    private val viewModel: SubtitleDownloaderViewModel by viewModels()
+    private val subtitleSelectorViewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private var _binding: LayoutSubtitleDownloaderBinding? = null
     private val binding get() = _binding!!
 
-    private val adapter = DownloadedSubtitleListAdapter().apply {
-        binding.rvDefaultSubtitleList.adapter = this
-        binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+    private lateinit var adapter: DownloadedSubtitleListAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModel.searchQuery(args.keyword)
     }
 
     override fun onStart() {
@@ -47,6 +54,10 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
         savedInstanceState: Bundle?
     ): View {
         _binding = LayoutSubtitleDownloaderBinding.inflate(inflater)
+        adapter = DownloadedSubtitleListAdapter().apply {
+            binding.rvDefaultSubtitleList.adapter = this
+            binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
+        }
         return binding.root
     }
 
@@ -55,8 +66,15 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
         lifecycleScope.launch {
             viewModel.subtitleUiState.collectLatest {
                 Logger.debug("subtitleUiState = $it")
-                adapter.subtitleList = it.downloadedSubtitleList ?: emptyList()
-                binding.tvError.visibility = if (adapter.subtitleList.isEmpty()) VISIBLE else GONE
+                adapter.subtitleList = it ?: emptyList()
+                it?.let { subtitleList ->
+                    binding.tvError.visibility = if (subtitleList.isEmpty()) VISIBLE else GONE
+                }
+                binding.tvTitle.text = when {
+                    it == null -> "Searching subtitles"
+                    it.isEmpty() -> "Subtitles"
+                    else -> "Select a subtitle"
+                }
             }
         }
         adapter.clickListener = this
@@ -68,9 +86,10 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
     }
 
     override fun onSubtitleClicked(subtitleData: SubtitleData) {
-        viewModel.onSubtitleClicked(subtitleData)
         lifecycleScope.launch {
-            delay(1000)
+            val url = viewModel.getSubtitleUrl(subtitleData.fileId)
+            subtitleSelectorViewModel.subtitleToLoad.value = subtitleData.copy(url = url)
+            delay(500)
             findNavController().popBackStack()
         }
     }

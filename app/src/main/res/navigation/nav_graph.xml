@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/subtitleSelectorFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -189,7 +189,12 @@
     <dialog
         android:id="@+id/subtitleDownloaderFragment"
         android:name="com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleDownloaderFragment"
-        android:label="SubtitleDownloaderFragment" />
+        android:label="SubtitleDownloaderFragment">
+        <argument
+            android:name="keyword"
+            android:defaultValue="Wonder Woman 1984"
+            app:argType="string" />
+    </dialog>
 
 
 </navigation>
