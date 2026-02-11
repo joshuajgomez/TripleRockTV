@@ -57,10 +57,10 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         lifecycleScope.launch {
             viewModel.subtitleUiState.collectLatest {
                 Logger.debug("subtitleUiState = $it")
-                adapter.subtitleList = it ?: emptyList()
+                if (!it.isNullOrEmpty()) adapter.subtitleList = it
             }
         }
-        binding.llFindButton.setOnClickListener {
+        binding.findMoreButton.setOnClickListener {
             val action = SubtitleSelectorFragmentDirections.toSubtitleDownload()
             action.keyword = args.title
             findNavController().navigate(action)
@@ -73,7 +73,7 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
     }
 
     override fun onSubtitleClicked(subtitleInfo: SubtitleInfo) {
-        viewModel.onSubtitleClicked(subtitleInfo)
+        if (!subtitleInfo.isSelected) viewModel.onSubtitleClicked(subtitleInfo)
         lifecycleScope.launch {
             delay(1000)
             findNavController().popBackStack()

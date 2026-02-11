@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/container_width"
     android:layout_height="@dimen/container_height"
-    android:background="?attr/cardColor"
-    android:padding="20dp">
+    android:background="?attr/cardColor">
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:ems="12"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
         android:text="Select a subtitle"
         android:textAppearance="?android:attr/textAppearanceLarge"
         app:layout_constraintStart_toStartOf="parent"
@@ -20,45 +20,19 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_default_subtitle_list"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_height="230dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         tools:itemCount="5"
         tools:listitem="@layout/item_subtitle" />
 
-    <LinearLayout
-        android:id="@+id/ll_find_button"
+    <com.joshgm3z.triplerocktv.ui.player.subtitle.FindButtonView
+        android:id="@+id/find_more_button"
         android:layout_width="wrap_content"
-        android:layout_height="40dp"
-        android:layout_marginVertical="10dp"
-        android:background="@drawable/default_button_bg"
-        android:clickable="true"
-        android:descendantFocusability="blocksDescendants"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="15dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="15dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_search" />
-
-        <TextView
-            android:id="@+id/tv_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:text="Find more subtitles"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    </LinearLayout>
-
+        app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
