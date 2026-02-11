@@ -31,6 +31,14 @@ class SubtitleSelectorFragment : DialogFragment() {
 
     private lateinit var adapter: SubtitleListAdapter
 
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            1000,
+            500
+        )
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -59,7 +67,7 @@ class SubtitleSelectorFragment : DialogFragment() {
             viewModel.onSubtitleClicked(it)
             lifecycleScope.launch {
                 delay(1000)
-                findNavController().popBackStack()
+//                findNavController().popBackStack()
             }
         }
     }
