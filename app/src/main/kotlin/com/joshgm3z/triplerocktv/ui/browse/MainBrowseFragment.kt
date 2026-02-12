@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse.category
+package com.joshgm3z.triplerocktv.ui.browse
 
 import android.os.Bundle
 import android.view.View
@@ -20,7 +20,9 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
+import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
+import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -132,22 +134,31 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
-        addRow(0, "Video on demand", uiState.vodCategories)
-        addRow(1, "Series", uiState.seriesCategories)
-        addRow(2, "Live TV", uiState.liveTvCategories)
-        addRow(3, "EPG", uiState.epgCategories)
+        addRecentsRow(uiState.recentPlayed)
+        addRow(1, "Video on demand", uiState.vodCategories)
+        addRow(2, "Series", uiState.seriesCategories)
+        addRow(3, "Live TV", uiState.liveTvCategories)
+        addRow(4, "EPG", uiState.epgCategories)
         addSettingsRow()
+    }
+
+    private fun addRecentsRow(list: List<Any>) {
+        if (list.isEmpty()) return
+        val header = HeaderItem(0, "Recently played")
+        val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
+        listRowAdapter.addAll(0, list)
+        rowsAdapter.add(ListRow(header, listRowAdapter))
     }
 
     private fun addRow(
         id: Long,
         header: String,
-        categories: List<Any>
+        list: List<Any>
     ) {
-        if (categories.isEmpty()) return
+        if (list.isEmpty()) return
         val header = HeaderItem(id, header)
         val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
-        listRowAdapter.addAll(0, categories)
+        listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }
 

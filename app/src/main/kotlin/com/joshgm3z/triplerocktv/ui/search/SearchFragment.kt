@@ -16,8 +16,8 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
-import com.joshgm3z.triplerocktv.ui.browse.stream.StreamPresenter
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
+import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

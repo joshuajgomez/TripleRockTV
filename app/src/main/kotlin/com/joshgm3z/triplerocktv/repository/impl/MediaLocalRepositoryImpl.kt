@@ -9,9 +9,8 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
-import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import com.joshgm3z.triplerocktv.util.Logger
-import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -76,4 +75,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
             && seriesCategoryDao.getAllCategories().isEmpty()
             && liveTvCategoryDao.getAllCategories().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
+
+    override suspend fun fetchRecentlyPlayed(): List<Any> {
+        return emptyList()
+    }
 }

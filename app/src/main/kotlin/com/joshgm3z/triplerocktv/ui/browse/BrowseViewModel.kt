@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse.category
+package com.joshgm3z.triplerocktv.ui.browse
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -18,6 +18,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class BrowseUiState(
+    val recentPlayed: List<Any> = emptyList(),
     val vodCategories: List<VodCategory> = emptyList(),
     val seriesCategories: List<SeriesCategory> = emptyList(),
     val liveTvCategories: List<LiveTvCategory> = emptyList(),
@@ -49,6 +50,7 @@ class BrowseViewModel
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
+                    recentPlayed = repository.fetchRecentlyPlayed(),
                     vodCategories = repository.fetchCategories(BrowseType.VideoOnDemand) as List<VodCategory>,
                     seriesCategories = repository.fetchCategories(BrowseType.Series) as List<SeriesCategory>,
                     liveTvCategories = repository.fetchCategories(BrowseType.LiveTV) as List<LiveTvCategory>,

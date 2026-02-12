@@ -1,7 +1,12 @@
-package com.joshgm3z.triplerocktv.ui.browse.category
+package com.joshgm3z.triplerocktv.ui.browse
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -20,8 +25,8 @@ fun updateBackgroundWithBlur(
         .apply(RequestOptions.bitmapTransform(BlurTransformation(25, 3))) // radius, sampling
         .into(object : CustomTarget<Bitmap>() {
             override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                val canvas = android.graphics.Canvas(resource)
-                val paint = android.graphics.Paint()
+                val canvas = Canvas(resource)
+                val paint = Paint()
                 // Set color to black with 50% alpha (128)
                 paint.colorFilter = colorFilter
                 canvas.drawBitmap(resource, 0f, 0f, paint)
@@ -32,12 +37,12 @@ fun updateBackgroundWithBlur(
         })
 }
 
-val colorFilter = android.graphics.PorterDuffColorFilter(
-    android.graphics.Color.argb(
+val colorFilter = PorterDuffColorFilter(
+    Color.argb(
         220,
         0,
         0,
         0
     ), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
-    android.graphics.PorterDuff.Mode.SRC_ATOP
+    PorterDuff.Mode.SRC_ATOP
 )

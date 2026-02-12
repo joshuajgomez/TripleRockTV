@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse.stream
+package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.os.Bundle
 import android.view.View
@@ -13,7 +13,7 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

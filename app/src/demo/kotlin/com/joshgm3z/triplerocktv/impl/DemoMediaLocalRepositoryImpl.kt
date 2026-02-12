@@ -6,7 +6,7 @@ import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.category.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import javax.inject.Inject
 
 class DemoMediaLocalRepositoryImpl
@@ -15,10 +15,10 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchCategories(
         browseType: BrowseType
     ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> DemoData.Companion.sampleVodCategory()
-        BrowseType.Series -> DemoData.Companion.getSampleSeriesCategories()
-        BrowseType.LiveTV -> DemoData.Companion.getSampleLiveTvCategories()
-        BrowseType.EPG -> DemoData.Companion.getSampleIptvEpgListings()
+        BrowseType.VideoOnDemand -> DemoData.sampleVodCategory()
+        BrowseType.Series -> DemoData.getSampleSeriesCategories()
+        BrowseType.LiveTV -> DemoData.getSampleLiveTvCategories()
+        BrowseType.EPG -> DemoData.getSampleIptvEpgListings()
         else -> emptyList()
     }
 
@@ -48,11 +48,11 @@ constructor() : MediaLocalRepository {
         categoryId: Int,
         browseType: BrowseType
     ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> DemoData.Companion.sampleVodStreams.filter { it.categoryId == categoryId }
-        BrowseType.Series -> DemoData.Companion.getSampleSeriesStreams()
+        BrowseType.VideoOnDemand -> DemoData.sampleVodStreams.filter { it.categoryId == categoryId }
+        BrowseType.Series -> DemoData.getSampleSeriesStreams()
             .filter { it.categoryId == categoryId }
 
-        BrowseType.LiveTV -> DemoData.Companion.sampleLiveStreams.filter { it.categoryId == categoryId }
+        BrowseType.LiveTV -> DemoData.sampleLiveStreams.filter { it.categoryId == categoryId }
         else -> emptyList()
     }
 
@@ -69,4 +69,10 @@ constructor() : MediaLocalRepository {
     }
 
     override suspend fun isContentEmpty(): Boolean = false
+
+    override suspend fun fetchRecentlyPlayed(): List<Any> {
+        return DemoData.sampleVodStreams.subList(0, 2) +
+                DemoData.sampleLiveStreams.subList(0, 1)
+
+    }
 }
