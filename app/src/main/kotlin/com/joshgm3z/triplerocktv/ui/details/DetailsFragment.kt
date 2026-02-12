@@ -23,7 +23,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
-import com.joshgm3z.triplerocktv.ui.browse.category.updateBackgroundWithBlur
+import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
