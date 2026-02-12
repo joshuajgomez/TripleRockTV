@@ -35,9 +35,12 @@ class PlaybackViewModel @Inject constructor(
         Logger.debug("streamId = [${streamId}], browseType = [${browseType}]")
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
-            when (val result = repository.fetchStream(streamId, browseType)) {
+            val result = repository.fetchStream(streamId, browseType)
+            result?.let {
+                repository.updateLastPlayed(it, System.currentTimeMillis())
+            }
+            when (result) {
                 is VodStream -> _uiState.update {
-                    repository.updateLastPlayed(result, System.currentTimeMillis())
                     it.copy(
                         title = result.name,
                         videoUrl = result.videoUrl(userInfo)
