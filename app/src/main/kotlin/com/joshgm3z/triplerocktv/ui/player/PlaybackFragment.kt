@@ -104,8 +104,8 @@ class PlaybackFragment : VideoSupportFragment() {
                     trackViewModel.subtitleTrackToLoad.value = null
                     when (it) {
                         is SubtitleData -> loadSubtitle(it)
-                        is TrackInfo -> switchSubtitle(it)
-                        else -> Logger.warn("Unknown subtitleToLoad type: ${it::class.java}")
+                        is TrackInfo -> switchTrack(it)
+                        else -> Logger.warn("Unknown track type: ${it::class.java}")
                     }
                 }
             }
@@ -115,7 +115,7 @@ class PlaybackFragment : VideoSupportFragment() {
                 Logger.debug("audioTrackToLoad $it")
                 it?.let {
                     trackViewModel.audioTrackToLoad.value = null
-                    switchAudio(it)
+                    switchTrack(it)
                 }
             }
         }
@@ -127,31 +127,17 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    private fun switchSubtitle(trackInfo: TrackInfo) {
+    private fun switchTrack(trackInfo: TrackInfo) {
         val currentMediaItem = player.currentMediaItem ?: return
         val currentPosition = player.currentPosition
         val playWhenReady = player.playWhenReady
 
-        player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setPreferredTextLanguage(trackInfo.language)
-            .build()
+        val param = player.trackSelectionParameters.buildUpon()
 
-        player.setMediaItem(currentMediaItem, false)
-        player.prepare()
-        player.seekTo(currentPosition)
-        player.playWhenReady = playWhenReady
-    }
-
-    private fun switchAudio(trackInfo: TrackInfo) {
-        val currentMediaItem = player.currentMediaItem ?: return
-        val currentPosition = player.currentPosition
-        val playWhenReady = player.playWhenReady
-
-        player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setPreferredAudioLanguage(trackInfo.language)
-            .build()
+        player.trackSelectionParameters = when (trackInfo.trackType) {
+            TrackType.Subtitle -> param.setPreferredTextLanguage(trackInfo.language)
+            TrackType.Audio -> param.setPreferredAudioLanguage(trackInfo.language)
+        }.build()
 
         player.setMediaItem(currentMediaItem, false)
         player.prepare()
