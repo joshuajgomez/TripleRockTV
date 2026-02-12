@@ -60,7 +60,7 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
                 if (!it.isNullOrEmpty()) adapter.subtitleList = it
             }
         }
-        binding.findMoreButton.setOnClickListener {
+        binding.llFindMoreButton.setOnClickListener {
             val action = SubtitleSelectorFragmentDirections.toSubtitleDownload()
             action.keyword = args.title
             findNavController().navigate(action)
