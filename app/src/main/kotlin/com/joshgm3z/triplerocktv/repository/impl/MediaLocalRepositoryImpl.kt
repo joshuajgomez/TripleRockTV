@@ -4,8 +4,10 @@ import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
@@ -23,10 +25,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val seriesStreamsDao: SeriesStreamsDao,
     private val liveTvStreamsDao: LiveTvStreamsDao,
 ) : MediaLocalRepository {
-
-    companion object {
-        private const val TAG: String = "MediaLocalRepositoryImpl"
-    }
 
     override suspend fun fetchCategories(
         browseType: BrowseType
@@ -80,12 +78,16 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchRecentlyPlayed(): List<Any> {
         val recentPlayed = mutableListOf<Any>()
         recentPlayed.addAll(vodStreamsDao.getRecentStreams())
+        recentPlayed.addAll(seriesStreamsDao.getRecentStreams())
+        recentPlayed.addAll(liveTvStreamsDao.getRecentStreams())
         return recentPlayed
     }
 
     override suspend fun updateLastPlayed(stream: Any, time: Long) {
         when (stream) {
             is VodStream -> vodStreamsDao.update(stream.copy(lastPlayed = time))
+            is SeriesStream -> seriesStreamsDao.update(stream.copy(lastPlayed = time))
+            is LiveTvStream -> liveTvStreamsDao.update(stream.copy(lastPlayed = time))
         }
     }
 }
