@@ -7,15 +7,30 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
+import com.joshgm3z.triplerocktv.databinding.ViewStreamCardShortBinding
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
-class StreamPresenter : Presenter() {
+class StreamPresenter(
+    val isShortCard: Boolean = false
+) : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.view_stream_card, parent, false)
-        return ViewHolder(view)
+        val binding = when {
+            isShortCard -> ViewStreamCardShortBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+
+            else -> ViewStreamCardBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        }
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {

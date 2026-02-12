@@ -18,8 +18,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
+import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
@@ -116,6 +119,21 @@ class MainBrowseFragment : BrowseSupportFragment() {
                 .setCategoryName(item.categoryName)
                 .setBrowseType(BrowseType.Series)
 
+            is SeriesStream -> MainBrowseFragmentDirections
+                .toDetails()
+                .setBrowseType(BrowseType.Series)
+                .setStreamId(item.seriesId)
+
+            is VodStream -> MainBrowseFragmentDirections
+                .toDetails()
+                .setBrowseType(BrowseType.VideoOnDemand)
+                .setStreamId(item.streamId)
+
+            is LiveTvStream -> MainBrowseFragmentDirections
+                .toDetails()
+                .setBrowseType(BrowseType.LiveTV)
+                .setStreamId(item.streamId)
+
             else -> return
         }.let { findNavController().navigate(it) }
     }
@@ -145,7 +163,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun addRecentsRow(list: List<Any>) {
         if (list.isEmpty()) return
         val header = HeaderItem(0, "Recently played")
-        val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
+        val listRowAdapter = ArrayObjectAdapter(StreamPresenter(isShortCard = true))
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }

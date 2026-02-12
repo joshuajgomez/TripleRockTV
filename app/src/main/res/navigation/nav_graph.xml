@@ -73,6 +73,9 @@
         <action
             android:id="@+id/toSettings"
             app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/toDetails"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
     <fragment
