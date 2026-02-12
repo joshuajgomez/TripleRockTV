@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.player.subtitle
+package com.joshgm3z.triplerocktv.ui.player.track
 
 import android.content.Context
 import android.util.AttributeSet

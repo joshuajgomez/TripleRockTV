@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.player.subtitle
+package com.joshgm3z.triplerocktv.ui.player.track
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,7 +29,7 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
     private val args: SubtitleDownloaderFragmentArgs by navArgs()
 
     private val viewModel: SubtitleDownloaderViewModel by viewModels()
-    private val subtitleSelectorViewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val trackSelectorViewModel: TrackSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private var _binding: LayoutSubtitleDownloaderBinding? = null
     private val binding get() = _binding!!
@@ -88,7 +88,7 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
     override fun onSubtitleClicked(subtitleData: SubtitleData) {
         lifecycleScope.launch {
             val url = viewModel.getSubtitleUrl(subtitleData.fileId)
-            subtitleSelectorViewModel.subtitleToLoad.value = subtitleData.copy(url = url)
+            trackSelectorViewModel.subtitleTrackToLoad.value = subtitleData.copy(url = url)
             delay(500)
             findNavController().popBackStack()
         }

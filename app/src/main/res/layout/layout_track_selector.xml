@@ -18,15 +18,15 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_default_subtitle_list"
+        android:id="@+id/rv_track_list"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         tools:itemCount="5"
-        tools:listitem="@layout/item_subtitle" />
+        tools:listitem="@layout/item_track_info" />
 
-    <com.joshgm3z.triplerocktv.ui.player.subtitle.FindButtonView
+    <com.joshgm3z.triplerocktv.ui.player.track.FindButtonView
         android:id="@+id/find_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
