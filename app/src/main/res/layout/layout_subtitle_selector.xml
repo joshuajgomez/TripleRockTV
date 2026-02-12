@@ -26,38 +26,12 @@
         tools:itemCount="5"
         tools:listitem="@layout/item_subtitle" />
 
-    <LinearLayout
-        android:id="@+id/ll_find_more_button"
+    <com.joshgm3z.triplerocktv.ui.player.subtitle.FindButtonView
+        android:id="@+id/find_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:background="@color/button_bg_color_selector"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="5dp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title">
-
-        <ImageView
-            android:id="@+id/iv_search"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_search"
-            android:tint="@color/button_content_color_selector" />
-
-        <TextView
-            android:id="@+id/tv_find"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="Find more online"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@color/button_content_color_selector" />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="@+id/tv_title"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
