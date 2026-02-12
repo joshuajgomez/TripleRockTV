@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.player.subtitle
+package com.joshgm3z.triplerocktv.ui.player.track
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleSelectorBinding
+import com.joshgm3z.triplerocktv.databinding.LayoutTrackSelectorBinding
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -20,16 +20,16 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
+class TrackSelectorFragment : DialogFragment(), TrackListClickListener {
 
-    private val viewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val viewModel: TrackSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
-    private val args by navArgs<SubtitleSelectorFragmentArgs>()
+    private val args by navArgs<TrackSelectorFragmentArgs>()
 
-    private var _binding: LayoutSubtitleSelectorBinding? = null
+    private var _binding: LayoutTrackSelectorBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var adapter: SubtitleListAdapter
+    private lateinit var adapter: TrackListAdapter
 
     override fun onStart() {
         super.onStart()
@@ -43,25 +43,32 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = LayoutSubtitleSelectorBinding.inflate(inflater)
-        adapter = SubtitleListAdapter().apply {
-            binding.rvDefaultSubtitleList.adapter = this
-            binding.rvDefaultSubtitleList.layoutManager = LinearLayoutManager(context)
-            clickListener = this@SubtitleSelectorFragment
+        _binding = LayoutTrackSelectorBinding.inflate(inflater)
+        adapter = TrackListAdapter().apply {
+            binding.rvTrackList.adapter = this
+            binding.rvTrackList.layoutManager = LinearLayoutManager(context)
+            clickListener = this@TrackSelectorFragment
         }
+        binding.tvTitle.text = "Select ${args.trackType.name.lowercase()}"
+
+        binding.findMoreButton.visibility =
+            if (args.trackType == TrackType.Subtitle) View.VISIBLE else View.GONE
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewModel.subtitleUiState.collectLatest {
-                Logger.debug("subtitleUiState = $it")
-                if (!it.isNullOrEmpty()) adapter.subtitleList = it
+            when (args.trackType) {
+                TrackType.Subtitle -> viewModel.subtitleTrackListState
+                else -> viewModel.audioTrackListState
+            }.collectLatest {
+                Logger.debug("${args.trackType} trackListState = $it")
+                if (!it.isNullOrEmpty()) adapter.trackList = it
             }
         }
         binding.findMoreButton.setOnClickListener {
-            val action = SubtitleSelectorFragmentDirections.toSubtitleDownload()
+            val action = TrackSelectorFragmentDirections.toSubtitleDownload()
             action.keyword = args.title
             findNavController().navigate(action)
         }
@@ -72,8 +79,8 @@ class SubtitleSelectorFragment : DialogFragment(), SubtitleListClickListener {
         _binding = null
     }
 
-    override fun onSubtitleClicked(subtitleInfo: SubtitleInfo) {
-        if (!subtitleInfo.isSelected) viewModel.onSubtitleClicked(subtitleInfo)
+    override fun onTrackClicked(trackInfo: TrackInfo) {
+        if (!trackInfo.isSelected) viewModel.onTrackClicked(trackInfo)
         lifecycleScope.launch {
             delay(1000)
             findNavController().popBackStack()

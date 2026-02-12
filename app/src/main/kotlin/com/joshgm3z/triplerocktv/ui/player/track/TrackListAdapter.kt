@@ -1,18 +1,17 @@
-package com.joshgm3z.triplerocktv.ui.player.subtitle
+package com.joshgm3z.triplerocktv.ui.player.track
 
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.joshgm3z.triplerocktv.databinding.ItemDownloadedSubtitleBinding
-import com.joshgm3z.triplerocktv.databinding.ItemSubtitleBinding
+import com.joshgm3z.triplerocktv.databinding.ItemTrackInfoBinding
 import com.joshgm3z.triplerocktv.util.languageName
 
-class SubtitleListAdapter : RecyclerView.Adapter<SubtitleListViewHolder>() {
+class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
 
-    var clickListener: SubtitleListClickListener? = null
+    var clickListener: TrackListClickListener? = null
 
-    var subtitleList: List<SubtitleInfo> = emptyList()
+    var trackList: List<TrackInfo> = emptyList()
         set(value) {
             field = value
             notifyDataSetChanged()
@@ -21,33 +20,33 @@ class SubtitleListAdapter : RecyclerView.Adapter<SubtitleListViewHolder>() {
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SubtitleListViewHolder {
-        ItemSubtitleBinding.inflate(
+    ): TrackListViewHolder {
+        ItemTrackInfoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
-        ).let { return SubtitleListViewHolder(it.root) }
+        ).let { return TrackListViewHolder(it.root) }
     }
 
     override fun onBindViewHolder(
-        holder: SubtitleListViewHolder,
+        holder: TrackListViewHolder,
         position: Int
     ) {
-        val data = subtitleList[position]
+        val data = trackList[position]
         holder.text = data.label ?: data.language ?: "Unknown"
         holder.language = data.language.languageName()
         holder.checked = data.isSelected
         holder.listenClickEvent {
-            clickListener?.onSubtitleClicked(data)
+            clickListener?.onTrackClicked(data)
         }
     }
 
-    override fun getItemCount(): Int = subtitleList.size
+    override fun getItemCount(): Int = trackList.size
 
 }
 
-class SubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-    val binding = ItemSubtitleBinding.bind(itemView)
+class TrackListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val binding = ItemTrackInfoBinding.bind(itemView)
 
     var text: String = ""
         set(value) {
@@ -63,7 +62,7 @@ class SubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
     var checked: Boolean = false
         set(value) {
-            binding.rbSubtitle.isChecked = value
+            binding.rbTrack.isChecked = value
             field = value
         }
 
@@ -72,6 +71,6 @@ class SubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
     }
 }
 
-interface SubtitleListClickListener {
-    fun onSubtitleClicked(subtitleInfo: SubtitleInfo)
+interface TrackListClickListener {
+    fun onTrackClicked(trackInfo: TrackInfo)
 }

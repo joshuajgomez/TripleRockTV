@@ -31,8 +31,9 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.media3.common.text.CueGroup
-import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleInfo
-import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorViewModel
+import com.joshgm3z.triplerocktv.ui.player.track.TrackInfo
+import com.joshgm3z.triplerocktv.ui.player.track.TrackSelectorViewModel
+import com.joshgm3z.triplerocktv.ui.player.track.TrackType
 
 /**
  * A fragment for playing video content.
@@ -42,7 +43,7 @@ import com.joshgm3z.triplerocktv.ui.player.subtitle.SubtitleSelectorViewModel
 class PlaybackFragment : VideoSupportFragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
-    private val subtitleViewModel: SubtitleSelectorViewModel by hiltNavGraphViewModels(
+    private val trackViewModel: TrackSelectorViewModel by hiltNavGraphViewModels(
         R.id.nav_graph
     )
 
@@ -70,7 +71,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
         player.addListener(errorListener(this))
         player.addListener(subtitleListener)
-        player.addListener(subtitleViewModel.subtitleTrackListener)
+        player.addListener(trackViewModel.subtitleTrackListener)
 
         LeanbackPlayerAdapter(requireContext(), player, 16).apply {
             setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
@@ -97,35 +98,59 @@ class PlaybackFragment : VideoSupportFragment() {
         }
 
         lifecycleScope.launch {
-            subtitleViewModel.subtitleToLoad.collectLatest { it ->
-                Logger.debug("subtitleUiState updated")
+            trackViewModel.subtitleTrackToLoad.collectLatest { it ->
+                Logger.debug("subtitleTrackToLoad $it")
                 it?.let {
-                    subtitleViewModel.subtitleToLoad.value = null
+                    trackViewModel.subtitleTrackToLoad.value = null
                     when (it) {
                         is SubtitleData -> loadSubtitle(it)
-                        is SubtitleInfo -> switchSubtitle(it)
+                        is TrackInfo -> switchSubtitle(it)
                         else -> Logger.warn("Unknown subtitleToLoad type: ${it::class.java}")
                     }
                 }
             }
         }
+        lifecycleScope.launch {
+            trackViewModel.audioTrackToLoad.collectLatest { it ->
+                Logger.debug("audioTrackToLoad $it")
+                it?.let {
+                    trackViewModel.audioTrackToLoad.value = null
+                    switchAudio(it)
+                }
+            }
+        }
 
         lifecycleScope.launch {
-            subtitleViewModel.enableCaptionsButton.collectLatest {
-                Logger.debug("enableCaptionsButton $it")
-
+            trackViewModel.trackButtonState.collectLatest {
+                Logger.debug("trackButtonState $it")
             }
         }
     }
 
-    private fun switchSubtitle(subtitleInfo: SubtitleInfo) {
+    private fun switchSubtitle(trackInfo: TrackInfo) {
         val currentMediaItem = player.currentMediaItem ?: return
         val currentPosition = player.currentPosition
         val playWhenReady = player.playWhenReady
 
         player.trackSelectionParameters = player.trackSelectionParameters
             .buildUpon()
-            .setPreferredTextLanguage(subtitleInfo.language)
+            .setPreferredTextLanguage(trackInfo.language)
+            .build()
+
+        player.setMediaItem(currentMediaItem, false)
+        player.prepare()
+        player.seekTo(currentPosition)
+        player.playWhenReady = playWhenReady
+    }
+
+    private fun switchAudio(trackInfo: TrackInfo) {
+        val currentMediaItem = player.currentMediaItem ?: return
+        val currentPosition = player.currentPosition
+        val playWhenReady = player.playWhenReady
+
+        player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setPreferredAudioLanguage(trackInfo.language)
             .build()
 
         player.setMediaItem(currentMediaItem, false)
@@ -177,22 +202,34 @@ class PlaybackFragment : VideoSupportFragment() {
             requireActivity(),
             playerAdapter
         ) {
-            private val closedCaptioningAction =
-                PlaybackControlsRow.ClosedCaptioningAction(context)
+            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context)
+            private val audioAction = PlaybackControlsRow.ShuffleAction(context)
 
             override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
                 adapter.add(closedCaptioningAction)
+                adapter.add(audioAction)
             }
 
             override fun onActionClicked(action: Action) {
-                if (action === closedCaptioningAction) {
-                    videoTitle?.let { title ->
-                        val action = PlaybackFragmentDirections.toSubtitleSelector()
-                        action.title = title
+                when {
+                    action === closedCaptioningAction -> {
+                        videoTitle?.let { title ->
+                            val action = PlaybackFragmentDirections.toTrackSelector()
+                            action.title = title
+                            action.trackType = TrackType.Subtitle
+                            findNavController().navigate(action)
+                        }
+                    }
+
+                    action === audioAction -> {
+                        val action = PlaybackFragmentDirections.toTrackSelector()
+                        action.trackType = TrackType.Audio
                         findNavController().navigate(action)
                     }
-                } else {
-                    super.onActionClicked(action)
+
+                    else -> {
+                        super.onActionClicked(action)
+                    }
                 }
             }
         }
