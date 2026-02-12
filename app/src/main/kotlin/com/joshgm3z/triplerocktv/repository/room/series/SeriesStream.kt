@@ -18,7 +18,8 @@ data class SeriesStream(
     val releaseDate: String?,
     val lastModified: String?,
     val rating: String?,
-    val categoryId: Int
+    val categoryId: Int,
+    val lastPlayed: Long = 0,
 ){
     fun videoUrl(userInfo: UserInfo) = "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$seriesId.mkv"
 }

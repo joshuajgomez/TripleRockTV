@@ -12,7 +12,8 @@ data class LiveTvStream(
     val streamType: String,
     val streamIcon: String?,
     val categoryId: Int,
-    val added: String
+    val added: String,
+    val lastPlayed: Long = 0,
 ) {
     companion object {
         fun sample(): LiveTvStream = LiveTvStream(
@@ -22,7 +23,8 @@ data class LiveTvStream(
             streamType = "movie",
             streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/lNVHB85FUDZqLzvug3k6FA07RIr.jpg",
             categoryId = 122,
-            added = "1609012046"
+            added = "1609012046",
+            lastPlayed = System.currentTimeMillis(),
         )
     }
     fun videoUrl(userInfo: UserInfo) = "${userInfo.webUrl}/$streamType/${userInfo.username}/${userInfo.password}/$streamId.m3u8"

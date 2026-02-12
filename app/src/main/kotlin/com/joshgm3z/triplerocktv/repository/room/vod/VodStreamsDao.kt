@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 
 @Dao
@@ -20,9 +21,12 @@ interface VodStreamsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<VodStream>)
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertSeries(streams: List<SeriesStream>)
+    @Update
+    suspend fun update(stream: VodStream)
 
     @Query("DELETE FROM vod_stream")
     suspend fun deleteAllStreams()
+
+    @Query("SELECT * FROM vod_stream WHERE lastPlayed > 0")
+    fun getRecentStreams(): List<VodStream>
 }

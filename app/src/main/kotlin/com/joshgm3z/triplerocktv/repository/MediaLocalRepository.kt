@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.repository
 
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 
 interface MediaLocalRepository {
@@ -18,4 +19,6 @@ interface MediaLocalRepository {
     suspend fun isContentEmpty(): Boolean
 
     suspend fun fetchRecentlyPlayed(): List<Any>
+
+    suspend fun updateLastPlayed(stream: Any, time: Long)
 }
