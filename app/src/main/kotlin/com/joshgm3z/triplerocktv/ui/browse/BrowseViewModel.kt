@@ -50,7 +50,6 @@ class BrowseViewModel
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
-                    recentPlayed = repository.fetchRecentlyPlayed(),
                     vodCategories = repository.fetchCategories(BrowseType.VideoOnDemand) as List<VodCategory>,
                     seriesCategories = repository.fetchCategories(BrowseType.Series) as List<SeriesCategory>,
                     liveTvCategories = repository.fetchCategories(BrowseType.LiveTV) as List<LiveTvCategory>,
@@ -61,6 +60,16 @@ class BrowseViewModel
         viewModelScope.launch {
             localDatastore.blurSettingFlow().collectLatest {
                 isBlurSettingEnabled = it
+            }
+        }
+    }
+
+    fun updateRecentPlayed() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.update {
+                it.copy(
+                    recentPlayed = repository.fetchRecentlyPlayed(),
+                )
             }
         }
     }

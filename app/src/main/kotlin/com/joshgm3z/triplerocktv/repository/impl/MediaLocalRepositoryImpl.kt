@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import com.joshgm3z.triplerocktv.util.Logger
@@ -77,6 +78,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
             && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchRecentlyPlayed(): List<Any> {
-        return emptyList()
+        val recentPlayed = mutableListOf<Any>()
+        recentPlayed.addAll(vodStreamsDao.getRecentStreams())
+        return recentPlayed
+    }
+
+    override suspend fun updateLastPlayed(stream: Any, time: Long) {
+        when (stream) {
+            is VodStream -> vodStreamsDao.update(stream.copy(lastPlayed = time))
+        }
     }
 }

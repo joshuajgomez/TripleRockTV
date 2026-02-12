@@ -37,6 +37,7 @@ class PlaybackViewModel @Inject constructor(
             val userInfo = localDataStore.getUserInfo()!!
             when (val result = repository.fetchStream(streamId, browseType)) {
                 is VodStream -> _uiState.update {
+                    repository.updateLastPlayed(result, System.currentTimeMillis())
                     it.copy(
                         title = result.name,
                         videoUrl = result.videoUrl(userInfo)

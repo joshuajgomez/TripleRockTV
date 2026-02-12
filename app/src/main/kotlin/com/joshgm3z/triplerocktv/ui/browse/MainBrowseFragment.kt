@@ -196,5 +196,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
         if (!viewModel.isBlurSettingEnabled) {
             backgroundManager.drawable = null
         }
+        viewModel.updateRecentPlayed()
     }
 }
