@@ -5,9 +5,11 @@ import androidx.lifecycle.ViewModel
 import androidx.media3.common.C
 import androidx.media3.common.C.FORMAT_HANDLED
 import androidx.media3.common.Format
+import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
+import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -37,6 +39,29 @@ constructor() : ViewModel() {
 
     private var _enableCaptionsButton = MutableStateFlow(false)
     var enableCaptionsButton = _enableCaptionsButton.asStateFlow()
+
+    init {
+        if (BuildConfig.FLAVOR == "demo") {
+            _subtitleUiState.value = getDemoSubtitles()
+        }
+    }
+
+    private fun getDemoSubtitles(): List<SubtitleInfo> {
+        val list = mutableListOf<SubtitleInfo>()
+        repeat(5) {
+            list += SubtitleInfo(
+                groupIndex = 0,
+                trackIndexInGroup = 0,
+                mimeType = MimeTypes.APPLICATION_MP4,
+                language = "en",
+                label = "Wonder.Woman.1984.2020.720p.WEB.H264-NAISU.ur",
+                roleFlags = 0,
+                isSupported = true,
+                isSelected = it == 1
+            )
+        }
+        return list
+    }
 
     fun onSubtitleClicked(subtitleInfo: SubtitleInfo) {
         Logger.debug("subtitleInfo = [${subtitleInfo}]")
