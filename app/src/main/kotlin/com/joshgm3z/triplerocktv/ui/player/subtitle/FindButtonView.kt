@@ -12,12 +12,13 @@ class FindButtonView @JvmOverloads constructor(
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
-    val binding = ViewFindButtonBinding.inflate(LayoutInflater.from(context), this, true)
 
     init {
+        ViewFindButtonBinding.inflate(LayoutInflater.from(context), this, true)
+
         isFocusable = true
         isClickable = true
         isFocusableInTouchMode = true
-        setBackgroundResource(R.color.button_bg_color_selector)
+        setBackgroundResource(R.drawable.button_bg_color_selector)
     }
 }
