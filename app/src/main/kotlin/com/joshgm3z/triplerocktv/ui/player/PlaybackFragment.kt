@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.BackgroundManager
@@ -188,8 +189,12 @@ class PlaybackFragment : VideoSupportFragment() {
             requireActivity(),
             playerAdapter
         ) {
-            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context)
-            private val audioAction = PlaybackControlsRow.ShuffleAction(context)
+            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+            }
+            private val audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
+            }
 
             override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
                 adapter.add(closedCaptioningAction)
