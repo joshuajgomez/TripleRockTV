@@ -7,7 +7,7 @@ import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.StreamType
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,11 +31,11 @@ class PlaybackViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PlaybackUiState())
     val uiState = _uiState.asStateFlow()
 
-    fun fetchStreamDetails(streamId: Int, browseType: BrowseType) {
-        Logger.debug("streamId = [${streamId}], browseType = [${browseType}]")
+    fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
+        Logger.debug("streamId = [${streamId}], browseType = [${streamType}]")
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
-            val result = repository.fetchStream(streamId, browseType)
+            val result = repository.fetchStream(streamId, streamType)
             result?.let {
                 repository.updateLastPlayed(it, System.currentTimeMillis())
             }

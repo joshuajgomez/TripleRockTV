@@ -13,7 +13,7 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
+import com.joshgm3z.triplerocktv.repository.StreamType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -47,10 +47,9 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                     is MediaLoadingUiState.Update -> {
                         it.map.forEach { (type, state) ->
                             when (type) {
-                                MediaLoadingType.VideoOnDemand -> idVod
-                                MediaLoadingType.LiveTv -> idLiveTv
-                                MediaLoadingType.Series -> idSeries
-                                MediaLoadingType.EPG -> idEpg
+                                StreamType.VideoOnDemand -> idVod
+                                StreamType.LiveTV -> idLiveTv
+                                StreamType.Series -> idSeries
                             }.let { id -> updateStatus(id, state) }
                         }
                         if (it.map.values.all { state -> state.status == LoadingStatus.Error || state.status == LoadingStatus.Complete }) {

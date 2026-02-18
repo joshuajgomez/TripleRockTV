@@ -2,80 +2,75 @@ package com.joshgm3z.triplerocktv.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.LIMIT
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
-class VodFetcher
+class OnlineDataFetcher
 @Inject
 constructor(
-    private val vodCategoryDao: VodCategoryDao,
-    private val vodStreamsDao: VodStreamsDao,
+    private val categoryDataDao: CategoryDataDao,
+    private val streamDataDao: StreamDataDao,
 ) {
     lateinit var iptvService: IptvService
 
     suspend fun fetchContent(
-        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        streamType: StreamType,
+        onFetch: (LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
-        val categories = fetchCategories().subList(0, LIMIT)
+        val categories = fetchCategories(streamType).subList(0, LIMIT)
         val total = categories.size
         if (total > 0) {
             // Clear existing data only if network call is successful
-            vodCategoryDao.deleteAllCategories()
-            vodStreamsDao.deleteAllStreams()
+            categoryDataDao.deleteAllOfType(StreamType.VideoOnDemand)
+            streamDataDao.deleteAllOfType(StreamType.VideoOnDemand)
         } else {
-            onFetch(
-                MediaLoadingType.VideoOnDemand,
-                LoadingState(0, LoadingStatus.Error)
-            )
+            onFetch(LoadingState(0, LoadingStatus.Error))
             return
         }
 
         categories.forEachIndexed { index, it ->
             fetchAndStoreContent(it)
             onFetch(
-                MediaLoadingType.VideoOnDemand,
                 LoadingState(
                     percent = (index.toFloat() / total * 100).toInt(),
                     status = LoadingStatus.Ongoing
                 )
             )
         }
-        onFetch(
-            MediaLoadingType.VideoOnDemand,
-            LoadingState(100, LoadingStatus.Complete)
-        )
+        onFetch(LoadingState(100, LoadingStatus.Complete))
     }
 
-    private suspend fun fetchCategories(): List<VodCategory> =
+    private suspend fun fetchCategories(streamType: StreamType): List<CategoryData> =
         iptvService.getVodCategories(username, password).map {
-            VodCategory(
+            CategoryData(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
-                parentId = it.parentId
+                parentId = it.parentId,
+                streamType = streamType
             )
         }
 
 
-    private suspend fun fetchAndStoreContent(vodCategory: VodCategory) {
-        val vodStreams = iptvService.getVodStreams(username, password, vodCategory.categoryId)
+    private suspend fun fetchAndStoreContent(categoryData: CategoryData) {
+        val streams = iptvService.getVodStreams(username, password, categoryData.categoryId)
 
-        vodCategoryDao.insert(vodCategory.apply {
-            count = vodStreams.size
-            firstStreamIcon = vodStreams.firstOrNull()?.streamIcon
+        categoryDataDao.insert(categoryData.apply {
+            count = streams.size
+            firstStreamIcon = streams.firstOrNull()?.streamIcon
         })
-        vodStreamsDao.insertStreams(vodStreams.map {
-            VodStream(
+        streamDataDao.insertAll(streams.map {
+            StreamData(
                 num = it.num,
                 name = it.name,
                 streamType = it.streamType,
@@ -83,6 +78,7 @@ constructor(
                 streamIcon = it.streamIcon,
                 categoryId = it.categoryId,
                 added = it.added,
+                type = categoryData.streamType
             )
         })
     }

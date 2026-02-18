@@ -3,11 +3,12 @@ package com.joshgm3z.triplerocktv.ui.browse
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,21 +19,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class BrowseUiState(
-    val recentPlayed: List<Any> = emptyList(),
-    val vodCategories: List<VodCategory> = emptyList(),
+    val recentPlayed: List<StreamData> = emptyList(),
+    val vodCategories: List<CategoryData> = emptyList(),
+    val liveTvCategories: List<CategoryData> = emptyList(),
     val seriesCategories: List<SeriesCategory> = emptyList(),
-    val liveTvCategories: List<LiveTvCategory> = emptyList(),
     val epgCategories: List<IptvEpgListing> = emptyList(),
     var errorMessage: String? = null,
 )
-
-enum class BrowseType {
-    Home,
-    VideoOnDemand,
-    LiveTV,
-    EPG,
-    Series,
-}
 
 @Suppress("UNCHECKED_CAST")
 @HiltViewModel
@@ -50,9 +43,8 @@ class BrowseViewModel
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
-                    vodCategories = repository.fetchCategories(BrowseType.VideoOnDemand) as List<VodCategory>,
-                    seriesCategories = repository.fetchCategories(BrowseType.Series) as List<SeriesCategory>,
-                    liveTvCategories = repository.fetchCategories(BrowseType.LiveTV) as List<LiveTvCategory>,
+                    vodCategories = repository.fetchCategories(StreamType.VideoOnDemand),
+                    liveTvCategories = repository.fetchCategories(StreamType.LiveTV),
                     epgCategories = repository.fetchEpgListings(),
                 )
             }

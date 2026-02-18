@@ -3,9 +3,8 @@ package com.joshgm3z.triplerocktv.ui.browse.category
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
 
 class CategoryPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -18,21 +17,18 @@ class CategoryPresenter : Presenter() {
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
         val title = when (item) {
-            is VodCategory -> item.categoryName
+            is CategoryData -> item.categoryName
             is SeriesCategory -> item.categoryName
-            is LiveTvCategory -> item.categoryName
             else -> "Unknown"
         }
         val streamIcon = when (item) {
-            is VodCategory -> item.firstStreamIcon
+            is CategoryData -> item.firstStreamIcon
             is SeriesCategory -> item.firstStreamIcon
-            is LiveTvCategory -> item.firstStreamIcon
             else -> null
         }
         val count = when (item) {
-            is VodCategory -> item.count
+            is CategoryData -> item.count
             is SeriesCategory -> item.count
-            is LiveTvCategory -> item.count
             else -> 0
         }
         val cardView = viewHolder.view as CategoryCardView

@@ -52,7 +52,7 @@ class DetailsFragment : DetailsSupportFragment() {
             if (action.id == ACTION_PLAY) {
                 val navAction = DetailsFragmentDirections.toPlayback(
                     args.streamId,
-                    args.browseType
+                    args.streamType
                 )
                 findNavController().navigate(navAction)
             }
@@ -82,7 +82,7 @@ class DetailsFragment : DetailsSupportFragment() {
                 }
             }
         }
-        viewModel.fetchStreamDetails(args.streamId, args.browseType)
+        viewModel.fetchStreamDetails(args.streamId, args.streamType)
     }
 
     private fun updateDetails(uiState: DetailsUiState) {

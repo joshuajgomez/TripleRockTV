@@ -17,12 +17,11 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
@@ -100,63 +99,48 @@ class MainBrowseFragment : BrowseSupportFragment() {
                 }
             }
 
-            is VodCategory -> MainBrowseFragmentDirections
-                .toStreamCatalogue()
-                .setCategoryId(item.categoryId)
-                .setCategoryName(item.categoryName)
-                .setBrowseType(BrowseType.VideoOnDemand)
-
-            is LiveTvCategory -> MainBrowseFragmentDirections
-                .toStreamCatalogue()
-                .setCategoryId(item.categoryId)
-                .setCategoryName(item.categoryName)
-                .setBrowseType(BrowseType.LiveTV)
+            is CategoryData -> MainBrowseFragmentDirections.toStreamCatalogue().apply {
+                categoryId = item.categoryId
+                categoryName = item.categoryName
+                streamType = item.streamType
+            }
 
 
-            is SeriesCategory -> MainBrowseFragmentDirections
-                .toStreamCatalogue()
-                .setCategoryId(item.categoryId)
-                .setCategoryName(item.categoryName)
-                .setBrowseType(BrowseType.Series)
+            is SeriesCategory -> MainBrowseFragmentDirections.toStreamCatalogue().apply {
+                categoryId = item.categoryId
+                categoryName = item.categoryName
+                streamType = StreamType.Series
+            }
 
-            is SeriesStream -> MainBrowseFragmentDirections
-                .toDetails()
-                .setBrowseType(BrowseType.Series)
-                .setStreamId(item.seriesId)
+            is SeriesStream -> MainBrowseFragmentDirections.toDetails().apply {
+                streamType = StreamType.Series
+                streamId = item.seriesId
+            }
 
-            is VodStream -> MainBrowseFragmentDirections
-                .toDetails()
-                .setBrowseType(BrowseType.VideoOnDemand)
-                .setStreamId(item.streamId)
-
-            is LiveTvStream -> MainBrowseFragmentDirections
-                .toDetails()
-                .setBrowseType(BrowseType.LiveTV)
-                .setStreamId(item.streamId)
+            is StreamData -> MainBrowseFragmentDirections.toDetails().apply {
+                streamType = item.streamType
+                streamId = item.streamId
+            }
 
             else -> return
         }.let { findNavController().navigate(it) }
     }
 
-    private fun handleBlur(item: Any?) = when (item) {
-        is VodCategory -> item.firstStreamIcon
-        is LiveTvCategory -> item.firstStreamIcon
-        is SeriesCategory -> item.firstStreamIcon
-        else -> null
-    }?.let {
-        if (viewModel.isBlurSettingEnabled)
-            updateBackgroundWithBlur(requireContext(), it) {
-                backgroundManager.setBitmap(it)
-            }
-    }
+    private fun handleBlur(categoryData: CategoryData) =
+        categoryData.firstStreamIcon?.let { thumbNailUrl ->
+            if (viewModel.isBlurSettingEnabled)
+                updateBackgroundWithBlur(requireContext(), thumbNailUrl) {
+                    backgroundManager.setBitmap(it)
+                }
+        }
 
     private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
         addRecentsRow(uiState.recentPlayed)
         addRow(1, "Video on demand", uiState.vodCategories)
-        addRow(2, "Series", uiState.seriesCategories)
+//        addRow(2, "Series", uiState.seriesCategories)
         addRow(3, "Live TV", uiState.liveTvCategories)
-        addRow(4, "EPG", uiState.epgCategories)
+//        addRow(4, "EPG", uiState.epgCategories)
         addSettingsRow()
     }
 
@@ -171,7 +155,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun addRow(
         id: Long,
         header: String,
-        list: List<Any>
+        list: List<CategoryData>
     ) {
         if (list.isEmpty()) return
         val header = HeaderItem(id, header)

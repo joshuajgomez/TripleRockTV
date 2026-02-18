@@ -102,9 +102,9 @@
             android:defaultValue=""
             app:argType="string" />
         <argument
-            android:name="browseType"
+            android:name="streamType"
             android:defaultValue="VideoOnDemand"
-            app:argType="com.joshgm3z.triplerocktv.ui.browse.BrowseType" />
+            app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
@@ -119,9 +119,9 @@
             android:defaultValue="20642"
             app:argType="integer" />
         <argument
-            android:name="browseType"
+            android:name="streamType"
             android:defaultValue="VideoOnDemand"
-            app:argType="com.joshgm3z.triplerocktv.ui.browse.BrowseType" />
+            app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
@@ -135,8 +135,8 @@
             android:name="streamId"
             app:argType="integer" />
         <argument
-            android:name="browseType"
-            app:argType="com.joshgm3z.triplerocktv.ui.browse.BrowseType" />
+            android:name="streamType"
+            app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toError"
             app:destination="@id/errorFragment"

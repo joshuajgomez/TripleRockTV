@@ -13,15 +13,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.collections.isNotEmpty
 
 @AndroidEntryPoint
 class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResultProvider {
@@ -57,19 +57,14 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     private fun setupClickListeners() = setOnItemViewClickedListener { _, item, _, _ ->
         val action = SearchFragmentDirections.toDetails()
         when (item) {
-            is VodStream -> action.apply {
+            is StreamData -> action.apply {
                 streamId = item.streamId
-                browseType = BrowseType.VideoOnDemand
-            }
-
-            is LiveTvStream -> action.apply {
-                streamId = item.streamId
-                browseType = BrowseType.LiveTV
+                streamType = item.streamType
             }
 
             is SeriesStream -> action.apply {
                 streamId = item.seriesId
-                browseType = BrowseType.Series
+                streamType = StreamType.Series
             }
 
             else -> return@setOnItemViewClickedListener

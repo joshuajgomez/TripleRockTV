@@ -9,9 +9,8 @@ import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardShortBinding
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class StreamPresenter(
     val isShortCard: Boolean = false
@@ -35,14 +34,12 @@ class StreamPresenter(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val title = when (item) {
-            is VodStream -> item.name
-            is LiveTvStream -> item.name
+            is StreamData -> item.name
             is SeriesStream -> item.name
             else -> "Unknown"
         }
         val imageUri = when (item) {
-            is VodStream -> item.streamIcon
-            is LiveTvStream -> item.streamIcon
+            is StreamData -> item.streamIcon
             is SeriesStream -> item.cover
             else -> "Unknown"
         }

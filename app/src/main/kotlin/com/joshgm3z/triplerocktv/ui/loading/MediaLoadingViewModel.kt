@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.ui.loading
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.LoadingState
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -16,7 +16,7 @@ import javax.inject.Inject
 sealed class MediaLoadingUiState {
     object Initial : MediaLoadingUiState()
     data class Update(
-        val map: Map<MediaLoadingType, LoadingState> = emptyMap()
+        val map: Map<StreamType, LoadingState> = emptyMap()
     ) : MediaLoadingUiState()
 
     data class Error(val message: String, val summary: String) : MediaLoadingUiState()
@@ -51,10 +51,10 @@ class MediaLoadingViewModel
                             else -> {
                                 Logger.debug("fetchContent: new map")
                                 val map = hashMapOf(
-                                    MediaLoadingType.VideoOnDemand to LoadingState(),
-                                    MediaLoadingType.Series to LoadingState(),
-                                    MediaLoadingType.LiveTv to LoadingState(),
-                                    MediaLoadingType.EPG to LoadingState(),
+                                    StreamType.VideoOnDemand to LoadingState(),
+                                    StreamType.Series to LoadingState(),
+                                    StreamType.LiveTv to LoadingState(),
+                                    StreamType.EPG to LoadingState(),
                                 )
                                 map.apply { set(type, state) }
                             }

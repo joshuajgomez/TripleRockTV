@@ -1,12 +1,11 @@
 package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.helper.EPGFetcher
-import com.joshgm3z.triplerocktv.repository.impl.helper.LiveTvFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.SeriesFetcher
-import com.joshgm3z.triplerocktv.repository.impl.helper.VodFetcher
+import com.joshgm3z.triplerocktv.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.CoroutineScope
@@ -22,8 +21,7 @@ class MediaOnlineRepositoryImpl
     scope: CoroutineScope,
     private val localDatastore: LocalDatastore,
     private val seriesFetcher: SeriesFetcher,
-    private val vodFetcher: VodFetcher,
-    private val liveTvFetcher: LiveTvFetcher,
+    private val onlineDataFetcher: OnlineDataFetcher,
     private val epgFetcher: EPGFetcher,
 ) : MediaOnlineRepository {
     companion object {
@@ -46,8 +44,7 @@ class MediaOnlineRepositoryImpl
             password = it.password
             iptvService = getIptvService(it.webUrl)
             seriesFetcher.iptvService = iptvService!!
-            vodFetcher.iptvService = iptvService!!
-            liveTvFetcher.iptvService = iptvService!!
+            onlineDataFetcher.iptvService = iptvService!!
             epgFetcher.iptvService = iptvService!!
         }
         assert(iptvService != null)
@@ -68,7 +65,7 @@ class MediaOnlineRepositoryImpl
     }
 
     override suspend fun fetchContent(
-        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onFetch: (StreamType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
@@ -76,9 +73,15 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         try {
-            vodFetcher.fetchContent(onFetch, onError)
+            onlineDataFetcher.fetchContent(
+                streamType = StreamType.VideoOnDemand, onError = onError,
+                onFetch = { onFetch(StreamType.VideoOnDemand, it) },
+            )
+            onlineDataFetcher.fetchContent(
+                streamType = StreamType.LiveTV, onError = onError,
+                onFetch = { onFetch(StreamType.LiveTV, it) },
+            )
             seriesFetcher.fetchContent(onFetch, onError)
-            liveTvFetcher.fetchContent(onFetch, onError)
             epgFetcher.fetchContent(onFetch, onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")

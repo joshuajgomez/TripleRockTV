@@ -1,37 +1,31 @@
 package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
-    private val vodCategoryDao: VodCategoryDao,
     private val seriesCategoryDao: SeriesCategoryDao,
-    private val liveTvCategoryDao: LiveTvCategoryDao,
     private val epgListingDao: EpgListingDao,
-    private val vodStreamsDao: VodStreamsDao,
     private val seriesStreamsDao: SeriesStreamsDao,
-    private val liveTvStreamsDao: LiveTvStreamsDao,
+    private val streamDataDao: StreamDataDao,
+    private val categoryDataDao: CategoryDataDao,
 ) : MediaLocalRepository {
 
     override suspend fun fetchCategories(
-        browseType: BrowseType
-    ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> vodCategoryDao.getAllCategories()
-        BrowseType.Series -> seriesCategoryDao.getAllCategories()
-        BrowseType.LiveTV -> liveTvCategoryDao.getAllCategories()
+        streamType: StreamType
+    ): List<CategoryData> = when (streamType) {
+        StreamType.VideoOnDemand -> categoryDataDao.getAllOfType(streamType)
+        StreamType.LiveTV -> categoryDataDao.getAllOfType(streamType)
         else -> emptyList()
     }
 
@@ -40,54 +34,42 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun searchStreamByName(
         name: String,
-        browseType: BrowseType
-    ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> vodStreamsDao.searchStreams(name)
-        BrowseType.Series -> seriesStreamsDao.searchStreams(name)
-        BrowseType.LiveTV -> liveTvStreamsDao.searchStreams(name)
-        else -> emptyList()
+        streamType: StreamType
+    ): List<StreamData> = when (streamType) {
+        StreamType.Series -> emptyList()
+        else -> streamDataDao.searchByName(name)
     }.apply {
-        Logger.info("searchStreamByName($name, $browseType): $this")
+        Logger.info("searchStreamByName($name, $streamType): $this")
     }
 
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
-        browseType: BrowseType
-    ): List<Any> = when (browseType) {
-        BrowseType.VideoOnDemand -> vodStreamsDao.getAllStreams(categoryId)
-        BrowseType.Series -> seriesStreamsDao.getAllStreams(categoryId)
-        BrowseType.LiveTV -> liveTvStreamsDao.getAllStreams(categoryId)
-        else -> emptyList()
+        streamType: StreamType
+    ): List<StreamData> = when (streamType) {
+        StreamType.Series -> emptyList()
+        else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType)
+    }.apply {
+        Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
     }
 
     override suspend fun fetchStream(
         streamId: Int,
-        browseType: BrowseType,
-    ): Any? = when (browseType) {
-        BrowseType.VideoOnDemand -> vodStreamsDao.getStream(streamId)
-        BrowseType.LiveTV -> liveTvStreamsDao.getStream(streamId)
-        BrowseType.Series -> seriesStreamsDao.getStream(streamId)
-        else -> null
+        streamType: StreamType,
+    ): StreamData? = when (streamType) {
+        StreamType.Series -> null
+        else -> streamDataDao.getByStreamId(streamId)
     }
 
-    override suspend fun isContentEmpty(): Boolean = vodCategoryDao.getAllCategories().isEmpty()
+    override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && seriesCategoryDao.getAllCategories().isEmpty()
-            && liveTvCategoryDao.getAllCategories().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
-    override suspend fun fetchRecentlyPlayed(): List<Any> {
-        val recentPlayed = mutableListOf<Any>()
-        recentPlayed.addAll(vodStreamsDao.getRecentStreams())
-        recentPlayed.addAll(seriesStreamsDao.getRecentStreams())
-        recentPlayed.addAll(liveTvStreamsDao.getRecentStreams())
-        return recentPlayed
-    }
-
-    override suspend fun updateLastPlayed(stream: Any, time: Long) {
-        when (stream) {
-            is VodStream -> vodStreamsDao.update(stream.copy(lastPlayed = time))
-            is SeriesStream -> seriesStreamsDao.update(stream.copy(lastPlayed = time))
-            is LiveTvStream -> liveTvStreamsDao.update(stream.copy(lastPlayed = time))
+    override suspend fun fetchRecentlyPlayed(): List<StreamData> =
+        mutableListOf<StreamData>().apply {
+            addAll(streamDataDao.getLastPlayed10())
         }
+
+    override suspend fun updateLastPlayed(streamData: StreamData, time: Long) {
+        streamDataDao.update(streamData.copy(lastPlayed = time))
     }
 }
