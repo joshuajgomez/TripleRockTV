@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.LIMIT
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
@@ -23,7 +23,7 @@ constructor(
     lateinit var iptvService: IptvService
 
     suspend fun fetchContent(
-        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onFetch: (StreamType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
@@ -34,7 +34,7 @@ constructor(
             seriesStreamsDao.deleteAllStreams()
         } else {
             onFetch(
-                MediaLoadingType.Series,
+                StreamType.Series,
                 LoadingState(0, LoadingStatus.Error)
             )
             return
@@ -43,7 +43,7 @@ constructor(
         categories.forEachIndexed { index, it ->
             fetchAndStoreSeries(it)
             onFetch(
-                MediaLoadingType.Series,
+                StreamType.Series,
                 LoadingState(
                     percent = (index.toFloat() / total * 100).toInt(),
                     status = LoadingStatus.Ongoing
@@ -51,7 +51,7 @@ constructor(
             )
         }
         onFetch(
-            MediaLoadingType.Series,
+            StreamType.Series,
             LoadingState(100, LoadingStatus.Complete)
         )
     }

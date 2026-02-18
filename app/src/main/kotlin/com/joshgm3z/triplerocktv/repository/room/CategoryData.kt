@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.repository.room
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.joshgm3z.triplerocktv.ui.browse.StreamType
+import com.joshgm3z.triplerocktv.repository.StreamType
 
 @Entity(tableName = "category_data")
 data class CategoryData(

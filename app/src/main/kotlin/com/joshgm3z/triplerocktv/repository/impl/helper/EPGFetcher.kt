@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
-import com.joshgm3z.triplerocktv.repository.MediaLoadingType
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
@@ -17,7 +17,7 @@ constructor(
 ) {
     lateinit var iptvService: IptvService
 
-    suspend fun fetchContent(
+    /*suspend fun fetchContent(
         onFetch: (MediaLoadingType, LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
@@ -39,8 +39,8 @@ constructor(
             return
         }
         onFetch(
-            MediaLoadingType.EPG,
+            StreamType.EPG,
             LoadingState(100, LoadingStatus.Complete)
         )
-    }
+    }*/
 }
