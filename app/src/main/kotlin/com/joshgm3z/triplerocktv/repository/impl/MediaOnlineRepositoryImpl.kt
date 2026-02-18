@@ -82,7 +82,7 @@ class MediaOnlineRepositoryImpl
                 onFetch = { onFetch(StreamType.LiveTV, it) },
             )
             seriesFetcher.fetchContent(onFetch, onError)
-            epgFetcher.fetchContent(onFetch, onError)
+//            epgFetcher.fetchContent(onFetch, onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")

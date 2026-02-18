@@ -73,12 +73,12 @@ constructor(
             StreamData(
                 num = it.num,
                 name = it.name,
-                streamType = it.streamType,
+                streamTypeText = it.streamType,
                 streamId = it.streamId,
                 streamIcon = it.streamIcon,
                 categoryId = it.categoryId,
                 added = it.added,
-                type = categoryData.streamType
+                streamType = categoryData.streamType
             )
         })
     }

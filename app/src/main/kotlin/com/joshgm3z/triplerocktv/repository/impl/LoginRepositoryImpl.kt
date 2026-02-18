@@ -2,13 +2,11 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
+import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStreamsDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategoryDao
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStreamsDao
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,10 +14,8 @@ import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
-    private val vodStreamsDao: VodStreamsDao,
-    private val vodCategoryDao: VodCategoryDao,
-    private val liveTvCategoryDao: LiveTvCategoryDao,
-    private val liveTvStreamsDao: LiveTvStreamsDao,
+    private val streamDataDao: StreamDataDao,
+    private val categoryDataDao: CategoryDataDao,
     private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
     private val epgListingDao: EpgListingDao,
@@ -67,10 +63,8 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
         localDataStore.clearAllData()
-        vodStreamsDao.deleteAllStreams()
-        vodCategoryDao.deleteAllCategories()
-        liveTvCategoryDao.deleteAllCategories()
-        liveTvStreamsDao.deleteAllStreams()
+        streamDataDao.deleteAll()
+        categoryDataDao.deleteAll()
         seriesCategoryDao.deleteAllCategories()
         seriesStreamsDao.deleteAllStreams()
         epgListingDao.deleteAllEpgListings()

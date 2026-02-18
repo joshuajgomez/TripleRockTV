@@ -26,12 +26,12 @@ data class StreamData(
             streamId = 20642,
             num = 1,
             name = "Wonder Woman 1984 (2020)(4K)",
-            streamType = "movie",
+            streamTypeText = "movie",
             streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/lNVHB85FUDZqLzvug3k6FA07RIr.jpg",
             categoryId = 122,
             added = "1609012046",
             lastPlayed = System.currentTimeMillis(),
-            type = StreamType.VideoOnDemand,
+            streamType = StreamType.VideoOnDemand,
         )
     }
 

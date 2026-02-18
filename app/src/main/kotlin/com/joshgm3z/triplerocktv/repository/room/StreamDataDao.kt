@@ -5,14 +5,14 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.joshgm3z.triplerocktv.ui.browse.StreamType
+import com.joshgm3z.triplerocktv.repository.StreamType
 
 @Dao
 interface StreamDataDao {
-    @Query("SELECT * FROM stream_data WHERE categoryId = :categoryId AND type = :type")
+    @Query("SELECT * FROM stream_data WHERE categoryId = :categoryId AND streamType = :streamType")
     fun getAllFromCategoryAndType(
         categoryId: Int,
-        type: StreamType
+        streamType: StreamType
     ): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE name LIKE '%' || :streamName || '%'")
@@ -27,8 +27,8 @@ interface StreamDataDao {
     @Update
     suspend fun update(streamData: StreamData)
 
-    @Query("DELETE FROM stream_data WHERE type = :type")
-    suspend fun deleteAllOfType(type: StreamType)
+    @Query("DELETE FROM stream_data WHERE streamType = :streamType")
+    suspend fun deleteAllOfType(streamType: StreamType)
 
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
