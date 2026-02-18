@@ -1,10 +1,9 @@
 package com.joshgm3z.triplerocktv.repository
 
-enum class MediaLoadingType(val label: String) {
-    VideoOnDemand("Video On Demand"),
-    Series("Series"),
-    LiveTv("Live TV"),
-    EPG("EPG"),
+enum class StreamType {
+    VideoOnDemand,
+    LiveTV,
+    Series,
 }
 
 data class LoadingState(
@@ -22,7 +21,7 @@ enum class LoadingStatus {
 
 interface MediaOnlineRepository {
     suspend fun fetchContent(
-        onFetch: (MediaLoadingType, LoadingState) -> Unit,
+        onFetch: (StreamType, LoadingState) -> Unit,
         onError: (String, String) -> Unit,
     )
 }

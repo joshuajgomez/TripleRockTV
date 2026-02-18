@@ -85,7 +85,7 @@ class PlaybackFragment : VideoSupportFragment() {
             drawable = null
         }
 
-        viewModel.fetchStreamDetails(args.streamId, args.browseType)
+        viewModel.fetchStreamDetails(args.streamId, args.streamType)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 if (it.videoUrl.isNotEmpty()) {

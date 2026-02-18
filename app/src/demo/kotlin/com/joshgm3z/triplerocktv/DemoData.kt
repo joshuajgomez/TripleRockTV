@@ -1,12 +1,11 @@
 package com.joshgm3z.triplerocktv
 
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvCategory
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodCategory
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
 
 class DemoData {
     companion object {
@@ -19,89 +18,125 @@ class DemoData {
         val sampleVideoUr2 = "https://tv.balkanweb.com/news24/livestream/playlist.m3u8"
 
         val sampleVodStreams = listOf(
-            VodStream(
+            StreamData(
                 streamId = 10001,
                 num = 1,
                 name = "Inception (2010)",
-                streamType = "movie",
+                streamTypeText = "movie",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
                 categoryId = 101,
-                added = "1625012046"
+                added = "1625012046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodStream(
+            StreamData(
                 streamId = 10042,
                 num = 2,
                 name = "Breaking Bad S01E01",
-                streamType = "series",
+                streamTypeText = "series",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
                 categoryId = 101,
-                added = "1625112046"
+                added = "1625112046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodStream(
+            StreamData(
                 streamId = 10002,
                 num = 2,
                 name = "Breaking Bad S01E01",
-                streamType = "series",
+                streamTypeText = "series",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
                 categoryId = 102,
-                added = "1625112046"
+                added = "1625112046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodStream(
+            StreamData(
                 streamId = 10003,
                 num = 3,
                 name = "Planet Earth II",
-                streamType = "documentary",
+                streamTypeText = "documentary",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/6v2b7YbExg1kQ9g6zQ6gA2Q2nLk.jpg",
                 categoryId = 103,
-                added = "1625212046"
+                added = "1625212046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodStream(
+            StreamData(
                 streamId = 10004,
                 num = 4,
                 name = "No Icon Example",
-                streamType = "movie",
+                streamTypeText = "movie",
                 streamIcon = null,
                 categoryId = 104,
-                added = "1625312046"
+                added = "1625312046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.VideoOnDemand
             )
         )
 
         val sampleLiveStreams = listOf(
-            LiveTvStream(
+            StreamData(
                 streamId = 20001,
                 num = 1,
                 name = "BBC News",
-                streamType = "news",
+                streamTypeText = "news",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/5/5f/BBC_News_2022_%28Alt%29.svg",
                 categoryId = 201,
-                added = "1626012046"
+                added = "1626012046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.LiveTV
             ),
-            LiveTvStream(
+            StreamData(
                 streamId = 20002,
                 num = 2,
                 name = "ESPN",
-                streamType = "sports",
+                streamTypeText = "sports",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg",
                 categoryId = 202,
-                added = "1626112046"
+                added = "1626112046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.LiveTV
             ),
-            LiveTvStream(
+            StreamData(
                 streamId = 20003,
                 num = 3,
                 name = "Cartoon Network",
-                streamType = "kids",
+                streamTypeText = "kids",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Cartoon_Network_2010_logo.svg",
                 categoryId = 203,
-                added = "1626212046"
+                added = "1626212046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.LiveTV
             ),
-            LiveTvStream(
+            StreamData(
                 streamId = 20004,
                 num = 4,
                 name = "Discovery Channel",
-                streamType = "documentary",
+                streamTypeText = "documentary",
                 streamIcon = null,
                 categoryId = 204,
-                added = "1626312046"
+                added = "1626312046",
+                totalDuration = 120,
+                playedDuration = 45,
+                lastPlayed = 100,
+                streamType = StreamType.LiveTV
             )
         )
 
@@ -166,24 +201,27 @@ class DemoData {
             )
         }
 
-        fun sampleVodCategory(): List<VodCategory> = listOf(
-            VodCategory(
+        fun sampleVodCategory(): List<CategoryData> = listOf(
+            CategoryData(
                 categoryId = 122,
                 categoryName = "ENGLISH (4K)",
                 parentId = 0,
-                count = 3
+                count = 3,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodCategory(
+            CategoryData(
                 categoryId = 56,
                 categoryName = "OSCAR WINNING MOVIES",
                 parentId = 0,
-                count = 2
+                count = 2,
+                streamType = StreamType.VideoOnDemand
             ),
-            VodCategory(
+            CategoryData(
                 categoryId = 43,
                 categoryName = "ENGLISH FHD (2026)",
                 parentId = 0,
-                count = 1
+                count = 1,
+                streamType = StreamType.VideoOnDemand
             ),
         )
 
@@ -216,31 +254,35 @@ class DemoData {
             )
         }
 
-        fun getSampleLiveTvCategories(): List<LiveTvCategory> {
+        fun getSampleLiveTvCategories(): List<CategoryData> {
             return listOf(
-                LiveTvCategory(
+                CategoryData(
                     categoryId = 1,
                     categoryName = "News",
                     parentId = 0,
-                    count = 12
+                    count = 12,
+                    streamType = StreamType.LiveTV
                 ),
-                LiveTvCategory(
+                CategoryData(
                     categoryId = 2,
                     categoryName = "Sports",
                     parentId = 0,
-                    count = 8
+                    count = 8,
+                    streamType = StreamType.LiveTV
                 ),
-                LiveTvCategory(
+                CategoryData(
                     categoryId = 3,
                     categoryName = "Movies",
                     parentId = 0,
-                    count = 15
+                    count = 15,
+                    streamType = StreamType.LiveTV
                 ),
-                LiveTvCategory(
+                CategoryData(
                     categoryId = 4,
                     categoryName = "Kids",
                     parentId = 0,
-                    count = 5
+                    count = 5,
+                    streamType = StreamType.LiveTV
                 )
             )
         }

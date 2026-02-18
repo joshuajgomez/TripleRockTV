@@ -3,10 +3,9 @@ package com.joshgm3z.triplerocktv.ui.search
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,11 +18,10 @@ sealed class SearchUiState {
     object Loading : SearchUiState()
     data class Result(
         val query: String,
-        val vodStreams: List<VodStream>,
-        val liveTvStreams: List<LiveTvStream>,
+        val streamDataList: List<StreamData>,
         val seriesStreams: List<SeriesStream>,
     ) : SearchUiState() {
-        fun isEmpty() = vodStreams.isEmpty() && liveTvStreams.isEmpty() && seriesStreams.isEmpty()
+        fun isEmpty() = streamDataList.isEmpty() && seriesStreams.isEmpty()
     }
 }
 
@@ -45,18 +43,14 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = SearchUiState.Result(
                 query = text,
-                vodStreams = repository.searchStreamByName(
+                streamDataList = repository.searchStreamByName(
                     text,
-                    BrowseType.VideoOnDemand
-                ) as List<VodStream>,
-                seriesStreams = repository.searchStreamByName(
+                    StreamType.VideoOnDemand
+                ) + repository.searchStreamByName(
                     text,
-                    BrowseType.Series
-                ) as List<SeriesStream>,
-                liveTvStreams = repository.searchStreamByName(
-                    text,
-                    BrowseType.LiveTV
-                ) as List<LiveTvStream>,
+                    StreamType.LiveTV
+                ),
+                seriesStreams = emptyList()
             )
         }
     }

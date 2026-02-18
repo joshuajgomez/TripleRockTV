@@ -7,7 +7,7 @@ import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
+import com.joshgm3z.triplerocktv.ui.browse.StreamType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,9 +39,9 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    fun fetchStreamDetails(streamId: Int, browseType: BrowseType) {
+    fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
         viewModelScope.launch(Dispatchers.IO) {
-            when (val result = repository.fetchStream(streamId, browseType)) {
+            when (val result = repository.fetchStream(streamId, streamType)) {
                 is VodStream -> _uiState.update {
                     it.copy(
                         title = result.name,

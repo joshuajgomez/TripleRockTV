@@ -10,10 +10,9 @@ import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.BrowseType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -42,19 +41,14 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
             val action = StreamCatalogueFragmentDirections.toDetails()
             when (item) {
-                is VodStream -> action.apply {
+                is StreamData -> action.apply {
                     streamId = item.streamId
-                    browseType = BrowseType.VideoOnDemand
-                }
-
-                is LiveTvStream -> action.apply {
-                    streamId = item.streamId
-                    browseType = BrowseType.LiveTV
+                    streamType = item.streamType
                 }
 
                 is SeriesStream -> action.apply {
                     streamId = item.seriesId
-                    browseType = BrowseType.Series
+                    streamType = StreamType.Series
                 }
 
                 else -> return@OnItemViewClickedListener
@@ -80,6 +74,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
                 }
             }
         }
-        viewModel.fetchStreams(args.categoryId, args.browseType)
+        viewModel.fetchStreams(args.categoryId, args.streamType)
     }
 }
