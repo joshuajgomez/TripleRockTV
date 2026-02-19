@@ -24,8 +24,9 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchCategories(
         streamType: StreamType
     ): List<CategoryData> = when (streamType) {
-        StreamType.VideoOnDemand -> categoryDataDao.getAllOfType(streamType)
+        StreamType.VideoOnDemand,
         StreamType.LiveTV -> categoryDataDao.getAllOfType(streamType)
+
         else -> emptyList()
     }
 
