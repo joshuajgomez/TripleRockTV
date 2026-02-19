@@ -3,11 +3,10 @@ package com.joshgm3z.triplerocktv.ui.player
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
-import com.joshgm3z.triplerocktv.repository.room.live.LiveTvStream
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.vod.VodStream
-import com.joshgm3z.triplerocktv.ui.browse.StreamType
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -40,14 +39,7 @@ class PlaybackViewModel @Inject constructor(
                 repository.updateLastPlayed(it, System.currentTimeMillis())
             }
             when (result) {
-                is VodStream -> _uiState.update {
-                    it.copy(
-                        title = result.name,
-                        videoUrl = result.videoUrl(userInfo)
-                    )
-                }
-
-                is LiveTvStream -> _uiState.update {
+                is StreamData -> _uiState.update {
                     it.copy(
                         title = result.name,
                         videoUrl = result.videoUrl(userInfo)

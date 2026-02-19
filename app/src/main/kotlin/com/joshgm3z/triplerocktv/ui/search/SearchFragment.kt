@@ -96,8 +96,19 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
             }
 
             else -> {
-                if (result.vodStreams.isNotEmpty()) addResults("Video on demand", result.vodStreams)
-                if (result.liveTvStreams.isNotEmpty()) addResults("Live TV", result.liveTvStreams)
+                val vodStreamDataList = result.streamDataList.filter {
+                    it.streamType == StreamType.VideoOnDemand
+                }
+                if (vodStreamDataList.isNotEmpty()) addResults(
+                    "Video on demand",
+                    vodStreamDataList
+                )
+                val liveTvStreamDataList = result.streamDataList.filter {
+                    it.streamType == StreamType.LiveTV
+                }
+                if (liveTvStreamDataList.isNotEmpty()) addResults(
+                    "Live TV", liveTvStreamDataList
+                )
                 if (result.seriesStreams.isNotEmpty()) addResults("Series", result.seriesStreams)
             }
         }
