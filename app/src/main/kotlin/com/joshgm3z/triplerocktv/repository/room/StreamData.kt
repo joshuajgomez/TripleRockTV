@@ -16,7 +16,7 @@ data class StreamData(
     val added: String,
 
     val streamType: StreamType,
-    val extension: String = "mkv",
+    val extension: String = "",
     val lastPlayed: Long = 0,
     val totalDuration: Long = 0,
     val playedDuration: Long = 0,
@@ -36,7 +36,7 @@ data class StreamData(
     }
 
     fun videoUrl(userInfo: UserInfo) =
-        "${userInfo.webUrl}/$streamType/${userInfo.username}/${userInfo.password}/$streamId.$extension"
+        "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
 
 }
