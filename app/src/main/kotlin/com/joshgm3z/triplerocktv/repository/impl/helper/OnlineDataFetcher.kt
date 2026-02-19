@@ -12,6 +12,7 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.util.Logger
+import java.util.stream.Stream
 import javax.inject.Inject
 
 class OnlineDataFetcher
@@ -32,8 +33,8 @@ constructor(
         val total = categories.size
         if (total > 0) {
             // Clear existing data only if network call is successful
-            categoryDataDao.deleteAllOfType(StreamType.VideoOnDemand)
-            streamDataDao.deleteAllOfType(StreamType.VideoOnDemand)
+            categoryDataDao.deleteAllOfType(streamType)
+            streamDataDao.deleteAllOfType(streamType)
         } else {
             onFetch(LoadingState(0, LoadingStatus.Error))
             return
@@ -51,8 +52,13 @@ constructor(
         onFetch(LoadingState(100, LoadingStatus.Complete))
     }
 
-    private suspend fun fetchCategories(streamType: StreamType): List<CategoryData> =
-        iptvService.getVodCategories(username, password).map {
+    private suspend fun fetchCategories(streamType: StreamType): List<CategoryData> {
+        val categoryDataList = when (streamType) {
+            StreamType.VideoOnDemand -> iptvService.getVodCategories(username, password)
+            StreamType.LiveTV -> iptvService.getLiveCategories(username, password)
+            else -> return emptyList()
+        }
+        return categoryDataList.map {
             CategoryData(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
@@ -60,10 +66,25 @@ constructor(
                 streamType = streamType
             )
         }
+    }
 
 
     private suspend fun fetchAndStoreContent(categoryData: CategoryData) {
-        val streams = iptvService.getVodStreams(username, password, categoryData.categoryId)
+        val streams = when (categoryData.streamType) {
+            StreamType.VideoOnDemand -> iptvService.getVodStreams(
+                username,
+                password,
+                categoryData.categoryId
+            )
+
+            StreamType.LiveTV -> iptvService.getLiveStreams(
+                username,
+                password,
+                categoryData.categoryId
+            )
+
+            else -> emptyList()
+        }
 
         categoryDataDao.insert(categoryData.apply {
             count = streams.size
@@ -78,7 +99,8 @@ constructor(
                 streamIcon = it.streamIcon,
                 categoryId = it.categoryId,
                 added = it.added,
-                streamType = categoryData.streamType
+                streamType = categoryData.streamType,
+                extension = if (categoryData.streamType == StreamType.VideoOnDemand) "mkv" else "m3u8"
             )
         })
     }
