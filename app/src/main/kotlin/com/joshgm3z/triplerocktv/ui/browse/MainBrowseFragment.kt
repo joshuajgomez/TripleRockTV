@@ -80,7 +80,10 @@ class MainBrowseFragment : BrowseSupportFragment() {
             findNavController().navigate(MainBrowseFragmentDirections.toSearch())
         }
         onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
-            handleBlur(item)
+            when (item) {
+                is CategoryData -> handleBlur(item.firstStreamIcon)
+                is StreamData -> handleBlur(item.streamIcon)
+            }
         }
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
@@ -126,13 +129,15 @@ class MainBrowseFragment : BrowseSupportFragment() {
         }.let { findNavController().navigate(it) }
     }
 
-    private fun handleBlur(categoryData: CategoryData) =
-        categoryData.firstStreamIcon?.let { thumbNailUrl ->
+    private fun handleBlur(thumbnailUrl: String?) {
+        thumbnailUrl?.let {
             if (viewModel.isBlurSettingEnabled)
-                updateBackgroundWithBlur(requireContext(), thumbNailUrl) {
+                updateBackgroundWithBlur(requireContext(), it) {
                     backgroundManager.setBitmap(it)
+
                 }
         }
+    }
 
     private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
