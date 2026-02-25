@@ -29,8 +29,20 @@
         android:maxLines="3"
         android:paddingHorizontal="8dp"
         android:paddingTop="45dp"
-        android:paddingBottom="15dp"
+        android:paddingBottom="17dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@android:color/white"
         tools:text="Some movie (2025)" />
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="10dp"
+        android:layout_gravity="bottom"
+        android:paddingHorizontal="3dp"
+        android:visibility="gone"
+        tools:progress="30"
+        tools:visibility="visible" />
 </FrameLayout>

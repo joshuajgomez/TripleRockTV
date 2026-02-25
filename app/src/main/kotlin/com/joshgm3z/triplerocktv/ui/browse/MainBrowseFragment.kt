@@ -23,6 +23,7 @@ import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
+import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
@@ -152,7 +153,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun addRecentsRow(list: List<Any>) {
         if (list.isEmpty()) return
         val header = HeaderItem(0, "Recently played")
-        val listRowAdapter = ArrayObjectAdapter(StreamPresenter(isShortCard = true))
+        val listRowAdapter = ArrayObjectAdapter(RecentStreamPresenter())
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }
