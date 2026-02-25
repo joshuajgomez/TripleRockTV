@@ -38,5 +38,9 @@ data class StreamData(
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
+    fun progressPercent(): Int = when {
+        totalDuration == 0L -> 0
+        else -> ((playedDuration.toDouble() / totalDuration) * 100).toInt()
+    }
 
 }
