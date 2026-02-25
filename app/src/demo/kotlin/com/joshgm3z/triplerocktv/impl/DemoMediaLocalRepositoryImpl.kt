@@ -65,4 +65,9 @@ constructor() : MediaLocalRepository {
                 DemoData.sampleLiveStreams.subList(0, 1)
 
     }
+
+    override suspend fun updateLastPlayed(
+        streamData: StreamData,
+        time: Long
+    ) {}
 }
