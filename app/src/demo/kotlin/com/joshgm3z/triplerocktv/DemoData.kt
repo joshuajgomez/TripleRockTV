@@ -316,6 +316,6 @@ class DemoData {
             )
         }
 
-        val allStreams = sampleVodStreams + sampleLiveStreams + getSampleSeriesStreams()
+        val allStreams = sampleVodStreams + sampleLiveStreams
     }
 }
