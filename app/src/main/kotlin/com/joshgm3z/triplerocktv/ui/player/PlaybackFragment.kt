@@ -71,7 +71,7 @@ class PlaybackFragment : VideoSupportFragment() {
         val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
 
         player.addListener(errorListener(this))
-        player.addListener(subtitleListener)
+        player.addListener(playbackListener)
         player.addListener(trackViewModel.subtitleTrackListener)
 
         LeanbackPlayerAdapter(requireContext(), player, 16).apply {
@@ -245,14 +245,24 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    val subtitleListener = object : Player.Listener {
+    val playbackListener = object : Player.Listener {
         override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
+        }
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            if (playbackState == Player.STATE_READY) {
+                val durationMs = player.duration
+                if (durationMs > 0) {
+                    Logger.info("Total video duration: $durationMs ms")
+                    viewModel.updateTotalDuration(durationMs)
+                }
+            }
         }
     }
 
     override fun onPause() {
         super.onPause()
+        viewModel.updateLastPlayedPosition(player.currentPosition)
         transportControlGlue.pause()
     }
 

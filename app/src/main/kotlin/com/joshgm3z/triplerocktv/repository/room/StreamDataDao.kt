@@ -35,4 +35,10 @@ interface StreamDataDao {
 
     @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 ORDER BY lastPlayed DESC LIMIT 10")
     fun getLastPlayed10(): List<StreamData>
+
+    @Query("UPDATE stream_data SET lastPlayed = :lastPlayed WHERE streamId = :streamId")
+    fun updateLastPlayed(streamId: Int, lastPlayed: Long)
+
+    @Query("UPDATE stream_data SET totalDuration = :totalDuration WHERE streamId = :streamId")
+    fun updateTotalDuration(streamId: Int, totalDuration: Long)
 }
