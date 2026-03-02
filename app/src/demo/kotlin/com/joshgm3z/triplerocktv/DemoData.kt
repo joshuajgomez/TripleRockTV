@@ -39,8 +39,8 @@ class DemoData {
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
                 categoryId = 101,
                 added = "1625112046",
-                totalDuration = 120,
-                playedDuration = 45,
+                totalDuration = 130,
+                playedDuration = 25,
                 lastPlayed = 100,
                 streamType = StreamType.VideoOnDemand
             ),
