@@ -30,15 +30,14 @@ class PlaybackViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(PlaybackUiState())
     val uiState = _uiState.asStateFlow()
 
+    private var streamId: Int? = null
+
     fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
         Logger.debug("streamId = [${streamId}], browseType = [${streamType}]")
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
-            val result = repository.fetchStream(streamId, streamType)
-            result?.let {
-                repository.updateLastPlayed(it, System.currentTimeMillis())
-            }
-            when (result) {
+            this@PlaybackViewModel.streamId = streamId
+            when (val result = repository.fetchStream(streamId, streamType)) {
                 is StreamData -> _uiState.update {
                     it.copy(
                         title = result.name,
@@ -54,5 +53,17 @@ class PlaybackViewModel @Inject constructor(
                 }
             }
         }
+    }
+
+    fun updateTotalDuration(durationMs: Long) {
+        streamId?.let {
+            repository.updateTotalDuration(it, durationMs)
+        } ?: throw Exception("Stream id is null")
+    }
+
+    fun updateLastPlayedPosition(positionMs: Long) {
+        streamId?.let {
+            repository.updateLastPlayedPosition(it, positionMs)
+        } ?: throw Exception("Stream id is null")
     }
 }

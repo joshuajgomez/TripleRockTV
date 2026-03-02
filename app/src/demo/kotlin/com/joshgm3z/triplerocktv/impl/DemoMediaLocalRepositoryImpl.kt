@@ -66,8 +66,8 @@ constructor() : MediaLocalRepository {
 
     }
 
-    override suspend fun updateLastPlayed(
-        streamData: StreamData,
-        time: Long
-    ) {}
+    override fun updateLastPlayedPosition(streamId: Int, positionMs: Long) {}
+
+    override fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
+
 }
