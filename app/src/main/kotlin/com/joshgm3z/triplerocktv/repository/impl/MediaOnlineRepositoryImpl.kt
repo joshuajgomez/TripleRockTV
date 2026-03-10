@@ -86,6 +86,7 @@ class MediaOnlineRepositoryImpl
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
+            e.printStackTrace()
         } finally {
             localDatastore.setLastContentUpdate(System.currentTimeMillis())
         }

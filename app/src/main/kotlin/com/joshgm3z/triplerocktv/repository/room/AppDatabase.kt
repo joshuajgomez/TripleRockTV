@@ -17,7 +17,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
         SeriesStream::class,
         IptvEpgListing::class,
     ],
-    version = 15
+    version = 16
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDataDao(): CategoryDataDao
