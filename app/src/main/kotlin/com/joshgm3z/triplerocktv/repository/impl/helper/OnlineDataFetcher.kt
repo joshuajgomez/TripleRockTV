@@ -102,7 +102,7 @@ constructor(
                 categoryId = it.categoryId,
                 added = it.added,
                 streamType = categoryData.streamType,
-                extension = if (categoryData.streamType == StreamType.VideoOnDemand) "mkv" else "m3u8"
+                extension = it.containerExtension
             )
         })
     }
