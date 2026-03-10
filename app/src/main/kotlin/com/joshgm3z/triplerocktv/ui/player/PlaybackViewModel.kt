@@ -39,6 +39,7 @@ class PlaybackViewModel @Inject constructor(
             this@PlaybackViewModel.streamId = streamId
             when (val result = repository.fetchStream(streamId, streamType)) {
                 is StreamData -> _uiState.update {
+                    repository.updateLastPlayedTimestamp(streamId, System.currentTimeMillis())
                     it.copy(
                         title = result.name,
                         videoUrl = result.videoUrl(userInfo)
@@ -56,14 +57,20 @@ class PlaybackViewModel @Inject constructor(
     }
 
     fun updateTotalDuration(durationMs: Long) {
+        Logger.debug("durationMs = [${durationMs}]")
         streamId?.let {
-            repository.updateTotalDuration(it, durationMs)
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.updateTotalDuration(it, durationMs)
+            }
         } ?: throw Exception("Stream id is null")
     }
 
     fun updateLastPlayedPosition(positionMs: Long) {
+        Logger.debug("positionMs = [${positionMs}]")
         streamId?.let {
-            repository.updateLastPlayedPosition(it, positionMs)
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.updatePlayedDuration(it, positionMs)
+            }
         } ?: throw Exception("Stream id is null")
     }
 }

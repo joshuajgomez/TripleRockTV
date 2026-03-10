@@ -70,11 +70,15 @@ class MediaLocalRepositoryImpl @Inject constructor(
             addAll(streamDataDao.getLastPlayed10())
         }
 
-    override fun updateLastPlayedPosition(streamId: Int, positionMs: Long) {
-        streamDataDao.updateLastPlayed(streamId, positionMs)
+    override suspend fun updatePlayedDuration(streamId: Int, positionMs: Long) {
+        streamDataDao.updatePlayedDuration(streamId, positionMs)
     }
 
-    override fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {
+    override suspend fun updateLastPlayedTimestamp(streamId: Int, timeMs: Long) {
+        streamDataDao.updateLastPlayedTimestamp(streamId, timeMs)
+    }
+
+    override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {
         streamDataDao.updateTotalDuration(streamId, totalDurationMs)
     }
 }

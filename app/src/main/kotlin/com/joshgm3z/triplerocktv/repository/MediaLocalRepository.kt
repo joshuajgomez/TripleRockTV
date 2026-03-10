@@ -20,7 +20,9 @@ interface MediaLocalRepository {
 
     suspend fun fetchRecentlyPlayed(): List<StreamData>
 
-    fun updateLastPlayedPosition(streamId: Int, positionMs: Long)
+    suspend fun updatePlayedDuration(streamId: Int, positionMs: Long)
 
-    fun updateTotalDuration(streamId: Int, totalDurationMs: Long)
+    suspend fun updateLastPlayedTimestamp(streamId: Int, timeMs: Long)
+
+    suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long)
 }
