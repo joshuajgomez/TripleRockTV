@@ -33,12 +33,15 @@ interface StreamDataDao {
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 ORDER BY lastPlayed DESC LIMIT 10")
-    fun getLastPlayed10(): List<StreamData>
+    @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 AND playedDuration > 5000 ORDER BY lastPlayed DESC LIMIT 5")
+    suspend fun getLastPlayed10(): List<StreamData>
 
     @Query("UPDATE stream_data SET lastPlayed = :lastPlayed WHERE streamId = :streamId")
-    fun updateLastPlayed(streamId: Int, lastPlayed: Long)
+    suspend fun updateLastPlayedTimestamp(streamId: Int, lastPlayed: Long)
+
+    @Query("UPDATE stream_data SET playedDuration = :playedDuration WHERE streamId = :streamId")
+    suspend fun updatePlayedDuration(streamId: Int, playedDuration: Long)
 
     @Query("UPDATE stream_data SET totalDuration = :totalDuration WHERE streamId = :streamId")
-    fun updateTotalDuration(streamId: Int, totalDuration: Long)
+    suspend fun updateTotalDuration(streamId: Int, totalDuration: Long)
 }
