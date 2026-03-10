@@ -3,7 +3,6 @@ package com.joshgm3z.triplerocktv.repository.impl.helper
 import com.joshgm3z.triplerocktv.repository.LoadingState
 import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.repository.StreamType
-import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.LIMIT
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
@@ -25,11 +24,14 @@ constructor(
 
     suspend fun fetchContent(
         streamType: StreamType,
+        limit: Int? = null,
         onFetch: (LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
-        val categories = fetchCategories(streamType).subList(0, LIMIT)
+        val categories = fetchCategories(streamType).let {
+            if (limit != null) it.subList(0, limit) else it
+        }
         val total = categories.size
         if (total > 0) {
             // Clear existing data only if network call is successful

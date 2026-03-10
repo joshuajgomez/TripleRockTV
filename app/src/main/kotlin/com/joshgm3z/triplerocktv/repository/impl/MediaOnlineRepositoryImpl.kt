@@ -25,7 +25,7 @@ class MediaOnlineRepositoryImpl
     private val epgFetcher: EPGFetcher,
 ) : MediaOnlineRepository {
     companion object {
-        const val LIMIT = 5
+        private const val LIMIT = 5
         lateinit var username: String
         lateinit var password: String
     }
@@ -78,10 +78,10 @@ class MediaOnlineRepositoryImpl
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             onlineDataFetcher.fetchContent(
-                streamType = StreamType.LiveTV, onError = onError,
+                streamType = StreamType.LiveTV, onError = onError, limit = LIMIT,
                 onFetch = { onFetch(StreamType.LiveTV, it) },
             )
-            seriesFetcher.fetchContent(onFetch, onError)
+            seriesFetcher.fetchContent(limit = LIMIT, onFetch = onFetch, onError = onError)
 //            epgFetcher.fetchContent(onFetch, onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
