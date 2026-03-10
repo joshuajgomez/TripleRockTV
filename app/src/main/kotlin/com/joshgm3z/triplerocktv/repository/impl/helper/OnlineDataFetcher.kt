@@ -102,7 +102,8 @@ constructor(
                 categoryId = it.categoryId,
                 added = it.added,
                 streamType = categoryData.streamType,
-                extension = it.containerExtension
+                extension = it.containerExtension ?: "",
+                rating = 0.0f,
             )
         })
     }

@@ -14,9 +14,10 @@ data class StreamData(
     val streamIcon: String?,
     val categoryId: Int,
     val added: String,
+    val rating: Float,
+    val extension: String,
 
     val streamType: StreamType,
-    val extension: String = "",
     val lastPlayed: Long = 0,
     val totalDuration: Long = 0,
     val playedDuration: Long = 0,
@@ -32,6 +33,8 @@ data class StreamData(
             added = "1609012046",
             lastPlayed = System.currentTimeMillis(),
             streamType = StreamType.VideoOnDemand,
+            rating = 1.5f,
+            extension = "mp4"
         )
     }
 
