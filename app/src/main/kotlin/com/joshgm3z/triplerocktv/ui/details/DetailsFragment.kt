@@ -23,6 +23,7 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -49,13 +50,19 @@ class DetailsFragment : DetailsSupportFragment() {
             FullWidthDetailsOverviewRowPresenter(DetailsDescriptionPresenter())
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
-            if (action.id == ACTION_PLAY) {
-                val navAction = DetailsFragmentDirections.toPlayback(
+            when (action.id) {
+                ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
                     args.streamId,
                     args.streamType
                 )
-                findNavController().navigate(navAction)
-            }
+
+                ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
+                    args.streamId,
+                    args.streamType,
+                ).apply { resume = true }
+
+                else -> return@OnActionClickedListener
+            }.let { findNavController().navigate(it) }
         }
 
         presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
@@ -77,30 +84,33 @@ class DetailsFragment : DetailsSupportFragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.uiState.collectLatest {
-                    updateDetails(it)
+                viewModel.streamData.collectLatest {
+                    it?.let { streamData ->
+                        updateDetails(streamData)
+                    }
                 }
             }
         }
         viewModel.fetchStreamDetails(args.streamId, args.streamType)
     }
 
-    private fun updateDetails(uiState: DetailsUiState) {
-        handleBlur(uiState.imageUrl)
-        val detailsRow = DetailsOverviewRow(uiState)
+    private fun updateDetails(streamData: StreamData) {
+        handleBlur(streamData.streamIcon)
+        val detailsRow = DetailsOverviewRow(streamData)
 
         val actionAdapter = SparseArrayObjectAdapter()
-        actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
+        if (streamData.startedWatching) {
+            actionAdapter.set(ACTION_RESUME.toInt(), Action(ACTION_RESUME, "Resume"))
+            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Start over"))
+        } else {
+            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
+        }
         actionAdapter.set(ACTION_FAVORITE.toInt(), Action(ACTION_FAVORITE, "Add to favorite"))
-        actionAdapter.set(
-            ACTION_DOWNLOAD_SUBTITLE.toInt(),
-            Action(ACTION_DOWNLOAD_SUBTITLE, "Download subtitle")
-        )
         detailsRow.actionsAdapter = actionAdapter
 
         Glide.with(requireContext())
             .asBitmap()
-            .load(uiState.imageUrl)
+            .load(streamData.streamIcon)
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     detailsRow.setImageBitmap(requireContext(), resource)
@@ -124,7 +134,8 @@ class DetailsFragment : DetailsSupportFragment() {
 
     companion object {
         private const val ACTION_PLAY = 1L
-        private const val ACTION_FAVORITE = 2L
-        private const val ACTION_DOWNLOAD_SUBTITLE = 3L
+        private const val ACTION_RESUME = 2L
+        private const val ACTION_FAVORITE = 3L
+        private const val ACTION_DOWNLOAD_SUBTITLE = 4L
     }
 }
