@@ -18,6 +18,9 @@ data class StreamData(
     val extension: String,
 
     val streamType: StreamType,
+    val subtitleUrl: String? = null,
+    val subtitleTitle: String? = null,
+    val subtitleLanguage: String? = null,
     val lastPlayed: Long = 0,
     val totalDuration: Long = 0,
     val playedDuration: Long = 0,

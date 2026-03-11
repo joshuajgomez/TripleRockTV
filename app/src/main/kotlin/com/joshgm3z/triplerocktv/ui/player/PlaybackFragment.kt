@@ -87,13 +87,13 @@ class PlaybackFragment : VideoSupportFragment() {
 
         viewModel.fetchStreamDetails(args.streamId, args.streamType)
         lifecycleScope.launch {
-            viewModel.uiState.collectLatest {
+            viewModel.playbackUiState.collectLatest {
                 if (it.videoUrl.isNotEmpty()) {
                     transportControlGlue.title = it.title
                     videoTitle = it.title
                     transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
-                    playVideo(it.videoUrl)
+                    playVideo(it)
                 }
             }
         }
@@ -103,11 +103,26 @@ class PlaybackFragment : VideoSupportFragment() {
                 Logger.debug("subtitleTrackToLoad $it")
                 it?.let {
                     trackViewModel.subtitleTrackToLoad.value = null
+                    var subtitleUrl: String? = null
+                    var subtitleLanguage = ""
+                    var subtitleTitle = ""
                     when (it) {
-                        is SubtitleData -> loadSubtitle(it)
-                        is TrackInfo -> switchTrack(it)
+                        is SubtitleData -> {
+                            subtitleLanguage = it.language!!
+                            subtitleUrl = it.url
+                            subtitleTitle = it.title
+                            loadSubtitle(it)
+                        }
+
+                        is TrackInfo -> {
+                            subtitleLanguage = it.language!!
+                            subtitleTitle = it.label!!
+                            switchTrack(it)
+                        }
+
                         else -> Logger.warn("Unknown track type: ${it::class.java}")
                     }
+                    viewModel.updateSelectedSubtitle(subtitleLanguage, subtitleTitle, subtitleUrl)
                 }
             }
         }
@@ -189,9 +204,10 @@ class PlaybackFragment : VideoSupportFragment() {
             requireActivity(),
             playerAdapter
         ) {
-            private val closedCaptioningAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
-            }
+            private val closedCaptioningAction =
+                PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+                }
             private val audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
                 icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
             }
@@ -226,11 +242,30 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    private fun playVideo(videoUrl: String) {
-        Logger.info("videoUrl=[$videoUrl]")
+    private fun playVideo(uiState: PlaybackUiState) {
+        Logger.info("videoUrl=[$uiState]")
         val mediaItem = MediaItem.Builder()
-            .setUri(videoUrl)
+            .setUri(uiState.videoUrl)
             .build()
+
+        uiState.subtitleLanguage?.let {
+            player.trackSelectionParameters = player.trackSelectionParameters
+                .buildUpon()
+                .setPreferredTextLanguage(it)
+                .build()
+        }
+        uiState.subtitleUrl?.let {
+            val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
+                .setMimeType("application/x-subrip")
+                .setLanguage(uiState.subtitleLanguage)
+                .setLabel(uiState.subtitleTitle)
+                .setSelectionFlags(SELECTION_FLAG_DEFAULT)
+                .build()
+            mediaItem.buildUpon()
+                .setSubtitleConfigurations(listOf(subtitleConfig))
+                .build()
+        }
+
         player.setMediaItem(mediaItem)
         player.prepare()
     }
@@ -249,6 +284,7 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
         }
+
         override fun onPlaybackStateChanged(playbackState: Int) {
             if (playbackState == Player.STATE_READY) {
                 val durationMs = player.duration

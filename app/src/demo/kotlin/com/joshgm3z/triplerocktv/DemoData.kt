@@ -29,7 +29,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.VideoOnDemand
+                streamType = StreamType.VideoOnDemand,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 10042,
@@ -42,7 +44,9 @@ class DemoData {
                 totalDuration = 130,
                 playedDuration = 25,
                 lastPlayed = 100,
-                streamType = StreamType.VideoOnDemand
+                streamType = StreamType.VideoOnDemand,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 10002,
@@ -55,7 +59,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.VideoOnDemand
+                streamType = StreamType.VideoOnDemand,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 10003,
@@ -68,7 +74,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.VideoOnDemand
+                streamType = StreamType.VideoOnDemand,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 10004,
@@ -81,7 +89,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.VideoOnDemand
+                streamType = StreamType.VideoOnDemand,
+                rating = 0.0f,
+                extension = "mp4",
             )
         )
 
@@ -97,7 +107,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.LiveTV
+                streamType = StreamType.LiveTV,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 20002,
@@ -110,7 +122,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.LiveTV
+                streamType = StreamType.LiveTV,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 20003,
@@ -123,7 +137,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.LiveTV
+                streamType = StreamType.LiveTV,
+                rating = 0.0f,
+                extension = "mp4",
             ),
             StreamData(
                 streamId = 20004,
@@ -136,7 +152,9 @@ class DemoData {
                 totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
-                streamType = StreamType.LiveTV
+                streamType = StreamType.LiveTV,
+                rating = 0.0f,
+                extension = "mp4",
             )
         )
 
