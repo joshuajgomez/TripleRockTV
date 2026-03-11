@@ -66,8 +66,17 @@ constructor() : MediaLocalRepository {
 
     }
 
-    override fun updateLastPlayedPosition(streamId: Int, positionMs: Long) {}
+    override suspend fun updatePlayedDuration(streamId: Int, positionMs: Long) {}
 
-    override fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
+    override suspend fun updateLastPlayedTimestamp(streamId: Int, timeMs: Long) {}
+
+    override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
+
+    override suspend fun updateSelectedSubtitle(
+        streamId: Int,
+        language: String,
+        title: String,
+        url: String?
+    ) {}
 
 }

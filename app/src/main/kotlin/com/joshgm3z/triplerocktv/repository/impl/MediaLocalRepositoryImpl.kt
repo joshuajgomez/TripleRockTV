@@ -81,4 +81,11 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {
         streamDataDao.updateTotalDuration(streamId, totalDurationMs)
     }
+
+    override suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?) {
+        streamDataDao.updateSubtitleLanguage(streamId, language, title)
+        url?.let {
+            streamDataDao.updateSubtitleUrl(streamId, it)
+        }
+    }
 }

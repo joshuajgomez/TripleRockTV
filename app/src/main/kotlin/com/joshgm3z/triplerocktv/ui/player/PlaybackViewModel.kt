@@ -19,6 +19,9 @@ import javax.inject.Inject
 data class PlaybackUiState(
     val title: String = "",
     val videoUrl: String = "",
+    val subtitleUrl: String? = null,
+    val subtitleLanguage: String? = null,
+    val subtitleTitle: String? = null,
 )
 
 @HiltViewModel
@@ -27,8 +30,8 @@ class PlaybackViewModel @Inject constructor(
     private val localDataStore: LocalDatastore,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(PlaybackUiState())
-    val uiState = _uiState.asStateFlow()
+    private val _playbackUiState = MutableStateFlow(PlaybackUiState())
+    val playbackUiState = _playbackUiState.asStateFlow()
 
     private var streamId: Int? = null
 
@@ -38,15 +41,18 @@ class PlaybackViewModel @Inject constructor(
             val userInfo = localDataStore.getUserInfo()!!
             this@PlaybackViewModel.streamId = streamId
             when (val result = repository.fetchStream(streamId, streamType)) {
-                is StreamData -> _uiState.update {
+                is StreamData -> _playbackUiState.update {
                     repository.updateLastPlayedTimestamp(streamId, System.currentTimeMillis())
                     it.copy(
                         title = result.name,
-                        videoUrl = result.videoUrl(userInfo)
+                        videoUrl = result.videoUrl(userInfo),
+                        subtitleUrl = result.subtitleUrl,
+                        subtitleLanguage = result.subtitleLanguage,
+                        subtitleTitle = result.subtitleUrl,
                     )
                 }
 
-                is SeriesStream -> _uiState.update {
+                is SeriesStream -> _playbackUiState.update {
                     it.copy(
                         title = result.name,
                         videoUrl = result.videoUrl(userInfo)
@@ -70,6 +76,15 @@ class PlaybackViewModel @Inject constructor(
         streamId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 repository.updatePlayedDuration(it, positionMs)
+            }
+        } ?: throw Exception("Stream id is null")
+    }
+
+    fun updateSelectedSubtitle(language: String, title: String, url: String?) {
+        Logger.debug("url = [${url}], language = [${language}]")
+        streamId?.let {
+            viewModelScope.launch(Dispatchers.IO) {
+                repository.updateSelectedSubtitle(it, language, title, url)
             }
         } ?: throw Exception("Stream id is null")
     }

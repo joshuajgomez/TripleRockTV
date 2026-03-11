@@ -44,4 +44,10 @@ interface StreamDataDao {
 
     @Query("UPDATE stream_data SET totalDuration = :totalDuration WHERE streamId = :streamId")
     suspend fun updateTotalDuration(streamId: Int, totalDuration: Long)
+
+    @Query("UPDATE stream_data SET subtitleUrl = :url WHERE streamId = :streamId")
+    suspend fun updateSubtitleUrl(streamId: Int, url: String)
+
+    @Query("UPDATE stream_data SET subtitleLanguage = :language, subtitleTitle = :title WHERE streamId = :streamId")
+    suspend fun updateSubtitleLanguage(streamId: Int, language: String, title: String)
 }
