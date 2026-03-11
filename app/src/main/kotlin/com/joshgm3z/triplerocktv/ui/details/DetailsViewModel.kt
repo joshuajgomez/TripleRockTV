@@ -27,6 +27,8 @@ class DetailsViewModel @Inject constructor(
 
     var isBlurSettingEnabled: Boolean = false
 
+    private var streamId: Int? = null
+
     init {
         viewModelScope.launch {
             isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
@@ -34,10 +36,23 @@ class DetailsViewModel @Inject constructor(
     }
 
     fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
+        this.streamId = streamId
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = repository.fetchStream(streamId, streamType)) {
                 is StreamData -> _streamData.value = result
             }
+        }
+    }
+
+    fun addToMyList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateMyList(streamId!!, true)
+        }
+    }
+
+    fun removeFromMyList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateMyList(streamId!!, false)
         }
     }
 }

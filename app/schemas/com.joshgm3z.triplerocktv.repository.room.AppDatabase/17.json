@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 17,
-    "identityHash": "e917cd45e5f3a7ec53ba7f583ae0b2b5",
+    "identityHash": "d7c1eb1dd3a770c89a7db950096b720b",
     "entities": [
       {
         "tableName": "stream_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `streamType` TEXT NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `lastPlayed` INTEGER NOT NULL, `totalDuration` INTEGER NOT NULL, `playedDuration` INTEGER NOT NULL, PRIMARY KEY(`streamId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `streamType` TEXT NOT NULL, `inMyList` INTEGER NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `lastPlayed` INTEGER NOT NULL, `totalDuration` INTEGER NOT NULL, `playedDuration` INTEGER NOT NULL, PRIMARY KEY(`streamId`))",
         "fields": [
           {
             "fieldPath": "streamId",
@@ -65,6 +65,12 @@
             "fieldPath": "streamType",
             "columnName": "streamType",
             "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "inMyList",
+            "columnName": "inMyList",
+            "affinity": "INTEGER",
             "notNull": true
           },
           {
@@ -345,7 +351,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e917cd45e5f3a7ec53ba7f583ae0b2b5')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'd7c1eb1dd3a770c89a7db950096b720b')"
     ]
   }
 }

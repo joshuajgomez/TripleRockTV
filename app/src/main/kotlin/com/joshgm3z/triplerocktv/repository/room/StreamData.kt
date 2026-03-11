@@ -18,6 +18,7 @@ data class StreamData(
     val extension: String,
 
     val streamType: StreamType,
+    val inMyList: Boolean = false,
     val subtitleUrl: String? = null,
     val subtitleTitle: String? = null,
     val subtitleLanguage: String? = null,
