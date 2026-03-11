@@ -6,6 +6,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import com.joshgm3z.triplerocktv.repository.StreamType
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StreamDataDao {
@@ -21,6 +22,9 @@ interface StreamDataDao {
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun getByStreamId(streamId: Int): StreamData
 
+    @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
+    fun streamDataFlow(streamId: Int): Flow<StreamData>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(streams: List<StreamData>)
 
@@ -33,8 +37,8 @@ interface StreamDataDao {
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 AND playedDuration > 5000 ORDER BY lastPlayed DESC LIMIT 5")
-    suspend fun getLastPlayed10(): List<StreamData>
+    @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 AND playedDuration > :minPlaybackDuration ORDER BY lastPlayed DESC LIMIT 5")
+    suspend fun getLastPlayed10(minPlaybackDuration: Long = MIN_PLAYBACK_DURATION): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE inMyList IS true ORDER BY timeAddedToList DESC LIMIT 5")
     suspend fun getMyList10(): List<StreamData>

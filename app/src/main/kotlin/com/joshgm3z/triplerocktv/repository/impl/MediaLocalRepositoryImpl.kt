@@ -11,6 +11,7 @@ import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
+import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -61,6 +62,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
         else -> streamDataDao.getByStreamId(streamId)
     }
 
+    override fun streamDataFlow(
+        streamId: Int,
+        streamType: StreamType,
+    ): Flow<StreamData> = when (streamType) {
+        StreamType.VideoOnDemand -> streamDataDao.streamDataFlow(streamId)
+        else -> streamDataDao.streamDataFlow(streamId)
+    }
+
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && seriesCategoryDao.getAllCategories().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
@@ -90,7 +99,12 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamDataDao.updateMyList(streamId, add)
     }
 
-    override suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?) {
+    override suspend fun updateSelectedSubtitle(
+        streamId: Int,
+        language: String,
+        title: String,
+        url: String?
+    ) {
         streamDataDao.updateSubtitleLanguage(streamId, language, title)
         url?.let {
             streamDataDao.updateSubtitleUrl(streamId, it)

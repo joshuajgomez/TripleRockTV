@@ -25,6 +25,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -88,12 +89,10 @@ class DetailsFragment : DetailsSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.streamData.collectLatest {
-                    it?.let { streamData ->
-                        updateDetails(streamData)
-                    }
+        lifecycleScope.launch {
+            viewModel.streamData.collectLatest {
+                it?.let { streamData ->
+                    updateDetails(streamData)
                 }
             }
         }
@@ -101,8 +100,23 @@ class DetailsFragment : DetailsSupportFragment() {
     }
 
     private fun updateDetails(streamData: StreamData) {
+        Logger.debug("streamData = [${streamData}]")
         handleBlur(streamData.streamIcon)
-        val detailsRow = DetailsOverviewRow(streamData)
+
+        val existingRow = if (rowsAdapter.size() > 0) {
+            rowsAdapter.get(0) as? DetailsOverviewRow
+        } else {
+            null
+        }
+
+        val detailsRow = if (existingRow != null) {
+            // Reuse the existing row and update its data object
+            existingRow.item = streamData
+            existingRow
+        } else {
+            // Create a new row if it's the first time
+            DetailsOverviewRow(streamData)
+        }
 
         val actionAdapter = SparseArrayObjectAdapter()
         if (streamData.startedWatching) {
@@ -134,7 +148,12 @@ class DetailsFragment : DetailsSupportFragment() {
                 }
             })
 
-        rowsAdapter.add(detailsRow)
+        if (existingRow == null) {
+            rowsAdapter.add(detailsRow)
+        } else {
+            // If it was an update, notify the adapter immediately for text/action changes
+            rowsAdapter.notifyArrayItemRangeChanged(0, 1)
+        }
     }
 
     override fun onResume() {
