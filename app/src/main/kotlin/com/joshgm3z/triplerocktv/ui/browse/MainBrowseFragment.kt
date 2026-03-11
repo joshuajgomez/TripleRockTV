@@ -143,6 +143,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
         addRecentsRow(uiState.recentPlayed)
+        addMyListRow(uiState.myList)
         addRow(1, "Video on demand", uiState.vodCategories)
 //        addRow(2, "Series", uiState.seriesCategories)
         addRow(3, "Live TV", uiState.liveTvCategories)
@@ -154,6 +155,14 @@ class MainBrowseFragment : BrowseSupportFragment() {
         if (list.isEmpty()) return
         val header = HeaderItem(0, "Recently played")
         val listRowAdapter = ArrayObjectAdapter(RecentStreamPresenter())
+        listRowAdapter.addAll(0, list)
+        rowsAdapter.add(ListRow(header, listRowAdapter))
+    }
+
+    private fun addMyListRow(list: List<Any>) {
+        if (list.isEmpty()) return
+        val header = HeaderItem(0, "My list")
+        val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }

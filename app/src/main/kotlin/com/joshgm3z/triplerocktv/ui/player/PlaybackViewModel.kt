@@ -38,7 +38,7 @@ class PlaybackViewModel @Inject constructor(
             this@PlaybackViewModel.streamId = streamId
             when (val result = repository.fetchStream(streamId, streamType)) {
                 is StreamData -> _playbackUiState.update {
-                    repository.updateLastPlayedTimestamp(streamId, System.currentTimeMillis())
+                    repository.updateLastPlayedTimestamp(streamId)
                     PlaybackUiState(
                         streamData = result,
                         videoUrl = result.videoUrl(userInfo),
