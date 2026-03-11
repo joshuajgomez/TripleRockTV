@@ -26,5 +26,7 @@ interface MediaLocalRepository {
 
     suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long)
 
+    suspend fun updateMyList(streamId: Int, add: Boolean)
+
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
 }

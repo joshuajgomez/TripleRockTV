@@ -65,8 +65,6 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    private val resumeVideo: Boolean = args.resume
-
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -245,8 +243,8 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun playVideo(uiState: PlaybackUiState) {
-        Logger.info("videoUrl=[$uiState]")
-        val mediaItem = MediaItem.Builder()
+        Logger.info("uiState=[$uiState]")
+        var mediaItem = MediaItem.Builder()
             .setUri(uiState.videoUrl)
             .build()
 
@@ -263,14 +261,14 @@ class PlaybackFragment : VideoSupportFragment() {
                 .setLabel(uiState.streamData.subtitleTitle)
                 .setSelectionFlags(SELECTION_FLAG_DEFAULT)
                 .build()
-            mediaItem.buildUpon()
+            mediaItem = mediaItem.buildUpon()
                 .setSubtitleConfigurations(listOf(subtitleConfig))
                 .build()
         }
 
         player.setMediaItem(mediaItem)
         player.prepare()
-        if (resumeVideo && uiState.streamData.startedWatching) {
+        if (args.resume && uiState.streamData.startedWatching) {
             player.seekTo(uiState.streamData.playedDuration)
         }
     }

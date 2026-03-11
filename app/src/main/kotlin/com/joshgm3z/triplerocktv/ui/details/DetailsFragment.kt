@@ -54,15 +54,21 @@ class DetailsFragment : DetailsSupportFragment() {
                 ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
                     args.streamId,
                     args.streamType
-                )
+                ).apply { findNavController().navigate(this) }
 
                 ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
                     args.streamId,
                     args.streamType,
-                ).apply { resume = true }
+                ).apply {
+                    resume = true
+                    findNavController().navigate(this)
+                }
+
+                ACTION_FAVORITE -> viewModel.addToMyList()
+                ACTION_REMOVE_FAVORITE -> viewModel.removeFromMyList()
 
                 else -> return@OnActionClickedListener
-            }.let { findNavController().navigate(it) }
+            }
         }
 
         presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
@@ -105,7 +111,14 @@ class DetailsFragment : DetailsSupportFragment() {
         } else {
             actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
         }
-        actionAdapter.set(ACTION_FAVORITE.toInt(), Action(ACTION_FAVORITE, "Add to favorite"))
+        if (streamData.inMyList) actionAdapter.set(
+            ACTION_REMOVE_FAVORITE.toInt(),
+            Action(ACTION_REMOVE_FAVORITE, "Remove from my list")
+        ) else actionAdapter.set(
+            ACTION_FAVORITE.toInt(),
+            Action(ACTION_FAVORITE, "Add to my list")
+        )
+
         detailsRow.actionsAdapter = actionAdapter
 
         Glide.with(requireContext())
@@ -136,6 +149,6 @@ class DetailsFragment : DetailsSupportFragment() {
         private const val ACTION_PLAY = 1L
         private const val ACTION_RESUME = 2L
         private const val ACTION_FAVORITE = 3L
-        private const val ACTION_DOWNLOAD_SUBTITLE = 4L
+        private const val ACTION_REMOVE_FAVORITE = 4L
     }
 }
