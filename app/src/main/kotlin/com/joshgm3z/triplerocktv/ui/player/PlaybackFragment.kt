@@ -1,5 +1,8 @@
 package com.joshgm3z.triplerocktv.ui.player
 
+import android.annotation.SuppressLint
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -302,6 +305,7 @@ class PlaybackFragment : VideoSupportFragment() {
     override fun onPause() {
         super.onPause()
         viewModel.updateLastPlayedPosition(player.currentPosition)
+        viewModel.updateContinueWatching(requireContext(), player.currentPosition)
         transportControlGlue.pause()
     }
 
