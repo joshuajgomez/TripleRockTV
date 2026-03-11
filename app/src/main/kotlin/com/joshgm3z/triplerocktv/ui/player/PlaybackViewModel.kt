@@ -6,7 +6,6 @@ import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -17,11 +16,8 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class PlaybackUiState(
-    val title: String = "",
-    val videoUrl: String = "",
-    val subtitleUrl: String? = null,
-    val subtitleLanguage: String? = null,
-    val subtitleTitle: String? = null,
+    val videoUrl: String,
+    val streamData: StreamData,
 )
 
 @HiltViewModel
@@ -30,7 +26,7 @@ class PlaybackViewModel @Inject constructor(
     private val localDataStore: LocalDatastore,
 ) : ViewModel() {
 
-    private val _playbackUiState = MutableStateFlow(PlaybackUiState())
+    private val _playbackUiState = MutableStateFlow<PlaybackUiState?>(null)
     val playbackUiState = _playbackUiState.asStateFlow()
 
     private var streamId: Int? = null
@@ -43,19 +39,9 @@ class PlaybackViewModel @Inject constructor(
             when (val result = repository.fetchStream(streamId, streamType)) {
                 is StreamData -> _playbackUiState.update {
                     repository.updateLastPlayedTimestamp(streamId, System.currentTimeMillis())
-                    it.copy(
-                        title = result.name,
+                    PlaybackUiState(
+                        streamData = result,
                         videoUrl = result.videoUrl(userInfo),
-                        subtitleUrl = result.subtitleUrl,
-                        subtitleLanguage = result.subtitleLanguage,
-                        subtitleTitle = result.subtitleUrl,
-                    )
-                }
-
-                is SeriesStream -> _playbackUiState.update {
-                    it.copy(
-                        title = result.name,
-                        videoUrl = result.videoUrl(userInfo)
                     )
                 }
             }

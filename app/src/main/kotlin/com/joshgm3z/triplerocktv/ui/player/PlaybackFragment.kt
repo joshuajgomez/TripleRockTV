@@ -65,6 +65,8 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
+    private val resumeVideo: Boolean = args.resume
+
     @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,9 +90,9 @@ class PlaybackFragment : VideoSupportFragment() {
         viewModel.fetchStreamDetails(args.streamId, args.streamType)
         lifecycleScope.launch {
             viewModel.playbackUiState.collectLatest {
-                if (it.videoUrl.isNotEmpty()) {
-                    transportControlGlue.title = it.title
-                    videoTitle = it.title
+                it?.let { playbackUiState ->
+                    transportControlGlue.title = playbackUiState.streamData.name
+                    videoTitle = playbackUiState.streamData.name
                     transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
                     playVideo(it)
@@ -248,17 +250,17 @@ class PlaybackFragment : VideoSupportFragment() {
             .setUri(uiState.videoUrl)
             .build()
 
-        uiState.subtitleLanguage?.let {
+        uiState.streamData.subtitleLanguage?.let {
             player.trackSelectionParameters = player.trackSelectionParameters
                 .buildUpon()
                 .setPreferredTextLanguage(it)
                 .build()
         }
-        uiState.subtitleUrl?.let {
+        uiState.streamData.subtitleUrl?.let {
             val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
                 .setMimeType("application/x-subrip")
-                .setLanguage(uiState.subtitleLanguage)
-                .setLabel(uiState.subtitleTitle)
+                .setLanguage(uiState.streamData.subtitleLanguage)
+                .setLabel(uiState.streamData.subtitleTitle)
                 .setSelectionFlags(SELECTION_FLAG_DEFAULT)
                 .build()
             mediaItem.buildUpon()
@@ -268,6 +270,9 @@ class PlaybackFragment : VideoSupportFragment() {
 
         player.setMediaItem(mediaItem)
         player.prepare()
+        if (resumeVideo && uiState.streamData.startedWatching) {
+            player.seekTo(uiState.streamData.playedDuration)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

@@ -16,19 +16,14 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class DetailsUiState(
-    val title: String = "",
-    val imageUrl: String? = null,
-)
-
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     localDatastore: LocalDatastore,
     private val repository: MediaLocalRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(DetailsUiState())
-    val uiState = _uiState.asStateFlow()
+    private val _streamData = MutableStateFlow<StreamData?>(null)
+    val streamData = _streamData.asStateFlow()
 
     var isBlurSettingEnabled: Boolean = false
 
@@ -41,19 +36,7 @@ class DetailsViewModel @Inject constructor(
     fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
         viewModelScope.launch(Dispatchers.IO) {
             when (val result = repository.fetchStream(streamId, streamType)) {
-                is StreamData -> _uiState.update {
-                    it.copy(
-                        title = result.name,
-                        imageUrl = result.streamIcon
-                    )
-                }
-
-                is SeriesStream -> _uiState.update {
-                    it.copy(
-                        title = result.name,
-                        imageUrl = result.cover
-                    )
-                }
+                is StreamData -> _streamData.value = result
             }
         }
     }

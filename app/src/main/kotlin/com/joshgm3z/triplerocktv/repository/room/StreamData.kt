@@ -49,4 +49,6 @@ data class StreamData(
         else -> ((playedDuration.toDouble() / totalDuration) * 100).toInt()
     }
 
+    val startedWatching: Boolean
+        get() = lastPlayed > 5000
 }
