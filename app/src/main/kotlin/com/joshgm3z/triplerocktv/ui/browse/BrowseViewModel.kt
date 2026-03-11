@@ -19,6 +19,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class BrowseUiState(
+    val myList: List<StreamData> = emptyList(),
     val recentPlayed: List<StreamData> = emptyList(),
     val vodCategories: List<CategoryData> = emptyList(),
     val liveTvCategories: List<CategoryData> = emptyList(),
@@ -61,6 +62,7 @@ class BrowseViewModel
             _uiState.update {
                 it.copy(
                     recentPlayed = repository.fetchRecentlyPlayed(),
+                    myList = repository.fetchMyList()
                 )
             }
         }
