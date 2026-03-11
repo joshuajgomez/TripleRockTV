@@ -146,8 +146,8 @@ class DetailsFragment : DetailsSupportFragment() {
     }
 
     companion object {
-        private const val ACTION_PLAY = 1L
-        private const val ACTION_RESUME = 2L
+        private const val ACTION_RESUME = 1L
+        private const val ACTION_PLAY = 2L
         private const val ACTION_FAVORITE = 3L
         private const val ACTION_REMOVE_FAVORITE = 4L
     }
