@@ -5,6 +5,11 @@ import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
+/**
+ * Minimum video playback duration for the app to consider the video "started".
+ */
+const val MIN_PLAYBACK_DURATION = 5000L
+
 @Entity(tableName = "stream_data")
 data class StreamData(
     @PrimaryKey val streamId: Int,
@@ -52,5 +57,5 @@ data class StreamData(
     }
 
     val startedWatching: Boolean
-        get() = lastPlayed > 5000
+        get() = lastPlayed > MIN_PLAYBACK_DURATION
 }
