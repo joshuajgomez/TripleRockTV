@@ -103,7 +103,7 @@ constructor(
                 added = it.added,
                 streamType = categoryData.streamType,
                 extension = it.containerExtension ?: "",
-                rating = 0.0f,
+                rating = it.rating?.toFloatOrNull() ?: 0f,
             )
         })
     }
