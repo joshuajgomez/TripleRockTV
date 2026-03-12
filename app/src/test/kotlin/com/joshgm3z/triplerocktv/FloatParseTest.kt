@@ -10,7 +10,8 @@ class FloatParseTest {
         mapOf(
             null to 0f,
             "3.4" to 3.4f,
-            "3.40" to 3.4f,
+            "3.405" to 3.4f,
+            "3.4999999995" to 3.5f,
         ).forEach { (input, expected) ->
             val actual = input.parseToFloat()
             println("expected: $expected, actual: $actual")
