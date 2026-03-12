@@ -142,6 +142,11 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private fun updateRows(uiState: BrowseUiState) {
         rowsAdapter.clear()
+        if (uiState.loading) {
+            progressBarManager.show()
+            return
+        } else progressBarManager.hide()
+
         addRecentsRow(uiState.recentPlayed)
         addMyListRow(uiState.myList)
         addRow(1, "Video on demand", uiState.vodCategories)
@@ -195,6 +200,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
         if (!viewModel.isBlurSettingEnabled) {
             backgroundManager.drawable = null
         }
-        viewModel.updateRecentPlayed()
+        viewModel.onViewResumed()
     }
 }
