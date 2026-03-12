@@ -24,17 +24,23 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.alternateUri
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class DetailsFragment : DetailsSupportFragment() {
 
     private val viewModel: DetailsViewModel by viewModels()
+
     private val args by navArgs<DetailsFragmentArgs>()
+
+    @Inject
+    lateinit var glideUtil: GlideUtil
 
     private lateinit var detailsBackground: DetailsSupportFragmentBackgroundController
     private lateinit var rowsAdapter: ArrayObjectAdapter
@@ -135,18 +141,10 @@ class DetailsFragment : DetailsSupportFragment() {
 
         detailsRow.actionsAdapter = actionAdapter
 
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(streamData.streamIcon.alternateUri(viewModel.serverUrl))
-            .into(object : CustomTarget<Bitmap>() {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
-                    detailsRow.setImageBitmap(requireContext(), resource)
-                    rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-            })
+        glideUtil.loadBitmap(requireContext(), streamData.streamIcon) {
+            detailsRow.setImageBitmap(requireContext(), it)
+            rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
+        }
 
         if (existingRow == null) {
             rowsAdapter.add(detailsRow)
