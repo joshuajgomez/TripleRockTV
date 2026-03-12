@@ -26,6 +26,7 @@ data class BrowseUiState(
     val seriesCategories: List<SeriesCategory> = emptyList(),
     val epgCategories: List<IptvEpgListing> = emptyList(),
     var errorMessage: String? = null,
+    var loading: Boolean = false,
 )
 
 @Suppress("UNCHECKED_CAST")
@@ -41,15 +42,7 @@ class BrowseViewModel
     var isBlurSettingEnabled: Boolean = false
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update {
-                it.copy(
-                    vodCategories = repository.fetchCategories(StreamType.VideoOnDemand),
-                    liveTvCategories = repository.fetchCategories(StreamType.LiveTV),
-                    epgCategories = repository.fetchEpgListings(),
-                )
-            }
-        }
+        fetchList()
         viewModelScope.launch {
             localDatastore.blurSettingFlow().collectLatest {
                 isBlurSettingEnabled = it
@@ -57,14 +50,25 @@ class BrowseViewModel
         }
     }
 
-    fun updateRecentPlayed() {
+    private fun fetchList() {
+        _uiState.update {
+            it.copy(loading = true)
+        }
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
+                    vodCategories = repository.fetchCategories(StreamType.VideoOnDemand),
+                    liveTvCategories = repository.fetchCategories(StreamType.LiveTV),
+                    epgCategories = repository.fetchEpgListings(),
                     recentPlayed = repository.fetchRecentlyPlayed(),
-                    myList = repository.fetchMyList()
+                    myList = repository.fetchMyList(),
+                    loading = false,
                 )
             }
         }
+    }
+
+    fun onViewResumed() {
+        fetchList()
     }
 }

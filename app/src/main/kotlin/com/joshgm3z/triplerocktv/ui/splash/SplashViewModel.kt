@@ -28,11 +28,7 @@ constructor(
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
             delay(1000)
-            _navDirectionState.value = when {
-                localDatastore.getUserInfo() == null -> SplashScreenFragmentDirections.toLogin()
-                repository.isContentEmpty() -> SplashScreenFragmentDirections.toLoading()
-                else -> SplashScreenFragmentDirections.toBrowse()
-            }
+            _navDirectionState.value = SplashScreenFragmentDirections.toBrowse()
         }
     }
 }
