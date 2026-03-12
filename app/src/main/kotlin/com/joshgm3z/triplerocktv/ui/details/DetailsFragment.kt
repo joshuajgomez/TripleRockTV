@@ -25,6 +25,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
+import com.joshgm3z.triplerocktv.ui.streamcatalogue.alternateUri
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -137,7 +138,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         Glide.with(requireContext())
             .asBitmap()
-            .load(streamData.streamIcon)
+            .load(streamData.streamIcon.alternateUri(viewModel.serverUrl))
             .into(object : CustomTarget<Bitmap>() {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
                     detailsRow.setImageBitmap(requireContext(), resource)

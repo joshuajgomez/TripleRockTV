@@ -9,10 +9,28 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardShortBinding
+import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.ui.streamcatalogue.alternateUri
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecentStreamPresenter() : Presenter() {
+class RecentStreamPresenter
+@Inject constructor(
+    private val datastore: LocalDatastore,
+    scope: CoroutineScope,
+) : Presenter() {
+
+    private var serverUrl: String? = null
+
+    init {
+        scope.launch {
+            serverUrl = datastore.getUserInfo()?.webUrl
+        }
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewStreamCardShortBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -44,7 +62,7 @@ class RecentStreamPresenter() : Presenter() {
 
         titleView.text = title
         Glide.with(imageView.context)
-            .load(imageUri) // Replace with your actual field name
+            .load(imageUri.alternateUri(serverUrl.toString())) // Replace with your actual field name
             .centerCrop()
             .into(imageView)
         progressBar.progress = progress
