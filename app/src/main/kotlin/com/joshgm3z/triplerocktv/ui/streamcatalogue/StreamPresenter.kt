@@ -10,27 +10,15 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
-import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.util.Logger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
 class StreamPresenter
 @Inject constructor(
-    private val datastore: LocalDatastore,
-    scope: CoroutineScope,
+    private val glideUtil: GlideUtil,
 ) : Presenter() {
-
-    private var serverUrl: String? = null
-
-    init {
-        scope.launch {
-            serverUrl = datastore.getUserInfo()?.webUrl
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewStreamCardBinding.inflate(
@@ -67,10 +55,7 @@ class StreamPresenter
         ratingContainer.visibility = if (rating != null && rating > 0) View.VISIBLE else View.GONE
 
         titleView.text = title
-        Glide.with(imageView.context)
-            .load(imageUri.alternateUri(serverUrl.toString())) // Replace with your actual field name
-            .centerCrop()
-            .into(imageView)
+        glideUtil.loadImage(imageUri, imageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
@@ -78,11 +63,4 @@ class StreamPresenter
         Glide.with(imageView.context).clear(imageView)
     }
 
-}
-
-fun String?.alternateUri(serverUrl: String): String? = when {
-    this == null -> null
-    else -> replace("http://starshare.live:8080", serverUrl)
-}.apply {
-    Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
