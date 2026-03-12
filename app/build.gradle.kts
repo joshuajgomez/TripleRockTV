@@ -99,4 +99,5 @@ dependencies {
     implementation(libs.androidx.media3.hls)
     implementation("jp.wasabeef:glide-transformations:4.3.0")
     implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    testImplementation(kotlin("test"))
 }

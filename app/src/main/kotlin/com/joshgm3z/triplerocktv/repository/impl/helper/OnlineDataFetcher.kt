@@ -103,8 +103,12 @@ constructor(
                 added = it.added,
                 streamType = categoryData.streamType,
                 extension = it.containerExtension ?: "",
-                rating = it.rating?.toFloatOrNull() ?: 0f,
+                rating = it.rating.parseToFloat(),
             )
         })
     }
+}
+
+fun String?.parseToFloat(): Float {
+    return (this?.toFloatOrNull() ?: 0f)
 }
