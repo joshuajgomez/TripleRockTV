@@ -6,7 +6,8 @@ import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
 class DemoMediaLocalRepositoryImpl
@@ -58,6 +59,21 @@ constructor() : MediaLocalRepository {
         }
     }
 
+    override fun streamDataFlow(
+        streamId: Int,
+        streamType: StreamType
+    ): Flow<StreamData> = flow {
+        DemoData.allStreams.firstOrNull {
+            when (it) {
+                is StreamData -> it.streamId == streamId
+//            is SeriesStream -> it.seriesId == streamId
+                else -> false
+            }
+        }?.let {
+            emit(it)
+        }
+    }
+
     override suspend fun isContentEmpty(): Boolean = false
 
     override suspend fun fetchRecentlyPlayed(): List<StreamData> {
@@ -66,17 +82,25 @@ constructor() : MediaLocalRepository {
 
     }
 
+    override suspend fun fetchMyList(): List<StreamData> {
+        return DemoData.sampleVodStreams.filter { it.inMyList }
+    }
+
     override suspend fun updatePlayedDuration(streamId: Int, positionMs: Long) {}
 
-    override suspend fun updateLastPlayedTimestamp(streamId: Int, timeMs: Long) {}
+    override suspend fun updateLastPlayedTimestamp(streamId: Int) {}
 
     override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
+    override suspend fun updateMyList(streamId: Int, add: Boolean) {
+        TODO("Not yet implemented")
+    }
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,
         language: String,
         title: String,
         url: String?
-    ) {}
+    ) {
+    }
 
 }

@@ -32,6 +32,7 @@ class DemoData {
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
+                inMyList = true,
             ),
             StreamData(
                 streamId = 10042,
@@ -62,6 +63,7 @@ class DemoData {
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
+                inMyList = true,
             ),
             StreamData(
                 streamId = 10003,
