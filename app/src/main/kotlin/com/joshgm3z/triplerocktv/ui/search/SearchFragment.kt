@@ -21,6 +21,7 @@ import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.collections.isNotEmpty
 
 @AndroidEntryPoint
@@ -29,6 +30,9 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private val viewModel: SearchViewModel by viewModels()
+
+    @Inject
+    lateinit var streamPresenter: StreamPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -116,7 +120,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     private fun addResults(headerText: String, result: List<Any>) {
         val header = HeaderItem(0, "$headerText (${result.size})")
-        val adapter = ArrayObjectAdapter(StreamPresenter())
+        val adapter = ArrayObjectAdapter(streamPresenter)
         adapter.addAll(0, result)
         rowsAdapter.add(ListRow(header, adapter))
     }

@@ -16,6 +16,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class StreamCatalogueFragment : VerticalGridSupportFragment() {
@@ -23,11 +24,14 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
     private val viewModel: StreamViewModel by viewModels()
     private val args by navArgs<StreamCatalogueFragmentArgs>()
 
-    private val streamAdapter = ArrayObjectAdapter(StreamPresenter())
+    @Inject
+    lateinit var streamPresenter: StreamPresenter
+
+    private lateinit var streamAdapter: ArrayObjectAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        streamAdapter = ArrayObjectAdapter(streamPresenter)
         // Setup the grid presenter (e.g., 5 columns)
         val gridPresenter = VerticalGridPresenter().apply {
             numberOfColumns = 6

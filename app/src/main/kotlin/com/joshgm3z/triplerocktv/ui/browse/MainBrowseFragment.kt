@@ -30,6 +30,7 @@ import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 data class SettingItem(
     val title: String,
@@ -40,6 +41,9 @@ data class SettingItem(
 class MainBrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
+
+    @Inject
+    lateinit var streamPresenter: StreamPresenter
 
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
@@ -167,7 +171,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun addMyListRow(list: List<Any>) {
         if (list.isEmpty()) return
         val header = HeaderItem(0, "My list")
-        val listRowAdapter = ArrayObjectAdapter(StreamPresenter())
+        val listRowAdapter = ArrayObjectAdapter(streamPresenter)
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }
