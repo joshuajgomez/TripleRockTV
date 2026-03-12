@@ -126,6 +126,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     }
 
     override fun onQueryTextChange(newQuery: String?): Boolean {
+        Logger.debug("newQuery = [${newQuery}]")
         viewModel.onSearchInputChange(newQuery ?: "")
         return true
     }
