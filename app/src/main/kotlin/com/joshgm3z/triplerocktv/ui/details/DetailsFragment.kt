@@ -17,7 +17,6 @@ import androidx.leanback.widget.OnActionClickedListener
 import androidx.leanback.widget.SparseArrayObjectAdapter
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
@@ -25,8 +24,8 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
-import com.joshgm3z.triplerocktv.ui.streamcatalogue.alternateUri
 import com.joshgm3z.triplerocktv.util.Logger
+import com.joshgm3z.triplerocktv.util.alternateUri
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch

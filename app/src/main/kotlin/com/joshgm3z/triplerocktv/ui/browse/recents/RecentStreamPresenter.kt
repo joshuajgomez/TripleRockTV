@@ -9,27 +9,15 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardShortBinding
-import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.ui.streamcatalogue.alternateUri
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
 class RecentStreamPresenter
 @Inject constructor(
-    private val datastore: LocalDatastore,
-    scope: CoroutineScope,
+    private val glideUtil: GlideUtil,
 ) : Presenter() {
-
-    private var serverUrl: String? = null
-
-    init {
-        scope.launch {
-            serverUrl = datastore.getUserInfo()?.webUrl
-        }
-    }
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewStreamCardShortBinding.inflate(
@@ -61,10 +49,7 @@ class RecentStreamPresenter
         val progressBar = viewHolder.view.findViewById<ProgressBar>(R.id.progress_bar)
 
         titleView.text = title
-        Glide.with(imageView.context)
-            .load(imageUri.alternateUri(serverUrl.toString())) // Replace with your actual field name
-            .centerCrop()
-            .into(imageView)
+        glideUtil.loadImage(imageUri, imageView)
         progressBar.progress = progress
         progressBar.visibility = if (progress > 0) ProgressBar.VISIBLE else ProgressBar.GONE
     }
