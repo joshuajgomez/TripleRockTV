@@ -68,11 +68,7 @@ class StreamPresenter
 
         titleView.text = title
         Glide.with(imageView.context)
-            .load(imageUri) // Replace with your actual field name
-            .error(
-                Glide.with(imageView.context)
-                    .load(imageUri.alternateUri(serverUrl.toString()))
-            )
+            .load(imageUri.alternateUri(serverUrl.toString())) // Replace with your actual field name
             .centerCrop()
             .into(imageView)
     }

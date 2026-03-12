@@ -45,6 +45,9 @@ class MainBrowseFragment : BrowseSupportFragment() {
     @Inject
     lateinit var streamPresenter: StreamPresenter
 
+    @Inject
+    lateinit var recentStreamPresenter: RecentStreamPresenter
+
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private lateinit var backgroundManager: BackgroundManager
@@ -163,7 +166,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun addRecentsRow(list: List<Any>) {
         if (list.isEmpty()) return
         val header = HeaderItem(0, "Recently played")
-        val listRowAdapter = ArrayObjectAdapter(RecentStreamPresenter())
+        val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }
