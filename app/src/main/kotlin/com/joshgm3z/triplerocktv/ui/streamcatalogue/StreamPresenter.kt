@@ -1,8 +1,10 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
@@ -33,8 +35,19 @@ class StreamPresenter() : Presenter() {
             is SeriesStream -> item.cover
             else -> "Unknown"
         }
+        val rating = when (item) {
+            is StreamData -> item.rating
+            else -> null
+        }
         val titleView = viewHolder.view.findViewById<TextView>(R.id.stream_title)
+        val ratingTv = viewHolder.view.findViewById<TextView>(R.id.tv_rating)
+        val ratingContainer = viewHolder.view.findViewById<LinearLayout>(R.id.ll_rating_container)
         val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
+
+        rating?.let {
+            ratingTv.text = it.toString()
+        }
+        ratingContainer.visibility = if (rating != null && rating > 0) View.VISIBLE else View.GONE
 
         titleView.text = title
         Glide.with(imageView.context)

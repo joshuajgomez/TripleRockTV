@@ -18,19 +18,48 @@
         android:id="@+id/poster_image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar_movie" />
 
-    <TextView
-        android:id="@+id/stream_title"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="@drawable/gradient_scrim"
-        android:maxLines="3"
+        android:orientation="vertical"
         android:paddingHorizontal="8dp"
-        android:paddingTop="45dp"
-        android:paddingBottom="15dp"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/white"
-        tools:text="Some movie (2025)" />
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/stream_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="3"
+            android:paddingTop="45dp"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@android:color/white"
+            tools:text="Some movie with long name(2025) " />
+
+        <LinearLayout
+            android:id="@+id/ll_rating_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:src="@drawable/ic_star" />
+
+            <TextView
+                android:id="@+id/tv_rating"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                tools:text="3.5" />
+        </LinearLayout>
+    </LinearLayout>
 </FrameLayout>
