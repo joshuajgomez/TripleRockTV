@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
+import com.joshgm3z.triplerocktv.util.alternateUri
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
