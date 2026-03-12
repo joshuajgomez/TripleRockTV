@@ -110,5 +110,6 @@ constructor(
 }
 
 fun String?.parseToFloat(): Float {
-    return (this?.toFloatOrNull() ?: 0f)
+    val value = this?.toFloatOrNull() ?: 0f
+    return "%.1f".format(value).toFloat()
 }
