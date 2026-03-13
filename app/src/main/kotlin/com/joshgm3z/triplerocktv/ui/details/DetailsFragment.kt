@@ -10,6 +10,7 @@ import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.DetailsOverviewRow
+import androidx.leanback.widget.DetailsOverviewRowPresenter
 import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
 import androidx.leanback.widget.OnActionClickedListener
 import androidx.leanback.widget.SparseArrayObjectAdapter
@@ -47,7 +48,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
-            FullWidthDetailsOverviewRowPresenter(DetailsDescriptionPresenter())
+            DetailsOverviewRowPresenter(DetailsDescriptionPresenter())
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             when (action.id) {
