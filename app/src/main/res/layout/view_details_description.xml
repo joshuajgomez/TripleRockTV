@@ -17,6 +17,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="@color/white"
         android:textSize="30sp"
         tools:text="Some movie with long name (2000)" />
 
@@ -71,4 +72,13 @@
             android:layout_marginStart="5dp"
             android:text="In my list" />
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxLines="6"
+        android:text="Some long description about the movie thats really long" />
 </LinearLayout>
