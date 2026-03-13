@@ -92,12 +92,13 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
         description: String? = null,
         icon: Int? = null
     ) {
-        val action = actions[idStatus.toInt()]
-        action.title = message ?: ""
-        action.description = description ?: ""
-        action.icon = if (icon == null) null
-        else ContextCompat.getDrawable(requireContext(), icon)
-        notifyActionChanged(idStatus.toInt())
+        findActionById(idStatus)?.let { action ->
+            action.title = message ?: ""
+            action.description = description ?: ""
+            action.icon = if (icon == null) null
+            else ContextCompat.getDrawable(requireContext(), icon)
+            notifyActionChanged(action.id.toInt())
+        }
     }
 
     override fun onCreateGuidance(savedInstanceState: Bundle?): GuidanceStylist.Guidance {
