@@ -26,14 +26,12 @@ class DetailsViewModel @Inject constructor(
     val streamData = _streamData.asStateFlow()
 
     var isBlurSettingEnabled: Boolean = false
-    var serverUrl: String = ""
 
     private var streamId: Int? = null
 
     init {
         viewModelScope.launch {
             isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
-            serverUrl = localDatastore.getUserInfo()?.webUrl ?: ""
         }
     }
 

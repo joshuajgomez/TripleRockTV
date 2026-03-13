@@ -5,13 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        tools:progress="30" />
-
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
@@ -19,6 +12,12 @@
         android:textSize="30sp"
         tools:text="Some movie with long name (2000)" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        tools:progress="30" />
 
     <LinearLayout
         android:id="@+id/ll_rating_container"

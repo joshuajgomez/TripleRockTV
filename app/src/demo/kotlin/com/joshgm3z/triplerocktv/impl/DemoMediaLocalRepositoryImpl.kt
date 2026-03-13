@@ -64,11 +64,7 @@ constructor() : MediaLocalRepository {
         streamType: StreamType
     ): Flow<StreamData> = flow {
         DemoData.allStreams.firstOrNull {
-            when (it) {
-                is StreamData -> it.streamId == streamId
-//            is SeriesStream -> it.seriesId == streamId
-                else -> false
-            }
+            it.streamId == streamId
         }?.let {
             emit(it)
         }
