@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="25sp"
         tools:text="Some movie with long name (2000)" />
 
     <LinearLayout
@@ -40,6 +40,7 @@
             android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
             android:textSize="12sp"
             tools:text="3.5" />
 
@@ -47,30 +48,44 @@
             android:id="@+id/tv_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
+            android:layout_marginStart="8dp"
             android:textSize="12sp"
-            android:visibility="gone" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/ll_my_list_container"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <ImageView
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:contentDescription=""
-            android:src="@drawable/ic_check_circle_green" />
+            android:visibility="gone"
+            tools:text="&#8226; 1 hour 30 min"
+            tools:visibility="visible" />
 
         <TextView
+            android:id="@+id/tv_subtitle_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="In my list" />
+            android:layout_marginStart="8dp"
+            android:textSize="12sp"
+            android:visibility="gone"
+            tools:text="&#8226; Subtitle downloaded"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/ll_my_list_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:contentDescription=""
+                android:src="@drawable/ic_check_circle_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text="My list"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
     <TextView
@@ -79,6 +94,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:ellipsize="end"
-        android:maxLines="6"
-        android:text="Some long description about the movie thats really long" />
+        android:maxLines="4"
+        android:text="@string/long_description" />
 </LinearLayout>
