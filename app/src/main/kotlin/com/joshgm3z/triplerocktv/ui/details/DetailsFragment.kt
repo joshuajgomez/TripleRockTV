@@ -135,7 +135,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         detailsRow.actionsAdapter = actionAdapter
 
-        glideUtil.loadBitmap(requireContext(), streamData.streamIcon) {
+        glideUtil.loadBitmap(streamData.streamIcon) {
             detailsRow.setImageBitmap(requireContext(), it)
             rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
         }
