@@ -90,7 +90,7 @@ class DetailsFragment : DetailsSupportFragment() {
                 val canvas = Canvas(bitmap)
                 val paint = Paint()
                 // Set color to black with 50% alpha (128)
-                paint.colorFilter = colorFilter
+//                paint.colorFilter = colorFilter
                 canvas.drawBitmap(bitmap, 0f, 0f, paint)
                 BackgroundManager.getInstance(requireActivity()).setBitmap(bitmap)
             }

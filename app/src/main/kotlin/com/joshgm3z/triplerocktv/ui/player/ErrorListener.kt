@@ -37,6 +37,10 @@ fun errorListener(
         }
 
         val action = PlaybackFragmentDirections.toError(errorMessage)
-        findNavController(fragment).navigate(action)
+        try {
+            findNavController(fragment).navigate(action)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
     }
 }
