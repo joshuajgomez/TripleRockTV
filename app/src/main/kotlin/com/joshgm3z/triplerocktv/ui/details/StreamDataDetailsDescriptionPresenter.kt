@@ -4,8 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.toTextTime
 
 class DetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -28,11 +30,18 @@ class DetailsDescriptionPresenter : Presenter() {
         binding.tvTitle.text = streamData.name
         binding.tvRating.text = streamData.rating.toString()
         binding.progressBar.progress = streamData.progressPercent()
-        binding.progressBar.visibility =
-            if (streamData.progressPercent() > 0) View.VISIBLE else View.GONE
-        binding.llRatingContainer.visibility =
-            if (streamData.rating > 0) View.VISIBLE else View.GONE
+
+        binding.progressBar.visibility = visibleIf((streamData.progressPercent() > 0))
+        binding.llRatingContainer.visibility = visibleIf(streamData.rating > 0)
+
+        binding.tvDuration.text = binding.root.context.getString(
+            R.string.text_after_dot,
+            streamData.totalDuration.toTextTime()
+        )
+        binding.tvDuration.visibility = visibleIf(streamData.totalDuration > 0)
     }
+
+    private fun visibleIf(visible: Boolean) = if (visible) View.VISIBLE else View.GONE
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
 

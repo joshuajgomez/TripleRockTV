@@ -59,3 +59,13 @@ data class StreamData(
     val startedWatching: Boolean
         get() = lastPlayed > MIN_PLAYBACK_DURATION
 }
+
+fun Long.toTextTime(): String {
+    val totalSeconds = this / 1000
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    return buildString {
+        if (hours > 0) append("$hours hour ")
+        if (minutes > 0 || hours > 0) append("$minutes minutes")
+    }.trim()
+}
