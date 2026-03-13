@@ -1,5 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.browse
 
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -26,6 +28,7 @@ import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -47,6 +50,9 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     @Inject
     lateinit var recentStreamPresenter: RecentStreamPresenter
+
+    @Inject
+    lateinit var glideUtil: GlideUtil
 
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
@@ -140,9 +146,13 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun handleBlur(thumbnailUrl: String?) {
         thumbnailUrl?.let {
             if (viewModel.isBlurSettingEnabled)
-                updateBackgroundWithBlur(requireContext(), it) {
-                    backgroundManager.setBitmap(it)
-
+                glideUtil.loadBitmap(uri = it, blur = true) { bitmap ->
+                    val canvas = Canvas(bitmap)
+                    val paint = Paint()
+                    // Set color to black with 50% alpha (128)
+                    paint.colorFilter = colorFilter
+                    canvas.drawBitmap(bitmap, 0f, 0f, paint)
+                    backgroundManager.setBitmap(bitmap)
                 }
         }
     }
