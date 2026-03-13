@@ -31,6 +31,8 @@ data class StreamData(
     val lastPlayed: Long = 0,
     val totalDuration: Long = 0,
     val playedDuration: Long = 0,
+    val description: String? = null,
+    val backPosterUrl: String? = null,
 ) {
     companion object {
         fun sample(): StreamData = StreamData(

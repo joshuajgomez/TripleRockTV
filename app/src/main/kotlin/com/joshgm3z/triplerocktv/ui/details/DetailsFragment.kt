@@ -1,7 +1,10 @@
 package com.joshgm3z.triplerocktv.ui.details
 
+import android.graphics.Canvas
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.DetailsSupportFragment
@@ -11,14 +14,14 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.DetailsOverviewRow
 import androidx.leanback.widget.DetailsOverviewRowPresenter
-import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
 import androidx.leanback.widget.OnActionClickedListener
 import androidx.leanback.widget.SparseArrayObjectAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.ui.browse.updateBackgroundWithBlur
+import com.joshgm3z.triplerocktv.ui.browse.colorFilter
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +52,8 @@ class DetailsFragment : DetailsSupportFragment() {
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
             DetailsOverviewRowPresenter(DetailsDescriptionPresenter())
+
+        detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             when (action.id) {
@@ -81,8 +86,13 @@ class DetailsFragment : DetailsSupportFragment() {
         imageUrl ?: return
         backgroundImageUrl = imageUrl
         if (viewModel.isBlurSettingEnabled)
-            updateBackgroundWithBlur(requireContext(), imageUrl) {
-                BackgroundManager.getInstance(requireActivity()).setBitmap(it)
+            glideUtil.loadBitmap(uri = imageUrl, blur = false) { bitmap ->
+                val canvas = Canvas(bitmap)
+                val paint = Paint()
+                // Set color to black with 50% alpha (128)
+                paint.colorFilter = colorFilter
+                canvas.drawBitmap(bitmap, 0f, 0f, paint)
+                BackgroundManager.getInstance(requireActivity()).setBitmap(bitmap)
             }
     }
 
@@ -101,7 +111,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
     private fun updateDetails(streamData: StreamData) {
         Logger.debug("streamData = [${streamData}]")
-        handleBlur(streamData.streamIcon)
+        handleBlur(streamData.backPosterUrl)
 
         val existingRow = if (rowsAdapter.size() > 0) {
             rowsAdapter.get(0) as? DetailsOverviewRow
@@ -154,6 +164,11 @@ class DetailsFragment : DetailsSupportFragment() {
         lifecycleScope.launch {
             handleBlur(backgroundImageUrl)
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        BackgroundManager.getInstance(requireActivity()).setBitmap(null)
     }
 
     companion object {

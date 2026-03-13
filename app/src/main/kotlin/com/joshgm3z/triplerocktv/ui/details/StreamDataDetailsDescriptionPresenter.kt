@@ -40,6 +40,8 @@ class DetailsDescriptionPresenter : Presenter() {
         )
         binding.tvDuration.visibility = visibleIf(streamData.totalDuration > 0)
         binding.llMyListContainer.visibility = visibleIf(streamData.inMyList)
+        binding.tvDescription.text = streamData.description
+        binding.tvDescription.visibility = visibleIf(!streamData.description.isNullOrEmpty())
     }
 
     private fun visibleIf(visible: Boolean) = if (visible) View.VISIBLE else View.GONE
