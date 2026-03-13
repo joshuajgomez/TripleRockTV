@@ -87,9 +87,7 @@ constructor() : MediaLocalRepository {
     override suspend fun updateLastPlayedTimestamp(streamId: Int) {}
 
     override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
-    override suspend fun updateMyList(streamId: Int, add: Boolean) {
-        TODO("Not yet implemented")
-    }
+    override suspend fun updateMyList(streamId: Int, add: Boolean) {}
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,
