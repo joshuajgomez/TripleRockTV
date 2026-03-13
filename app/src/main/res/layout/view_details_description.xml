@@ -5,12 +5,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="30sp"
-        tools:text="Some movie with long name (2000)" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -19,11 +13,19 @@
         android:layout_height="wrap_content"
         tools:progress="30" />
 
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        tools:text="Some movie with long name (2000)" />
+
     <LinearLayout
         android:id="@+id/ll_rating_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
         android:gravity="center_vertical"
         android:visibility="gone"
         tools:visibility="visible">
@@ -49,4 +51,24 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <LinearLayout
+        android:id="@+id/ll_my_list_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:contentDescription=""
+            android:src="@drawable/ic_check_circle_green" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="In my list" />
+    </LinearLayout>
 </LinearLayout>

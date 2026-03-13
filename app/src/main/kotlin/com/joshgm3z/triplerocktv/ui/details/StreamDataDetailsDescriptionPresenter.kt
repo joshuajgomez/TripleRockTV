@@ -18,7 +18,7 @@ class DetailsDescriptionPresenter : Presenter() {
             parent,
             false
         )
-        return DescriptionViewHolder(view.root)
+        return ViewHolder(view.root)
     }
 
     override fun onBindViewHolder(
@@ -39,13 +39,10 @@ class DetailsDescriptionPresenter : Presenter() {
             streamData.totalDuration.toTextTime()
         )
         binding.tvDuration.visibility = visibleIf(streamData.totalDuration > 0)
+        binding.llMyListContainer.visibility = visibleIf(streamData.inMyList)
     }
 
     private fun visibleIf(visible: Boolean) = if (visible) View.VISIBLE else View.GONE
 
-    override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-
-    }
-
-    private class DescriptionViewHolder(view: View) : ViewHolder(view)
+    override fun onUnbindViewHolder(viewHolder: ViewHolder) {}
 }
