@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">3RockTV</string>
-    <string name="text_after_dot">&#8226;  %1$s</string>
+    <string name="text_after_dot">&#8226;    %1$s</string>
+    <string name="long_description">Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.</string>
 </resources>
