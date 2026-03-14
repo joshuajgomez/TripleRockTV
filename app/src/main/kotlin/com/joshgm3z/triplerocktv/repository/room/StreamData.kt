@@ -67,7 +67,7 @@ fun Long.toTextTime(): String {
     val hours = totalSeconds / 3600
     val minutes = (totalSeconds % 3600) / 60
     return buildString {
-        if (hours > 0) append("$hours hour ")
-        if (minutes > 0 || hours > 0) append("$minutes minutes")
+        if (hours > 0) append("${hours}h ")
+        if (minutes > 0 || hours > 0) append("${minutes}m")
     }.trim()
 }
