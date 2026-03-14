@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.toTextTime
+import com.joshgm3z.triplerocktv.util.Logger
 
 class DetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {

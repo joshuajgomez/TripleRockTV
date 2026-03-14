@@ -2,4 +2,6 @@
 <resources>
     <dimen name="container_width">600dp</dimen>
     <dimen name="container_height">300dp</dimen>
+    <dimen name="metadata_gap">5dp</dimen>
+    <dimen name="metadata_text_size">12sp</dimen>
 </resources>
