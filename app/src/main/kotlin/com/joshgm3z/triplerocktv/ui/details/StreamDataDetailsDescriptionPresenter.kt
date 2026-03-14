@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.Logger
+import com.joshgm3z.triplerocktv.util.visibleIf
 
 class DetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -45,8 +46,6 @@ class DetailsDescriptionPresenter : Presenter() {
         binding.tvDescription.visibility = visibleIf(!streamData.description.isNullOrEmpty())
         binding.tvSubtitleStatus.visibility = visibleIf(!streamData.subtitleUrl.isNullOrEmpty())
     }
-
-    private fun visibleIf(visible: Boolean) = if (visible) View.VISIBLE else View.GONE
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {}
 }

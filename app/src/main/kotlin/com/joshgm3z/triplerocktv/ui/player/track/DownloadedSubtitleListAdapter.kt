@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.databinding.ItemDownloadedSubtitleBinding
 import com.joshgm3z.triplerocktv.repository.SubtitleData
 import com.joshgm3z.triplerocktv.util.languageName
+import com.joshgm3z.triplerocktv.util.visibleIf
 
 class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleListViewHolder>() {
 
@@ -36,6 +37,7 @@ class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleLis
         val data = subtitleList[position]
         holder.text = data.title
         holder.language = data.language.languageName()
+        holder.downloadsCount = data.downloadCount
         holder.listenClickEvent {
             clickListener?.onSubtitleClicked(data)
         }
@@ -57,6 +59,13 @@ class DownloadedSubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder
     var language: String = ""
         set(value) {
             binding.tvLanguage.text = value
+            field = value
+        }
+
+    var downloadsCount: Int = 0
+        set(value) {
+            binding.tvDownloadCount.text = "$value downloads"
+            binding.llSubtitleCountContainer.visibility = visibleIf(value > 0)
             field = value
         }
 
