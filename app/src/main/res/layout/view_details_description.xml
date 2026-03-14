@@ -41,15 +41,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:textSize="12sp"
+            android:textSize="@dimen/metadata_text_size"
             tools:text="3.5" />
 
         <TextView
             android:id="@+id/tv_duration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="12sp"
+            android:layout_marginStart="@dimen/metadata_gap"
+            android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:text="&#8226; 1h 30m"
             tools:visibility="visible" />
@@ -58,17 +58,17 @@
             android:id="@+id/tv_subtitle_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:textSize="12sp"
+            android:layout_marginStart="@dimen/metadata_gap"
+            android:text="@string/subtitle_downloaded"
+            android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
-            tools:text="&#8226; Subtitle downloaded"
             tools:visibility="visible" />
 
         <LinearLayout
             android:id="@+id/ll_my_list_container"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="@dimen/metadata_gap"
             android:gravity="center_vertical"
             android:visibility="gone"
             tools:visibility="visible">
@@ -84,7 +84,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
                 android:text="My list"
-                android:textSize="12sp" />
+                android:textSize="@dimen/metadata_text_size" />
         </LinearLayout>
     </LinearLayout>
 
