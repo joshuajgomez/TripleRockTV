@@ -35,16 +35,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
         epgListingDao.getAllEpgListings()
 
-    override suspend fun searchStreamByName(
-        name: String,
-        streamType: StreamType
-    ): List<StreamData> = when (streamType) {
-        StreamType.Series -> emptyList()
-        else -> streamDataDao.searchByName(name)
-    }.apply {
-        Logger.info("searchStreamByName($name, $streamType): $this")
-    }
-
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
         streamType: StreamType

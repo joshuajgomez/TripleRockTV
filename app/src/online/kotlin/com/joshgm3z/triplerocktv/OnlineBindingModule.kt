@@ -4,11 +4,13 @@ import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.repository.MovieInfoRepository
+import com.joshgm3z.triplerocktv.repository.SearchRepository
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.repository.impl.LoginRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.impl.MediaLocalRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.impl.MovieInfoRepositoryImpl
+import com.joshgm3z.triplerocktv.repository.impl.SearchRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.impl.SubtitleRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -27,6 +29,11 @@ abstract class OnlineBindingModule {
     abstract fun bindMediaLocalRepository(
         repo: MediaLocalRepositoryImpl
     ): MediaLocalRepository
+
+    @Binds
+    abstract fun bindSearchRepository(
+        repo: SearchRepositoryImpl
+    ): SearchRepository
 
     @Binds
     abstract fun bindMediaOnlineRepository(

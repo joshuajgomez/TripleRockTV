@@ -47,10 +47,10 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.uiState.collectLatest {
-                    when (it) {
-                        is SearchUiState.Initial -> showInitialUi()
+                    when (it.searchUiState) {
+                        is SearchUiState.Initial -> showInitialUi(it.searchHints)
                         is SearchUiState.Loading -> showLoadingUi()
-                        is SearchUiState.Result -> updateSearchResult(it)
+                        is SearchUiState.Result -> updateSearchResult(it.searchUiState)
                     }
                 }
             }
@@ -71,6 +71,11 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
                 streamType = StreamType.Series
             }
 
+            is String -> {
+                setSearchQuery(item, true)
+                return@setOnItemViewClickedListener
+            }
+
             else -> return@setOnItemViewClickedListener
         }.let {
             findNavController().navigate(it)
@@ -84,10 +89,13 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         rowsAdapter.add(ListRow(header, ArrayObjectAdapter()))
     }
 
-    private fun showInitialUi() {
+    private fun showInitialUi(searchHints: List<String>) {
+        Logger.debug("searchHints = [${searchHints}]")
         rowsAdapter.clear()
         val header = HeaderItem(0, "Start typing to search")
-        rowsAdapter.add(ListRow(header, ArrayObjectAdapter()))
+        val adapter = ArrayObjectAdapter(SimpleTextPresenter())
+        adapter.addAll(0, searchHints)
+        rowsAdapter.add(ListRow(header, adapter))
     }
 
     private fun updateSearchResult(result: SearchUiState.Result) {
@@ -137,6 +145,9 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         // Handle query submission
+        query?.let {
+            viewModel.onSearchSubmit(it.trim())
+        }
         return false
     }
 }
