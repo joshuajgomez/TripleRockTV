@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joshgm3z.triplerocktv.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.SearchTextDao
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
@@ -39,6 +40,11 @@ class DatabaseModule {
     @Provides
     fun provideStreamDataDao(appDatabase: AppDatabase): StreamDataDao {
         return appDatabase.streamDataDao()
+    }
+
+    @Provides
+    fun provideSearchTextDao(appDatabase: AppDatabase): SearchTextDao {
+        return appDatabase.searchTextDao()
     }
 
     @Provides

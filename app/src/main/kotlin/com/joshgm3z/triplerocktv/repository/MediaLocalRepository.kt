@@ -11,8 +11,6 @@ interface MediaLocalRepository {
 
     suspend fun fetchEpgListings(): List<IptvEpgListing>
 
-    suspend fun searchStreamByName(name: String, streamType: StreamType): List<StreamData>
-
     suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<StreamData>
 
     suspend fun fetchStream(streamId: Int, streamType: StreamType): StreamData?
