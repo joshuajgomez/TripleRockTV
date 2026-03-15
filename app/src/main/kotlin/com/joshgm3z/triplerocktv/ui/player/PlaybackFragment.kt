@@ -44,6 +44,7 @@ import com.joshgm3z.triplerocktv.ui.player.track.TrackType
 class PlaybackFragment : VideoSupportFragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
+
     private val trackViewModel: TrackSelectorViewModel by hiltNavGraphViewModels(
         R.id.nav_graph
     )
@@ -281,6 +282,12 @@ class PlaybackFragment : VideoSupportFragment() {
 
             // Add to view hierarchy
             parent.addView(sv)
+        }
+        lifecycleScope.launch {
+            PeriodicReminderUtility().getPeriodicReminder {
+                if (player.isPlaying)
+                    viewModel.updateLastPlayedPosition(player.currentPosition)
+            }
         }
     }
 
