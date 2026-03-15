@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.repository.impl
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
@@ -19,6 +20,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
     private val epgListingDao: EpgListingDao,
+    private val searchHintDao: SearchHintDao,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -68,6 +70,7 @@ class LoginRepositoryImpl @Inject constructor(
         seriesCategoryDao.deleteAllCategories()
         seriesStreamsDao.deleteAllStreams()
         epgListingDao.deleteAllEpgListings()
+        searchHintDao.deleteAll()
 
         delay(1000)
         onLogoutComplete()

@@ -2,15 +2,15 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.SearchRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
-import com.joshgm3z.triplerocktv.repository.room.SearchText
-import com.joshgm3z.triplerocktv.repository.room.SearchTextDao
+import com.joshgm3z.triplerocktv.repository.room.SearchHint
+import com.joshgm3z.triplerocktv.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.util.Logger
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val searchTextDao: SearchTextDao,
+    private val searchHintDao: SearchHintDao,
     private val streamDataDao: StreamDataDao,
 ) : SearchRepository {
     override suspend fun searchStreamByName(
@@ -24,10 +24,10 @@ class SearchRepositoryImpl @Inject constructor(
     }
 
     override suspend fun addSearchText(searchText: String) {
-        searchTextDao.insert(SearchText(text = searchText))
+        searchHintDao.insert(SearchHint(text = searchText))
     }
 
     override suspend fun getSearchTextList(): List<String> {
-        return searchTextDao.getAll().map { it.text }
+        return searchHintDao.getSearchHints().map { it.text }
     }
 }
