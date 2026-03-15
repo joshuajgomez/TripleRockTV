@@ -275,6 +275,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.keepScreenOn = true
         subtitleView.let { sv ->
             val parent = view as? ViewGroup ?: return
 
