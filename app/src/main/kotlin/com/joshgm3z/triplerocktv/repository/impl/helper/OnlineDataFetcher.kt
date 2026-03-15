@@ -102,11 +102,17 @@ constructor(
                 categoryId = it.categoryId,
                 added = it.added,
                 streamType = categoryData.streamType,
-                extension = it.containerExtension ?: "",
+                extension = it.containerExtension ?: categoryData.streamType.defaultExtension(),
                 rating = it.rating.parseToFloat(),
+                epgChannelId = it.epgChannelId,
             )
         })
     }
+}
+
+private fun StreamType.defaultExtension(): String = when (this) {
+    StreamType.LiveTV -> "ts"
+    else -> ""
 }
 
 fun String?.parseToFloat(): Float {

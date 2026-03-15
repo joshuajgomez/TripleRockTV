@@ -21,6 +21,7 @@ data class StreamData(
     val added: String,
     val rating: Float,
     val extension: String,
+    val epgChannelId: String? = null,
 
     val streamType: StreamType,
     val inMyList: Boolean = false,
