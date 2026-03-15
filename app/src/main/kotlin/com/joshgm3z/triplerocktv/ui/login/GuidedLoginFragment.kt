@@ -13,6 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
+import com.joshgm3z.triplerocktv.util.orIfDebug
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -30,9 +31,9 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
         val idPassword = 2L
         val idLogin = 3L
         val idStatus = 4L
-        val defaultValueServerUrl = /*"http://"*/ Secrets.webUrl
-        val defaultValueUsername = /*""*/ Secrets.username
-        val defaultValuePassword = /*""*/ Secrets.password
+        val defaultValueServerUrl = "http://".orIfDebug(Secrets.webUrl)
+        val defaultValueUsername = "".orIfDebug(Secrets.username)
+        val defaultValuePassword = "".orIfDebug(Secrets.password)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -196,7 +197,7 @@ class GuidedLoginFragment : GuidedStepSupportFragment() {
     private fun copyInputToTitle(action: GuidedAction) {
         if (action.id == idServerUrl || action.id == idUsername || action.id == idPassword) {
             val userInput = action.editTitle.toString()
-            if(userInput.isNullOrEmpty()) return
+            if (userInput.isNullOrEmpty()) return
             action.title = userInput
 
             val position = findActionPositionById(action.id)
