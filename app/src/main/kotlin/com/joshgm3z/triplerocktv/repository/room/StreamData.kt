@@ -8,7 +8,7 @@ import com.joshgm3z.triplerocktv.ui.login.UserInfo
 /**
  * Minimum video playback duration for the app to consider the video "started".
  */
-const val MIN_PLAYBACK_DURATION = 5000L
+const val MIN_PLAYBACK_DURATION = 3 * 60 * 1000L // 180,000 ms
 
 @Entity(tableName = "stream_data")
 data class StreamData(
