@@ -5,6 +5,8 @@ import com.joshgm3z.triplerocktv.repository.data.IptvEpgResponse
 import com.joshgm3z.triplerocktv.repository.data.IptvSeries
 import com.joshgm3z.triplerocktv.repository.data.IptvStream
 import com.joshgm3z.triplerocktv.repository.data.SeriesDetailResponse
+import com.joshgm3z.triplerocktv.repository.data.VodInfoResponse
+import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -70,4 +72,12 @@ interface IptvService {
         @Query("stream_id") streamId: Int,
         @Query("action") action: String = "get_short_epg"
     ): IptvEpgResponse
+
+    @GET("player_api.php")
+    suspend fun getVodInfo(
+        @Query("vod_id") streamId: Int,
+        @Query("username") username: String = MediaOnlineRepositoryImpl.username,
+        @Query("password") password: String = MediaOnlineRepositoryImpl.password,
+        @Query("action") action: String = "get_vod_info"
+    ): VodInfoResponse
 }
