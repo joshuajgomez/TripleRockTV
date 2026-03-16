@@ -9,6 +9,8 @@ interface MediaLocalRepository {
 
     suspend fun fetchCategories(streamType: StreamType): List<CategoryData>
 
+    suspend fun fetchCategoriesByTitleKey(streamType: StreamType, titleKey: String): List<CategoryData>
+
     suspend fun fetchEpgListings(): List<IptvEpgListing>
 
     suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<StreamData>

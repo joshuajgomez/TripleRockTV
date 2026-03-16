@@ -169,10 +169,10 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
         addRecentsRow(uiState.recentPlayed)
         addMyListRow(uiState.myList)
-        addRow(1, "Video on demand", uiState.vodCategories)
-//        addRow(2, "Series", uiState.seriesCategories)
-        addRow(3, "Live TV", uiState.liveTvCategories)
-//        addRow(4, "EPG", uiState.epgCategories)
+        var counter = 1L
+        uiState.categoryMap.forEach { (title, categories) ->
+            addRow(counter++, title, categories)
+        }
         addSettingsRow()
     }
 

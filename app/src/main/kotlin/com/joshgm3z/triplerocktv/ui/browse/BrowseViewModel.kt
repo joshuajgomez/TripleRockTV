@@ -21,8 +21,7 @@ import javax.inject.Inject
 data class BrowseUiState(
     val myList: List<StreamData> = emptyList(),
     val recentPlayed: List<StreamData> = emptyList(),
-    val vodCategories: List<CategoryData> = emptyList(),
-    val liveTvCategories: List<CategoryData> = emptyList(),
+    val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
     val seriesCategories: List<SeriesCategory> = emptyList(),
     val epgCategories: List<IptvEpgListing> = emptyList(),
     var errorMessage: String? = null,
@@ -57,8 +56,26 @@ class BrowseViewModel
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
                 it.copy(
-                    vodCategories = repository.fetchCategories(StreamType.VideoOnDemand),
-                    liveTvCategories = repository.fetchCategories(StreamType.LiveTV),
+                    categoryMap = mapOf(
+                        "All movies" to repository.fetchCategories(StreamType.VideoOnDemand),
+                        "English" to repository.fetchCategoriesByTitleKey(
+                            StreamType.VideoOnDemand,
+                            "English"
+                        ),
+                        "Malayalam" to repository.fetchCategoriesByTitleKey(
+                            StreamType.VideoOnDemand,
+                            "Malayalam"
+                        ),
+                        "Hindi" to repository.fetchCategoriesByTitleKey(
+                            StreamType.VideoOnDemand,
+                            "Hindi"
+                        ),
+                        "Tamil" to repository.fetchCategoriesByTitleKey(
+                            StreamType.VideoOnDemand,
+                            "Tamil"
+                        ),
+                        "Live TV" to repository.fetchCategories(StreamType.LiveTV),
+                    ),
                     epgCategories = repository.fetchEpgListings(),
                     recentPlayed = repository.fetchRecentlyPlayed(),
                     myList = repository.fetchMyList(),

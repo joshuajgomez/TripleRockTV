@@ -11,6 +11,9 @@ interface CategoryDataDao {
     @Query("SELECT * FROM category_data WHERE streamType = :streamType")
     fun getAllOfType(streamType: StreamType): List<CategoryData>
 
+    @Query("SELECT * FROM category_data WHERE streamType = :streamType AND categoryName LIKE '%' || :titleKey ||'%'")
+    fun getAllOfTypeWithTitleKey(streamType: StreamType, titleKey: String): List<CategoryData>
+
     @Query("SELECT * FROM category_data")
     fun getAll(): List<CategoryData>
 
