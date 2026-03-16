@@ -24,4 +24,6 @@ interface MediaOnlineRepository {
         onFetch: (StreamType, LoadingState) -> Unit,
         onError: (String, String) -> Unit,
     )
+
+    suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType)
 }

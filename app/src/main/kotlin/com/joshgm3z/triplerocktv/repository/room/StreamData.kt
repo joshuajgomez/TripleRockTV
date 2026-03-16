@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.repository.room
 
+import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.repository.StreamType
@@ -30,10 +31,10 @@ data class StreamData(
     val subtitleTitle: String? = null,
     val subtitleLanguage: String? = null,
     val lastPlayed: Long = 0,
-    val totalDuration: Long = 0,
     val playedDuration: Long = 0,
-    val description: String? = null,
-    val backPosterUrl: String? = null,
+
+    @Embedded
+    val movieMetadata: MovieMetadata? = null
 ) {
     companion object {
         fun sample(): StreamData = StreamData(
@@ -55,8 +56,8 @@ data class StreamData(
         "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
     fun progressPercent(): Int = when {
-        totalDuration == 0L -> 0
-        else -> ((playedDuration.toDouble() / totalDuration) * 100).toInt()
+        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0
+        else -> ((playedDuration.toDouble() / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
     }
 
     val startedWatching: Boolean
@@ -71,4 +72,16 @@ fun Long.toTextTime(): String {
         if (hours > 0) append("${hours}h ")
         if (minutes > 0 || hours > 0) append("${minutes}m")
     }.trim()
+}
+
+data class MovieMetadata(
+    val description: String?,
+    val backPoster: String? = null,
+    val totalDurationMs: Long = 0L,
+    val cast: String? = null,
+    val director: String? = null,
+    val actors: String? = null,
+    val genre: String? = null,
+) {
+    val backPosterUrl: String = "https://image.tmdb.org/t/p/w1280/$backPoster"
 }
