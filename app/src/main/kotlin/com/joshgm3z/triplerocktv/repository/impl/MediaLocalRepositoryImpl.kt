@@ -32,6 +32,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
         else -> emptyList()
     }
 
+    override suspend fun fetchCategoriesByTitleKey(
+        streamType: StreamType,
+        titleKey: String
+    ): List<CategoryData> {
+        return categoryDataDao.getAllOfTypeWithTitleKey(streamType, titleKey)
+    }
+
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
         epgListingDao.getAllEpgListings()
 
