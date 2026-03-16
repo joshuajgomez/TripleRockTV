@@ -78,6 +78,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
             else -> return@setOnItemViewClickedListener
         }.let {
+            viewModel.saveSearchHint()
             findNavController().navigate(it)
         }
     }
@@ -145,10 +146,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         Logger.debug("query = [${query}]")
-        // Handle query submission
-        query?.let {
-            viewModel.onSearchSubmit(it.trim())
-        }
+        viewModel.saveSearchHint()
         return false
     }
 }
