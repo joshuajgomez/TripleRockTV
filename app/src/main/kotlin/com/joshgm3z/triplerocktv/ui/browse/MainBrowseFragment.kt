@@ -149,7 +149,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun handleBlur(thumbnailUrl: String?) {
         thumbnailUrl?.let {
             if (viewModel.isBlurSettingEnabled)
-                glideUtil.loadBitmap(uri = it, blur = true) { bitmap ->
+                glideUtil.getBitmap(uri = it, blur = true) { bitmap ->
                     val canvas = Canvas(bitmap)
                     val paint = Paint()
                     // Set color to black with 50% alpha (128)

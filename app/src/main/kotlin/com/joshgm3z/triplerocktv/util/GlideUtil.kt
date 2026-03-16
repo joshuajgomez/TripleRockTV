@@ -40,7 +40,7 @@ class GlideUtil
             .into(imageView)
     }
 
-    fun loadBitmap(
+    fun getBitmap(
         uri: String?,
         blur: Boolean = false,
         onBitmapReady: (Bitmap) -> Unit,
