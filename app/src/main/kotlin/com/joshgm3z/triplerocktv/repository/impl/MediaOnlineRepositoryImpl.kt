@@ -93,6 +93,9 @@ class MediaOnlineRepositoryImpl
     }
 
     override suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
+        if (iptvService == null) {
+            fetchIptvService()
+        }
         onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
     }
 }

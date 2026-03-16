@@ -5,8 +5,13 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
+import com.joshgm3z.triplerocktv.util.GlideUtil
+import javax.inject.Inject
 
-class CategoryPresenter : Presenter() {
+class CategoryPresenter
+@Inject constructor(
+    private val glideUtil: GlideUtil
+) : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val cardView = CategoryCardView(parent.context).apply {
             isFocusable = true
@@ -34,11 +39,7 @@ class CategoryPresenter : Presenter() {
         val cardView = viewHolder.view as CategoryCardView
         cardView.titleView.text = title
         cardView.countView.text = "$count videos"
-        streamIcon?.let {
-            Glide.with(cardView)
-                .load(it)
-                .into(cardView.imageView)
-        }
+        glideUtil.loadImage(streamIcon, cardView.imageView)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

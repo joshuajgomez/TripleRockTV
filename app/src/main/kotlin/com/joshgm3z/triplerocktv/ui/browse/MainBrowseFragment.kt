@@ -54,6 +54,9 @@ class MainBrowseFragment : BrowseSupportFragment() {
     @Inject
     lateinit var glideUtil: GlideUtil
 
+    @Inject
+    lateinit var categoryPresenter: CategoryPresenter
+
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private lateinit var backgroundManager: BackgroundManager
@@ -196,7 +199,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     ) {
         if (list.isEmpty()) return
         val header = HeaderItem(id, header)
-        val listRowAdapter = ArrayObjectAdapter(CategoryPresenter())
+        val listRowAdapter = ArrayObjectAdapter(categoryPresenter)
         listRowAdapter.addAll(0, list)
         rowsAdapter.add(ListRow(header, listRowAdapter))
     }
