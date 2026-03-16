@@ -295,16 +295,6 @@ class PlaybackFragment : VideoSupportFragment() {
         override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
         }
-
-        override fun onPlaybackStateChanged(playbackState: Int) {
-            if (playbackState == Player.STATE_READY) {
-                val durationMs = player.duration
-                if (durationMs > 0) {
-                    Logger.info("Total video duration: $durationMs ms")
-                    viewModel.updateTotalDuration(durationMs)
-                }
-            }
-        }
     }
 
     override fun onPause() {

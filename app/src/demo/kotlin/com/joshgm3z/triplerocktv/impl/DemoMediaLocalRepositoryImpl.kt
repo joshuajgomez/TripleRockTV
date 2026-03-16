@@ -24,21 +24,6 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
         DemoData.getSampleIptvEpgListings()
 
-    override suspend fun searchStreamByName(
-        name: String,
-        streamType: StreamType
-    ): List<StreamData> = when (streamType) {
-        StreamType.VideoOnDemand -> DemoData.sampleVodStreams.filter {
-            it.name.contains(name, ignoreCase = true)
-        }
-
-        StreamType.LiveTV -> DemoData.sampleLiveStreams.filter {
-            it.name.contains(name, ignoreCase = true)
-        }
-
-        else -> emptyList()
-    }
-
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
         streamType: StreamType
@@ -86,7 +71,6 @@ constructor() : MediaLocalRepository {
 
     override suspend fun updateLastPlayedTimestamp(streamId: Int) {}
 
-    override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {}
     override suspend fun updateMyList(streamId: Int, add: Boolean) {}
 
     override suspend fun updateSelectedSubtitle(

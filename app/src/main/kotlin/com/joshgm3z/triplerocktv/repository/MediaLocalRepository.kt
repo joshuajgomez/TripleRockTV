@@ -27,10 +27,6 @@ interface MediaLocalRepository {
 
     suspend fun updateLastPlayedTimestamp(streamId: Int)
 
-    suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long)
-
-    suspend fun updateMovieMetadata(streamId: Int, movieData: MovieData)
-
     suspend fun updateMyList(streamId: Int, add: Boolean)
 
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)

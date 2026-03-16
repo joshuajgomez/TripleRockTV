@@ -1,14 +1,12 @@
 package com.joshgm3z.triplerocktv.ui.details
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.toTextTime
-import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.visibleIf
 
 class DetailsDescriptionPresenter : Presenter() {
@@ -38,12 +36,12 @@ class DetailsDescriptionPresenter : Presenter() {
 
         binding.tvDuration.text = binding.root.context.getString(
             R.string.text_after_dot,
-            streamData.totalDuration.toTextTime()
+            streamData.movieMetadata?.totalDurationMs?.toTextTime()
         )
-        binding.tvDuration.visibility = visibleIf(streamData.totalDuration > 0)
+        binding.tvDuration.visibility = visibleIf((streamData.movieMetadata?.totalDurationMs ?: 0) > 0)
         binding.llMyListContainer.visibility = visibleIf(streamData.inMyList)
-        binding.tvDescription.text = streamData.description
-        binding.tvDescription.visibility = visibleIf(!streamData.description.isNullOrEmpty())
+        binding.tvDescription.text = streamData.movieMetadata?.description
+        binding.tvDescription.visibility = visibleIf(!streamData.movieMetadata?.description.isNullOrEmpty())
         binding.tvSubtitleStatus.visibility = visibleIf(!streamData.subtitleUrl.isNullOrEmpty())
     }
 

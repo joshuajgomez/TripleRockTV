@@ -1,10 +1,10 @@
 package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.MovieData
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
@@ -80,17 +80,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun updateLastPlayedTimestamp(streamId: Int) {
         streamDataDao.updateLastPlayedTimestamp(streamId)
-    }
-
-    override suspend fun updateTotalDuration(streamId: Int, totalDurationMs: Long) {
-        streamDataDao.updateTotalDuration(streamId, totalDurationMs)
-    }
-
-    override suspend fun updateMovieMetadata(
-        streamId: Int,
-        movieData: MovieData
-    ) {
-        streamDataDao.updateMovieMetadata(streamId, movieData.description, movieData.backPosterUrl)
     }
 
     override suspend fun updateMyList(streamId: Int, add: Boolean) {

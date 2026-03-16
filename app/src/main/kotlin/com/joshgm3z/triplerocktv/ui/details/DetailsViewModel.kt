@@ -3,7 +3,7 @@ package com.joshgm3z.triplerocktv.ui.details
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
-import com.joshgm3z.triplerocktv.repository.MovieInfoRepository
+import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.room.StreamData
@@ -21,7 +21,7 @@ import javax.inject.Inject
 class DetailsViewModel @Inject constructor(
     localDatastore: LocalDatastore,
     private val repository: MediaLocalRepository,
-    private val movieInfoRepository: MovieInfoRepository,
+    private val onlineRepository: MediaOnlineRepository,
 ) : ViewModel() {
 
     private val _streamData = MutableStateFlow<StreamData?>(null)
@@ -42,19 +42,15 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch {
             repository.streamDataFlow(streamId, streamType).collectLatest {
                 _streamData.value = it
-                if (it.description.isNullOrEmpty()) searchMetadata(it.name)
+                if (it.movieMetadata?.description.isNullOrEmpty()) searchMetadata(it)
             }
         }
     }
 
-    private fun searchMetadata(name: String) {
-        Logger.debug("name = [${name}]")
+    private fun searchMetadata(streamData: StreamData) {
+        Logger.debug("streamData = [${streamData}]")
         viewModelScope.launch(Dispatchers.IO) {
-            movieInfoRepository.searchMovieData(name.trimMovieName())?.let { movieData ->
-                streamId?.let {
-                    repository.updateMovieMetadata(it, movieData)
-                }
-            }
+            onlineRepository.getMovieDataAndUpdate(streamData.streamId, streamData.streamType)
         }
     }
 

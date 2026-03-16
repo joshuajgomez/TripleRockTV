@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv
 
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
@@ -26,13 +27,16 @@ class DemoData {
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
                 categoryId = 101,
                 added = "1625012046",
-                totalDuration = 4280000L,
                 playedDuration = 42800,
                 lastPlayed = 242,
                 streamType = StreamType.VideoOnDemand,
                 rating = 8.3f,
                 extension = "mp4",
                 inMyList = true,
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 4280000L,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             ),
             StreamData(
                 streamId = 10042,
@@ -42,12 +46,15 @@ class DemoData {
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
                 categoryId = 101,
                 added = "1625112046",
-                totalDuration = 130,
                 playedDuration = 25,
                 lastPlayed = 100,
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 130,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             ),
             StreamData(
                 streamId = 10002,
@@ -57,13 +64,16 @@ class DemoData {
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
                 categoryId = 102,
                 added = "1625112046",
-                totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
                 inMyList = true,
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 120,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             ),
             StreamData(
                 streamId = 10003,
@@ -73,12 +83,15 @@ class DemoData {
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/6v2b7YbExg1kQ9g6zQ6gA2Q2nLk.jpg",
                 categoryId = 103,
                 added = "1625212046",
-                totalDuration = 120,
                 playedDuration = 0,
                 lastPlayed = 0,
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 120,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             ),
             StreamData(
                 streamId = 10004,
@@ -88,12 +101,15 @@ class DemoData {
                 streamIcon = null,
                 categoryId = 104,
                 added = "1625312046",
-                totalDuration = 120,
                 playedDuration = 0,
                 lastPlayed = 0,
                 streamType = StreamType.VideoOnDemand,
                 rating = 0.0f,
                 extension = "mp4",
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 120,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             )
         )
 
@@ -106,12 +122,15 @@ class DemoData {
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/5/5f/BBC_News_2022_%28Alt%29.svg",
                 categoryId = 201,
                 added = "1626012046",
-                totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
                 streamType = StreamType.LiveTV,
                 rating = 0.0f,
                 extension = "mp4",
+                movieMetadata = MovieMetadata(
+                    totalDurationMs = 120,
+                    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+                )
             ),
             StreamData(
                 streamId = 20002,
@@ -121,7 +140,6 @@ class DemoData {
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg",
                 categoryId = 202,
                 added = "1626112046",
-                totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
                 streamType = StreamType.LiveTV,
@@ -136,7 +154,6 @@ class DemoData {
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Cartoon_Network_2010_logo.svg",
                 categoryId = 203,
                 added = "1626212046",
-                totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
                 streamType = StreamType.LiveTV,
@@ -151,7 +168,6 @@ class DemoData {
                 streamIcon = null,
                 categoryId = 204,
                 added = "1626312046",
-                totalDuration = 120,
                 playedDuration = 45,
                 lastPlayed = 100,
                 streamType = StreamType.LiveTV,

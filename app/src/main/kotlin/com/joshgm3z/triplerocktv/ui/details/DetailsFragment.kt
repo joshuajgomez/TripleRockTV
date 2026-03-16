@@ -111,7 +111,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
     private fun updateDetails(streamData: StreamData) {
         Logger.debug("streamData = [${streamData}]")
-        handleBlur(streamData.backPosterUrl)
+        handleBlur(streamData.movieMetadata?.backPosterUrl)
 
         val existingRow = if (rowsAdapter.size() > 0) {
             rowsAdapter.get(0) as? DetailsOverviewRow

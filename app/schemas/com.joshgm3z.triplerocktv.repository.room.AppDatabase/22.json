@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 22,
-    "identityHash": "16a7f06c48f61065bfcb5cbcf4312d71",
+    "identityHash": "3e531661aa2126970f811bc929c0887d",
     "entities": [
       {
         "tableName": "stream_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `epgChannelId` TEXT, `streamType` TEXT NOT NULL, `inMyList` INTEGER NOT NULL, `timeAddedToList` INTEGER NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `lastPlayed` INTEGER NOT NULL, `playedDuration` INTEGER NOT NULL, `description` TEXT, `backPoster` TEXT, `totalDurationMs` INTEGER, `cast` TEXT, `director` TEXT, `actors` TEXT, `genre` TEXT, `backPosterUrl` TEXT, PRIMARY KEY(`streamId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `epgChannelId` TEXT, `streamType` TEXT NOT NULL, `inMyList` INTEGER NOT NULL, `timeAddedToList` INTEGER NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `lastPlayed` INTEGER NOT NULL, `playedDuration` INTEGER NOT NULL, `description` TEXT, `backPosterUrl` TEXT, `totalDurationMs` INTEGER, `cast` TEXT, `director` TEXT, `actors` TEXT, `genre` TEXT, PRIMARY KEY(`streamId`))",
         "fields": [
           {
             "fieldPath": "streamId",
@@ -117,8 +117,8 @@
             "affinity": "TEXT"
           },
           {
-            "fieldPath": "movieMetadata.backPoster",
-            "columnName": "backPoster",
+            "fieldPath": "movieMetadata.backPosterUrl",
+            "columnName": "backPosterUrl",
             "affinity": "TEXT"
           },
           {
@@ -144,11 +144,6 @@
           {
             "fieldPath": "movieMetadata.genre",
             "columnName": "genre",
-            "affinity": "TEXT"
-          },
-          {
-            "fieldPath": "movieMetadata.backPosterUrl",
-            "columnName": "backPosterUrl",
             "affinity": "TEXT"
           }
         ],
@@ -431,7 +426,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '16a7f06c48f61065bfcb5cbcf4312d71')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '3e531661aa2126970f811bc929c0887d')"
     ]
   }
 }
