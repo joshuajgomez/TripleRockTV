@@ -108,6 +108,7 @@
         android:orientation="horizontal">
 
         <ProgressBar
+            android:progressTint="@color/orange"
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dp"

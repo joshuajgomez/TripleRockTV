@@ -44,8 +44,6 @@ constructor(
 
     private var job: Job? = null
 
-    private var searchQuery: String? = null
-
     init {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.update {
@@ -57,7 +55,6 @@ constructor(
     }
 
     fun onSearchInputChange(text: String) {
-        searchQuery = text
         this.job?.cancel()
 
         if (text.isEmpty()) {
@@ -85,11 +82,9 @@ constructor(
         }
     }
 
-    fun saveSearchHint() {
+    fun saveSearchHint(hint: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            searchQuery?.let {
-                repository.addSearchText(it)
-            }
+            repository.addSearchText(hint)
         }
     }
 }

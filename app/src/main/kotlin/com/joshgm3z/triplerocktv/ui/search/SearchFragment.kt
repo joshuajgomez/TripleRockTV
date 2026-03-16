@@ -60,13 +60,16 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     private fun setupClickListeners() = setOnItemViewClickedListener { _, item, _, _ ->
         val action = SearchFragmentDirections.toDetails()
+        var itemName = ""
         when (item) {
             is StreamData -> action.apply {
+                itemName = item.name
                 streamId = item.streamId
                 streamType = item.streamType
             }
 
             is SeriesStream -> action.apply {
+                itemName = item.name
                 streamId = item.seriesId
                 streamType = StreamType.Series
             }
@@ -78,7 +81,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
             else -> return@setOnItemViewClickedListener
         }.let {
-            viewModel.saveSearchHint()
+            viewModel.saveSearchHint(itemName)
             findNavController().navigate(it)
         }
     }
@@ -146,7 +149,9 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
 
     override fun onQueryTextSubmit(query: String?): Boolean {
         Logger.debug("query = [${query}]")
-        viewModel.saveSearchHint()
+        query?.let {
+            viewModel.saveSearchHint(it)
+        }
         return false
     }
 }
