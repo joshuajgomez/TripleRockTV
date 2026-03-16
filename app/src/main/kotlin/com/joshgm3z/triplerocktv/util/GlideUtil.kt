@@ -4,10 +4,14 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.joshgm3z.triplerocktv.BuildConfig
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -31,7 +35,7 @@ class GlideUtil
 
     fun loadImage(url: String?, imageView: ImageView) {
         Glide.with(imageView.context)
-            .load(url.alternateUri(serverUrl))
+            .load(url.alternateUri(serverUrl).orSampleIfDemo())
             .centerCrop()
             .into(imageView)
     }
@@ -43,7 +47,7 @@ class GlideUtil
     ) {
         var glide = Glide.with(context)
             .asBitmap()
-            .load(uri.alternateUri(serverUrl))
+            .load(uri.alternateUri(serverUrl).orSampleIfDemo())
 
         if (blur) glide = glide.apply(
             RequestOptions.bitmapTransform(BlurTransformation(25, 3))
@@ -59,6 +63,13 @@ class GlideUtil
 
             override fun onLoadCleared(placeholder: Drawable?) {}
         })
+    }
+
+    private fun String?.orSampleIfDemo(): Any? {
+        return when (BuildConfig.FLAVOR) {
+            "demo" -> AppCompatResources.getDrawable(context, R.drawable.avatar_movie)?.toBitmap()
+            else -> this
+        }
     }
 }
 
