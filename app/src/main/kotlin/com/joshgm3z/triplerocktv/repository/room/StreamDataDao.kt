@@ -5,7 +5,6 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import com.joshgm3z.triplerocktv.repository.MovieData
 import com.joshgm3z.triplerocktv.repository.StreamType
 import kotlinx.coroutines.flow.Flow
 
@@ -50,9 +49,6 @@ interface StreamDataDao {
     @Query("UPDATE stream_data SET playedDuration = :playedDuration WHERE streamId = :streamId")
     suspend fun updatePlayedDuration(streamId: Int, playedDuration: Long)
 
-    @Query("UPDATE stream_data SET totalDuration = :totalDuration WHERE streamId = :streamId")
-    suspend fun updateTotalDuration(streamId: Int, totalDuration: Long)
-
     @Query("UPDATE stream_data SET subtitleUrl = :url WHERE streamId = :streamId")
     suspend fun updateSubtitleUrl(streamId: Int, url: String)
 
@@ -62,6 +58,4 @@ interface StreamDataDao {
     @Query("UPDATE stream_data SET subtitleLanguage = :language, subtitleTitle = :title WHERE streamId = :streamId")
     suspend fun updateSubtitleLanguage(streamId: Int, language: String, title: String)
 
-    @Query("UPDATE stream_data SET description = :description, backPosterUrl = :backPosterUrl WHERE streamId = :streamId")
-    fun updateMovieMetadata(streamId: Int, description: String, backPosterUrl: String)
 }

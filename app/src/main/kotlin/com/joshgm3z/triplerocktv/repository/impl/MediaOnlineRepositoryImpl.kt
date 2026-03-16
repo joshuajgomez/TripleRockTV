@@ -91,4 +91,8 @@ class MediaOnlineRepositoryImpl
             localDatastore.setLastContentUpdate(System.currentTimeMillis())
         }
     }
+
+    override suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
+        onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
+    }
 }

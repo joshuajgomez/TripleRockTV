@@ -8,10 +8,10 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.util.Logger
-import java.util.stream.Stream
 import javax.inject.Inject
 
 class OnlineDataFetcher
@@ -107,6 +107,24 @@ constructor(
                 epgChannelId = it.epgChannelId,
             )
         })
+    }
+
+    suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
+        if (streamType != StreamType.VideoOnDemand) return
+        iptvService.getVodInfo(streamId).info.let {
+            val movieMetaData = MovieMetadata(
+                description = it.description,
+                backPoster = it.backdropPath?.firstOrNull(),
+                cast = it.cast,
+                director = it.director,
+                actors = it.actors,
+                genre = it.genre,
+                totalDurationMs = (it.durationSecs?.toLong() ?: 0L) * 1000L,
+            )
+            val updatedStreamData = streamDataDao.getByStreamId(streamId)
+                .copy(movieMetadata = movieMetaData)
+            streamDataDao.update(updatedStreamData)
+        }
     }
 }
 
