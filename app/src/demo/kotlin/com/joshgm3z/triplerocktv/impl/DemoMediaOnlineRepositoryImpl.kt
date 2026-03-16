@@ -22,4 +22,9 @@ constructor() : MediaOnlineRepository {
             onFetch(type, LoadingState(percent = 100, status = LoadingStatus.Complete))
         }
     }
+
+    override suspend fun getMovieDataAndUpdate(
+        streamId: Int,
+        streamType: StreamType
+    ) {}
 }

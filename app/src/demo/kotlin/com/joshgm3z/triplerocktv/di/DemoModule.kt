@@ -3,10 +3,12 @@ package com.joshgm3z.triplerocktv.di
 import com.joshgm3z.triplerocktv.impl.DemoLoginRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoMediaLocalRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoMediaOnlineRepositoryImpl
+import com.joshgm3z.triplerocktv.impl.DemoSearchRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoSubtitleRepositoryImpl
 import com.joshgm3z.triplerocktv.repository.LoginRepository
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.repository.SearchRepository
 import com.joshgm3z.triplerocktv.repository.SubtitleRepository
 import dagger.Binds
 import dagger.Module
@@ -35,4 +37,9 @@ abstract class DemoBindingModule {
     abstract fun bindSubtitleRepository(
         repo: DemoSubtitleRepositoryImpl
     ): SubtitleRepository
+
+    @Binds
+    abstract fun bindSearchRepository(
+        repo: DemoSearchRepositoryImpl
+    ): SearchRepository
 }

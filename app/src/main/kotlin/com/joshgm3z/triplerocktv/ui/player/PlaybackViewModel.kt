@@ -48,15 +48,6 @@ class PlaybackViewModel @Inject constructor(
         }
     }
 
-    fun updateTotalDuration(durationMs: Long) {
-        Logger.debug("durationMs = [${durationMs}]")
-        streamId?.let {
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.updateTotalDuration(it, durationMs)
-            }
-        } ?: throw Exception("Stream id is null")
-    }
-
     fun updateLastPlayedPosition(positionMs: Long) {
         Logger.debug("positionMs = [${positionMs}]")
         streamId?.let {

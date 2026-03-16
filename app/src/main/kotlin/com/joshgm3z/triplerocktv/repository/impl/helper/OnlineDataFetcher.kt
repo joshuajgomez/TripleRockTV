@@ -114,7 +114,7 @@ constructor(
         iptvService.getVodInfo(streamId).info.let {
             val movieMetaData = MovieMetadata(
                 description = it.description,
-                backPoster = it.backdropPath?.firstOrNull(),
+                backPosterUrl = it.backdropPath?.firstOrNull(),
                 cast = it.cast,
                 director = it.director,
                 actors = it.actors,

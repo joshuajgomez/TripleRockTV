@@ -76,12 +76,10 @@ fun Long.toTextTime(): String {
 
 data class MovieMetadata(
     val description: String?,
-    val backPoster: String? = null,
+    val backPosterUrl: String? = null,
     val totalDurationMs: Long = 0L,
     val cast: String? = null,
     val director: String? = null,
     val actors: String? = null,
     val genre: String? = null,
-) {
-    val backPosterUrl: String = "https://image.tmdb.org/t/p/w1280/$backPoster"
-}
+)
