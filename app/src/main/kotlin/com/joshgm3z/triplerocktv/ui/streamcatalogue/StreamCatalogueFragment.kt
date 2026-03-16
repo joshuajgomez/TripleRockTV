@@ -67,13 +67,11 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         progressBarManager.show()
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                streamAdapter.clear()
                 it?.let {
                     progressBarManager.hide()
+                    streamAdapter.setItems(it, null)
                     if (it.isEmpty()) {
                         title = "No titles found"
-                    } else {
-                        streamAdapter.addAll(0, it)
                     }
                 }
             }
