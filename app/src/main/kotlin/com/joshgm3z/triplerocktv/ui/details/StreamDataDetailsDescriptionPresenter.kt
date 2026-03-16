@@ -24,25 +24,34 @@ class DetailsDescriptionPresenter : Presenter() {
     override fun onBindViewHolder(
         vh: ViewHolder,
         item: Any?
-    ) {
-        val binding = ViewDetailsDescriptionBinding.bind(vh.view)
+    ) = with(ViewDetailsDescriptionBinding.bind(vh.view)) {
         val streamData = item as StreamData
-        binding.tvTitle.text = streamData.name
-        binding.tvRating.text = streamData.rating.toString()
-        binding.progressBar.progress = streamData.progressPercent()
+        streamData.let {
+            tvTitle.text = it.name
 
-        binding.progressBar.visibility = visibleIf((streamData.progressPercent() > 0))
-        binding.llRatingContainer.visibility = visibleIf(streamData.rating > 0)
+            progressBar.progress = it.progressPercent()
+            tvTimeRemaining.text = it.timeRemainingText()
+            llProgressbarContainer.visibility = visibleIf((it.startedWatching))
 
-        binding.tvDuration.text = binding.root.context.getString(
-            R.string.text_after_dot,
-            streamData.movieMetadata?.totalDurationMs?.toTextTime()
-        )
-        binding.tvDuration.visibility = visibleIf((streamData.movieMetadata?.totalDurationMs ?: 0) > 0)
-        binding.llMyListContainer.visibility = visibleIf(streamData.inMyList)
-        binding.tvDescription.text = streamData.movieMetadata?.description
-        binding.tvDescription.visibility = visibleIf(!streamData.movieMetadata?.description.isNullOrEmpty())
-        binding.tvSubtitleStatus.visibility = visibleIf(!streamData.subtitleUrl.isNullOrEmpty())
+            tvRating.text = it.rating.toString()
+            llRatingContainer.visibility = visibleIf(it.rating > 0)
+
+            tvDuration.text = root.context.getString(
+                R.string.text_after_dot,
+                it.movieMetadata?.totalDurationMs?.toTextTime()
+            )
+            tvDuration.visibility = visibleIf((it.movieMetadata?.totalDurationMs ?: 0) > 0)
+
+            llMyListContainer.visibility = visibleIf(it.inMyList)
+
+            tvDescription.text = it.movieMetadata?.description
+            tvDescription.visibility = visibleIf(!it.movieMetadata?.description.isNullOrEmpty())
+
+            tvSubtitleStatus.visibility = visibleIf(!it.subtitleUrl.isNullOrEmpty())
+
+            tvGenre.visibility = visibleIf(!it.movieMetadata?.genre.isNullOrEmpty())
+            tvGenre.text = it.movieMetadata?.genre
+        }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {}

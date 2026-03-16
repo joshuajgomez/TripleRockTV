@@ -60,8 +60,15 @@ data class StreamData(
         else -> ((playedDuration.toDouble() / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
     }
 
+    fun timeRemainingText(): String = when {
+        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> ""
+        else -> ((movieMetadata?.totalDurationMs ?: 0L) - playedDuration)
+            .toTextTime()
+            .let { "$it remaining" }
+    }
+
     val startedWatching: Boolean
-        get() = lastPlayed > MIN_PLAYBACK_DURATION
+        get() = playedDuration > MIN_PLAYBACK_DURATION && movieMetadata?.totalDurationMs != 0L
 }
 
 fun Long.toTextTime(): String {
