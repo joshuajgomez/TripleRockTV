@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.impl
 
 import com.joshgm3z.triplerocktv.repository.LoginRepository
+import com.joshgm3z.triplerocktv.repository.retrofit.Secrets
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -15,10 +16,13 @@ constructor() : LoginRepository {
         onError: (String) -> Unit
     ) {
         delay(2000)
-        if (username.isEmpty() || password.isEmpty() || webUrl.isEmpty())
-            onError("Please fill in all fields")
-        else
-            onSuccess()
+        when {
+            username.isEmpty() || password.isEmpty() || webUrl.isEmpty() -> onError("Please fill in all fields")
+            username != Secrets.username -> onError("Incorrect credentials")
+            password != Secrets.password -> onError("Incorrect credentials")
+            webUrl != Secrets.webUrl -> onError("Incorrect credentials")
+            else -> onSuccess()
+        }
     }
 
     override suspend fun tryLogout(onLogoutCompleter: () -> Unit) {

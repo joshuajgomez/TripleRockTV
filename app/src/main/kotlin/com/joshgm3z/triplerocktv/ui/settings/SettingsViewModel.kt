@@ -45,6 +45,7 @@ constructor(
     }
 
     fun verifyCredentials(serverUrl: String, username: String, password: String) {
+        Logger.debug("serverUrl = [${serverUrl}], username = [${username}], password = [${password}]")
         Logger.entry()
         _credentialState.update {
             it.copy(loading = true, errorMessage = null)

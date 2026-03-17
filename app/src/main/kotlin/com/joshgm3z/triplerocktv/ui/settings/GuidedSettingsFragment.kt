@@ -41,8 +41,14 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.credentialState.collectLatest {
-                it.userInfo?.let { userInfo -> updateCredentials(userInfo) }
                 updateBlurSettings(it.isBlurSettingEnabled)
+                Logger.debug("credentialState = [${it}]")
+                it.userInfo?.let { userInfo -> updateCredentials(userInfo) }
+                when {
+                    it.loading -> showLoading()
+                    it.errorMessage != null -> showLoginFailed(it.errorMessage!!)
+                    it.verificationSuccess -> showLoginSuccess()
+                }
             }
         }
     }
@@ -56,15 +62,9 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
 
     private fun updateCredentials(userInfo: UserInfo) {
         fun setText(id: Long, text: String) {
-            findActionById(idCredential)?.let {
-                try {
-                    val subAction = it.subActions.first { it.id == id }
-                    subAction.editTitle = text
-                    subAction.title = text
-                } catch (e: IndexOutOfBoundsException) {
-                    e.printStackTrace()
-                }
-            }
+            val subAction = getSubAction(id)
+            subAction.editTitle = text
+            subAction.title = text
         }
         setText(idServerUrl, userInfo.webUrl)
         setText(idUsername, userInfo.username)
@@ -75,31 +75,29 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
 
     private fun enableViews(enable: Boolean) {
         listOf(
-            actions[idServerUrl.toInt()],
-            actions[idUsername.toInt()],
-            actions[idPassword.toInt()],
-            actions[idLogin.toInt()],
-        ).forEach {
-            it.isEnabled = enable
-            notifyActionChanged(it.id.toInt())
-        }
+            idServerUrl,
+            idUsername,
+            idPassword,
+            idLogin,
+        ).forEach { getSubAction(it).isEnabled = enable }
     }
 
     fun showLoading() {
-        showStatus(message = "Verifying")
         enableViews(false)
+        showStatus(message = "Verifying")
     }
 
     fun showLoginFailed(message: String?) {
+        enableViews(true)
         showStatus(
             message = "Verification failed",
             description = message,
             icon = R.drawable.ic_error_orange
         )
-        enableViews(true)
     }
 
     fun showLoginSuccess() {
+        enableViews(true)
         showStatus("Verified", icon = R.drawable.ic_check_circle_green)
     }
 
@@ -188,40 +186,31 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         return subActions
     }
 
+    private fun getSubAction(id: Long) =
+        findActionById(idCredential)?.subActions?.first { it.id == id }!!
+
     private fun showStatus(
         message: String? = null,
         description: String? = null,
         icon: Int? = null
     ) {
-        val action = actions[idStatus.toInt()]
+        Logger.debug("message = [${message}], description = [${description}], icon = [${icon}]")
+        val action = getSubAction(idStatus)
         action.title = message ?: ""
         action.description = description ?: ""
         action.icon = if (icon == null) null
         else ContextCompat.getDrawable(requireContext(), icon)
-        notifyActionChanged(idStatus.toInt())
+        notifyActionChanged(findActionPositionById(idCredential))
+        selectedActionPosition = findActionPositionById(idCredential)
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
         Logger.debug("action = [${action.id}]")
         when (action.id) {
-            idLogin -> {
-                val serverUrl = actions[idServerUrl.toInt()].editTitle.toString()
-                val username = actions[idUsername.toInt()].editTitle.toString()
-                val password = actions[idPassword.toInt()].editTitle.toString()
-                // Handle login logic here
+            idSignout -> GuidedSettingsFragmentDirections.toConfirmSignOutDialog()
+                .let { findNavController().navigate(it) }
 
-                if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
-            }
-
-            idSignout -> {
-                findNavController().navigate(
-                    GuidedSettingsFragmentDirections.toConfirmSignOutDialog()
-                )
-            }
-
-            idBlur -> {
-                viewModel.setBlurSetting(action.isChecked)
-            }
+            idBlur -> viewModel.setBlurSetting(action.isChecked)
         }
     }
 
@@ -233,6 +222,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
                 fun getSubActionText(id: Long): String {
                     return subActions?.find { it.id == id }?.editTitle?.toString() ?: ""
                 }
+
                 val serverUrl = getSubActionText(idServerUrl)
                 val username = getSubActionText(idUsername)
                 val password = getSubActionText(idPassword)
