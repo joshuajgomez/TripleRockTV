@@ -25,7 +25,7 @@ class DemoData {
                 name = "Inception (2010)",
                 streamTypeText = "movie",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
-                categoryId = 101,
+                categoryId = 1,
                 added = "1625012046",
                 playedDuration = 42800,
                 lastPlayed = 242,
@@ -44,7 +44,7 @@ class DemoData {
                 name = "Breaking Bad S01E01",
                 streamTypeText = "series",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
-                categoryId = 101,
+                categoryId = 1,
                 added = "1625112046",
                 playedDuration = 25,
                 lastPlayed = 100,
@@ -62,7 +62,7 @@ class DemoData {
                 name = "Breaking Bad S01E01",
                 streamTypeText = "series",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/eSzpy96DwBujGFj0xMbXBcGcfxX.jpg",
-                categoryId = 102,
+                categoryId = 2,
                 added = "1625112046",
                 playedDuration = 45,
                 lastPlayed = 100,
@@ -81,7 +81,7 @@ class DemoData {
                 name = "Planet Earth II",
                 streamTypeText = "documentary",
                 streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/6v2b7YbExg1kQ9g6zQ6gA2Q2nLk.jpg",
-                categoryId = 103,
+                categoryId = 3,
                 added = "1625212046",
                 playedDuration = 0,
                 lastPlayed = 0,
@@ -99,7 +99,7 @@ class DemoData {
                 name = "No Icon Example",
                 streamTypeText = "movie",
                 streamIcon = null,
-                categoryId = 104,
+                categoryId = 4,
                 added = "1625312046",
                 playedDuration = 0,
                 lastPlayed = 0,
@@ -120,7 +120,7 @@ class DemoData {
                 name = "BBC News",
                 streamTypeText = "news",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/5/5f/BBC_News_2022_%28Alt%29.svg",
-                categoryId = 201,
+                categoryId = 1,
                 added = "1626012046",
                 playedDuration = 45,
                 lastPlayed = 100,
@@ -138,7 +138,7 @@ class DemoData {
                 name = "ESPN",
                 streamTypeText = "sports",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2f/ESPN_wordmark.svg",
-                categoryId = 202,
+                categoryId = 2,
                 added = "1626112046",
                 playedDuration = 45,
                 lastPlayed = 100,
@@ -152,7 +152,7 @@ class DemoData {
                 name = "Cartoon Network",
                 streamTypeText = "kids",
                 streamIcon = "https://upload.wikimedia.org/wikipedia/commons/2/2a/Cartoon_Network_2010_logo.svg",
-                categoryId = 203,
+                categoryId = 4,
                 added = "1626212046",
                 playedDuration = 45,
                 lastPlayed = 100,
@@ -166,7 +166,7 @@ class DemoData {
                 name = "Discovery Channel",
                 streamTypeText = "documentary",
                 streamIcon = null,
-                categoryId = 204,
+                categoryId = 3,
                 added = "1626312046",
                 playedDuration = 45,
                 lastPlayed = 100,
@@ -239,66 +239,66 @@ class DemoData {
 
         fun sampleVodCategory(): List<CategoryData> = listOf(
             CategoryData(
-                categoryId = 122,
+                categoryId = 1,
                 categoryName = "ENGLISH (4K)",
-                parentId = 0,
-                count = 3,
-                streamType = StreamType.VideoOnDemand
-            ),
-            CategoryData(
-                categoryId = 56,
-                categoryName = "OSCAR WINNING MOVIES",
                 parentId = 0,
                 count = 2,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 43,
+                categoryId = 2,
+                categoryName = "OSCAR WINNING MOVIES",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 3,
                 categoryName = "ENGLISH FHD (2026)",
                 parentId = 0,
                 count = 1,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 44,
+                categoryId = 4,
                 categoryName = "Malayalam (2026)",
                 parentId = 0,
                 count = 1,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 45,
+                categoryId = 5,
                 categoryName = "Malayalam (2024)",
                 parentId = 0,
-                count = 1,
+                count = 0,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 46,
+                categoryId = 6,
                 categoryName = "Hindi (2024)",
                 parentId = 0,
-                count = 1,
+                count = 0,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 47,
+                categoryId = 7,
                 categoryName = "Hindi (2023)",
                 parentId = 0,
-                count = 1,
+                count = 0,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 48,
+                categoryId = 8,
                 categoryName = "Tamil (2024)",
                 parentId = 0,
-                count = 1,
+                count = 0,
                 streamType = StreamType.VideoOnDemand
             ),
             CategoryData(
-                categoryId = 49,
+                categoryId = 9,
                 categoryName = "Tamil (2024)",
                 parentId = 0,
-                count = 1,
+                count = 0,
                 streamType = StreamType.VideoOnDemand
             ),
         )
@@ -338,28 +338,28 @@ class DemoData {
                     categoryId = 1,
                     categoryName = "News",
                     parentId = 0,
-                    count = 12,
+                    count = 1,
                     streamType = StreamType.LiveTV
                 ),
                 CategoryData(
                     categoryId = 2,
                     categoryName = "Sports",
                     parentId = 0,
-                    count = 8,
+                    count = 1,
                     streamType = StreamType.LiveTV
                 ),
                 CategoryData(
                     categoryId = 3,
                     categoryName = "Movies",
                     parentId = 0,
-                    count = 15,
+                    count = 1,
                     streamType = StreamType.LiveTV
                 ),
                 CategoryData(
                     categoryId = 4,
                     categoryName = "Kids",
                     parentId = 0,
-                    count = 5,
+                    count = 1,
                     streamType = StreamType.LiveTV
                 )
             )
