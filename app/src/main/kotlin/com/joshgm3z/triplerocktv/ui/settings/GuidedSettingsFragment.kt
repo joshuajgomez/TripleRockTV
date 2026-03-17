@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.ui.login.UserInfo
+import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -201,6 +202,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
+        Logger.debug("action = [${action.id}]")
         when (action.id) {
             idLogin -> {
                 val serverUrl = actions[idServerUrl.toInt()].editTitle.toString()
@@ -223,18 +225,42 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         }
     }
 
+    override fun onSubGuidedActionClicked(action: GuidedAction): Boolean {
+        Logger.debug("action = [${action.id}]")
+        when (action.id) {
+            idLogin -> {
+                val subActions = findActionById(idCredential)?.subActions
+                fun getSubActionText(id: Long): String {
+                    return subActions?.find { it.id == id }?.editTitle?.toString() ?: ""
+                }
+                val serverUrl = getSubActionText(idServerUrl)
+                val username = getSubActionText(idUsername)
+                val password = getSubActionText(idPassword)
+                // Handle login logic here
+
+                if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
+            }
+        }
+        return true
+    }
+
     private fun isInputValid(): Boolean {
-        val serverUrlEt = actions[idServerUrl.toInt()].editTitle
-        if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == "http://") {
-            selectedActionPosition = idServerUrl.toInt()
+        val subActions = findActionById(idCredential)?.subActions
+        fun getSubActionText(id: Long): String {
+            return subActions?.find { it.id == id }?.editTitle?.toString() ?: ""
+        }
+
+        val serverUrl = getSubActionText(idServerUrl)
+        if (serverUrl.isEmpty() || serverUrl == "http://") {
+            selectedActionPosition = findActionPositionById(idServerUrl)
             return false
         }
-        if (actions[idUsername.toInt()].editTitle.isNullOrEmpty()) {
-            selectedActionPosition = idUsername.toInt()
+        if (getSubActionText(idUsername).isEmpty()) {
+            selectedActionPosition = findActionPositionById(idUsername)
             return false
         }
-        if (actions[idPassword.toInt()].editTitle.isNullOrEmpty()) {
-            selectedActionPosition = idPassword.toInt()
+        if (getSubActionText(idPassword).isEmpty()) {
+            selectedActionPosition = findActionPositionById(idPassword)
             return false
         }
 
