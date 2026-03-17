@@ -21,6 +21,15 @@ constructor() : MediaLocalRepository {
         else -> emptyList()
     }
 
+    override suspend fun fetchCategoriesByTitleKey(
+        streamType: StreamType,
+        titleKey: String
+    ): List<CategoryData> = when (streamType) {
+        StreamType.VideoOnDemand -> DemoData.sampleVodCategory()
+        StreamType.LiveTV -> DemoData.getSampleLiveTvCategories()
+        else -> emptyList()
+    }.filter { it.categoryName.contains(titleKey, ignoreCase = true) }
+
     override suspend fun fetchEpgListings(): List<IptvEpgListing> =
         DemoData.getSampleIptvEpgListings()
 
