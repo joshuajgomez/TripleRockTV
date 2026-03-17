@@ -259,6 +259,48 @@ class DemoData {
                 count = 1,
                 streamType = StreamType.VideoOnDemand
             ),
+            CategoryData(
+                categoryId = 44,
+                categoryName = "Malayalam (2026)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 45,
+                categoryName = "Malayalam (2024)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 46,
+                categoryName = "Hindi (2024)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 47,
+                categoryName = "Hindi (2023)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 48,
+                categoryName = "Tamil (2024)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
+            CategoryData(
+                categoryId = 49,
+                categoryName = "Tamil (2024)",
+                parentId = 0,
+                count = 1,
+                streamType = StreamType.VideoOnDemand
+            ),
         )
 
         fun getSampleSeriesCategories(): List<SeriesCategory> {
