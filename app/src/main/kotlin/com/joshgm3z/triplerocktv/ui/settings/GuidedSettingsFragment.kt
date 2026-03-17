@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.settings
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.InputType
 import android.view.View
@@ -189,6 +190,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
     private fun getSubAction(id: Long) =
         findActionById(idCredential)?.subActions?.first { it.id == id }!!
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun showStatus(
         message: String? = null,
         description: String? = null,
@@ -200,8 +202,8 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
         action.description = description ?: ""
         action.icon = if (icon == null) null
         else ContextCompat.getDrawable(requireContext(), icon)
-        notifyActionChanged(findActionPositionById(idCredential))
-        selectedActionPosition = findActionPositionById(idCredential)
+
+        guidedActionsStylist.subActionsGridView?.adapter?.notifyDataSetChanged()
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
@@ -231,13 +233,12 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
                 if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
             }
         }
-        return true
+        return false
     }
 
     private fun isInputValid(): Boolean {
-        val subActions = findActionById(idCredential)?.subActions
         fun getSubActionText(id: Long): String {
-            return subActions?.find { it.id == id }?.editTitle?.toString() ?: ""
+            return getSubAction(id).editTitle?.toString() ?: ""
         }
 
         val serverUrl = getSubActionText(idServerUrl)
