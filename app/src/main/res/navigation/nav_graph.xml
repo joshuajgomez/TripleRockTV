@@ -95,11 +95,11 @@
         android:label="StreamCatalogueFragment">
         <argument
             android:name="categoryId"
-            android:defaultValue="122"
+            android:defaultValue="1"
             app:argType="integer" />
         <argument
             android:name="categoryName"
-            android:defaultValue=""
+            android:defaultValue="Some category"
             app:argType="string" />
         <argument
             android:name="streamType"
