@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
@@ -30,6 +29,7 @@ import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -59,11 +59,8 @@ class MainBrowseFragment : BrowseSupportFragment() {
 
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
-    private lateinit var backgroundManager: BackgroundManager
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        prepareBackgroundManager()
         setupUI()
         setupEventListeners()
         viewLifecycleOwner.lifecycleScope.launch {
@@ -74,10 +71,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
             }
         }
         prepareEntranceTransition()
-    }
-
-    private fun prepareBackgroundManager() {
-        backgroundManager = BackgroundManager.getInstance(requireActivity())
     }
 
     private fun setupUI() {
@@ -155,7 +148,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
                     // Set color to black with 50% alpha (128)
                     paint.colorFilter = colorFilter
                     canvas.drawBitmap(bitmap, 0f, 0f, paint)
-                    backgroundManager.setBitmap(bitmap)
+                    requireActivity().setBackground(bitmap)
                 }
         }
     }
@@ -218,7 +211,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     override fun onResume() {
         super.onResume()
         if (!viewModel.isBlurSettingEnabled) {
-            backgroundManager.drawable = null
+            requireActivity().setBackground(null)
         }
         viewModel.onViewResumed()
     }

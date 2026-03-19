@@ -6,11 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.BackgroundManager
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.databinding.FragmentSplashScreenBinding
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -25,10 +25,7 @@ class SplashScreenFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        BackgroundManager.getInstance(requireActivity()).apply {
-            if (!isAttached) attach(requireActivity().window)
-            color = requireContext().getBackgroundColor()
-        }
+        requireActivity().setBackground(requireContext().getBackgroundColor())
     }
 
     override fun onCreateView(

@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
 import androidx.leanback.widget.Action
@@ -21,8 +20,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.ui.browse.colorFilter
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -86,12 +87,13 @@ class DetailsFragment : DetailsSupportFragment() {
         backgroundImageUrl = imageUrl
         if (viewModel.isBlurSettingEnabled)
             glideUtil.getBitmap(uri = imageUrl, blur = false) { bitmap ->
+                if (!isVisible) return@getBitmap
                 val canvas = Canvas(bitmap)
                 val paint = Paint()
                 // Set color to black with 50% alpha (128)
-//                paint.colorFilter = colorFilter
+                paint.colorFilter = colorFilter
                 canvas.drawBitmap(bitmap, 0f, 0f, paint)
-                BackgroundManager.getInstance(requireActivity()).setBitmap(bitmap)
+                requireActivity().setBackground(bitmap)
             }
     }
 
@@ -163,11 +165,6 @@ class DetailsFragment : DetailsSupportFragment() {
         lifecycleScope.launch {
             handleBlur(backgroundImageUrl)
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        BackgroundManager.getInstance(requireActivity()).setBitmap(null)
     }
 
     companion object {

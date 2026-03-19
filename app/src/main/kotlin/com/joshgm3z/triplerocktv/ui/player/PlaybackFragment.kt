@@ -7,7 +7,6 @@ import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
-import androidx.leanback.app.BackgroundManager
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
@@ -35,6 +34,7 @@ import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.ui.player.track.TrackInfo
 import com.joshgm3z.triplerocktv.ui.player.track.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.ui.player.track.TrackType
+import com.joshgm3z.triplerocktv.util.setBackground
 
 /**
  * A fragment for playing video content.
@@ -82,9 +82,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
         transportControlGlue.host = glueHost
 
-        BackgroundManager.getInstance(requireActivity()).apply {
-            drawable = null
-        }
+        requireActivity().setBackground(null)
 
         viewModel.fetchStreamDetails(args.streamId, args.streamType)
         lifecycleScope.launch {
