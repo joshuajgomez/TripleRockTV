@@ -95,7 +95,7 @@ fun String?.alternateUri(serverUrl: String): String? = when {
 
 enum class DimMode(val value: Int) {
     None(0),
-    Dark(100),
+    Dark(120),
     Darker(200),
 }
 

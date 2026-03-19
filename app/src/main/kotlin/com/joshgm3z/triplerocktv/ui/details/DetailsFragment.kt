@@ -84,6 +84,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
     private fun handleBlur(imageUrl: String?) {
         imageUrl ?: return
+        if (backgroundImageUrl == imageUrl) return
         backgroundImageUrl = imageUrl
         glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.Dark) { bitmap ->
             if (!isVisible) return@getBitmap
@@ -156,8 +157,9 @@ class DetailsFragment : DetailsSupportFragment() {
     override fun onResume() {
         super.onResume()
         backgroundImageUrl ?: return
-        lifecycleScope.launch {
-            handleBlur(backgroundImageUrl)
+        glideUtil.getBitmap(uri = backgroundImageUrl, dimMode = DimMode.Dark) { bitmap ->
+            if (!isVisible) return@getBitmap
+            requireActivity().setBackground(bitmap)
         }
     }
 
