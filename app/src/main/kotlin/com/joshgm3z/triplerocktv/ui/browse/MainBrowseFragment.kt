@@ -27,6 +27,7 @@ import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
+import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.util.setBackground
@@ -142,7 +143,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
     private fun handleBlur(thumbnailUrl: String?) {
         thumbnailUrl?.let {
             if (viewModel.isBlurSettingEnabled)
-                glideUtil.getBitmap(uri = it, blur = true, dim = true) { bitmap ->
+                glideUtil.getBitmap(uri = it, blur = true, dimMode = DimMode.Darker) { bitmap ->
                     if (!isVisible) return@getBitmap
                     requireActivity().setBackground(bitmap)
                 }

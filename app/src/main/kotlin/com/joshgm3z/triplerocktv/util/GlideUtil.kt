@@ -48,7 +48,7 @@ class GlideUtil
     fun getBitmap(
         uri: String?,
         blur: Boolean = false,
-        dim: Boolean = false,
+        dimMode: DimMode = DimMode.None,
         onBitmapReady: (Bitmap) -> Unit,
     ) {
         var glide = Glide.with(context)
@@ -64,11 +64,11 @@ class GlideUtil
                 resource: Bitmap,
                 transition: Transition<in Bitmap>?
             ) {
-                if (dim) {
+                if (dimMode != DimMode.None) {
                     val canvas = Canvas(resource)
                     val paint = Paint()
                     // Set color to black with 50% alpha (128)
-                    paint.colorFilter = colorFilter
+                    paint.colorFilter = colorFilter(dimMode)
                     canvas.drawBitmap(resource, 0f, 0f, paint)
                 }
                 onBitmapReady(resource)
@@ -93,9 +93,15 @@ fun String?.alternateUri(serverUrl: String): String? = when {
     Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
 
-private val colorFilter = PorterDuffColorFilter(
+enum class DimMode(val value: Int) {
+    None(0),
+    Dark(100),
+    Darker(200),
+}
+
+private fun colorFilter(dimMode: DimMode) = PorterDuffColorFilter(
     Color.argb(
-        180,
+        dimMode.value,
         0,
         0,
         0

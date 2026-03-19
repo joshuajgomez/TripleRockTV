@@ -20,6 +20,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.setBackground
@@ -84,11 +85,10 @@ class DetailsFragment : DetailsSupportFragment() {
     private fun handleBlur(imageUrl: String?) {
         imageUrl ?: return
         backgroundImageUrl = imageUrl
-        if (viewModel.isBlurSettingEnabled)
-            glideUtil.getBitmap(uri = imageUrl, dim = true) { bitmap ->
-                if (!isVisible) return@getBitmap
-                requireActivity().setBackground(bitmap)
-            }
+        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.Dark) { bitmap ->
+            if (!isVisible) return@getBitmap
+            requireActivity().setBackground(bitmap)
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
