@@ -20,7 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.ui.browse.colorFilter
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.setBackground
@@ -86,13 +85,8 @@ class DetailsFragment : DetailsSupportFragment() {
         imageUrl ?: return
         backgroundImageUrl = imageUrl
         if (viewModel.isBlurSettingEnabled)
-            glideUtil.getBitmap(uri = imageUrl, blur = false) { bitmap ->
+            glideUtil.getBitmap(uri = imageUrl, dim = true) { bitmap ->
                 if (!isVisible) return@getBitmap
-                val canvas = Canvas(bitmap)
-                val paint = Paint()
-                // Set color to black with 50% alpha (128)
-                paint.colorFilter = colorFilter
-                canvas.drawBitmap(bitmap, 0f, 0f, paint)
                 requireActivity().setBackground(bitmap)
             }
     }
