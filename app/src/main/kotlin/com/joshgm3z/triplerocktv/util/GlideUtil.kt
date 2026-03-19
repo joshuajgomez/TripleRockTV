@@ -2,6 +2,11 @@ package com.joshgm3z.triplerocktv.util
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
@@ -43,6 +48,7 @@ class GlideUtil
     fun getBitmap(
         uri: String?,
         blur: Boolean = false,
+        dim: Boolean = false,
         onBitmapReady: (Bitmap) -> Unit,
     ) {
         var glide = Glide.with(context)
@@ -58,6 +64,13 @@ class GlideUtil
                 resource: Bitmap,
                 transition: Transition<in Bitmap>?
             ) {
+                if (dim) {
+                    val canvas = Canvas(resource)
+                    val paint = Paint()
+                    // Set color to black with 50% alpha (128)
+                    paint.colorFilter = colorFilter
+                    canvas.drawBitmap(resource, 0f, 0f, paint)
+                }
                 onBitmapReady(resource)
             }
 
@@ -79,3 +92,13 @@ fun String?.alternateUri(serverUrl: String): String? = when {
 }.apply {
     Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
+
+private val colorFilter = PorterDuffColorFilter(
+    Color.argb(
+        180,
+        0,
+        0,
+        0
+    ), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
+    PorterDuff.Mode.SRC_ATOP
+)
