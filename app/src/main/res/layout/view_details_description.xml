@@ -28,6 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/metadata_gap"
+            android:textColor="?attr/metadataTextColor"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:text="Comedy"
@@ -43,6 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
+            android:textColor="?attr/metadataTextColor"
             android:textSize="@dimen/metadata_text_size"
             tools:text="3.5" />
 
@@ -51,6 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/metadata_gap"
+            android:textColor="?attr/metadataTextColor"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:text="&#8226; 1h 30m"
@@ -62,6 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/metadata_gap"
             android:text="@string/subtitle_downloaded"
+            android:textColor="?attr/metadataTextColor"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -86,6 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:text="My list"
+                android:textColor="?attr/metadataTextColor"
                 android:textSize="@dimen/metadata_text_size" />
         </LinearLayout>
     </LinearLayout>
@@ -108,12 +113,12 @@
         android:orientation="horizontal">
 
         <ProgressBar
-            android:progressTint="@color/orange"
             android:id="@+id/progress_bar"
             style="?android:attr/progressBarStyleHorizontal"
             android:layout_width="50dp"
-            android:layout_marginStart="3dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:progressTint="@color/orange"
             tools:progress="30" />
 
         <TextView
@@ -121,6 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:textColor="?attr/metadataTextColor"
             android:textSize="12sp"
             tools:text="30m remaining" />
     </LinearLayout>
