@@ -3,6 +3,8 @@ package com.joshgm3z.triplerocktv.ui.splash
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavDirections
+import com.google.firebase.Firebase
+import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.util.Logger
@@ -27,9 +29,14 @@ constructor(
     init {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            delay(1000)
+            delay(500)
+            val userInfo = localDatastore.getUserInfo().apply {
+                this?.let {
+                    Firebase.crashlytics.setUserId(it.username)
+                }
+            }
             _navDirectionState.value = when {
-                localDatastore.getUserInfo() == null -> SplashScreenFragmentDirections.toLogin()
+                userInfo == null -> SplashScreenFragmentDirections.toLogin()
                 repository.isContentEmpty() -> SplashScreenFragmentDirections.toLoading()
                 else -> SplashScreenFragmentDirections.toBrowse()
             }
