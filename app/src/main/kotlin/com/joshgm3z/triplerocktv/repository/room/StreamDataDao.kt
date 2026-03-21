@@ -37,14 +37,25 @@ interface StreamDataDao {
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM stream_data WHERE lastPlayed > 0 AND playedDuration > :minPlaybackDuration ORDER BY lastPlayed DESC LIMIT 5")
-    suspend fun getLastPlayed10(minPlaybackDuration: Long = MIN_PLAYBACK_DURATION): List<StreamData>
+    @Query(
+        "SELECT * FROM stream_data WHERE lastPlayed > 0 " +
+                "AND playedDuration > :minPlaybackDuration " +
+                "AND totalDurationMs - playedDuration > :minDurationLeft " +
+                "ORDER BY lastPlayed DESC LIMIT 5"
+    )
+    suspend fun getLastPlayed10(
+        minPlaybackDuration: Long = MIN_PLAYBACK_DURATION,
+        minDurationLeft: Long = MIN_DURATION_LEFT
+    ): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE inMyList IS true ORDER BY timeAddedToList DESC LIMIT 5")
     suspend fun getMyList10(): List<StreamData>
 
     @Query("UPDATE stream_data SET lastPlayed = :lastPlayed WHERE streamId = :streamId")
-    suspend fun updateLastPlayedTimestamp(streamId: Int, lastPlayed: Long = System.currentTimeMillis())
+    suspend fun updateLastPlayedTimestamp(
+        streamId: Int,
+        lastPlayed: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE stream_data SET playedDuration = :playedDuration WHERE streamId = :streamId")
     suspend fun updatePlayedDuration(streamId: Int, playedDuration: Long)
@@ -53,7 +64,11 @@ interface StreamDataDao {
     suspend fun updateSubtitleUrl(streamId: Int, url: String)
 
     @Query("UPDATE stream_data SET inMyList = :add, timeAddedToList = :timeAddedToList WHERE streamId = :streamId")
-    suspend fun updateMyList(streamId: Int, add: Boolean, timeAddedToList: Long = System.currentTimeMillis())
+    suspend fun updateMyList(
+        streamId: Int,
+        add: Boolean,
+        timeAddedToList: Long = System.currentTimeMillis()
+    )
 
     @Query("UPDATE stream_data SET subtitleLanguage = :language, subtitleTitle = :title WHERE streamId = :streamId")
     suspend fun updateSubtitleLanguage(streamId: Int, language: String, title: String)
