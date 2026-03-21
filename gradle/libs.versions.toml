@@ -1,6 +1,7 @@
 [versions]
 agp = "8.9.3"
 datastorePreferences = "1.2.0"
+firebaseBom = "34.10.0"
 fragmentKtx = "1.8.9"
 glide = "5.0.5"
 hilt = "2.54"
@@ -37,6 +38,11 @@ androidx-navigation-safeargs-plugin = { module = "androidx.navigation:navigation
 androidx-tv-foundation = { group = "androidx.tv", name = "tv-foundation", version.ref = "tvFoundation" }
 androidx-tv-material = { group = "androidx.tv", name = "tv-material", version.ref = "tvMaterial" }
 androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
+firebase-crashlytics = { module = "com.google.firebase:firebase-crashlytics" }
+
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.ref = "hilt" }
