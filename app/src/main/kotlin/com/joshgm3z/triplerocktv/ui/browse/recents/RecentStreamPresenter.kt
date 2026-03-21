@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewStreamCardShortBinding
+import com.joshgm3z.triplerocktv.databinding.ViewRecentStreamCardBinding
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -20,7 +20,7 @@ class RecentStreamPresenter
 ) : Presenter() {
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val binding = ViewStreamCardShortBinding.inflate(
+        val binding = ViewRecentStreamCardBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
