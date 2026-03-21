@@ -208,10 +208,9 @@ class PlaybackFragment : VideoSupportFragment() {
             requireActivity(),
             playerAdapter
         ) {
-            private val closedCaptioningAction =
-                PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                    icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
-                }
+            private val ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+            }
             private val audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
                 icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
             }
@@ -226,13 +225,13 @@ class PlaybackFragment : VideoSupportFragment() {
             }
 
             override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
-                adapter.add(closedCaptioningAction)
+                adapter.add(ccAction)
                 adapter.add(audioAction)
             }
 
             override fun onActionClicked(action: Action) {
-                when {
-                    action === closedCaptioningAction -> {
+                when(action) {
+                    ccAction -> {
                         videoTitle?.let { title ->
                             val action = PlaybackFragmentDirections.toTrackSelector()
                             action.title = title
@@ -241,20 +240,20 @@ class PlaybackFragment : VideoSupportFragment() {
                         }
                     }
 
-                    action === audioAction -> {
+                    audioAction -> {
                         val action = PlaybackFragmentDirections.toTrackSelector()
                         action.trackType = TrackType.Audio
                         findNavController().navigate(action)
                     }
 
-                    action === rewindAction -> {
+                    rewindAction -> {
                         val newPos =
                             (player.currentPosition - FAST_FORWARD_DURATION).coerceAtLeast(0)
                         player.seekTo(newPos)
                     }
 
                     // 5. Handle Fast Forward (seek forward 10 seconds)
-                    action === fastForwardAction -> {
+                    fastForwardAction -> {
                         val newPos =
                             (player.currentPosition + FAST_FORWARD_DURATION).coerceAtMost(player.duration)
                         player.seekTo(newPos)
