@@ -36,6 +36,8 @@ import com.joshgm3z.triplerocktv.ui.player.track.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.ui.player.track.TrackType
 import com.joshgm3z.triplerocktv.util.setBackground
 
+const val FAST_FORWARD_DURATION = 10000
+
 /**
  * A fragment for playing video content.
  */
@@ -211,6 +213,15 @@ class PlaybackFragment : VideoSupportFragment() {
                 icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
             }
 
+            private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context)
+            private val rewindAction = PlaybackControlsRow.RewindAction(context)
+
+            override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {
+                adapter.add(rewindAction)
+                super.onCreatePrimaryActions(adapter)
+                adapter.add(fastForwardAction)
+            }
+
             override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
                 adapter.add(closedCaptioningAction)
                 adapter.add(audioAction)
@@ -231,6 +242,19 @@ class PlaybackFragment : VideoSupportFragment() {
                         val action = PlaybackFragmentDirections.toTrackSelector()
                         action.trackType = TrackType.Audio
                         findNavController().navigate(action)
+                    }
+
+                    action === rewindAction -> {
+                        val newPos =
+                            (player.currentPosition - FAST_FORWARD_DURATION).coerceAtLeast(0)
+                        player.seekTo(newPos)
+                    }
+
+                    // 5. Handle Fast Forward (seek forward 10 seconds)
+                    action === fastForwardAction -> {
+                        val newPos =
+                            (player.currentPosition + FAST_FORWARD_DURATION).coerceAtMost(player.duration)
+                        player.seekTo(newPos)
                     }
 
                     else -> {
