@@ -105,7 +105,7 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.leanback)
     implementation(libs.androidx.media3.hls)
-    implementation("jp.wasabeef:glide-transformations:4.3.0")
-    implementation("androidx.hilt:hilt-navigation-fragment:1.2.0")
+    implementation(libs.glide.transformations)
+    implementation(libs.androidx.hilt.navigation.fragment)
     testImplementation(kotlin("test"))
 }
