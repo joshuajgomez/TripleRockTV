@@ -2,9 +2,11 @@ package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.os.Bundle
 import android.view.View
+import android.widget.ZoomButton
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
@@ -33,7 +35,10 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         super.onCreate(savedInstanceState)
         streamAdapter = ArrayObjectAdapter(streamPresenter)
         // Setup the grid presenter (e.g., 5 columns)
-        val gridPresenter = VerticalGridPresenter().apply {
+        val gridPresenter = VerticalGridPresenter(
+            FocusHighlight.ZOOM_FACTOR_LARGE,
+            false
+        ).apply {
             numberOfColumns = 6
         }
         setGridPresenter(gridPresenter)
