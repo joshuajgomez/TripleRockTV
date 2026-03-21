@@ -91,6 +91,9 @@ class PlaybackFragment : VideoSupportFragment() {
             viewModel.playbackUiState.collectLatest {
                 it?.let { playbackUiState ->
                     transportControlGlue.title = playbackUiState.streamData.name
+                    playbackUiState.streamData.movieMetadata?.genre?.let { subtitle ->
+                        transportControlGlue.subtitle = subtitle
+                    }
                     videoTitle = playbackUiState.streamData.name
                     transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
