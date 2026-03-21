@@ -6,6 +6,8 @@ plugins {
     kotlin("kapt")
     id("androidx.room")
     id("androidx.navigation.safeargs")
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -94,6 +96,10 @@ dependencies {
     kapt(libs.room.compiler)
 
     implementation(libs.glide)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.analytics)
+    implementation(libs.firebase.crashlytics)
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
