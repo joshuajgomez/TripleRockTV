@@ -10,6 +10,7 @@ import com.joshgm3z.triplerocktv.ui.login.UserInfo
  * Minimum video playback duration for the app to consider the video "started".
  */
 const val MIN_PLAYBACK_DURATION = 3 * 60 * 1000L // 180,000 ms
+const val MIN_DURATION_LEFT = 5 * 60 * 1000L // 180,000 ms
 
 @Entity(tableName = "stream_data")
 data class StreamData(
@@ -60,15 +61,20 @@ data class StreamData(
         else -> ((playedDuration.toDouble() / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
     }
 
+    fun timeRemaining(): Long = when {
+        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0L
+        else -> ((movieMetadata?.totalDurationMs ?: 0L) - playedDuration)
+    }
+
     fun timeRemainingText(): String = when {
         (movieMetadata?.totalDurationMs ?: 0L) == 0L -> ""
-        else -> ((movieMetadata?.totalDurationMs ?: 0L) - playedDuration)
-            .toTextTime()
-            .let { "$it remaining" }
+        else -> timeRemaining().toTextTime().let { "$it remaining" }
     }
 
     val startedWatching: Boolean
-        get() = playedDuration > MIN_PLAYBACK_DURATION && movieMetadata?.totalDurationMs != 0L
+        get() = playedDuration > MIN_PLAYBACK_DURATION
+                && movieMetadata?.totalDurationMs != 0L
+                && timeRemaining() > MIN_DURATION_LEFT
 }
 
 fun Long.toTextTime(): String {
