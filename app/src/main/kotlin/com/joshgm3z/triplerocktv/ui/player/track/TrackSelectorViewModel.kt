@@ -109,12 +109,23 @@ constructor() : ViewModel() {
                     enableAudioButton = audioTracks.isNotEmpty()
                 )
             }
-            _subtitleTrackListState.value = subtitleTracks
+            _subtitleTrackListState.value = subtitleTracks.plusDisableSubtitleTrack()
             _audioTrackListState.value = audioTracks
         }
     }
 
 }
+
+private fun MutableList<TrackInfo>.plusDisableSubtitleTrack(): MutableList<TrackInfo> =
+    this.apply {
+        if (any { it.label == "Disabled" }) return@apply
+        add(
+            TrackInfo(
+                0, 0, "", language = "", label = "Disabled", 0,
+                false, !any { it.isSelected }, TrackType.Subtitle
+            )
+        )
+    }
 
 @OptIn(UnstableApi::class)
 private fun Tracks.Group.parseTracks(

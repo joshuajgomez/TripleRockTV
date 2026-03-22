@@ -1,7 +1,7 @@
 package com.joshgm3z.triplerocktv.util
 
 fun String?.languageName(): String {
-    if (isNullOrBlank()) return "Unknown"
+    if (isNullOrBlank()) return ""
     val normalized = trim().lowercase().replace('_', '-')
     return when (normalized) {
         "en" -> "English"
