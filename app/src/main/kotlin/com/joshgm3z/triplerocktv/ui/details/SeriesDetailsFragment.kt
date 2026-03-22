@@ -50,7 +50,7 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
-            DetailsOverviewRowPresenter(DetailsDescriptionPresenter())
+            DetailsOverviewRowPresenter(SeriesDetailsDescriptionPresenter())
 
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 

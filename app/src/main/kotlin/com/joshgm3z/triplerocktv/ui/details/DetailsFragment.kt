@@ -1,7 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.details
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
@@ -51,7 +49,7 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
-            DetailsOverviewRowPresenter(DetailsDescriptionPresenter())
+            DetailsOverviewRowPresenter(StreamDataDetailsDescriptionPresenter())
 
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 
