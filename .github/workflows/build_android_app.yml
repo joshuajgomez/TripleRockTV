@@ -40,9 +40,7 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      # This builds the "online" flavor (your default) in Debug mode.
-      # To build all flavors, use: ./gradlew assembleDebug
-      - name: Build Online Debug APK
+      - name: Build Online Release APK
         run: ./gradlew assembleOnlineRelease
 
       - name: Upload APK
