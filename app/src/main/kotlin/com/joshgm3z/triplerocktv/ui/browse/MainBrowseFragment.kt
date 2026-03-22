@@ -21,7 +21,6 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
@@ -29,6 +28,7 @@ import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -119,13 +119,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
                 streamType = item.streamType
             }
 
-
-            is SeriesCategory -> MainBrowseFragmentDirections.toStreamCatalogue().apply {
-                categoryId = item.categoryId
-                categoryName = item.categoryName
-                streamType = StreamType.Series
-            }
-
             is SeriesStream -> MainBrowseFragmentDirections.toDetails().apply {
                 streamType = StreamType.Series
                 streamId = item.seriesId
@@ -187,6 +180,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         header: String,
         list: List<CategoryData>
     ) {
+        Logger.debug("id = [${id}], header = [${header}], list = [${list}]")
         if (list.isEmpty()) return
         val header = HeaderItem(id, header)
         val listRowAdapter = ArrayObjectAdapter(categoryPresenter)

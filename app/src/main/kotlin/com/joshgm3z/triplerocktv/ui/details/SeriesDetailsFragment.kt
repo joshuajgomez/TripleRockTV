@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.details
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.add
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
@@ -10,14 +11,18 @@ import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.DetailsOverviewRow
-import androidx.leanback.widget.DetailsOverviewRowPresenter
+import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
+import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnActionClickedListener
 import androidx.leanback.widget.SparseArrayObjectAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
@@ -28,11 +33,11 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class DetailsFragment : DetailsSupportFragment() {
+class SeriesDetailsFragment : DetailsSupportFragment() {
 
-    private val viewModel: DetailsViewModel by viewModels()
+    private val viewModel: SeriesDetailsViewModel by viewModels()
 
-    private val args by navArgs<DetailsFragmentArgs>()
+    private val args by navArgs<SeriesDetailsFragmentArgs>()
 
     @Inject
     lateinit var glideUtil: GlideUtil
@@ -49,35 +54,38 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val presenterSelector = ClassPresenterSelector()
         val detailsPresenter =
-            DetailsOverviewRowPresenter(StreamDataDetailsDescriptionPresenter())
+            FullWidthDetailsOverviewRowPresenter(SeriesDetailsDescriptionPresenter())
 
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 
-        detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
-            when (action.id) {
-                ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
-                    args.streamId,
-                    args.streamType
-                ).apply { findNavController().navigate(this) }
-
-                ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
-                    args.streamId,
-                    args.streamType,
-                ).apply {
-                    resume = true
-                    findNavController().navigate(this)
-                }
-
-                ACTION_FAVORITE -> viewModel.addToMyList()
-                ACTION_REMOVE_FAVORITE -> viewModel.removeFromMyList()
-
-                else -> return@OnActionClickedListener
-            }
-        }
+        detailsPresenter.onActionClickedListener = onActionClickedListener
 
         presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
+        presenterSelector.addClassPresenter(ListRow::class.java, ListRowPresenter())
         rowsAdapter = ArrayObjectAdapter(presenterSelector)
         adapter = rowsAdapter
+    }
+
+    val onActionClickedListener = OnActionClickedListener { action ->
+        when (action.id) {
+            ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
+                args.seriesId,
+                StreamType.Series
+            ).apply { findNavController().navigate(this) }
+
+            ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
+                args.seriesId,
+                StreamType.Series
+            ).apply {
+                resume = true
+                findNavController().navigate(this)
+            }
+
+            ACTION_FAVORITE -> viewModel.addToMyList()
+            ACTION_REMOVE_FAVORITE -> viewModel.removeFromMyList()
+
+            else -> return@OnActionClickedListener
+        }
     }
 
     private fun handleBlur(imageUrl: String?) {
@@ -94,18 +102,18 @@ class DetailsFragment : DetailsSupportFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            viewModel.streamData.collectLatest {
-                it?.let { streamData ->
-                    updateDetails(streamData)
+            viewModel.seriesStream.collectLatest {
+                it?.let { seriesStream ->
+                    updateDetails(seriesStream)
                 }
             }
         }
-        viewModel.fetchStreamDetails(args.streamId, args.streamType)
+        viewModel.fetchStreamDetails(args.seriesId)
     }
 
-    private fun updateDetails(streamData: StreamData) {
-        Logger.debug("streamData = [${streamData}]")
-        handleBlur(streamData.movieMetadata?.backPosterUrl)
+    private fun updateDetails(seriesStream: SeriesStream) {
+        Logger.debug("streamData = [${seriesStream}]")
+        handleBlur(seriesStream.backdropUrl)
 
         val existingRow = if (rowsAdapter.size() > 0) {
             rowsAdapter.get(0) as? DetailsOverviewRow
@@ -115,31 +123,14 @@ class DetailsFragment : DetailsSupportFragment() {
 
         val detailsRow = if (existingRow != null) {
             // Reuse the existing row and update its data object
-            existingRow.item = streamData
+            existingRow.item = seriesStream
             existingRow
         } else {
             // Create a new row if it's the first time
-            DetailsOverviewRow(streamData)
+            DetailsOverviewRow(seriesStream)
         }
 
-        val actionAdapter = SparseArrayObjectAdapter()
-        if (streamData.startedWatching) {
-            actionAdapter.set(ACTION_RESUME.toInt(), Action(ACTION_RESUME, "Resume"))
-            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Start over"))
-        } else {
-            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
-        }
-        if (streamData.inMyList) actionAdapter.set(
-            ACTION_REMOVE_FAVORITE.toInt(),
-            Action(ACTION_REMOVE_FAVORITE, "Remove from my list")
-        ) else actionAdapter.set(
-            ACTION_FAVORITE.toInt(),
-            Action(ACTION_FAVORITE, "Add to my list")
-        )
-
-        detailsRow.actionsAdapter = actionAdapter
-
-        glideUtil.getBitmap(streamData.streamIcon) {
+        glideUtil.getBitmap(seriesStream.coverImageUrl) {
             detailsRow.setImageBitmap(requireContext(), it)
             rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
         }
@@ -149,6 +140,27 @@ class DetailsFragment : DetailsSupportFragment() {
         } else {
             // If it was an update, notify the adapter immediately for text/action changes
             rowsAdapter.notifyArrayItemRangeChanged(0, 1)
+        }
+
+        showSeasons(seriesStream)
+    }
+
+    private fun showSeasons(seriesStream: SeriesStream) {
+        if (rowsAdapter.size() > 1) {
+            rowsAdapter.removeItems(1, rowsAdapter.size() - 1)
+        }
+
+        val episodePresenter = EpisodePresenter(glideUtil) // Create this class to define how episode cards look
+
+        seriesStream.seasons?.forEachIndexed { index, season ->
+            val listRowAdapter = ArrayObjectAdapter(episodePresenter)
+
+            season.episodes.forEach { episode ->
+                listRowAdapter.add(episode)
+            }
+
+            val header = HeaderItem(index.toLong(), "Season ${season.number}")
+            rowsAdapter.add(ListRow(header, listRowAdapter))
         }
     }
 
