@@ -1,0 +1,50 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Decode Google Services JSON
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
+
+      - name: Decode default keystore
+        run: |
+          mkdir -p security
+          echo "${{ secrets.DEFAULT_KEYSTORE_BASE64 }}" | base64 --decode > security/default_keystore
+
+      - name: Decode Secrets.kt
+        run: echo "${{ secrets.SECRETS_KT_BASE64 }}" | base64 --decode > app/src/main/kotlin/com/joshgm3z/triplerocktv/repository/retrofit/Secrets.kt
+      
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Build Online Release APK
+        run: ./gradlew assembleOnlineRelease
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: 3RockTV.apk
+          path: app/build/outputs/apk/online/release/*.apk
