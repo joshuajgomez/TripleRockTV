@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.databinding.ItemTrackInfoBinding
 import com.joshgm3z.triplerocktv.util.languageName
+import com.joshgm3z.triplerocktv.util.visibleIf
 
 class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
 
@@ -58,6 +59,7 @@ class TrackListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         set(value) {
             binding.tvLanguage.text = value
             field = value
+            binding.tvLanguage.visibility = visibleIf(value.isNotEmpty())
         }
 
     var checked: Boolean = false

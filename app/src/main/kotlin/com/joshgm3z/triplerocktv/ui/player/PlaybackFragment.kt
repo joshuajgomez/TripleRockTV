@@ -30,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.ui.player.track.TrackInfo
 import com.joshgm3z.triplerocktv.ui.player.track.TrackSelectorViewModel
@@ -148,21 +149,28 @@ class PlaybackFragment : VideoSupportFragment() {
     }
 
     private fun switchTrack(trackInfo: TrackInfo) {
-        val currentMediaItem = player.currentMediaItem ?: return
-        val currentPosition = player.currentPosition
-        val playWhenReady = player.playWhenReady
+        Logger.debug("trackInfo = [${trackInfo}]")
+        val parametersBuilder = player.trackSelectionParameters.buildUpon()
 
-        val param = player.trackSelectionParameters.buildUpon()
+        when (trackInfo.trackType) {
+            TrackType.Subtitle -> {
+                if (trackInfo.label == "Disabled") {
+                    // Completely disable text tracks
+                    parametersBuilder.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+                } else {
+                    // Enable text tracks and prefer the selected language
+                    parametersBuilder
+                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                        .setPreferredTextLanguage(trackInfo.language)
+                }
+            }
 
-        player.trackSelectionParameters = when (trackInfo.trackType) {
-            TrackType.Subtitle -> param.setPreferredTextLanguage(trackInfo.language)
-            TrackType.Audio -> param.setPreferredAudioLanguage(trackInfo.language)
-        }.build()
+            TrackType.Audio -> {
+                parametersBuilder.setPreferredAudioLanguage(trackInfo.language)
+            }
+        }
 
-        player.setMediaItem(currentMediaItem, false)
-        player.prepare()
-        player.seekTo(currentPosition)
-        player.playWhenReady = playWhenReady
+        player.trackSelectionParameters = parametersBuilder.build()
     }
 
     private fun loadSubtitle(subtitleData: SubtitleData) {
@@ -230,7 +238,7 @@ class PlaybackFragment : VideoSupportFragment() {
             }
 
             override fun onActionClicked(action: Action) {
-                when(action) {
+                when (action) {
                     ccAction -> {
                         videoTitle?.let { title ->
                             val action = PlaybackFragmentDirections.toTrackSelector()
@@ -274,12 +282,14 @@ class PlaybackFragment : VideoSupportFragment() {
             .build()
 
         uiState.streamData.subtitleLanguage?.let {
+            if (it.isEmpty()) return@let
             player.trackSelectionParameters = player.trackSelectionParameters
                 .buildUpon()
                 .setPreferredTextLanguage(it)
                 .build()
         }
         uiState.streamData.subtitleUrl?.let {
+            if (it.isEmpty()) return@let
             val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
                 .setMimeType("application/x-subrip")
                 .setLanguage(uiState.streamData.subtitleLanguage)
