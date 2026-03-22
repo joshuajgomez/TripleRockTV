@@ -1,0 +1,38 @@
+name: Publish Release
+
+on:
+  push:
+    tags:
+      - 'v*' # Triggers when you push a tag like v1.0.0
+
+permissions:
+  contents: write # Required to create a release and upload assets
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      # 1. Download the APK built by your other action
+      # This assumes your build action used actions/upload-artifact with name 'release-apk'
+      - name: Download Built APK
+        uses: actions/download-artifact@v4
+        with:
+          name: 3RockTV.apk 
+          path: release-artifacts
+
+      # 2. Create the GitHub Release and attach the APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            release-artifacts/**/*.apk
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref }}
+          draft: true
+          prerelease: true
+          generate_release_notes: true # Automatically generates "What's Changed"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
