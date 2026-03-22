@@ -10,12 +10,20 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+      KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+      KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Decode Google Services JSON
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > app/google-services.json
+
+      - name: Decode default keystore
+        run: echo "${{ secrets.DEFAULT_KEYSTORE_BASE64 }}" | base64 --decode > security/default_keystore
 
       - name: Decode Secrets.kt
         run: echo "${{ secrets.SECRETS_KT_BASE64 }}" | base64 --decode > app/src/main/kotlin/com/joshgm3z/triplerocktv/repository/retrofit/Secrets.kt
