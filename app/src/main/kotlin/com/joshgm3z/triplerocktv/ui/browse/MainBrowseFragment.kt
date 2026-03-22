@@ -21,7 +21,6 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
@@ -118,13 +117,6 @@ class MainBrowseFragment : BrowseSupportFragment() {
                 categoryId = item.categoryId
                 categoryName = item.categoryName
                 streamType = item.streamType
-            }
-
-
-            is SeriesCategory -> MainBrowseFragmentDirections.toStreamCatalogue().apply {
-                categoryId = item.categoryId
-                categoryName = item.categoryName
-                streamType = StreamType.Series
             }
 
             is SeriesStream -> MainBrowseFragmentDirections.toDetails().apply {

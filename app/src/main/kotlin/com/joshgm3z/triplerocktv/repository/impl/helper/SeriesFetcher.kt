@@ -8,8 +8,6 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger

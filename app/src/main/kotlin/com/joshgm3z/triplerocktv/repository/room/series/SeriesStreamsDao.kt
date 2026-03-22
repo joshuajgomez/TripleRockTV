@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 
 @Dao
 interface SeriesStreamsDao {
@@ -16,7 +17,7 @@ interface SeriesStreamsDao {
     fun getStream(seriesId: Int): SeriesStream
 
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
-    fun getAllStreams(categoryId: Int): List<SeriesStream>
+    fun getAllOfCategory(categoryId: Int): List<SeriesStream>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<SeriesStream>)

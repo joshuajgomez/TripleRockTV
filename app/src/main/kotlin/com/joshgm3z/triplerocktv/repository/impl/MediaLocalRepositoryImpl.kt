@@ -4,19 +4,16 @@ import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
-    private val seriesCategoryDao: SeriesCategoryDao,
     private val epgListingDao: EpgListingDao,
     private val seriesStreamsDao: SeriesStreamsDao,
     private val streamDataDao: StreamDataDao,
@@ -40,8 +37,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
         streamType: StreamType
-    ): List<StreamData> = when (streamType) {
-        StreamType.Series -> emptyList()
+    ): List<Any> = when (streamType) {
+        StreamType.Series -> seriesStreamsDao.getAllOfCategory(categoryId)
         else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType)
     }.apply {
         Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
@@ -64,7 +61,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
-            && seriesCategoryDao.getAllCategories().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchRecentlyPlayed(): List<StreamData> =
