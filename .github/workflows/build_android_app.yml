@@ -41,7 +41,7 @@ jobs:
       # This builds the "online" flavor (your default) in Debug mode.
       # To build all flavors, use: ./gradlew assembleDebug
       - name: Build Online Debug APK
-        run: ./gradlew assembleOnlineDebug
+        run: ./gradlew assembleOnlineRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
