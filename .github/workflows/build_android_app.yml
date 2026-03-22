@@ -48,5 +48,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: triple-rock-tv-online-debug
-          path: app/build/outputs/apk/online/debug/*.apk
+          name: 3RockTV.apk
+          path: app/build/outputs/apk/online/release/*.apk
