@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.repository.data
 
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 data class IptvSeries(
     @SerializedName("num") val num: Int,
@@ -22,11 +23,11 @@ data class IptvSeries(
 
 data class SeriesDetailResponse(
     val info: SeriesInfo,
-    val seasons: List<Season>,
-    val episodes: Map<String, List<Episode>> // Key is the season number (e.g., "1")
+    val seasons: List<SeasonData>,
+    val episodes: Map<Int, List<Episode>> // Key is the season number (e.g., "1")
 )
 
-data class Season(
+data class SeasonData(
     @SerializedName("air_date") val airDate: String?,
     @SerializedName("episode_count") val episodeCount: Int?,
     val id: Int?,
@@ -61,7 +62,10 @@ data class Episode(
     val season: Int,
     val added: String,
     val episodeInfo: EpisodeInfo,
-)
+) {
+    fun videoUrl(userInfo: UserInfo) =
+        "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$id.$container_extension"
+}
 
 data class EpisodeInfo(
     val releasedate: String?,

@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.repository.room
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
@@ -18,8 +19,9 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
         IptvEpgListing::class,
         SearchHint::class,
     ],
-    version = 24
+    version = 25
 )
+@TypeConverters(SeasonConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun categoryDataDao(): CategoryDataDao
     abstract fun streamDataDao(): StreamDataDao

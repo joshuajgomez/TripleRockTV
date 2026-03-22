@@ -59,8 +59,8 @@ interface IptvService {
 
     @GET("player_api.php")
     suspend fun getSeriesDetails(
-        @Query("username") user: String,
-        @Query("password") pass: String,
+        @Query("username") user: String = MediaOnlineRepositoryImpl.username,
+        @Query("password") pass: String = MediaOnlineRepositoryImpl.password,
         @Query("action") action: String = "get_series_info",
         @Query("series_id") seriesId: Int
     ): SeriesDetailResponse

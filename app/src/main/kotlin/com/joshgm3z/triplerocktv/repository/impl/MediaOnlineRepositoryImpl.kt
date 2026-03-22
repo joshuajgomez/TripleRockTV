@@ -97,4 +97,8 @@ class MediaOnlineRepositoryImpl
         }
         onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
     }
+
+    override suspend fun getSeriesDataAndUpdate(streamId: Int) {
+        seriesFetcher.getSeriesDataAndUpdate(streamId)
+    }
 }

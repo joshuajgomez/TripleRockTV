@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.repository
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLocalRepository {
@@ -18,6 +19,8 @@ interface MediaLocalRepository {
     suspend fun fetchStream(streamId: Int, streamType: StreamType): StreamData?
 
     fun streamDataFlow(streamId: Int, streamType: StreamType): Flow<StreamData>
+
+    fun seriesStreamFlow(streamId: Int): Flow<SeriesStream>
 
     suspend fun isContentEmpty(): Boolean
 

@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Compa
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
@@ -95,5 +96,23 @@ constructor(
                 backdropUrl = it.backdropPath.firstOrNull()
             )
         })
+    }
+
+    suspend fun getSeriesDataAndUpdate(streamId: Int) {
+        iptvService.getSeriesDetails(seriesId = streamId).let { it ->
+            val seasons = it.seasons.map { seasonData ->
+                Season(
+                    episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
+                    number = seasonData.seasonNumber ?: -1,
+                    name = seasonData.name ?: "",
+                    coverImageUrl = seasonData.cover ?: "",
+                    voteAverage = seasonData.voteAverage ?: 0f,
+                )
+            }
+            Logger.debug("seasons = [$seasons]")
+            seriesStreamsDao.getStream(streamId).copy(seasons = seasons).let {
+                seriesStreamsDao.update(it)
+            }
+        }
     }
 }

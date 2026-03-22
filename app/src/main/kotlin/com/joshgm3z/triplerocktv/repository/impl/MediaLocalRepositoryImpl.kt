@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.flow.Flow
@@ -59,6 +60,9 @@ class MediaLocalRepositoryImpl @Inject constructor(
         StreamType.VideoOnDemand -> streamDataDao.streamDataFlow(streamId)
         else -> streamDataDao.streamDataFlow(streamId)
     }
+
+    override fun seriesStreamFlow(streamId: Int): Flow<SeriesStream> =
+        seriesStreamsDao.seriesStreamFlow(streamId)
 
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
