@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.repository.room.series
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
+//TODO: Delete
 @Entity(tableName = "series_category")
 data class SeriesCategory(
     @PrimaryKey val categoryId: Int,

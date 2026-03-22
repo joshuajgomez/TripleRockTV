@@ -37,7 +37,7 @@ class RecentStreamPresenter
         }
         val imageUri = when (item) {
             is StreamData -> item.streamIcon
-            is SeriesStream -> item.cover
+            is SeriesStream -> item.coverImageUrl
             else -> "Unknown"
         }
         val progress = when (item) {

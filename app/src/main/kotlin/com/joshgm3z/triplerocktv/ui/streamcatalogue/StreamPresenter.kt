@@ -10,6 +10,7 @@ import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
+import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -37,11 +38,12 @@ class StreamPresenter
         }
         val imageUri = when (item) {
             is StreamData -> item.streamIcon
-            is SeriesStream -> item.cover
+            is SeriesStream -> item.coverImageUrl
             else -> "Unknown"
         }
         val rating = when (item) {
             is StreamData -> item.rating
+            is SeriesStream -> item.rating.parseToFloat()
             else -> null
         }
         val titleView = viewHolder.view.findViewById<TextView>(R.id.stream_title)

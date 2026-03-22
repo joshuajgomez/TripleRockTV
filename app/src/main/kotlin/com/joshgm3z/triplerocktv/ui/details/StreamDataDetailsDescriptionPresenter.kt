@@ -9,7 +9,7 @@ import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.visibleIf
 
-class DetailsDescriptionPresenter : Presenter() {
+class StreamDataDetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         // You can use the standard lb_details_description layout or a custom one
         // For a progress bar, it's easier to use a custom layout file

@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.repository
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import kotlinx.coroutines.flow.Flow
 
 interface MediaLocalRepository {
@@ -13,11 +14,13 @@ interface MediaLocalRepository {
 
     suspend fun fetchEpgListings(): List<IptvEpgListing>
 
-    suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<StreamData>
+    suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<Any>
 
-    suspend fun fetchStream(streamId: Int, streamType: StreamType): StreamData?
+    suspend fun fetchStream(streamId: Int, streamType: StreamType): Any?
 
     fun streamDataFlow(streamId: Int, streamType: StreamType): Flow<StreamData>
+
+    fun seriesStreamFlow(streamId: Int): Flow<SeriesStream>
 
     suspend fun isContentEmpty(): Boolean
 
@@ -25,9 +28,9 @@ interface MediaLocalRepository {
 
     suspend fun fetchMyList(): List<StreamData>
 
-    suspend fun updatePlayedDuration(streamId: Int, positionMs: Long)
+    suspend fun updatePlayedDuration(streamId: Int, positionMs: Long, streamType: StreamType)
 
-    suspend fun updateLastPlayedTimestamp(streamId: Int)
+    suspend fun updateLastPlayedTimestamp(streamId: Int, streamType: StreamType, timeStamp: Long = System.currentTimeMillis())
 
     suspend fun updateMyList(streamId: Int, add: Boolean)
 

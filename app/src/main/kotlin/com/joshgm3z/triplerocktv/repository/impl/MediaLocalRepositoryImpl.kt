@@ -2,21 +2,20 @@ package com.joshgm3z.triplerocktv.repository.impl
 
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.epg.IptvEpgListing
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
-    private val seriesCategoryDao: SeriesCategoryDao,
     private val epgListingDao: EpgListingDao,
     private val seriesStreamsDao: SeriesStreamsDao,
     private val streamDataDao: StreamDataDao,
@@ -25,12 +24,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun fetchCategories(
         streamType: StreamType
-    ): List<CategoryData> = when (streamType) {
-        StreamType.VideoOnDemand,
-        StreamType.LiveTV -> categoryDataDao.getAllOfType(streamType)
-
-        else -> emptyList()
-    }
+    ): List<CategoryData> = categoryDataDao.getAllOfType(streamType)
 
     override suspend fun fetchCategoriesByTitleKey(
         streamType: StreamType,
@@ -45,8 +39,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStreamsOfCategory(
         categoryId: Int,
         streamType: StreamType
-    ): List<StreamData> = when (streamType) {
-        StreamType.Series -> emptyList()
+    ): List<Any> = when (streamType) {
+        StreamType.Series -> seriesStreamsDao.getAllOfCategory(categoryId)
         else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType)
     }.apply {
         Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
@@ -55,8 +49,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStream(
         streamId: Int,
         streamType: StreamType,
-    ): StreamData? = when (streamType) {
-        StreamType.Series -> null
+    ): Any? = when (streamType) {
+        StreamType.Series -> seriesStreamsDao.getBySeriesId(streamId)
         else -> streamDataDao.getByStreamId(streamId)
     }
 
@@ -68,8 +62,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
         else -> streamDataDao.streamDataFlow(streamId)
     }
 
+    override fun seriesStreamFlow(streamId: Int): Flow<SeriesStream> =
+        seriesStreamsDao.seriesStreamFlow(streamId)
+
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
-            && seriesCategoryDao.getAllCategories().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchRecentlyPlayed(): List<StreamData> =
@@ -81,12 +77,39 @@ class MediaLocalRepositoryImpl @Inject constructor(
         return streamDataDao.getMyList10()
     }
 
-    override suspend fun updatePlayedDuration(streamId: Int, positionMs: Long) {
-        streamDataDao.updatePlayedDuration(streamId, positionMs)
+    override suspend fun updatePlayedDuration(
+        streamId: Int,
+        positionMs: Long,
+        streamType: StreamType
+    ) = when (streamType) {
+        StreamType.VideoOnDemand -> streamDataDao.updatePlayedDuration(streamId, positionMs)
+        StreamType.Series -> updateEpisode(streamId) { it.copy(playedDuration = positionMs) }
+        else -> {}
     }
 
-    override suspend fun updateLastPlayedTimestamp(streamId: Int) {
-        streamDataDao.updateLastPlayedTimestamp(streamId)
+    override suspend fun updateLastPlayedTimestamp(
+        streamId: Int,
+        streamType: StreamType,
+        timeStamp: Long
+    ) {
+        when (streamType) {
+            StreamType.Series -> updateEpisode(streamId) { it.copy(lastPlayed = timeStamp) }
+            StreamType.VideoOnDemand -> streamDataDao.updateLastPlayedTimestamp(streamId, timeStamp)
+            else -> {}
+        }
+    }
+
+    private suspend fun updateEpisode(streamId: Int, doUpdate: (Episode) -> Episode) {
+        val seriesStream = seriesStreamsDao.getBySeriesId(streamId)
+        val updatedSeasons = seriesStream.seasons?.map { season ->
+            val updatedEpisodes = season.episodes.map { episode ->
+                if (episode.id == streamId) doUpdate(episode)
+                else episode
+            }
+            season.copy(episodes = updatedEpisodes)
+        }
+        val updatedSeriesStream = seriesStream.copy(seasons = updatedSeasons)
+        seriesStreamsDao.update(updatedSeriesStream)
     }
 
     override suspend fun updateMyList(streamId: Int, add: Boolean) {
