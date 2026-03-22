@@ -24,8 +24,11 @@ jobs:
       - name: Download Built APK
         uses: actions/download-artifact@v4
         with:
-          name: 3RockTV-apk/app-online-release.apk 
-          path: release-artifacts
+          name: 3RockTV-apk
+          path: release-artifacts/
+
+      - name: List files to verify
+        run: ls -R release-artifacts/
 
       - name: Rename APK
         run: |
