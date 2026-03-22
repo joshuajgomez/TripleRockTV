@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        tools:text="Some movie with long name (2000)" />
+
+    <LinearLayout
+        android:id="@+id/ll_rating_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:layout_marginTop="5dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/metadata_gap"
+            android:textColor="?attr/metadataTextColor"
+            android:textSize="@dimen/metadata_text_size"
+            android:visibility="gone"
+            tools:text="Comedy"
+            tools:visibility="visible" />
+
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_star" />
+
+        <TextView
+            android:id="@+id/tv_rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:textColor="?attr/metadataTextColor"
+            android:textSize="@dimen/metadata_text_size"
+            tools:text="3.5" />
+
+        <TextView
+            android:id="@+id/tv_duration"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/metadata_gap"
+            android:textColor="?attr/metadataTextColor"
+            android:textSize="@dimen/metadata_text_size"
+            android:visibility="gone"
+            tools:text="&#8226; 1h 30m"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/tv_subtitle_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/metadata_gap"
+            android:text="@string/subtitle_downloaded"
+            android:textColor="?attr/metadataTextColor"
+            android:textSize="@dimen/metadata_text_size"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <LinearLayout
+            android:id="@+id/ll_my_list_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/metadata_gap"
+            android:gravity="center_vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:contentDescription=""
+                android:src="@drawable/ic_check_circle_green" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="3dp"
+                android:text="My list"
+                android:textColor="?attr/metadataTextColor"
+                android:textSize="@dimen/metadata_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="6"
+        android:text="@string/long_description" />
+
+    <LinearLayout
+        android:id="@+id/ll_progressbar_container"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:progressTint="@color/orange"
+            tools:progress="30" />
+
+        <TextView
+            android:id="@+id/tv_time_remaining"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:textColor="?attr/metadataTextColor"
+            android:textSize="12sp"
+            tools:text="30m remaining" />
+    </LinearLayout>
+</LinearLayout>

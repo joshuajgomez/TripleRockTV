@@ -6,8 +6,9 @@ import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
+import com.joshgm3z.triplerocktv.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class SeriesFetcher
 @Inject
 constructor(
-    private val seriesCategoryDao: SeriesCategoryDao,
+    private val categoryDataDao: CategoryDataDao,
     private val seriesStreamsDao: SeriesStreamsDao,
 ) {
     lateinit var iptvService: IptvService
@@ -32,7 +33,7 @@ constructor(
         }
         val total = categories.size
         if (total > 0) {
-            seriesCategoryDao.deleteAllCategories()
+            categoryDataDao.deleteAllOfType(StreamType.Series)
             seriesStreamsDao.deleteAllStreams()
         } else {
             onFetch(
@@ -58,22 +59,23 @@ constructor(
         )
     }
 
-    private suspend fun fetchSeriesCategories(): List<SeriesCategory> =
+    private suspend fun fetchSeriesCategories(): List<CategoryData> =
         iptvService.getSeriesCategories(username, password).map {
-            SeriesCategory(
+            CategoryData(
                 categoryId = it.categoryId,
                 categoryName = it.categoryName,
-                parentId = it.parentId
+                parentId = it.parentId,
+                streamType = StreamType.Series
             )
         }.apply {
             Logger.debug("fetchSeriesCategories: $this")
         }
 
-    private suspend fun fetchAndStoreSeries(vodCategory: SeriesCategory) {
-        val series = iptvService.getSeries(username, password, vodCategory.categoryId)
+    private suspend fun fetchAndStoreSeries(category: CategoryData) {
+        val series = iptvService.getSeries(username, password, category.categoryId)
         Logger.debug("fetchAndStoreSeries: $series")
 
-        seriesCategoryDao.insert(vodCategory.apply {
+        categoryDataDao.insert(category.apply {
             count = series.size
             firstStreamIcon = series.firstOrNull()?.cover
         })
@@ -83,15 +85,34 @@ constructor(
                 name = it.name,
                 categoryId = it.categoryId,
                 seriesId = it.seriesId,
-                cover = it.cover,
+                coverImageUrl = it.cover,
                 plot = it.plot,
                 cast = it.cast,
                 director = it.director,
                 genre = it.genre,
                 releaseDate = it.releaseDate,
                 lastModified = it.lastModified,
-                rating = it.rating
+                rating = it.rating,
+                backdropUrl = it.backdropPath.firstOrNull()
             )
         })
+    }
+
+    suspend fun getSeriesDataAndUpdate(streamId: Int) {
+        iptvService.getSeriesDetails(seriesId = streamId).let { it ->
+            val seasons = it.seasons.map { seasonData ->
+                Season(
+                    episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
+                    number = seasonData.seasonNumber ?: -1,
+                    name = seasonData.name ?: "",
+                    coverImageUrl = seasonData.cover ?: "",
+                    voteAverage = seasonData.voteAverage ?: 0f,
+                )
+            }
+            Logger.debug("seasons = [$seasons]")
+            seriesStreamsDao.getBySeriesId(streamId).copy(seasons = seasons).let {
+                seriesStreamsDao.update(it)
+            }
+        }
     }
 }

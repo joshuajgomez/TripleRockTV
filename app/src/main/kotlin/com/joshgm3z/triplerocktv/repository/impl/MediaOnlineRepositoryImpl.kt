@@ -73,16 +73,15 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         try {
-            onlineDataFetcher.fetchContent(
+            /*onlineDataFetcher.fetchContent(
                 streamType = StreamType.VideoOnDemand, onError = onError,
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             onlineDataFetcher.fetchContent(
                 streamType = StreamType.LiveTV, onError = onError, limit = LIMIT,
                 onFetch = { onFetch(StreamType.LiveTV, it) },
-            )
-            seriesFetcher.fetchContent(limit = LIMIT, onFetch = onFetch, onError = onError)
-//            epgFetcher.fetchContent(onFetch, onError)
+            )*/
+            seriesFetcher.fetchContent(onFetch = onFetch, onError = onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
@@ -97,5 +96,9 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
+    }
+
+    override suspend fun getSeriesDataAndUpdate(streamId: Int) {
+        seriesFetcher.getSeriesDataAndUpdate(streamId)
     }
 }

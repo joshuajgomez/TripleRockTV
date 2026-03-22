@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.repository.data
 
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 data class IptvSeries(
     @SerializedName("num") val num: Int,
@@ -14,23 +15,27 @@ data class IptvSeries(
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("last_modified") val lastModified: String?,
     @SerializedName("rating") val rating: String?,
-    @SerializedName("category_id") val categoryId: Int
+    @SerializedName("category_id") val categoryId: Int,
+    @SerializedName("backdrop_path") val backdropPath: List<String>,
+    @SerializedName("episode_run_time") val episodeRunTime: String,
+    @SerializedName("youtube_trailer") val youtubeTrailer: String,
 )
 
 data class SeriesDetailResponse(
     val info: SeriesInfo,
-    val seasons: List<Season>,
-    val episodes: Map<String, List<Episode>> // Key is the season number (e.g., "1")
+    val seasons: List<SeasonData>,
+    val episodes: Map<Int, List<Episode>> // Key is the season number (e.g., "1")
 )
 
-data class Season(
+data class SeasonData(
     @SerializedName("air_date") val airDate: String?,
     @SerializedName("episode_count") val episodeCount: Int?,
     val id: Int?,
     val name: String?, // e.g., "Season 1"
     val overview: String?,
     @SerializedName("season_number") val seasonNumber: Int?,
-    @SerializedName("cover") val cover: String?
+    @SerializedName("cover") val cover: String?,
+    @SerializedName("vote_average") val voteAverage: Float?,
 )
 
 data class SeriesInfo(
@@ -45,12 +50,31 @@ data class SeriesInfo(
     val rating: String?,
     @SerializedName("rating_5_points") val rating5Points: Double?,
     val backdrop_path: List<String>?,
-    val youtube_trailer: String?
+    val youtube_trailer: String?,
+    val category_id: String?,
 )
 
 data class Episode(
-    val id: String,
+    val id: Int,
+    val episode_num: Int,
     val title: String,
     val container_extension: String, // e.g., "mp4" or "mkv"
-    val season: Int
+    val season: Int,
+    val added: String,
+    val episodeInfo: EpisodeInfo,
+    val lastPlayed: Long = 0,
+    val playedDuration: Long = 0,
+) {
+    fun videoUrl(userInfo: UserInfo) =
+        "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$id.$container_extension"
+}
+
+data class EpisodeInfo(
+    val releasedate: String?,
+    val plot: Int?,
+    val duration_secs: Int?,
+    val duration: String?,
+    val movie_image: String?,
+    val rating: String?,
+    val season: String?,
 )
