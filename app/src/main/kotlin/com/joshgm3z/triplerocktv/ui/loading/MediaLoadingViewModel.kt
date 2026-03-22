@@ -51,8 +51,8 @@ class MediaLoadingViewModel
                             else -> {
                                 Logger.debug("fetchContent: new map")
                                 val map = hashMapOf(
-                                    StreamType.VideoOnDemand to LoadingState(),
-//                                    StreamType.Series to LoadingState(),
+//                                    StreamType.VideoOnDemand to LoadingState(),
+                                    StreamType.Series to LoadingState(),
                                     StreamType.LiveTV to LoadingState(),
                                 )
                                 map.apply { set(type, state) }

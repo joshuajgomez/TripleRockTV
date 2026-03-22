@@ -347,6 +347,44 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "get_vod_categories",
+      "id": "bfbacdcf-fb5b-4780-b7c7-298fc18be8b9",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://riseiptv.xyz:8080/player_api.php?username=jgomez554&password=38333563&action=get_vod_categories",
+          "protocol": "http",
+          "host": [
+            "riseiptv",
+            "xyz"
+          ],
+          "port": "8080",
+          "path": [
+            "player_api.php"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "jgomez554",
+              "uuid": "9096498c-2fc7-48d5-bcec-57c21ebbb733"
+            },
+            {
+              "key": "password",
+              "value": "38333563",
+              "uuid": "4e0cc894-5b13-462a-9e57-b3a96d03e220"
+            },
+            {
+              "key": "action",
+              "value": "get_vod_categories",
+              "uuid": "cd483789-eaac-42e7-92ac-19038b61e959"
+            }
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

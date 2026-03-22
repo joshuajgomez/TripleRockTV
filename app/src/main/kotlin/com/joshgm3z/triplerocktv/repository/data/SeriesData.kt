@@ -14,7 +14,10 @@ data class IptvSeries(
     @SerializedName("releaseDate") val releaseDate: String?,
     @SerializedName("last_modified") val lastModified: String?,
     @SerializedName("rating") val rating: String?,
-    @SerializedName("category_id") val categoryId: Int
+    @SerializedName("category_id") val categoryId: Int,
+    @SerializedName("backdrop_path") val backdropPath: List<String>,
+    @SerializedName("episode_run_time") val episodeRunTime: String,
+    @SerializedName("youtube_trailer") val youtubeTrailer: String,
 )
 
 data class SeriesDetailResponse(

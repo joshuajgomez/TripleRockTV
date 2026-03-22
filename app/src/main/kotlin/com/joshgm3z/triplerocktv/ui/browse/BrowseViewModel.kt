@@ -22,7 +22,6 @@ data class BrowseUiState(
     val myList: List<StreamData> = emptyList(),
     val recentPlayed: List<StreamData> = emptyList(),
     val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
-    val seriesCategories: List<SeriesCategory> = emptyList(),
     val epgCategories: List<IptvEpgListing> = emptyList(),
     var errorMessage: String? = null,
     var loading: Boolean = false,
@@ -57,6 +56,7 @@ class BrowseViewModel
             _uiState.update {
                 it.copy(
                     categoryMap = mapOf(
+                        "Series" to repository.fetchCategories(StreamType.Series),
                         "All movies" to repository.fetchCategories(StreamType.VideoOnDemand),
                         "English" to repository.fetchCategoriesByTitleKey(
                             StreamType.VideoOnDemand,

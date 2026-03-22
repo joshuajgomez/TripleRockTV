@@ -10,7 +10,8 @@ data class SeriesStream(
     val seriesId: Int,
     val num: Int,
     val name: String,
-    val cover: String?,
+    val coverImageUrl: String?,
+    val backdropUrl: String?,
     val plot: String?,
     val cast: String?,
     val director: String?,
@@ -20,6 +21,7 @@ data class SeriesStream(
     val rating: String?,
     val categoryId: Int,
     val lastPlayed: Long = 0,
-){
-    fun videoUrl(userInfo: UserInfo) = "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$seriesId.mkv"
+) {
+    fun videoUrl(userInfo: UserInfo) =
+        "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$seriesId.mkv"
 }
