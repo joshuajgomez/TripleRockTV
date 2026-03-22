@@ -29,6 +29,7 @@ import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -187,6 +188,7 @@ class MainBrowseFragment : BrowseSupportFragment() {
         header: String,
         list: List<CategoryData>
     ) {
+        Logger.debug("id = [${id}], header = [${header}], list = [${list}]")
         if (list.isEmpty()) return
         val header = HeaderItem(id, header)
         val listRowAdapter = ArrayObjectAdapter(categoryPresenter)

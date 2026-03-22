@@ -33,7 +33,8 @@ data class Season(
     val name: String?, // e.g., "Season 1"
     val overview: String?,
     @SerializedName("season_number") val seasonNumber: Int?,
-    @SerializedName("cover") val cover: String?
+    @SerializedName("cover") val cover: String?,
+    @SerializedName("vote_average") val voteAverage: Float?,
 )
 
 data class SeriesInfo(
@@ -48,12 +49,26 @@ data class SeriesInfo(
     val rating: String?,
     @SerializedName("rating_5_points") val rating5Points: Double?,
     val backdrop_path: List<String>?,
-    val youtube_trailer: String?
+    val youtube_trailer: String?,
+    val category_id: String?,
 )
 
 data class Episode(
     val id: String,
+    val episode_num: Int,
     val title: String,
     val container_extension: String, // e.g., "mp4" or "mkv"
-    val season: Int
+    val season: Int,
+    val added: String,
+    val episodeInfo: EpisodeInfo,
+)
+
+data class EpisodeInfo(
+    val releasedate: String?,
+    val plot: Int?,
+    val duration_secs: Int?,
+    val duration: String?,
+    val movie_image: String?,
+    val rating: String?,
+    val season: String?,
 )
