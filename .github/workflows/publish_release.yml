@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write # Required to create a release and upload assets
 
+env:
+  # Define your custom APK base name here
+  APK_FINAL_NAME: "3RockTV-${{ github.ref_name }}.apk"
+
 jobs:
   publish:
     runs-on: ubuntu-latest
@@ -20,15 +24,18 @@ jobs:
       - name: Download Built APK
         uses: actions/download-artifact@v4
         with:
-          name: 3RockTV.apk 
+          name: 3RockTV-apk/app-online-release.apk 
           path: release-artifacts
+
+      - name: Rename APK
+        run: |
+          mv release-artifacts/app-online-release.apk ${{ env.APK_FINAL_NAME }}
 
       # 2. Create the GitHub Release and attach the APK
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            release-artifacts/**/*.apk
+          files: ${{ env.APK_FINAL_NAME }}
           name: Release ${{ github.ref_name }}
           tag_name: ${{ github.ref }}
           draft: true
