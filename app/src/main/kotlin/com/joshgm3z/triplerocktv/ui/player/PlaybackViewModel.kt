@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 data class PlaybackUiState(
     val videoUrl: String,
-    val streamData: StreamData,
+    val playbackItem: Any,
 )
 
 @HiltViewModel
@@ -44,7 +44,7 @@ class PlaybackViewModel @Inject constructor(
                 is StreamData -> _playbackUiState.update {
                     repository.updateLastPlayedTimestamp(streamId, StreamType.VideoOnDemand)
                     PlaybackUiState(
-                        streamData = result,
+                        playbackItem = result,
                         videoUrl = result.videoUrl(userInfo),
                     )
                 }
@@ -52,7 +52,7 @@ class PlaybackViewModel @Inject constructor(
                 is Episode -> _playbackUiState.update {
                     repository.updateLastPlayedTimestamp(streamId, StreamType.Series)
                     PlaybackUiState(
-                        streamData = StreamData.sample(),
+                        playbackItem = result,
                         videoUrl = result.videoUrl(userInfo),
                     )
                 }
