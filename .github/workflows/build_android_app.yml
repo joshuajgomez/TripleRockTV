@@ -51,7 +51,7 @@ jobs:
       - name: Update Master Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: master
+          tag_name: master-release
           files: release_artifacts/3RockTV-master.apk
           body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
           prerelease: true
