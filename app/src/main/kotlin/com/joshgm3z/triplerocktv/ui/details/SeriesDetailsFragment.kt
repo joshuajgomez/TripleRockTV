@@ -68,15 +68,13 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     val onActionClickedListener = OnActionClickedListener { action ->
         when (action.id) {
-            ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
-                args.seriesId,
-                StreamType.Series
-            ).apply { findNavController().navigate(this) }
+            ACTION_PLAY -> DetailsFragmentDirections.toPlayback(StreamType.Series).apply {
+                streamId = args.seriesId
+                findNavController().navigate(this)
+            }
 
-            ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
-                args.seriesId,
-                StreamType.Series
-            ).apply {
+            ACTION_RESUME -> DetailsFragmentDirections.toPlayback(StreamType.Series).apply {
+                streamId = args.seriesId
                 resume = true
                 findNavController().navigate(this)
             }
