@@ -63,6 +63,31 @@ android {
             dimension = "environment"
             isDefault = true
         }
+        create("dev") {
+            dimension = "environment"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "3TV-dev")
+        }
+    }
+
+    sourceSets {
+        // Add the shared folder to the "dev" flavor
+        getByName("dev") {
+            java.srcDirs("src/sharedFlavors/kotlin")
+        }
+
+        // Add the same shared folder to the "demo" flavor
+        getByName("online") {
+            java.srcDirs("src/sharedFlavors/kotlin")
+        }
+    }
+
+    androidComponents {
+        beforeVariants { variantBuilder ->
+            if (variantBuilder.buildType == "release" &&
+                listOf("dev", "demo").contains(variantBuilder.flavorName)
+            ) variantBuilder.enable = false
+        }
     }
 
     room {
