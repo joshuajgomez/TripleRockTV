@@ -1,6 +1,9 @@
 package com.joshgm3z.triplerocktv.repository.data
 
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.repository.room.MIN_DURATION_LEFT
+import com.joshgm3z.triplerocktv.repository.room.MIN_PLAYBACK_DURATION
+import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 data class IptvSeries(
@@ -67,6 +70,28 @@ data class Episode(
 ) {
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$id.$container_extension"
+
+    fun totalDurationMs(): Long = episodeInfo.duration_secs?.times(1000L) ?: 0L
+
+    fun progressPercent(): Int = when {
+        totalDurationMs() == 0L -> 0
+        else -> ((playedDuration.toDouble() / totalDurationMs()) * 100).toInt()
+    }
+
+    fun timeRemaining(): Long = when {
+        totalDurationMs() == 0L -> 0L
+        else -> (totalDurationMs() - playedDuration)
+    }
+
+    fun timeRemainingText(): String = when {
+        totalDurationMs() == 0L -> ""
+        else -> timeRemaining().toTextTime().let { "$it remaining" }
+    }
+
+    val startedWatching: Boolean
+        get() = playedDuration > MIN_PLAYBACK_DURATION
+                && totalDurationMs() != 0L
+                && timeRemaining() > MIN_DURATION_LEFT
 }
 
 data class EpisodeInfo(
