@@ -55,16 +55,14 @@ class DetailsFragment : DetailsSupportFragment() {
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             when (action.id) {
-                ACTION_PLAY -> DetailsFragmentDirections.toPlayback(
-                    args.streamId,
-                    args.streamType
-                ).apply { findNavController().navigate(this) }
+                ACTION_PLAY -> DetailsFragmentDirections.toPlayback(args.streamType).apply {
+                    streamId = args.streamId
+                    findNavController().navigate(this)
+                }
 
-                ACTION_RESUME -> DetailsFragmentDirections.toPlayback(
-                    args.streamId,
-                    args.streamType,
-                ).apply {
+                ACTION_RESUME -> DetailsFragmentDirections.toPlayback(args.streamType).apply {
                     resume = true
+                    streamId = args.streamId
                     findNavController().navigate(this)
                 }
 
