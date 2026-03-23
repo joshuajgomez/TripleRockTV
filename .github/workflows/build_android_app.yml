@@ -54,5 +54,7 @@ jobs:
           tag_name: master
           files: release_artifacts/3RockTV-master.apk
           body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
+          prerelease: true
+          make_latest: "true"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
