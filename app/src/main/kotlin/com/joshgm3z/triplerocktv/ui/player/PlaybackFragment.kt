@@ -32,6 +32,9 @@ import kotlinx.coroutines.launch
 import androidx.core.net.toUri
 import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
+import com.joshgm3z.triplerocktv.repository.data.Episode
+import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.player.track.TrackInfo
 import com.joshgm3z.triplerocktv.ui.player.track.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.ui.player.track.TrackType
@@ -91,11 +94,19 @@ class PlaybackFragment : VideoSupportFragment() {
         lifecycleScope.launch {
             viewModel.playbackUiState.collectLatest {
                 it?.let { playbackUiState ->
-                    transportControlGlue.title = playbackUiState.streamData.name
-                    playbackUiState.streamData.movieMetadata?.genre?.let { subtitle ->
+                    videoTitle = when (playbackUiState.playbackItem) {
+                        is StreamData -> playbackUiState.playbackItem.name
+                        is Episode -> playbackUiState.playbackItem.title
+                        else -> ""
+                    }
+                    val videoSubTitle = when (playbackUiState.playbackItem) {
+                        is StreamData -> playbackUiState.playbackItem.movieMetadata?.genre
+                        else -> ""
+                    }
+                    videoSubTitle?.let { subtitle ->
                         transportControlGlue.subtitle = subtitle
                     }
-                    videoTitle = playbackUiState.streamData.name
+                    transportControlGlue.title = videoTitle
                     transportControlGlue.isSeekEnabled = true
                     transportControlGlue.playWhenPrepared()
                     playVideo(it)
@@ -277,23 +288,33 @@ class PlaybackFragment : VideoSupportFragment() {
 
     private fun playVideo(uiState: PlaybackUiState) {
         Logger.info("uiState=[$uiState]")
-        var mediaItem = MediaItem.Builder()
-            .setUri(uiState.videoUrl)
-            .build()
+        when (uiState.playbackItem) {
+            is Episode -> playVideoFromSerisStream(uiState.playbackItem, uiState.videoUrl)
+            is StreamData -> playVideoFromStreamData(uiState.playbackItem, uiState.videoUrl)
+            else -> throw Exception("Unknown playback item type: ${uiState.playbackItem::class.java}")
+        }
+    }
 
-        uiState.streamData.subtitleLanguage?.let {
+    private fun playVideoFromStreamData(
+        streamData: StreamData,
+        videoUrl: String
+    ) {
+        var mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
+        streamData.subtitleLanguage?.let {
             if (it.isEmpty()) return@let
             player.trackSelectionParameters = player.trackSelectionParameters
                 .buildUpon()
                 .setPreferredTextLanguage(it)
                 .build()
         }
-        uiState.streamData.subtitleUrl?.let {
+        streamData.subtitleUrl?.let {
             if (it.isEmpty()) return@let
             val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
                 .setMimeType("application/x-subrip")
-                .setLanguage(uiState.streamData.subtitleLanguage)
-                .setLabel(uiState.streamData.subtitleTitle)
+                .setLanguage(streamData.subtitleLanguage)
+                .setLabel(streamData.subtitleTitle)
                 .setSelectionFlags(SELECTION_FLAG_DEFAULT)
                 .build()
             mediaItem = mediaItem.buildUpon()
@@ -303,8 +324,23 @@ class PlaybackFragment : VideoSupportFragment() {
 
         player.setMediaItem(mediaItem)
         player.prepare()
-        if (args.resume && uiState.streamData.startedWatching) {
-            player.seekTo(uiState.streamData.playedDuration)
+        if (args.resume && streamData.startedWatching) {
+            player.seekTo(streamData.playedDuration)
+        }
+    }
+
+    private fun playVideoFromSerisStream(
+        episode: Episode,
+        videoUrl: String
+    ) {
+        val mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
+
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        if (args.resume && episode.startedWatching) {
+            player.seekTo(episode.playedDuration)
         }
     }
 
