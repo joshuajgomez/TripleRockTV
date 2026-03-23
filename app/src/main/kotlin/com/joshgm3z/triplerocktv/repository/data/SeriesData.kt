@@ -64,14 +64,14 @@ data class Episode(
     val container_extension: String, // e.g., "mp4" or "mkv"
     val season: Int,
     val added: String,
-    val episodeInfo: EpisodeInfo,
+    val episodeInfo: EpisodeInfo?,
     val lastPlayed: Long = 0,
     val playedDuration: Long = 0,
 ) {
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$id.$container_extension"
 
-    fun totalDurationMs(): Long = episodeInfo.duration_secs?.times(1000L) ?: 0L
+    fun totalDurationMs(): Long = episodeInfo?.duration_secs?.times(1000L) ?: 0L
 
     fun progressPercent(): Int = when {
         totalDurationMs() == 0L -> 0
