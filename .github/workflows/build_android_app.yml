@@ -48,7 +48,7 @@ jobs:
           mkdir -p release_artifacts
           cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
 
-      - name: Update Latest Release
+      - name: Update Master Release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: master
