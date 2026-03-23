@@ -7,8 +7,8 @@ class ToTextTimeTest {
 
     @Test
     fun test() {
-        assertEquals("1 hour 23 minutes", 4980000L.toTextTime())
+        assertEquals("1h 23m", 4980000L.toTextTime())
         assertEquals("", 0L.toTextTime())
-        assertEquals("45 minutes", 2700000L.toTextTime())
+        assertEquals("45m", 2700000L.toTextTime())
     }
 }
