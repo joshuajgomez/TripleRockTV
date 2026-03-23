@@ -71,14 +71,8 @@ android {
     }
 
     sourceSets {
-        // Add the shared folder to the "dev" flavor
         getByName("dev") {
-            java.srcDirs("src/sharedFlavors/kotlin")
-        }
-
-        // Add the same shared folder to the "demo" flavor
-        getByName("online") {
-            java.srcDirs("src/sharedFlavors/kotlin")
+            java.srcDirs("src/online/kotlin")
         }
     }
 
