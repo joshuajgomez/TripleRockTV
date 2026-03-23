@@ -49,9 +49,19 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStream(
         streamId: Int,
         streamType: StreamType,
-    ): Any? = when (streamType) {
-        StreamType.Series -> seriesStreamsDao.getBySeriesId(streamId)
-        else -> streamDataDao.getByStreamId(streamId)
+    ): StreamData = streamDataDao.getByStreamId(streamId)
+
+    override suspend fun fetchEpisode(
+        episodeId: Int,
+        seriesId: Int,
+    ): Episode? {
+        val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
+        seriesStream.seasons?.forEach { season ->
+            season.episodes.forEach { episode ->
+                if (episode.id == episodeId) return episode
+            }
+        }
+        return null
     }
 
     override fun streamDataFlow(
@@ -83,27 +93,39 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamType: StreamType
     ) = when (streamType) {
         StreamType.VideoOnDemand -> streamDataDao.updatePlayedDuration(streamId, positionMs)
-        StreamType.Series -> updateEpisode(streamId) { it.copy(playedDuration = positionMs) }
         else -> {}
     }
+
+    override suspend fun updateEpisodePlayedDuration(
+        seriesId: Int,
+        episodeId: Int,
+        positionMs: Long,
+    ) = updateEpisode(seriesId, episodeId) { it.copy(playedDuration = positionMs) }
 
     override suspend fun updateLastPlayedTimestamp(
         streamId: Int,
         streamType: StreamType,
         timeStamp: Long
     ) {
-        when (streamType) {
-            StreamType.Series -> updateEpisode(streamId) { it.copy(lastPlayed = timeStamp) }
-            StreamType.VideoOnDemand -> streamDataDao.updateLastPlayedTimestamp(streamId, timeStamp)
-            else -> {}
-        }
+        streamDataDao.updateLastPlayedTimestamp(streamId, timeStamp)
     }
 
-    private suspend fun updateEpisode(streamId: Int, doUpdate: (Episode) -> Episode) {
-        val seriesStream = seriesStreamsDao.getBySeriesId(streamId)
+    override suspend fun updateEpisodeLastPlayedTimestamp(
+        episodeId: Int,
+        seriesId: Int,
+        timeStamp: Long
+    ) = updateEpisode(episodeId, seriesId) { it.copy(lastPlayed = timeStamp) }
+
+    private suspend fun updateEpisode(
+        episodeId: Int,
+        seriesId: Int,
+        doUpdate: (Episode) -> Episode
+    ) {
+        Logger.debug("episodeId = [${episodeId}], seriesId = [${seriesId}]")
+        val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
         val updatedSeasons = seriesStream.seasons?.map { season ->
             val updatedEpisodes = season.episodes.map { episode ->
-                if (episode.id == streamId) doUpdate(episode)
+                if (episode.id == episodeId) doUpdate(episode)
                 else episode
             }
             season.copy(episodes = updatedEpisodes)

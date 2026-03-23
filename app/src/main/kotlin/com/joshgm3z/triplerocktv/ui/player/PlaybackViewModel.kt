@@ -34,28 +34,32 @@ class PlaybackViewModel @Inject constructor(
     private var streamId: Int? = null
     private var streamType: StreamType? = null
 
-    fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
+    fun fetchStreamDetails(streamId: Int, streamType: StreamType, seriesId: Int? = null) {
         Logger.debug("streamId = [${streamId}], browseType = [${streamType}]")
         this.streamType = streamType
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
             this@PlaybackViewModel.streamId = streamId
-            when (val result = repository.fetchStream(streamId, streamType)) {
-                is StreamData -> _playbackUiState.update {
+            when (streamType) {
+                StreamType.VideoOnDemand -> _playbackUiState.update {
                     repository.updateLastPlayedTimestamp(streamId, StreamType.VideoOnDemand)
+                    val result = repository.fetchStream(streamId, streamType)
                     PlaybackUiState(
                         playbackItem = result,
                         videoUrl = result.videoUrl(userInfo),
                     )
                 }
 
-                is Episode -> _playbackUiState.update {
-                    repository.updateLastPlayedTimestamp(streamId, StreamType.Series)
+                StreamType.Series -> _playbackUiState.update {
+//                    repository.updateEpisodeLastPlayedTimestamp(streamId, seriesId!!)
+                    val episode = repository.fetchEpisode(streamId, seriesId!!)
                     PlaybackUiState(
-                        playbackItem = result,
-                        videoUrl = result.videoUrl(userInfo),
+                        playbackItem = episode!!,
+                        videoUrl = episode.videoUrl(userInfo),
                     )
                 }
+
+                else -> return@launch
             }
         }
     }

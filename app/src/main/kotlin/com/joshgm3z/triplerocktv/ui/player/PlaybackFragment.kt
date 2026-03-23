@@ -90,7 +90,7 @@ class PlaybackFragment : VideoSupportFragment() {
 
         requireActivity().setBackground(null)
 
-        viewModel.fetchStreamDetails(args.streamId, args.streamType)
+        viewModel.fetchStreamDetails(args.streamId, args.streamType, args.seriesId)
         lifecycleScope.launch {
             viewModel.playbackUiState.collectLatest {
                 it?.let { playbackUiState ->
