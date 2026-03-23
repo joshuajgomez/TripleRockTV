@@ -43,8 +43,16 @@ jobs:
       - name: Build Online Release APK
         run: ./gradlew assembleOnlineRelease
 
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
+      - name: Prepare APK for Release
+        run: |
+          mkdir -p release_artifacts
+          cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
+
+      - name: Update Latest Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: 3RockTV-apk
-          path: app/build/outputs/apk/online/release/*.apk
+          tag_name: master
+          files: release_artifacts/3RockTV-master.apk
+          body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
