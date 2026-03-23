@@ -17,6 +17,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -55,14 +56,16 @@ class DetailsFragment : DetailsSupportFragment() {
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             when (action.id) {
-                ACTION_PLAY -> DetailsFragmentDirections.toPlayback(args.streamType).apply {
+                ACTION_PLAY -> DetailsFragmentDirections.toPlayback().apply {
                     streamId = args.streamId
+                    streamType = args.streamType
                     findNavController().navigate(this)
                 }
 
-                ACTION_RESUME -> DetailsFragmentDirections.toPlayback(args.streamType).apply {
+                ACTION_RESUME -> DetailsFragmentDirections.toPlayback().apply {
                     resume = true
                     streamId = args.streamId
+                    streamType = args.streamType
                     findNavController().navigate(this)
                 }
 

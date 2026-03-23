@@ -51,8 +51,8 @@ class PlaybackViewModel @Inject constructor(
                 }
 
                 StreamType.Series -> _playbackUiState.update {
-//                    repository.updateEpisodeLastPlayedTimestamp(streamId, seriesId!!)
-                    val episode = repository.fetchEpisode(streamId, seriesId!!)
+                    repository.updateEpisodeLastPlayedTimestamp(streamId, seriesId!!)
+                    val episode = repository.fetchEpisode(streamId, seriesId)
                     PlaybackUiState(
                         playbackItem = episode!!,
                         videoUrl = episode.videoUrl(userInfo),
