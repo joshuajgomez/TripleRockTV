@@ -6,6 +6,7 @@ import androidx.fragment.app.viewModels
 import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
+import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
@@ -39,9 +40,13 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     private val seasonRowAdapter = ArrayObjectAdapter(seasonPresenter)
 
     private val rowsAdapter = ArrayObjectAdapter(ClassPresenterSelector().apply {
-        addClassPresenter(ListRow::class.java, ListRowPresenter().apply {
-            selectEffectEnabled = false
-        })
+        addClassPresenter(
+            ListRow::class.java, ListRowPresenter(
+                FocusHighlight.ZOOM_FACTOR_NONE,
+                false
+            ).apply {
+                selectEffectEnabled = false
+            })
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -71,7 +76,12 @@ class SeriesSelectorFragment : RowsSupportFragment() {
         onItemViewClickedListener =
             OnItemViewClickedListener { _, item, _, _ ->
                 when (item) {
-                    is Season -> setSelectedPosition(EPISODE_ROW, true)
+                    is Season -> setSelectedPosition(
+                        EPISODE_ROW,
+                        true,
+                        ListRowPresenter.SelectItemViewHolderTask(0)
+                    )
+
                     is Episode -> SeriesSelectorFragmentDirections.toPlayback().apply {
                         this.seriesId = args.seriesId
                         this.streamId = item.id
