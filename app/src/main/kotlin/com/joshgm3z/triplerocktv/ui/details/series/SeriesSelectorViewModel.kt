@@ -67,7 +67,7 @@ class SeriesSelectorViewModel
     }
 
     private fun List<Season>.getSeasonNumber(episodeId: Int): Int {
-        forEachIndexed { index, season ->
+        forEach { season ->
             if (season.episodes.any { it.id == episodeId }) return season.number
         }
         return -1
