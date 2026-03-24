@@ -1,22 +1,11 @@
 package com.joshgm3z.triplerocktv.ui.details
 
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
-import androidx.leanback.widget.Presenter.ViewHolder
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.repository.data.Episode
-import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
-import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
 class EpisodePresenter
@@ -29,16 +18,20 @@ class EpisodePresenter
             width = 300
             height = 200
             setPadding(24, 16, 24, 16)
-            setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            setTextColor(ContextCompat.getColorStateList(context, R.color.episode_text_color))
             textSize = 12f
-            setBackgroundResource(R.color.gray)
+            setBackgroundResource(R.drawable.episode_bg_selector)
         }
         return ViewHolder(textView)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val episode = item as Episode
-        (viewHolder.view as TextView).text = "${episode.episode_num}: ${episode.title}"
+        (viewHolder.view as TextView).text = viewHolder.view.context.getString(
+            R.string.episode_title,
+            episode.episode_num,
+            episode.title
+        )
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
