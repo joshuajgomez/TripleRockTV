@@ -12,8 +12,13 @@ import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.ui.details.EpisodePresenter
+import com.joshgm3z.triplerocktv.ui.details.SeriesDetailsFragmentArgs
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -22,6 +27,8 @@ import kotlinx.coroutines.launch
 class SeriesSelectorFragment : RowsSupportFragment() {
 
     private val viewModel: SeriesSelectorViewModel by viewModels()
+
+    private val args by navArgs<SeriesDetailsFragmentArgs>()
 
     private val SEASON_ROW = 0
     private val EPISODE_ROW = 1
@@ -56,8 +63,14 @@ class SeriesSelectorFragment : RowsSupportFragment() {
 
         onItemViewClickedListener =
             OnItemViewClickedListener { _, item, _, _ ->
-                if (item is Season) {
-                    setSelectedPosition(EPISODE_ROW, true)
+                when (item) {
+                    is Season -> setSelectedPosition(EPISODE_ROW, true)
+                    is Episode -> SeriesSelectorFragmentDirections.toPlayback().apply {
+                        this.seriesId = args.seriesId
+                        this.streamId = item.id
+                        this.streamType = StreamType.Series
+                        findNavController().navigate(this)
+                    }
                 }
             }
     }

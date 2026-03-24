@@ -24,7 +24,7 @@ class SeasonPresenter : Presenter() {
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val season = item as Season
-        (viewHolder.view as TextView).text = season.name
+        (viewHolder.view as TextView).text = "Season ${season.number}"
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
