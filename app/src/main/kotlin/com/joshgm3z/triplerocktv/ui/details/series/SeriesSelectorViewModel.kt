@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SeriesSelectorUiState(
-    val selectedSeasonIndex: Int? = null,
+    val selectedSeasonNumber: Int? = null,
     val selectedEpisodeIndex: Int? = null,
     val seasons: List<Season> = emptyList(),
     val episodes: List<Episode> = emptyList(),
@@ -43,11 +43,11 @@ class SeriesSelectorViewModel
             val seriesStream = repository.seriesStreamFlow(seriesId).first()
             seriesStream.seasons?.let { seasons ->
                 _uiState.update { it ->
-                    val selectedSeasonIndex = seasons.getSeasonIndex(initialSelectedEpisodeId)
-                    val episodes = seasons[selectedSeasonIndex].episodes
+                    val selectedSeasonNumber = seasons.getSeasonNumber(initialSelectedEpisodeId)
+                    val episodes = seasons.first { it.number == selectedSeasonNumber }.episodes
                     it.copy(
                         seasons = seasons,
-                        selectedSeasonIndex = selectedSeasonIndex,
+                        selectedSeasonNumber = selectedSeasonNumber,
                         selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
                         episodes = episodes
                     )
@@ -58,18 +58,17 @@ class SeriesSelectorViewModel
 
     fun onSeasonSelected(seasonNumber: Int) {
         _uiState.update { it ->
-            val selectedSeasonIndex = it.seasons.indexOfFirst { it.number == seasonNumber }
             it.copy(
-                selectedSeasonIndex = selectedSeasonIndex,
+                selectedSeasonNumber = seasonNumber,
                 selectedEpisodeIndex = null,
-                episodes = it.seasons[selectedSeasonIndex].episodes
+                episodes = it.seasons.first { it.number == seasonNumber }.episodes
             )
         }
     }
 
-    private fun List<Season>.getSeasonIndex(episodeId: Int): Int {
+    private fun List<Season>.getSeasonNumber(episodeId: Int): Int {
         forEachIndexed { index, season ->
-            if (season.episodes.any { it.id == episodeId }) return index
+            if (season.episodes.any { it.id == episodeId }) return season.number
         }
         return -1
     }

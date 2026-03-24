@@ -26,15 +26,22 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class SeriesSelectorFragment : RowsSupportFragment() {
 
+    private val SEASON_ROW = 0
+
+    private val EPISODE_ROW = 1
+
     private val viewModel: SeriesSelectorViewModel by viewModels()
 
     private val args by navArgs<SeriesDetailsFragmentArgs>()
 
-    private val SEASON_ROW = 0
-    private val EPISODE_ROW = 1
+    private val seasonPresenter = SeasonPresenter()
+
+    private val seasonRowAdapter = ArrayObjectAdapter(seasonPresenter)
 
     private val rowsAdapter = ArrayObjectAdapter(ClassPresenterSelector().apply {
-        addClassPresenter(ListRow::class.java, ListRowPresenter())
+        addClassPresenter(ListRow::class.java, ListRowPresenter().apply {
+            selectEffectEnabled = false
+        })
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +86,6 @@ class SeriesSelectorFragment : RowsSupportFragment() {
         if (state.seasons.isEmpty()) return
 
         if (rowsAdapter.size() == 0) {
-            val seasonRowAdapter = ArrayObjectAdapter(SeasonPresenter())
             seasonRowAdapter.addAll(0, state.seasons)
             rowsAdapter.add(
                 ListRow(
@@ -94,6 +100,9 @@ class SeriesSelectorFragment : RowsSupportFragment() {
             val episodeRowAdapter = ArrayObjectAdapter(EpisodePresenter())
             rowsAdapter.add(ListRow(episodeRowAdapter))
         }
+
+        seasonPresenter.highlightSeasonNumber = state.selectedSeasonNumber
+        seasonRowAdapter.notifyArrayItemRangeChanged(0, seasonRowAdapter.size())
 
         val episodeRow = rowsAdapter.get(EPISODE_ROW) as? ListRow
         val episodeAdapter = episodeRow?.adapter as? ArrayObjectAdapter
