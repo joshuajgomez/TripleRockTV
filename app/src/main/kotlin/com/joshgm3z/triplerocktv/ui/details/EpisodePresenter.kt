@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
 import androidx.leanback.widget.Presenter.ViewHolder
@@ -19,18 +20,17 @@ import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
 class EpisodePresenter
-@Inject constructor(
-    private val glideUtil: GlideUtil,
-) : Presenter() {
+@Inject constructor() : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val textView = TextView(parent.context).apply {
             isFocusable = true
             isFocusableInTouchMode = true
             // Basic styling - adjust as needed
-            width = 200
+            width = 300
             height = 200
             setPadding(24, 16, 24, 16)
             setTextColor(ContextCompat.getColor(context, android.R.color.white))
+            textSize = 12f
             setBackgroundResource(R.color.gray)
         }
         return ViewHolder(textView)
