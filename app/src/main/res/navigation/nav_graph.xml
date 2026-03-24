@@ -156,6 +156,10 @@
             android:name="initialSelectedEpisodeId"
             android:defaultValue="652973"
             app:argType="integer" />
+
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
     </fragment>
 
     <fragment
