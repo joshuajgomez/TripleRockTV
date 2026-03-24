@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/playbackFragment">
+    app:startDestination="@id/seriesSelectorFragment">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -157,6 +157,21 @@
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/seriesSelectorFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.details.series.SeriesSelectorFragment"
+        android:label="SeriesSelectorFragment">
+        <argument
+            android:name="seriesId"
+            android:defaultValue="72"
+            app:argType="integer" />
+
+        <argument
+            android:name="initialSelectedEpisodeId"
+            android:defaultValue="652973"
+            app:argType="integer" />
     </fragment>
 
     <fragment
