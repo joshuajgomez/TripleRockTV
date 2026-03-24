@@ -42,13 +42,14 @@ class SeriesSelectorViewModel
         viewModelScope.launch {
             val seriesStream = repository.seriesStreamFlow(seriesId).first()
             seriesStream.seasons?.let { seasons ->
-                _uiState.update {
+                _uiState.update { it ->
                     val selectedSeasonIndex = seasons.getSeasonIndex(initialSelectedEpisodeId)
+                    val episodes = seasons[selectedSeasonIndex].episodes
                     it.copy(
                         seasons = seasons,
                         selectedSeasonIndex = selectedSeasonIndex,
-                        selectedEpisodeIndex = initialSelectedEpisodeId,
-                        episodes = seasons[selectedSeasonIndex].episodes
+                        selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
+                        episodes = episodes
                     )
                 }
             }

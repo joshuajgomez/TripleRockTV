@@ -105,5 +105,12 @@ class SeriesSelectorFragment : RowsSupportFragment() {
                 episodeAdapter.setItems(state.episodes, null)
             }
         }
+
+        state.selectedEpisodeIndex?.let {
+            setSelectedPosition(
+                EPISODE_ROW, true,
+                ListRowPresenter.SelectItemViewHolderTask(it)
+            )
+        }
     }
 }
