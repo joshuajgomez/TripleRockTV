@@ -13,10 +13,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
-import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.mockkObject
-import io.mockk.mockkStatic
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
 import org.junit.Before
@@ -101,7 +98,7 @@ class MediaLocalRepositoryImplTest {
                         added = "2024-01-01",
                         episodeInfo = EpisodeInfo(
                             releasedate = "2024-01-01",
-                            plot = 101,
+                            plot = "",
                             duration_secs = 3600,
                             duration = "60m",
                             movie_image = null,
@@ -115,7 +112,8 @@ class MediaLocalRepositoryImplTest {
                 number = 1,
                 name = "Season 1",
                 coverImageUrl = "https://example.com/season1.jpg",
-                voteAverage = 8.0f
+                voteAverage = 8.0f,
+                overview = ""
             ),
             Season(
                 episodes = listOf(
@@ -128,7 +126,7 @@ class MediaLocalRepositoryImplTest {
                         added = "2025-01-01",
                         episodeInfo = EpisodeInfo(
                             releasedate = "2025-01-01",
-                            plot = 102,
+                            plot = "",
                             duration_secs = 3700,
                             duration = "62m",
                             movie_image = null,
@@ -142,7 +140,8 @@ class MediaLocalRepositoryImplTest {
                 number = 2,
                 name = "Season 2",
                 coverImageUrl = "https://example.com/season2.jpg",
-                voteAverage = 0.5f
+                voteAverage = 0.5f,
+                overview = ""
             )
         ),
         seriesId = 11,
