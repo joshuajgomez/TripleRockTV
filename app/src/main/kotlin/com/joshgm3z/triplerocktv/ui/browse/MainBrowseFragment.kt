@@ -1,7 +1,5 @@
 package com.joshgm3z.triplerocktv.ui.browse
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
