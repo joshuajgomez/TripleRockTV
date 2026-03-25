@@ -54,14 +54,14 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchEpisode(
         episodeId: Int,
         seriesId: Int,
-    ): Episode? {
+    ): Episode {
         val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
         seriesStream.seasons?.forEach { season ->
             season.episodes.forEach { episode ->
                 if (episode.id == episodeId) return episode
             }
         }
-        return null
+        throw Exception("Episode $episodeId for series $seriesId not found")
     }
 
     override fun streamDataFlow(
