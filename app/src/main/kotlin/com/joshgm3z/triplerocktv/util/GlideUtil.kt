@@ -12,8 +12,12 @@ import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.graphics.drawable.toBitmap
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.R
@@ -41,6 +45,7 @@ class GlideUtil
     fun loadImage(url: String?, imageView: ImageView) {
         Glide.with(imageView.context)
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
+            .listener(glideErrorListener)
             .centerCrop()
             .into(imageView)
     }
@@ -88,6 +93,7 @@ class GlideUtil
 
 val invalidUrls = listOf(
     "http://webhop.live:8080",
+    "http://wehop.live:8080",
     "http://starshare.live:8080",
 )
 
@@ -118,3 +124,29 @@ private fun colorFilter(dimMode: DimMode) = PorterDuffColorFilter(
     ), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
     PorterDuff.Mode.SRC_ATOP
 )
+
+private val glideErrorListener = object : RequestListener<Drawable> {
+    override fun onLoadFailed(
+        e: GlideException?,
+        model: Any?,
+        target: Target<Drawable?>?,
+        isFirstResource: Boolean
+    ): Boolean {
+        if (model is String) {
+            Logger.error("Glide failed to load image: $model")
+            FirebaseLogger.logGlideError(model)
+        }
+        return false
+    }
+
+    override fun onResourceReady(
+        resource: Drawable?,
+        model: Any?,
+        target: Target<Drawable?>?,
+        dataSource: DataSource?,
+        isFirstResource: Boolean
+    ): Boolean {
+        return false
+    }
+
+}
