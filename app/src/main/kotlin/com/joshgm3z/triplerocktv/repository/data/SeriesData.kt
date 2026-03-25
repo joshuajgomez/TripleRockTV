@@ -64,6 +64,7 @@ data class Episode(
     val container_extension: String, // e.g., "mp4" or "mkv"
     val season: Int,
     val added: String,
+    @SerializedName("info")
     val episodeInfo: EpisodeInfo?,
     val lastPlayed: Long = 0,
     val playedDuration: Long = 0,
@@ -96,7 +97,7 @@ data class Episode(
 
 data class EpisodeInfo(
     val releasedate: String?,
-    val plot: Int?,
+    val plot: String?,
     val duration_secs: Int?,
     val duration: String?,
     val movie_image: String?,
