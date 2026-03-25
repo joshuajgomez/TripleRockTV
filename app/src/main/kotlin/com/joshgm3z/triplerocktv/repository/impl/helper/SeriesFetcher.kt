@@ -111,7 +111,8 @@ constructor(
                 )
             }
             Logger.debug("seasons = [$seasons]")
-            seriesStreamsDao.getBySeriesId(streamId).copy(seasons = seasons).let {
+            val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
+            seriesStreamsDao.getBySeriesId(streamId).copy(seasons = filteredSeasons).let {
                 seriesStreamsDao.update(it)
             }
         }
