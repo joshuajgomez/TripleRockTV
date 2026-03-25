@@ -3,7 +3,6 @@ package com.joshgm3z.triplerocktv.repository.room.series
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.repository.data.Episode
-import com.joshgm3z.triplerocktv.ui.login.UserInfo
 
 @Entity(tableName = "series_stream")
 data class SeriesStream(
@@ -22,6 +21,7 @@ data class SeriesStream(
     val rating: String?,
     val categoryId: Int,
     val lastPlayed: Long = 0,
+    val lastPlayedEpisodeId: Int = 0,
 
     val seasons: List<Season>? = null
 )
