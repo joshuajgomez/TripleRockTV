@@ -44,11 +44,11 @@ class MetadataView @JvmOverloads constructor(
             field = value
         }
 
-    var durationMs: Long? = null
+    var duration: String? = null
         set(value) {
             binding.tvDuration.setVisible(value != null)
             binding.tvDuration.text = context.getString(
-                R.string.text_after_dot, value?.toTextTime()
+                R.string.text_after_dot, value
             )
             field = value
         }

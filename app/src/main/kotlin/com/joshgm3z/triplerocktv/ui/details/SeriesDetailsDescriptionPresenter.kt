@@ -14,8 +14,6 @@ import com.joshgm3z.triplerocktv.util.visibleIf
 
 class SeriesDetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        // You can use the standard lb_details_description layout or a custom one
-        // For a progress bar, it's easier to use a custom layout file
         val view = ViewSeriesDetailsDescriptionBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
@@ -27,33 +25,21 @@ class SeriesDetailsDescriptionPresenter : Presenter() {
     override fun onBindViewHolder(
         vh: ViewHolder,
         item: Any?
-    ) = with(ViewDetailsDescriptionBinding.bind(vh.view)) {
-        val streamData = item as SeriesStream
-        streamData.let {
-            tvTitle.text = it.name
+    ) = with(ViewSeriesDetailsDescriptionBinding.bind(vh.view)) {
+        val uiState = item as SeriesDetailsUiState
+        uiState.let {
+            tvTitle.text = it.episodeTitle
 
-//            progressBar.progress = it.progressPercent()
-//            tvTimeRemaining.text = it.timeRemainingText()
-//            llProgressbarContainer.visibility = visibleIf((it.startedWatching))
+            progressBar.progress = it.progressPercent
+            tvTimeRemaining.text = it.timeLeft
+            llProgressbarContainer.visibility = visibleIf((it.progressPercent > 0))
 
-            tvRating.text = it.rating.toString()
-            llRatingContainer.visibility = visibleIf(it.rating.parseToFloat() > 0)
+            metadataView.rating = it.rating
+            metadataView.duration = it.duration
+            metadataView.genre = it.genre
 
-//            tvDuration.text = root.context.getString(
-//                R.string.text_after_dot,
-//                it.movieMetadata?.totalDurationMs?.toTextTime()
-//            )
-//            tvDuration.visibility = visibleIf((it.movieMetadata?.totalDurationMs ?: 0) > 0)
-
-//            llMyListContainer.visibility = visibleIf(it.inMyList)
-
-            tvDescription.text = it.plot
-            tvDescription.visibility = visibleIf(!it.plot.isNullOrEmpty())
-
-//            tvSubtitleStatus.visibility = visibleIf(!it.subtitleUrl.isNullOrEmpty())
-
-            tvGenre.visibility = visibleIf(!it.genre.isNullOrEmpty())
-            tvGenre.text = it.genre
+            tvDescription.text = it.description
+            tvDescription.visibility = visibleIf(it.description.isNotEmpty())
         }
     }
 
