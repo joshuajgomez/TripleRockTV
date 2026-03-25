@@ -3,7 +3,6 @@ package com.joshgm3z.triplerocktv.ui.details
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.add
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
@@ -11,8 +10,7 @@ import androidx.leanback.widget.Action
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.DetailsOverviewRow
-import androidx.leanback.widget.FullWidthDetailsOverviewRowPresenter
-import androidx.leanback.widget.HeaderItem
+import androidx.leanback.widget.DetailsOverviewRowPresenter
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnActionClickedListener
@@ -22,8 +20,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.repository.StreamType
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.ui.search.SimpleTextPresenter
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.Logger
@@ -48,14 +44,17 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     private var backgroundImageUrl: String? = null
 
+    private var selectedEpisodeId = -1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         detailsBackground = DetailsSupportFragmentBackgroundController(this)
 
         val presenterSelector = ClassPresenterSelector()
-        val detailsPresenter =
-            FullWidthDetailsOverviewRowPresenter(SeriesDetailsDescriptionPresenter())
+        val detailsPresenter = DetailsOverviewRowPresenter(
+            SeriesDetailsDescriptionPresenter()
+        )
 
         detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
 
@@ -69,18 +68,25 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     val onActionClickedListener = OnActionClickedListener { action ->
         when (action.id) {
-            ACTION_PLAY -> DetailsFragmentDirections.toPlayback().apply {
+            ACTION_PLAY -> SeriesDetailsFragmentDirections.toPlayback().apply {
                 streamId = args.seriesId
                 streamType = StreamType.Series
                 findNavController().navigate(this)
             }
 
-            ACTION_RESUME -> DetailsFragmentDirections.toPlayback().apply {
+            ACTION_RESUME -> SeriesDetailsFragmentDirections.toPlayback().apply {
                 streamId = args.seriesId
                 streamType = StreamType.Series
                 resume = true
                 findNavController().navigate(this)
             }
+
+            ACTION_MORE_EPISODES -> SeriesDetailsFragmentDirections.toSeriesSelectorFragment()
+                .apply {
+                    seriesId = args.seriesId
+                    initialSelectedEpisodeId = selectedEpisodeId
+                    findNavController().navigate(this)
+                }
 
             ACTION_FAVORITE -> viewModel.addToMyList()
             ACTION_REMOVE_FAVORITE -> viewModel.removeFromMyList()
@@ -103,18 +109,16 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launch {
-            viewModel.seriesStream.collectLatest {
-                it?.let { seriesStream ->
-                    updateDetails(seriesStream)
-                }
+            viewModel.seriesDetailsUiState.collectLatest {
+                it?.let { updateDetails(it) }
             }
         }
-        viewModel.fetchStreamDetails(args.seriesId)
     }
 
-    private fun updateDetails(seriesStream: SeriesStream) {
-        Logger.debug("streamData = [${seriesStream}]")
-        handleBlur(seriesStream.backdropUrl)
+    private fun updateDetails(uiState: SeriesDetailsUiState) {
+        Logger.debug("streamData = [${uiState}]")
+        selectedEpisodeId = uiState.episodeId
+        handleBlur(uiState.seasonPoster)
 
         val existingRow = if (rowsAdapter.size() > 0) {
             rowsAdapter.get(0) as? DetailsOverviewRow
@@ -124,14 +128,14 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
         val detailsRow = if (existingRow != null) {
             // Reuse the existing row and update its data object
-            existingRow.item = seriesStream
+            existingRow.item = uiState
             existingRow
         } else {
             // Create a new row if it's the first time
-            DetailsOverviewRow(seriesStream)
+            DetailsOverviewRow(uiState)
         }
 
-        glideUtil.getBitmap(seriesStream.coverImageUrl) {
+        glideUtil.getBitmap(uiState.episodePoster) {
             detailsRow.setImageBitmap(requireContext(), it)
             rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
         }
@@ -143,26 +147,25 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
             rowsAdapter.notifyArrayItemRangeChanged(0, 1)
         }
 
-        showSeasons(seriesStream)
-    }
-
-    private fun showSeasons(seriesStream: SeriesStream) {
-        if (rowsAdapter.size() > 1) {
-            rowsAdapter.removeItems(1, rowsAdapter.size() - 1)
+        val actionAdapter = SparseArrayObjectAdapter()
+        if (uiState.progressPercent > 0) {
+            actionAdapter.set(
+                ACTION_RESUME.toInt(),
+                Action(ACTION_RESUME, "Resume ${uiState.episodeLabel}")
+            )
+            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Start over"))
+        } else {
+            actionAdapter.set(
+                ACTION_PLAY.toInt(),
+                Action(ACTION_PLAY, "Play ${uiState.episodeLabel}")
+            )
         }
+        actionAdapter.set(
+            ACTION_MORE_EPISODES.toInt(),
+            Action(ACTION_MORE_EPISODES, "More episodes")
+        )
 
-        val episodePresenter = EpisodePresenter(glideUtil) // Create this class to define how episode cards look
-
-        seriesStream.seasons?.forEachIndexed { index, season ->
-            val listRowAdapter = ArrayObjectAdapter(episodePresenter)
-
-            season.episodes.forEach { episode ->
-                listRowAdapter.add(episode)
-            }
-
-            val header = HeaderItem(index.toLong(), "Season ${season.number}")
-            rowsAdapter.add(ListRow(header, listRowAdapter))
-        }
+        detailsRow.actionsAdapter = actionAdapter
     }
 
     override fun onResume() {
@@ -179,5 +182,6 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
         private const val ACTION_PLAY = 2L
         private const val ACTION_FAVORITE = 3L
         private const val ACTION_REMOVE_FAVORITE = 4L
+        private const val ACTION_MORE_EPISODES = 5L
     }
 }
