@@ -69,6 +69,8 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        verticalGridView.setPadding(0, 80, 0, 0)
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 updateUI(it)

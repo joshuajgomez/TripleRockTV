@@ -47,7 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:maxEms="12"
-        android:textSize="10sp"
+        android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title"
         tools:text="@string/long_description" />
