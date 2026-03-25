@@ -47,16 +47,18 @@ class MetadataView @JvmOverloads constructor(
     var durationMs: Long? = null
         set(value) {
             binding.tvDuration.setVisible(value != null)
-            binding.tvDuration.text =
-                context.getString(R.string.text_after_dot, value?.toTextTime())
+            binding.tvDuration.text = context.getString(
+                R.string.text_after_dot, value?.toTextTime()
+            )
             field = value
         }
 
     var episodeCount: Int? = null
         set(value) {
             binding.tvEpisodeCount.setVisible(value != null)
-            binding.tvEpisodeCount.text =
-                context.getString(R.string.text_after_dot, "$value episodes")
+            binding.tvEpisodeCount.text = context.getString(
+                R.string.text_after_dot, "$value episodes"
+            )
             field = value
         }
 }
