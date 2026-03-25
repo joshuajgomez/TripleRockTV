@@ -109,15 +109,6 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     }
 
     private fun updateUI(state: SeriesSelectorUiState) {
-        glideUtil.getBitmap(
-            uri = "http://riseiptv.xyz:8080/images/f84cfc4a649186588214ccff8a8c335a.jpg",
-            blur = false,
-            dimMode = DimMode.None
-        ) { bitmap ->
-            if (!isVisible) return@getBitmap
-            requireActivity().setBackground(bitmap)
-        }
-
         if (state.seasons.isEmpty()) return
 
         val selectedSeason = state.seasons.filter { it.number == state.selectedSeasonNumber }
