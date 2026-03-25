@@ -151,7 +151,7 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
             rowsAdapter.removeItems(1, rowsAdapter.size() - 1)
         }
 
-        val episodePresenter = EpisodePresenter() // Create this class to define how episode cards look
+        val episodePresenter = EpisodePresenter(glideUtil) // Create this class to define how episode cards look
 
         seriesStream.seasons?.forEachIndexed { index, season ->
             val listRowAdapter = ArrayObjectAdapter(episodePresenter)

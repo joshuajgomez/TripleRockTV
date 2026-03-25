@@ -3,7 +3,7 @@
     <!-- Color when focused -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <solid android:color="@color/white" /> <!-- Or your preferred focus color -->
+            <solid android:color="@color/gray2" /> <!-- Or your preferred focus color -->
         </shape>
     </item>
     <!-- Default color -->

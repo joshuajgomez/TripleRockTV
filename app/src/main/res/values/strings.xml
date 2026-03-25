@@ -6,4 +6,5 @@
     <string name="long_description">Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.</string>
     <string name="episode_title">Episode %1$d:\n%2$s</string>
     <string name="my_list">My list</string>
+    <string name="season_episode">S%1$d: E%2$d</string>
 </resources>
