@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import com.joshgm3z.triplerocktv.util.alternateUri
+import com.joshgm3z.triplerocktv.util.invalidUrls
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -15,6 +16,17 @@ class AlternateUriTest {
             "$sampleServerUrl/images/6ffb68625b168d5a5618f7ea2e0a1035.jpg",
             input.alternateUri(sampleServerUrl)
         )
+    }
+
+    @Test
+    fun test_invalid_server_urls() {
+        invalidUrls.forEach {
+            val input = "$it/images/6ffb68625b168d5a5618f7ea2e0a1035.jpg"
+            assertEquals(
+                "$sampleServerUrl/images/6ffb68625b168d5a5618f7ea2e0a1035.jpg",
+                input.alternateUri(sampleServerUrl),
+            )
+        }
     }
 
     @Test

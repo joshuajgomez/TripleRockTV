@@ -87,7 +87,7 @@ class GlideUtil
 }
 
 val invalidUrls = listOf(
-    "http://webhop.live:8080/",
+    "http://webhop.live:8080",
     "http://starshare.live:8080",
 )
 
