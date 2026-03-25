@@ -86,9 +86,19 @@ class GlideUtil
     }
 }
 
+val invalidUrls = listOf(
+    "http://webhop.live:8080/",
+    "http://starshare.live:8080",
+)
+
 fun String?.alternateUri(serverUrl: String): String? = when {
     this == null -> null
-    else -> replace("http://starshare.live:8080", serverUrl)
+    invalidUrls.any { contains(it) } -> {
+        val invalidUrl = invalidUrls.first { contains(it) }
+        replace(invalidUrl, serverUrl)
+    }
+
+    else -> this
 }.apply {
     Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
