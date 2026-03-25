@@ -39,7 +39,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
             FocusHighlight.ZOOM_FACTOR_LARGE,
             false
         ).apply {
-            numberOfColumns = 6
+            numberOfColumns = 5
         }
         setGridPresenter(gridPresenter)
 
