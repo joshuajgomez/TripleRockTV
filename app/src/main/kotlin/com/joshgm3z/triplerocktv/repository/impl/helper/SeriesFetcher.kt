@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.repository.impl.MediaOnlineRepositoryImpl.Companion.username
+import com.joshgm3z.triplerocktv.repository.impl.REQUEST_DELAY
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
@@ -12,6 +13,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.util.Logger
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class SeriesFetcher
@@ -52,6 +54,7 @@ constructor(
                     status = LoadingStatus.Ongoing
                 )
             )
+            delay(REQUEST_DELAY)
         }
         onFetch(
             StreamType.Series,
