@@ -19,7 +19,9 @@ import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.ui.details.EpisodePresenter
 import com.joshgm3z.triplerocktv.ui.details.SeriesDetailsFragmentArgs
+import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -48,11 +50,13 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     private val rowsAdapter = ArrayObjectAdapter(ClassPresenterSelector().apply {
         addClassPresenter(
             ListRow::class.java, ListRowPresenter(
-                FocusHighlight.ZOOM_FACTOR_NONE,
+                FocusHighlight.ZOOM_FACTOR_SMALL,
                 false
             ).apply {
+                shadowEnabled = false
                 selectEffectEnabled = false
-            })
+            }
+        )
     })
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,6 +80,10 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     private fun registerListener() {
         onItemViewSelectedListener =
             OnItemViewSelectedListener { _, item, _, _ ->
+                if (selectedPosition == SEASON_INFO_ROW) {
+                    selectedPosition = SEASON_ROW
+                    return@OnItemViewSelectedListener
+                }
                 if (item is Season) {
                     viewModel.onSeasonSelected(item.number)
                 }
@@ -101,12 +109,23 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     }
 
     private fun updateUI(state: SeriesSelectorUiState) {
+        glideUtil.getBitmap(
+            uri = "http://riseiptv.xyz:8080/images/f84cfc4a649186588214ccff8a8c335a.jpg",
+            blur = false,
+            dimMode = DimMode.None
+        ) { bitmap ->
+            if (!isVisible) return@getBitmap
+            requireActivity().setBackground(bitmap)
+        }
+
         if (state.seasons.isEmpty()) return
 
         val selectedSeason = state.seasons.filter { it.number == state.selectedSeasonNumber }
-        seasonInfoAdapter.setItems(selectedSeason, null)
-        val seasonInfoRow = ListRow(seasonInfoAdapter)
+        view?.post {
+            seasonInfoAdapter.setItems(selectedSeason, null)
+        }
 
+        val seasonInfoRow = ListRow(seasonInfoAdapter)
         if (rowsAdapter.size() > SEASON_INFO_ROW) {
             rowsAdapter.replace(SEASON_INFO_ROW, seasonInfoRow)
         } else {
@@ -119,7 +138,7 @@ class SeriesSelectorFragment : RowsSupportFragment() {
         }
 
         if (rowsAdapter.size() <= EPISODE_ROW) {
-            val episodeRowAdapter = ArrayObjectAdapter(EpisodePresenter())
+            val episodeRowAdapter = ArrayObjectAdapter(EpisodePresenter(glideUtil))
             rowsAdapter.add(EPISODE_ROW, ListRow(episodeRowAdapter))
         }
 

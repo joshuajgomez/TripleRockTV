@@ -1,40 +1,40 @@
 package com.joshgm3z.triplerocktv.ui.details
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.databinding.ViewEpisodeBinding
 import com.joshgm3z.triplerocktv.repository.data.Episode
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
 class EpisodePresenter
-@Inject constructor() : Presenter() {
+@Inject constructor(
+    private val glideUtil: GlideUtil
+) : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val textView = TextView(parent.context).apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-            // Basic styling - adjust as needed
-            width = 300
-            height = 200
-            setPadding(24, 16, 24, 16)
-            setTextColor(ContextCompat.getColorStateList(context, R.color.episode_text_color))
-            textSize = 12f
-            setBackgroundResource(R.drawable.episode_bg_selector)
-        }
-        return ViewHolder(textView)
+        val binding = ViewEpisodeBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val episode = item as Episode
-        (viewHolder.view as TextView).text = viewHolder.view.context.getString(
-            R.string.episode_title,
-            episode.episode_num,
-            episode.title
-        )
+        val context = viewHolder.view.context
+        ViewEpisodeBinding.bind(viewHolder.view).apply {
+            tvTitle.text = episode.title
+            tvDescription.text = episode.episodeInfo?.plot
+            tvEpisodeNumber.text =
+                context.getString(R.string.season_episode, episode.season, episode.episode_num)
+            glideUtil.loadImage(episode.episodeInfo?.movie_image, ivPoster)
+        }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        (viewHolder.view as TextView).text = null
+
     }
 }

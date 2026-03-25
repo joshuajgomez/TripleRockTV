@@ -68,6 +68,8 @@
         android:drawablePadding="3dp"
         android:text="@string/my_list"
         android:textColor="?attr/metadataTextColor"
-        android:textSize="@dimen/metadata_text_size" />
+        android:textSize="@dimen/metadata_text_size"
+        android:visibility="gone"
+        tools:visibility="visible" />
 
 </LinearLayout>
