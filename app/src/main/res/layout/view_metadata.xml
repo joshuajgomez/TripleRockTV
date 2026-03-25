@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_episode_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size"
+        android:visibility="gone"
+        tools:text="8 episodes"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/metadata_gap"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size"
+        android:visibility="gone"
+        tools:text="&#8226; Comedy"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/metadata_gap"
+        android:drawableStart="@drawable/ic_star_scaled"
+        android:drawablePadding="3dp"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size"
+        tools:text="3.5" />
+
+    <TextView
+        android:id="@+id/tv_duration"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/metadata_gap"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size"
+        android:visibility="gone"
+        tools:text="&#8226; 1h 30m"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_subtitle_status"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/metadata_gap"
+        android:text="@string/subtitle_downloaded"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size"
+        android:visibility="gone"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_my_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/metadata_gap"
+        android:drawableStart="@drawable/ic_check_scaled"
+        android:drawablePadding="3dp"
+        android:text="@string/my_list"
+        android:textColor="?attr/metadataTextColor"
+        android:textSize="@dimen/metadata_text_size" />
+
+</LinearLayout>
