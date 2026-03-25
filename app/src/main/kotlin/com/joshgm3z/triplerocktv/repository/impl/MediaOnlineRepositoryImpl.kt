@@ -16,6 +16,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
+const val REQUEST_DELAY: Long = 100L
+
 class MediaOnlineRepositoryImpl
 @Inject constructor(
     scope: CoroutineScope,
