@@ -6,6 +6,7 @@ import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewEpisodeBinding
 import com.joshgm3z.triplerocktv.repository.data.Episode
+import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -28,6 +29,7 @@ class EpisodePresenter
         ViewEpisodeBinding.bind(viewHolder.view).apply {
             tvTitle.text = episode.title
             tvDescription.text = episode.episodeInfo?.plot
+            metadata.rating = episode.episodeInfo?.rating?.parseToFloat()
             tvEpisodeNumber.text =
                 context.getString(R.string.season_episode, episode.season, episode.episode_num)
             glideUtil.loadImage(episode.episodeInfo?.movie_image, ivPoster)

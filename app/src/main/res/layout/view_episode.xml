@@ -33,22 +33,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
-        android:maxEms="10"
-        android:textSize="12sp"
+        android:maxEms="13"
         android:textColor="@color/white"
-        android:textStyle="bold"
+        android:textSize="12sp"
         app:layout_constraintStart_toEndOf="@+id/iv_poster"
         app:layout_constraintTop_toTopOf="@+id/iv_poster"
         tools:text="@string/subtitle_file_name" />
+
+    <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+        android:id="@+id/metadata"
+        android:layout_width="wrap_content"
+        android:layout_height="15dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <TextView
         android:id="@+id/tv_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:maxEms="12"
+        android:ellipsize="end"
+        android:maxEms="13"
+        android:maxLines="6"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/metadata"
         tools:text="@string/long_description" />
 </androidx.constraintlayout.widget.ConstraintLayout>
