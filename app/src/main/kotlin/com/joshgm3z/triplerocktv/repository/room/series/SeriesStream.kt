@@ -31,5 +31,6 @@ data class Season(
     val number: Int,
     val name: String,
     val coverImageUrl: String,
+    val overview: String,
     val voteAverage: Float,
 )

@@ -107,6 +107,7 @@ constructor(
                     name = seasonData.name ?: "",
                     coverImageUrl = seasonData.cover ?: "",
                     voteAverage = seasonData.voteAverage ?: 0f,
+                    overview = seasonData.overview ?: "",
                 )
             }
             Logger.debug("seasons = [$seasons]")
