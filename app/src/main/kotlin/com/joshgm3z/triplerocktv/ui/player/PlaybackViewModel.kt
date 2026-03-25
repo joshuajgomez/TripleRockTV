@@ -32,11 +32,13 @@ class PlaybackViewModel @Inject constructor(
     val playbackUiState = _playbackUiState.asStateFlow()
 
     private var streamId: Int? = null
+    private var seriesId: Int? = null
     private var streamType: StreamType? = null
 
     fun fetchStreamDetails(streamId: Int, streamType: StreamType, seriesId: Int? = null) {
         Logger.debug("streamId = [${streamId}], browseType = [${streamType}]")
         this.streamType = streamType
+        this.seriesId = seriesId
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
             this@PlaybackViewModel.streamId = streamId
@@ -68,7 +70,21 @@ class PlaybackViewModel @Inject constructor(
         Logger.debug("positionMs = [${positionMs}]")
         streamId?.let {
             viewModelScope.launch(Dispatchers.IO) {
-                repository.updatePlayedDuration(it, positionMs, streamType!!)
+                when (streamType) {
+                    StreamType.VideoOnDemand -> repository.updatePlayedDuration(
+                        it,
+                        positionMs,
+                        streamType!!
+                    )
+
+                    StreamType.Series -> repository.updateEpisodePlayedDuration(
+                        it,
+                        seriesId!!,
+                        positionMs
+                    )
+
+                    else -> return@launch
+                }
             }
         } ?: throw Exception("Stream id is null")
     }
