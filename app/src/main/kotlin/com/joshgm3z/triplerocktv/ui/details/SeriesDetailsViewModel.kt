@@ -85,10 +85,10 @@ class SeriesDetailsViewModel @Inject constructor(
     }
 
     private fun List<Season>.getEpisodeToPlay(): Episode {
-        forEach {
-            if (it.episodes.isNotEmpty()) return it.episodes.first()
-        }
-        throw IllegalStateException("No episodes found")
+        val allEpisodes = mutableListOf<Episode>()
+        forEach { season -> allEpisodes.addAll(season.episodes) }
+        allEpisodes.sortByDescending { it.lastPlayed }
+        return allEpisodes.first()
     }
 
     private fun Episode.label(): String = "S$season: E$episode_num"
