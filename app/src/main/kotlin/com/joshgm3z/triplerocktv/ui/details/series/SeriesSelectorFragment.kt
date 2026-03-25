@@ -7,7 +7,6 @@ import androidx.leanback.app.RowsSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ClassPresenterSelector
 import androidx.leanback.widget.FocusHighlight
-import androidx.leanback.widget.HeaderItem
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
@@ -20,24 +19,31 @@ import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.ui.details.EpisodePresenter
 import com.joshgm3z.triplerocktv.ui.details.SeriesDetailsFragmentArgs
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SeriesSelectorFragment : RowsSupportFragment() {
 
-    private val SEASON_ROW = 0
-
-    private val EPISODE_ROW = 1
+    private val SEASON_INFO_ROW = 0
+    private val SEASON_ROW = 1
+    private val EPISODE_ROW = 2
 
     private val viewModel: SeriesSelectorViewModel by viewModels()
 
     private val args by navArgs<SeriesDetailsFragmentArgs>()
 
+    @Inject
+    lateinit var glideUtil: GlideUtil
+
     private val seasonPresenter = SeasonPresenter()
 
     private val seasonRowAdapter = ArrayObjectAdapter(seasonPresenter)
+
+    private lateinit var seasonInfoAdapter: ArrayObjectAdapter
 
     private val rowsAdapter = ArrayObjectAdapter(ClassPresenterSelector().apply {
         addClassPresenter(
@@ -52,6 +58,8 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         adapter = rowsAdapter
+
+        seasonInfoAdapter = ArrayObjectAdapter(SeasonInfoPresenter(glideUtil))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -95,20 +103,24 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     private fun updateUI(state: SeriesSelectorUiState) {
         if (state.seasons.isEmpty()) return
 
-        if (rowsAdapter.size() == 0) {
-            seasonRowAdapter.addAll(0, state.seasons)
-            rowsAdapter.add(
-                ListRow(
-                    HeaderItem(
-                        SEASON_ROW.toLong(),
-                        "Select a season"
-                    ), seasonRowAdapter
-                )
-            )
+        val selectedSeason = state.seasons.filter { it.number == state.selectedSeasonNumber }
+        seasonInfoAdapter.setItems(selectedSeason, null)
+        val seasonInfoRow = ListRow(seasonInfoAdapter)
 
-            // Initial empty episodes row
+        if (rowsAdapter.size() > SEASON_INFO_ROW) {
+            rowsAdapter.replace(SEASON_INFO_ROW, seasonInfoRow)
+        } else {
+            rowsAdapter.add(SEASON_INFO_ROW, seasonInfoRow)
+        }
+
+        if (rowsAdapter.size() <= SEASON_ROW) {
+            seasonRowAdapter.setItems(state.seasons, null)
+            rowsAdapter.add(ListRow(seasonRowAdapter))
+        }
+
+        if (rowsAdapter.size() <= EPISODE_ROW) {
             val episodeRowAdapter = ArrayObjectAdapter(EpisodePresenter())
-            rowsAdapter.add(ListRow(episodeRowAdapter))
+            rowsAdapter.add(EPISODE_ROW, ListRow(episodeRowAdapter))
         }
 
         seasonPresenter.highlightSeasonNumber = state.selectedSeasonNumber
@@ -117,19 +129,17 @@ class SeriesSelectorFragment : RowsSupportFragment() {
         val episodeRow = rowsAdapter.get(EPISODE_ROW) as? ListRow
         val episodeAdapter = episodeRow?.adapter as? ArrayObjectAdapter
 
-        // Check if data actually changed to avoid infinite loops or jitter
         if (episodeAdapter != null && state.episodes.isNotEmpty()) {
-            // Wrap in post to avoid the "RecyclerView is computing layout" crash
             view?.post {
                 episodeAdapter.setItems(state.episodes, null)
-            }
-        }
 
-        state.selectedEpisodeIndex?.let {
-            setSelectedPosition(
-                EPISODE_ROW, true,
-                ListRowPresenter.SelectItemViewHolderTask(it)
-            )
+                state.selectedEpisodeIndex?.let {
+                    setSelectedPosition(
+                        EPISODE_ROW, true,
+                        ListRowPresenter.SelectItemViewHolderTask(it)
+                    )
+                }
+            }
         }
     }
 }
