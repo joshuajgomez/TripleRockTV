@@ -19,7 +19,7 @@ import javax.inject.Inject
 
 data class BrowseUiState(
     val myList: List<StreamData> = emptyList(),
-    val recentPlayed: List<StreamData> = emptyList(),
+    val recentPlayed: List<Any> = emptyList(),
     val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
     val epgCategories: List<IptvEpgListing> = emptyList(),
     var errorMessage: String? = null,

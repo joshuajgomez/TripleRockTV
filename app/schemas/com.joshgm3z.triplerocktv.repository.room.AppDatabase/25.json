@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 25,
-    "identityHash": "c9e3e98228bd452cb6dde433f5932d28",
+    "identityHash": "64961fa55c56a4cd51c2aa03e7a97acb",
     "entities": [
       {
         "tableName": "stream_data",
@@ -245,7 +245,7 @@
       },
       {
         "tableName": "series_stream",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `coverImageUrl` TEXT, `backdropUrl` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` INTEGER NOT NULL, `lastPlayed` INTEGER NOT NULL, `seasons` TEXT, PRIMARY KEY(`seriesId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `coverImageUrl` TEXT, `backdropUrl` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` INTEGER NOT NULL, `lastPlayed` INTEGER NOT NULL, `lastPlayedEpisodeId` INTEGER NOT NULL, `seasons` TEXT, PRIMARY KEY(`seriesId`))",
         "fields": [
           {
             "fieldPath": "seriesId",
@@ -319,6 +319,12 @@
           {
             "fieldPath": "lastPlayed",
             "columnName": "lastPlayed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastPlayedEpisodeId",
+            "columnName": "lastPlayedEpisodeId",
             "affinity": "INTEGER",
             "notNull": true
           },
@@ -436,7 +442,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'c9e3e98228bd452cb6dde433f5932d28')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64961fa55c56a4cd51c2aa03e7a97acb')"
     ]
   }
 }
