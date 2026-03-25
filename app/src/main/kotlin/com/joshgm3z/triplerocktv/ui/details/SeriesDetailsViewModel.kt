@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
+import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.Logger
@@ -63,7 +64,7 @@ class SeriesDetailsViewModel @Inject constructor(
             repository.seriesStreamFlow(seriesId).collectLatest {
                 if (it.seasons.isNullOrEmpty()) searchMetadata(it)
                 else {
-                    val episodeToPlay = it.seasons.first().episodes.first()
+                    val episodeToPlay = it.seasons.getEpisodeToPlay()
                     _seriesDetailsUiState.value = SeriesDetailsUiState(
                         episodeLabel = episodeToPlay.label(),
                         episodeTitle = episodeToPlay.title,
@@ -83,10 +84,14 @@ class SeriesDetailsViewModel @Inject constructor(
         }
     }
 
-    private fun Episode.label(): String {
-        return "S${season.toString().padStart(2, '0')}" +
-                ": E${episode_num.toString().padStart(2, '0')}"
+    private fun List<Season>.getEpisodeToPlay(): Episode {
+        forEach {
+            if (it.episodes.isNotEmpty()) return it.episodes.first()
+        }
+        throw IllegalStateException("No episodes found")
     }
+
+    private fun Episode.label(): String = "S$season: E$episode_num"
 
     private fun searchMetadata(seriesStream: SeriesStream) {
         Logger.debug("seriesStream = [${seriesStream}]")
