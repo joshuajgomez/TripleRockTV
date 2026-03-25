@@ -29,8 +29,8 @@ interface SeriesStreamsDao {
     @Update
     suspend fun update(stream: SeriesStream)
 
-    @Query("SELECT * FROM series_stream WHERE lastPlayed > 0")
-    fun getRecentStreams(): List<SeriesStream>
+    @Query("SELECT * FROM series_stream ORDER BY lastPlayed DESC LIMIT 10")
+    fun getLastPlayed10(): List<SeriesStream>
 
     @Query("DELETE FROM series_stream")
     suspend fun deleteAllStreams()
