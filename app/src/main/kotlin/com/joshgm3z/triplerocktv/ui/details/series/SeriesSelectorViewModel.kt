@@ -41,7 +41,9 @@ class SeriesSelectorViewModel
     init {
         viewModelScope.launch {
             val seriesStream = repository.seriesStreamFlow(seriesId).first()
-            seriesStream.seasons?.let { seasons ->
+            seriesStream.seasons?.filter {
+                it.episodes.isNotEmpty()
+            }?.let { seasons ->
                 _uiState.update { it ->
                     val selectedSeasonNumber = seasons.getSeasonNumber(initialSelectedEpisodeId)
                     val episodes = seasons.first { it.number == selectedSeasonNumber }.episodes
