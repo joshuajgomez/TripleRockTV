@@ -55,7 +55,8 @@ class MetadataView @JvmOverloads constructor(
     var episodeCount: Int? = null
         set(value) {
             binding.tvEpisodeCount.setVisible(value != null)
-            binding.tvEpisodeCount.text = "$value episodes"
+            binding.tvEpisodeCount.text =
+                context.getString(R.string.text_after_dot, "$value episodes")
             field = value
         }
 }

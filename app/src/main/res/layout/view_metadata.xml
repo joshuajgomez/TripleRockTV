@@ -6,14 +6,14 @@
     android:orientation="horizontal">
 
     <TextView
-        android:id="@+id/tv_episode_count"
+        android:id="@+id/tv_rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_star_scaled"
+        android:drawablePadding="3dp"
         android:textColor="?attr/metadataTextColor"
         android:textSize="@dimen/metadata_text_size"
-        android:visibility="gone"
-        tools:text="8 episodes"
-        tools:visibility="visible" />
+        tools:text="3.5" />
 
     <TextView
         android:id="@+id/tv_genre"
@@ -27,15 +27,15 @@
         tools:visibility="visible" />
 
     <TextView
-        android:id="@+id/tv_rating"
+        android:id="@+id/tv_episode_count"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/metadata_gap"
-        android:drawableStart="@drawable/ic_star_scaled"
-        android:drawablePadding="3dp"
         android:textColor="?attr/metadataTextColor"
         android:textSize="@dimen/metadata_text_size"
-        tools:text="3.5" />
+        android:visibility="gone"
+        tools:text="&#8226; 8 episodes"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_duration"
