@@ -1,0 +1,83 @@
+package com.joshgm3z.triplerocktv.ui.home
+
+import android.os.Bundle
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.app.RowsSupportFragment
+import androidx.leanback.app.VerticalGridSupportFragment
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.ListRow
+import androidx.leanback.widget.ListRowPresenter
+import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.VerticalGridPresenter
+import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.ui.browse.SettingItem
+import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
+import com.joshgm3z.triplerocktv.util.DimMode
+import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setBackground
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class HomeFragment : BrowseSupportFragment() {
+
+    private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(ListRowPresenter())
+
+    @Inject
+    lateinit var glideUtil: GlideUtil
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        headersState = HEADERS_DISABLED
+        adapter = rowsAdapter
+        onItemViewClickedListener = itemViewClickedListener
+
+        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout)
+    }
+
+    private val itemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
+        when (item) {
+            is SettingItem -> when (item.title) {
+                "Sign out" -> HomeFragmentDirections.toConfirmSignOutDialog()
+                "All settings" -> HomeFragmentDirections.toSettings()
+                else -> HomeFragmentDirections.toMediaLoading()
+            }
+
+            is HomeItem -> HomeFragmentDirections.toBrowse()
+            else -> HomeFragmentDirections.toBrowse()
+        }.let {
+            findNavController().navigate(it)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+//        verticalGridView.setPadding(0, 200, 0, 0)
+
+        val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
+        homeAdapter.add(HomeItem("Video on demand", R.drawable.ic_star))
+        homeAdapter.add(HomeItem("Series", R.drawable.ic_star))
+        homeAdapter.add(HomeItem("Live TV", R.drawable.ic_star))
+        rowsAdapter.add(ListRow(homeAdapter))
+
+        val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
+        settingsAdapter.add(SettingItem("Update", R.drawable.icon_download))
+        settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
+        settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
+        rowsAdapter.add(ListRow(settingsAdapter))
+
+
+        glideUtil.getBitmap(
+            uri = "http://riseiptv.xyz:8080/images/f84cfc4a649186588214ccff8a8c335a.jpg",
+            blur = true,
+            dimMode = DimMode.Dark
+        ) {
+            if (!isVisible) return@getBitmap
+            requireActivity().setBackground(it)
+        }
+    }
+}

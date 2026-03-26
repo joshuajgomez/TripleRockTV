@@ -3,7 +3,25 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/homeFragment">
+
+    <fragment
+        android:id="@+id/homeFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.home.HomeFragment"
+        android:label="HomeFragment">
+        <action
+            android:id="@+id/toConfirmSignOutDialog"
+            app:destination="@id/signOutDialogFragment" />
+        <action
+            android:id="@+id/toMediaLoading"
+            app:destination="@id/mediaLoadingFragment" />
+        <action
+            android:id="@+id/toSettings"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/toBrowse"
+            app:destination="@id/browseFragment" />
+    </fragment>
 
     <fragment
         android:id="@+id/splashScreenFragment"
