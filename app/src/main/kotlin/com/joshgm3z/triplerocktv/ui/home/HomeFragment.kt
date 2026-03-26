@@ -4,13 +4,10 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.BrowseSupportFragment
-import androidx.leanback.app.RowsSupportFragment
-import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
-import androidx.leanback.widget.VerticalGridPresenter
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.ui.browse.SettingItem
@@ -56,7 +53,6 @@ class HomeFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-//        verticalGridView.setPadding(0, 200, 0, 0)
 
         val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
         homeAdapter.add(HomeItem("Video on demand", R.drawable.ic_star))
