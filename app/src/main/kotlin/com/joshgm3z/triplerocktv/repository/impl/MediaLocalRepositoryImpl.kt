@@ -94,7 +94,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
                 else -> 0L
             }
         }
-        return allMedia.subList(0, 9)
+        val toIndex = if (allMedia.size > 9) 9 else allMedia.size
+        return allMedia.subList(0, toIndex)
     }
 
     private fun SeriesStream.timeLeftInLastEpisode(): Boolean {
