@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.data.EpisodeInfo
 import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.repository.room.series.Season
@@ -13,6 +14,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coJustRun
+import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.slot
 import kotlinx.coroutines.test.runTest
@@ -85,78 +87,19 @@ class MediaLocalRepositoryImplTest {
         }
     }
 
-    fun sampleSeriesData() = SeriesStream(
-        seasons = listOf(
-            Season(
-                episodes = listOf(
-                    Episode(
-                        id = 1,
-                        episode_num = 1,
-                        title = "Pilot",
-                        container_extension = "mp4",
-                        season = 1,
-                        added = "2024-01-01",
-                        episodeInfo = EpisodeInfo(
-                            releasedate = "2024-01-01",
-                            plot = "",
-                            duration_secs = 3600,
-                            duration = "60m",
-                            movie_image = null,
-                            rating = "8.0",
-                            season = "1"
-                        ),
-                        lastPlayed = 0,
-                        playedDuration = 0
-                    )
-                ),
-                number = 1,
-                name = "Season 1",
-                coverImageUrl = "https://example.com/season1.jpg",
-                voteAverage = 8.0f,
-                overview = ""
-            ),
-            Season(
-                episodes = listOf(
-                    Episode(
-                        id = 2,
-                        episode_num = 1,
-                        title = "New Beginnings",
-                        container_extension = "mkv",
-                        season = 2,
-                        added = "2025-01-01",
-                        episodeInfo = EpisodeInfo(
-                            releasedate = "2025-01-01",
-                            plot = "",
-                            duration_secs = 3700,
-                            duration = "62m",
-                            movie_image = null,
-                            rating = "8.5",
-                            season = "2"
-                        ),
-                        lastPlayed = 0,
-                        playedDuration = 0
-                    )
-                ),
-                number = 2,
-                name = "Season 2",
-                coverImageUrl = "https://example.com/season2.jpg",
-                voteAverage = 0.5f,
-                overview = ""
-            )
-        ),
-        seriesId = 11,
-        categoryId = 11,
-        backdropUrl = null,
-        cast = null,
-        coverImageUrl = null,
-        director = null,
-        genre = null,
-        lastModified = null,
-        name = "Sample Series",
-        num = 1,
-        plot = null,
-        rating = null,
-        releaseDate = null
-    )
+    @Test
+    fun `Verify fetchRecentlyPlayed returns movies and series`() = runTest {
+        coEvery { streamDataDao.getLastPlayed10() } returns sampleStreamData()
+        coEvery { seriesStreamsDao.getLastPlayed10() } returns listOf(sampleSeriesData())
+
+        repository.fetchRecentlyPlayed().let { it ->
+            it.forEach {
+                when(it){
+                    is StreamData -> println("${it.name} last played ${it.lastPlayed}")
+                    is SeriesStream -> println("${it.name} last played ${it.lastPlayed}")
+                }
+            }
+        }
+    }
 
 }
