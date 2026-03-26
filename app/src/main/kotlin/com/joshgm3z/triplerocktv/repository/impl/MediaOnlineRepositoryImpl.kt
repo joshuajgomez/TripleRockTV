@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -75,15 +76,21 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         try {
-            onlineDataFetcher.fetchContent(
-                streamType = StreamType.VideoOnDemand, onError = onError,
-                onFetch = { onFetch(StreamType.VideoOnDemand, it) },
-            )
-            onlineDataFetcher.fetchContent(
-                streamType = StreamType.LiveTV, onError = onError, limit = LIMIT,
-                onFetch = { onFetch(StreamType.LiveTV, it) },
-            )
-            seriesFetcher.fetchContent(onFetch = onFetch, onError = onError)
+            CoroutineScope(Dispatchers.IO).launch {
+                onlineDataFetcher.fetchContent(
+                    streamType = StreamType.VideoOnDemand, onError = onError,
+                    onFetch = { onFetch(StreamType.VideoOnDemand, it) },
+                )
+            }
+            CoroutineScope(Dispatchers.IO).launch {
+                onlineDataFetcher.fetchContent(
+                    streamType = StreamType.LiveTV, onError = onError, limit = LIMIT,
+                    onFetch = { onFetch(StreamType.LiveTV, it) },
+                )
+            }
+            CoroutineScope(Dispatchers.IO).launch {
+                seriesFetcher.fetchContent(onFetch = onFetch, onError = onError)
+            }
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
