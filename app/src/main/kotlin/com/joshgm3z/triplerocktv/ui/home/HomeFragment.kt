@@ -41,7 +41,7 @@ class HomeFragment : BrowseSupportFragment() {
         when (item) {
             is SettingItem -> when (item.title) {
                 "Sign out" -> HomeFragmentDirections.toConfirmSignOutDialog()
-                "All settings" -> HomeFragmentDirections.toSettings()
+                "Settings" -> HomeFragmentDirections.toSettings()
                 else -> HomeFragmentDirections.toMediaLoading()
             }
 
