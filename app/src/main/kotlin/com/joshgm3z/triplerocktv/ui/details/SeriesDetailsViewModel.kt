@@ -71,7 +71,7 @@ class SeriesDetailsViewModel @Inject constructor(
                         episodeId = episodeToPlay.id,
                         genre = it.genre ?: "",
                         rating = episodeToPlay.episodeInfo?.rating.parseToFloat(),
-                        inMyList = false,
+                        inMyList = it.inMyList,
                         description = episodeToPlay.episodeInfo?.plot ?: "",
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
                         seasonPoster = it.coverImageUrl ?: "",

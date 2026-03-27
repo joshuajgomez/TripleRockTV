@@ -44,5 +44,4 @@ interface SeriesStreamsDao {
         add: Boolean,
         timeAddedToList: Long = System.currentTimeMillis()
     )
-    fun updateMyList(seriesId: Int, add: Boolean) {}
 }
