@@ -59,6 +59,7 @@ class HomeFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        rowsAdapter.clear()
 
         val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
         homeAdapter.add(HomeItem("Video on demand", R.drawable.ic_star))
