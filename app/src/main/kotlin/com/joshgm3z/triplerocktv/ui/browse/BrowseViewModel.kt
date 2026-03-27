@@ -50,13 +50,6 @@ class BrowseViewModel @Inject constructor(
 
     init {
         Logger.debug("found streamType = $streamType")
-        viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = when (streamType) {
-                StreamType.VideoOnDemand -> getVideoOnDemandState()
-                StreamType.Series -> getSeriesStreamState()
-                else -> throw IllegalArgumentException("Invalid stream type")
-            }
-        }
     }
 
     private suspend fun getSeriesStreamState() = BrowseUiState.SeriesStreamState(
@@ -88,4 +81,14 @@ class BrowseViewModel @Inject constructor(
             ),
         )
     )
+
+    fun onViewResume() {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = when (streamType) {
+                StreamType.VideoOnDemand -> getVideoOnDemandState()
+                StreamType.Series -> getSeriesStreamState()
+                else -> throw IllegalArgumentException("Invalid stream type")
+            }
+        }
+    }
 }

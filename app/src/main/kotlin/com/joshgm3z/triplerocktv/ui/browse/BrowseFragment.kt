@@ -110,9 +110,8 @@ class BrowseFragment : BrowseSupportFragment() {
                 streamType = item.streamType
             }
 
-            is SeriesStream -> BrowseFragmentDirections.toDetails().apply {
-                streamType = StreamType.Series
-                streamId = item.seriesId
+            is SeriesStream -> BrowseFragmentDirections.toSeriesDetails().apply {
+                seriesId = item.seriesId
             }
 
             is StreamData -> BrowseFragmentDirections.toDetails().apply {
@@ -191,5 +190,10 @@ class BrowseFragment : BrowseSupportFragment() {
                     requireActivity().setBackground(bitmap)
                 }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.onViewResume()
     }
 }
