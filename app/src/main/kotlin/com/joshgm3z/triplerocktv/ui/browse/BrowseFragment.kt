@@ -91,10 +91,12 @@ class BrowseFragment : BrowseSupportFragment() {
         setOnSearchClickedListener {
             findNavController().navigate(BrowseFragmentDirections.toSearch())
         }
-        onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, row ->
+        onItemViewSelectedListener = OnItemViewSelectedListener { _, item, _, _ ->
             when (item) {
                 is CategoryData -> handleBlur(item.firstStreamIcon)
                 is StreamData -> handleBlur(item.streamIcon)
+                is SeriesStream -> handleBlur(item.coverImageUrl)
+                is Episode -> handleBlur(item.episodeInfo?.movie_image)
             }
         }
 
