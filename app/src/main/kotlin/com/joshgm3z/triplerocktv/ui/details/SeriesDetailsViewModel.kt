@@ -76,7 +76,7 @@ class SeriesDetailsViewModel @Inject constructor(
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
                         seasonPoster = it.coverImageUrl ?: "",
                         episodePoster = episodeToPlay.episodeInfo?.movie_image ?: "",
-                        timeLeft = episodeToPlay.timeRemaining().toTextTime(),
+                        timeLeft = episodeToPlay.timeRemaining().toTextTime().let { "$it remaining" },
                         progressPercent = episodeToPlay.progressPercent(),
                     )
                 }
