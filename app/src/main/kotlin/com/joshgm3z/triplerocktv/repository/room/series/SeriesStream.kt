@@ -23,7 +23,8 @@ data class SeriesStream(
     val lastPlayed: Long = 0,
     val lastPlayedEpisodeId: Int = 0,
 
-    val seasons: List<Season>? = null
+    val seasons: List<Season>? = null,
+    val inMyList: Boolean = false,
 )
 
 data class Season(

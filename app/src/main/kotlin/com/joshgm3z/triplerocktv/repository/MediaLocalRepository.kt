@@ -30,9 +30,13 @@ interface MediaLocalRepository {
 
     suspend fun isContentEmpty(): Boolean
 
-    suspend fun fetchRecentlyPlayed(): List<Any>
+    suspend fun fetchRecentlyPlayedStreamData(): List<StreamData>
+
+    suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream>
 
     suspend fun fetchMyList(): List<StreamData>
+
+    suspend fun fetchMyListSeries(): List<SeriesStream>
 
     suspend fun updatePlayedDuration(streamId: Int, positionMs: Long, streamType: StreamType)
 

@@ -7,7 +7,6 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
 import com.joshgm3z.triplerocktv.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import dagger.Module
 import dagger.Provides
@@ -45,11 +44,6 @@ class DatabaseModule {
     @Provides
     fun provideSearchHintDao(appDatabase: AppDatabase): SearchHintDao {
         return appDatabase.searchHintDao()
-    }
-
-    @Provides
-    fun provideSeriesCategoryDao(appDatabase: AppDatabase): SeriesCategoryDao {
-        return appDatabase.seriesCategoryDao()
     }
 
     @Provides

@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -23,17 +22,14 @@ class CategoryPresenter
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
         val title = when (item) {
             is CategoryData -> item.categoryName
-            is SeriesCategory -> item.categoryName
             else -> "Unknown"
         }
         val streamIcon = when (item) {
             is CategoryData -> item.firstStreamIcon
-            is SeriesCategory -> item.firstStreamIcon
             else -> null
         }
         val count = when (item) {
             is CategoryData -> item.count
-            is SeriesCategory -> item.count
             else -> 0
         }
         val cardView = viewHolder.view as CategoryCardView
