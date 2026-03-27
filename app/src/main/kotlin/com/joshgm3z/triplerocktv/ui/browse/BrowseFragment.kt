@@ -30,6 +30,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 @AndroidEntryPoint
 class BrowseFragment : BrowseSupportFragment() {
@@ -66,6 +68,7 @@ class BrowseFragment : BrowseSupportFragment() {
                 when (it) {
                     is BrowseUiState.Loading -> progressBarManager.show()
                     is BrowseUiState.VideoOnDemandState -> showStreamDataState(it)
+                    is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
                     is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
                     else -> throw Exception("Invalid state")
                 }
@@ -154,6 +157,30 @@ class BrowseFragment : BrowseSupportFragment() {
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
         }
+    }
+
+    private fun showSeriesStreamState(uiState: BrowseUiState.SeriesStreamState) {
+        rowsAdapter.clear()
+
+        if (uiState.myList.isNotEmpty()) {
+            val header = HeaderItem(0, "My list")
+            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+            listRowAdapter.addAll(0, uiState.myList)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+
+        fun addRow(
+            id: Long,
+            header: String,
+            list: List<CategoryData>
+        ) {
+            if (list.isEmpty()) return
+            val header = HeaderItem(id, header)
+            val listRowAdapter = ArrayObjectAdapter(categoryPresenter)
+            listRowAdapter.addAll(0, list)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+        addRow(0L, "Series", uiState.seriesCategories)
     }
 
     private fun handleBlur(thumbnailUrl: String?) {
