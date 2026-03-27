@@ -2,7 +2,11 @@ package com.joshgm3z.triplerocktv.ui.browse.settings
 
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.joshgm3z.triplerocktv.ui.browse.SettingItem
+
+data class SettingItem(
+    val title: String,
+    val iconRes: Int,
+)
 
 class SettingsItemPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -14,7 +18,7 @@ class SettingsItemPresenter : Presenter() {
         return ViewHolder(cardView)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
+    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val cardView = viewHolder.view as SettingCardView
         val settingItem = item as SettingItem
         cardView.titleView.text = settingItem.title

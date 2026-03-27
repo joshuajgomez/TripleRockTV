@@ -4,8 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.databinding.ViewHomeCardBinding
-import com.joshgm3z.triplerocktv.ui.browse.SettingItem
-import com.joshgm3z.triplerocktv.ui.browse.settings.SettingCardView
 
 data class HomeItem(
     val title: String,

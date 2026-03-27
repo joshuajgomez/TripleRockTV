@@ -6,6 +6,29 @@
     app:startDestination="@id/splashScreenFragment">
 
     <fragment
+        android:id="@+id/splashScreenFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.splash.SplashScreenFragment"
+        android:label="SplashScreenFragment"
+        tools:layout="@layout/fragment_splash_screen">
+        <action
+            android:id="@+id/toLogin"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toHome"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toLoading"
+            app:destination="@id/mediaLoadingFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+
+
+    <fragment
         android:id="@+id/homeFragment"
         android:name="com.joshgm3z.triplerocktv.ui.home.HomeFragment"
         android:label="HomeFragment">
@@ -20,41 +43,28 @@
             app:destination="@id/settingsFragment" />
         <action
             android:id="@+id/toBrowse"
-            app:destination="@id/newBrowseFragment" />
+            app:destination="@id/browseFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/newBrowseFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.browse.newbrowse.BrowseFragment"
-        android:label="NewBrowseFragment">
+        android:id="@+id/browseFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.browse.BrowseFragment"
+        android:label="BrowseFragment">
         <argument
             android:name="streamType"
             app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toError"
             app:destination="@id/errorFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/splashScreenFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.splash.SplashScreenFragment"
-        android:label="SplashScreenFragment"
-        tools:layout="@layout/fragment_splash_screen">
         <action
-            android:id="@+id/toLogin"
-            app:destination="@id/loginFragment"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/toStreamCatalogue"
+            app:destination="@id/streamsCatalogue" />
         <action
-            android:id="@+id/toBrowse"
-            app:destination="@id/browseFragment"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/toSearch"
+            app:destination="@id/searchFragment" />
         <action
-            android:id="@+id/toLoading"
-            app:destination="@id/mediaLoadingFragment"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
+            android:id="@+id/toDetails"
+            app:destination="@id/detailsFragment" />
     </fragment>
 
     <fragment
@@ -82,30 +92,6 @@
             app:destination="@id/errorFragment"
             app:popUpTo="@id/mediaLoadingFragment"
             app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/browseFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.browse.MainBrowseFragment"
-        android:label="BrowseFragment">
-        <action
-            android:id="@+id/toConfirmSignOutDialog"
-            app:destination="@id/signOutDialogFragment" />
-        <action
-            android:id="@+id/toMediaLoading"
-            app:destination="@id/mediaLoadingFragment" />
-        <action
-            android:id="@+id/toStreamCatalogue"
-            app:destination="@id/streamsCatalogue" />
-        <action
-            android:id="@+id/toSearch"
-            app:destination="@id/searchFragment" />
-        <action
-            android:id="@+id/toSettings"
-            app:destination="@id/settingsFragment" />
-        <action
-            android:id="@+id/toDetails"
-            app:destination="@id/detailsFragment" />
     </fragment>
 
     <fragment
