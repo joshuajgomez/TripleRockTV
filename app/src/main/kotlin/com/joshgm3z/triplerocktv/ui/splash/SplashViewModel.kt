@@ -38,7 +38,7 @@ constructor(
             _navDirectionState.value = when {
                 userInfo == null -> SplashScreenFragmentDirections.toLogin()
                 repository.isContentEmpty() -> SplashScreenFragmentDirections.toLoading()
-                else -> SplashScreenFragmentDirections.toBrowse()
+                else -> SplashScreenFragmentDirections.toHome()
             }
         }
     }
