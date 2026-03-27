@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/homeFragment"
@@ -73,9 +73,9 @@
         android:name="com.joshgm3z.triplerocktv.ui.loading.GuidedLoadingFragment"
         android:label="MediaLoadingFragment">
         <action
-            android:id="@+id/toBrowse"
-            app:destination="@id/browseFragment"
-            app:popUpTo="@id/browseFragment"
+            android:id="@+id/toHome"
+            app:destination="@id/homeFragment"
+            app:popUpTo="@id/homeFragment"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/toError"

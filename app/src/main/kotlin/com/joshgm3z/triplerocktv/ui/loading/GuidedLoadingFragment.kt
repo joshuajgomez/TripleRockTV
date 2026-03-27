@@ -59,7 +59,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                                 icon = R.drawable.ic_check_circle_green
                             )
                             delay(2000)
-                            findNavController().navigate(GuidedLoadingFragmentDirections.toBrowse())
+                            findNavController().navigate(GuidedLoadingFragmentDirections.toHome())
                         }
                     }
                 }
