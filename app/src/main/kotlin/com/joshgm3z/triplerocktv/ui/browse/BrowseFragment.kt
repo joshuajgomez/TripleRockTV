@@ -14,9 +14,10 @@ import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.series.Season
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.browse.category.CategoryPresenter
 import com.joshgm3z.triplerocktv.ui.browse.recents.RecentStreamPresenter
@@ -49,6 +50,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
     @Inject
     lateinit var categoryPresenter: CategoryPresenter
+
+    private val episodeToSeriesMap = mutableMapOf<Int, Int>()
 
     private val rowsAdapter = ArrayObjectAdapter(ListRowPresenter())
 
@@ -97,30 +100,30 @@ class BrowseFragment : BrowseSupportFragment() {
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
             // Handle item click if needed
-            handleClick(item)
+            when (item) {
+
+                is CategoryData -> BrowseFragmentDirections.toStreamCatalogue().apply {
+                    categoryId = item.categoryId
+                    categoryName = item.categoryName
+                    streamType = item.streamType
+                }
+
+                is SeriesStream -> BrowseFragmentDirections.toSeriesDetails().apply {
+                    seriesId = item.seriesId
+                }
+
+                is StreamData -> BrowseFragmentDirections.toDetails().apply {
+                    streamType = item.streamType
+                    streamId = item.streamId
+                }
+
+                is Episode -> BrowseFragmentDirections.toSeriesDetails().apply {
+                    seriesId = episodeToSeriesMap[item.id]!!
+                }
+
+                else -> return@OnItemViewClickedListener
+            }.let { findNavController().navigate(it) }
         }
-    }
-
-    private fun handleClick(item: Any?) {
-        when (item) {
-
-            is CategoryData -> BrowseFragmentDirections.toStreamCatalogue().apply {
-                categoryId = item.categoryId
-                categoryName = item.categoryName
-                streamType = item.streamType
-            }
-
-            is SeriesStream -> BrowseFragmentDirections.toSeriesDetails().apply {
-                seriesId = item.seriesId
-            }
-
-            is StreamData -> BrowseFragmentDirections.toDetails().apply {
-                streamType = item.streamType
-                streamId = item.streamId
-            }
-
-            else -> return
-        }.let { findNavController().navigate(it) }
     }
 
     private fun showStreamDataState(uiState: BrowseUiState.VideoOnDemandState) {
@@ -161,6 +164,17 @@ class BrowseFragment : BrowseSupportFragment() {
     private fun showSeriesStreamState(uiState: BrowseUiState.SeriesStreamState) {
         rowsAdapter.clear()
 
+        if (uiState.recentPlayedEpisodes.isNotEmpty()) {
+            val episodes = uiState.recentPlayedEpisodes.map {
+                episodeToSeriesMap[it.lastPlayedEpisodeId] = it.seriesId
+                it.seasons?.findEpisode(it.lastPlayedEpisodeId)
+            }
+            val header = HeaderItem(0, "Recently played")
+            val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
+            listRowAdapter.addAll(0, episodes)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+
         if (uiState.myList.isNotEmpty()) {
             val header = HeaderItem(0, "My list")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
@@ -180,6 +194,15 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
         addRow(0L, "Series", uiState.seriesCategories)
+    }
+
+    private fun List<Season>.findEpisode(episodeId: Int): Episode {
+        forEach {
+            it.episodes.forEach { episode ->
+                if (episode.id == episodeId) return episode
+            }
+        }
+        throw Exception("EpisodeId $episodeId not found")
     }
 
     private fun handleBlur(thumbnailUrl: String?) {
