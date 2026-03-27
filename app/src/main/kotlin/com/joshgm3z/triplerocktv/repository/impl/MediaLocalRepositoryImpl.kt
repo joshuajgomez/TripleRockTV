@@ -173,6 +173,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamDataDao.updateMyList(streamId, add)
     }
 
+    override suspend fun updateMyListSeries(seriesId: Int, add: Boolean) {
+        seriesStreamsDao.updateMyList(seriesId, add)
+    }
+
     override suspend fun updateSelectedSubtitle(
         streamId: Int,
         language: String,

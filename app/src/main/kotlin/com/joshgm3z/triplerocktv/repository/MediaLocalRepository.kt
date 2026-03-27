@@ -56,5 +56,7 @@ interface MediaLocalRepository {
 
     suspend fun updateMyList(streamId: Int, add: Boolean)
 
+    suspend fun updateMyListSeries(seriesId: Int, add: Boolean)
+
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
 }

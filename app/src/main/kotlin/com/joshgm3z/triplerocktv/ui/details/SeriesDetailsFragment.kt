@@ -40,6 +40,7 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
     lateinit var glideUtil: GlideUtil
 
     private lateinit var detailsBackground: DetailsSupportFragmentBackgroundController
+
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private var backgroundImageUrl: String? = null
@@ -166,6 +167,18 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
             ACTION_MORE_EPISODES.toInt(),
             Action(ACTION_MORE_EPISODES, "More episodes")
         )
+
+        if (uiState.inMyList) {
+            actionAdapter.set(
+                ACTION_REMOVE_FAVORITE.toInt(),
+                Action(ACTION_REMOVE_FAVORITE, "Remove from list")
+            )
+        } else {
+            actionAdapter.set(
+                ACTION_FAVORITE.toInt(),
+                Action(ACTION_FAVORITE, "Add to my list")
+            )
+        }
 
         detailsRow.actionsAdapter = actionAdapter
     }
