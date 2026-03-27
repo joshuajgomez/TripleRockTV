@@ -195,7 +195,7 @@ class BrowseFragment : BrowseSupportFragment() {
             listRowAdapter.addAll(0, list)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
-        addRow(0L, "Series", uiState.seriesCategories)
+        addRow(0L, "All series", uiState.seriesCategories)
     }
 
     private fun List<Season>.findEpisode(episodeId: Int): Episode {
