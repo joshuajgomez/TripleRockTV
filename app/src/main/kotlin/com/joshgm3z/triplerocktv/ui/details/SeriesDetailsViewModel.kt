@@ -103,14 +103,14 @@ class SeriesDetailsViewModel @Inject constructor(
     fun addToMyList() {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateMyList(seriesId, true)
+            repository.updateMyListSeries(seriesId, true)
         }
     }
 
     fun removeFromMyList() {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateMyList(seriesId, false)
+            repository.updateMyListSeries(seriesId, false)
         }
     }
 }

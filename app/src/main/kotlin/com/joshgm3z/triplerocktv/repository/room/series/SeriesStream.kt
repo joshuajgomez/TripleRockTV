@@ -25,6 +25,7 @@ data class SeriesStream(
 
     val seasons: List<Season>? = null,
     val inMyList: Boolean = false,
+    val timeAddedToList: Long = 0L,
 )
 
 data class Season(

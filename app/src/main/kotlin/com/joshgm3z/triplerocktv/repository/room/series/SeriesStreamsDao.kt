@@ -23,7 +23,7 @@ interface SeriesStreamsDao {
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
     fun getAllOfCategory(categoryId: Int): List<SeriesStream>
 
-    @Query("SELECT * FROM series_stream WHERE inMyList IS true")
+    @Query("SELECT * FROM series_stream WHERE inMyList IS true ORDER BY timeAddedToList DESC LIMIT 10")
     fun getMyList10(): List<SeriesStream>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -37,4 +37,12 @@ interface SeriesStreamsDao {
 
     @Query("DELETE FROM series_stream")
     suspend fun deleteAllStreams()
+
+    @Query("UPDATE series_stream SET inMyList = :add, timeAddedToList = :timeAddedToList WHERE seriesId = :seriesId")
+    suspend fun updateMyList(
+        seriesId: Int,
+        add: Boolean,
+        timeAddedToList: Long = System.currentTimeMillis()
+    )
+    fun updateMyList(seriesId: Int, add: Boolean) {}
 }
