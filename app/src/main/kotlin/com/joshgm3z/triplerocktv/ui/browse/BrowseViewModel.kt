@@ -5,10 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
-import com.joshgm3z.triplerocktv.repository.data.Episode
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategory
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,9 +27,9 @@ sealed class BrowseUiState {
     ) : BrowseUiState()
 
     data class SeriesStreamState(
-        val recentPlayedEpisodes: List<Episode> = emptyList(),
+        val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
         val myList: List<SeriesStream> = emptyList(),
-        val seriesCategories: List<SeriesCategory> = emptyList(),
+        val seriesCategories: List<CategoryData> = emptyList(),
     ) : BrowseUiState()
 }
 
@@ -62,13 +60,14 @@ class BrowseViewModel @Inject constructor(
     }
 
     private suspend fun getSeriesStreamState() = BrowseUiState.SeriesStreamState(
-        myList = emptyList(),
-        recentPlayedEpisodes = emptyList(),
+        myList = repository.fetchMyListSeries(),
+        recentPlayedEpisodes = repository.fetchRecentlyPlayedSeries(),
+        seriesCategories = repository.fetchCategories(StreamType.Series),
     )
 
     private suspend fun getVideoOnDemandState() = BrowseUiState.VideoOnDemandState(
         myList = repository.fetchMyList(),
-        recentPlayed = repository.fetchRecentlyPlayed(),
+        recentPlayed = repository.fetchRecentlyPlayedStreamData(),
         categoryMap = mapOf(
             "All movies" to repository.fetchCategories(StreamType.VideoOnDemand),
             "English" to repository.fetchCategoriesByTitleKey(

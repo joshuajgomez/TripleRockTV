@@ -23,6 +23,9 @@ interface SeriesStreamsDao {
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
     fun getAllOfCategory(categoryId: Int): List<SeriesStream>
 
+    @Query("SELECT * FROM series_stream WHERE inMyList IS true")
+    fun getMyList10(): List<SeriesStream>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<SeriesStream>)
 

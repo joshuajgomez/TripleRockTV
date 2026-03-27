@@ -81,21 +81,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
-    override suspend fun fetchRecentlyPlayed(): List<Any> {
-        val recentMovies = streamDataDao.getLastPlayed10()
+    override suspend fun fetchRecentlyPlayedStreamData(): List<StreamData> {
+        return streamDataDao.getLastPlayed10()
+    }
+
+    override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
         val recentSeries = seriesStreamsDao.getLastPlayed10().filter { it.timeLeftInLastEpisode() }
-        val allMedia = mutableListOf<Any>()
-        allMedia.add(recentMovies)
-        allMedia.add(recentSeries)
-        allMedia.sortedByDescending {
-            when (it) {
-                is StreamData -> it.lastPlayed
-                is SeriesStream -> it.lastPlayed
-                else -> 0L
-            }
-        }
-        val toIndex = if (allMedia.size > 9) 9 else allMedia.size
-        return allMedia.subList(0, toIndex)
+        return recentSeries.sortedByDescending { it.lastPlayed }
     }
 
     private fun SeriesStream.timeLeftInLastEpisode(): Boolean {
@@ -114,6 +106,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override suspend fun fetchMyList(): List<StreamData> {
         return streamDataDao.getMyList10()
+    }
+
+    override suspend fun fetchMyListSeries(): List<SeriesStream> {
+        return seriesStreamsDao.getMyList10()
     }
 
     override suspend fun updatePlayedDuration(

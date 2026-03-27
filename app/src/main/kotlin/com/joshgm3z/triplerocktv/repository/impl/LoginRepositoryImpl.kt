@@ -6,7 +6,6 @@ import com.joshgm3z.triplerocktv.repository.room.CategoryDataDao
 import com.joshgm3z.triplerocktv.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.repository.room.epg.EpgListingDao
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesCategoryDao
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
@@ -17,7 +16,6 @@ class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val streamDataDao: StreamDataDao,
     private val categoryDataDao: CategoryDataDao,
-    private val seriesCategoryDao: SeriesCategoryDao,
     private val seriesStreamsDao: SeriesStreamsDao,
     private val epgListingDao: EpgListingDao,
     private val searchHintDao: SearchHintDao,
@@ -67,7 +65,6 @@ class LoginRepositoryImpl @Inject constructor(
         localDataStore.clearAllData()
         streamDataDao.deleteAll()
         categoryDataDao.deleteAll()
-        seriesCategoryDao.deleteAllCategories()
         seriesStreamsDao.deleteAllStreams()
         epgListingDao.deleteAllEpgListings()
         searchHintDao.deleteAll()

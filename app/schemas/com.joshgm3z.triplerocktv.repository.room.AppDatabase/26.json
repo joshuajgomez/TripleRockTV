@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 26,
-    "identityHash": "64961fa55c56a4cd51c2aa03e7a97acb",
+    "identityHash": "0b91b89cb8c6825ebd84f0667efbb1ff",
     "entities": [
       {
         "tableName": "stream_data",
@@ -203,49 +203,8 @@
         }
       },
       {
-        "tableName": "series_category",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`categoryId` INTEGER NOT NULL, `categoryName` TEXT NOT NULL, `parentId` INTEGER NOT NULL, `count` INTEGER NOT NULL, `firstStreamIcon` TEXT, PRIMARY KEY(`categoryId`))",
-        "fields": [
-          {
-            "fieldPath": "categoryId",
-            "columnName": "categoryId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "categoryName",
-            "columnName": "categoryName",
-            "affinity": "TEXT",
-            "notNull": true
-          },
-          {
-            "fieldPath": "parentId",
-            "columnName": "parentId",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "count",
-            "columnName": "count",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "firstStreamIcon",
-            "columnName": "firstStreamIcon",
-            "affinity": "TEXT"
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": false,
-          "columnNames": [
-            "categoryId"
-          ]
-        }
-      },
-      {
         "tableName": "series_stream",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `coverImageUrl` TEXT, `backdropUrl` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` INTEGER NOT NULL, `lastPlayed` INTEGER NOT NULL, `lastPlayedEpisodeId` INTEGER NOT NULL, `seasons` TEXT, PRIMARY KEY(`seriesId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`seriesId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `coverImageUrl` TEXT, `backdropUrl` TEXT, `plot` TEXT, `cast` TEXT, `director` TEXT, `genre` TEXT, `releaseDate` TEXT, `lastModified` TEXT, `rating` TEXT, `categoryId` INTEGER NOT NULL, `lastPlayed` INTEGER NOT NULL, `lastPlayedEpisodeId` INTEGER NOT NULL, `seasons` TEXT, `inMyList` INTEGER NOT NULL, PRIMARY KEY(`seriesId`))",
         "fields": [
           {
             "fieldPath": "seriesId",
@@ -332,6 +291,12 @@
             "fieldPath": "seasons",
             "columnName": "seasons",
             "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "inMyList",
+            "columnName": "inMyList",
+            "affinity": "INTEGER",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -442,7 +407,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '64961fa55c56a4cd51c2aa03e7a97acb')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0b91b89cb8c6825ebd84f0667efbb1ff')"
     ]
   }
 }
