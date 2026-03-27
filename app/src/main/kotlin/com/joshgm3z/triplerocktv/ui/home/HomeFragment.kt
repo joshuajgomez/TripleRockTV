@@ -10,10 +10,12 @@ import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.repository.StreamType
 import com.joshgm3z.triplerocktv.ui.browse.SettingItem
 import com.joshgm3z.triplerocktv.ui.browse.settings.SettingsItemPresenter
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.Logger
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -44,8 +46,13 @@ class HomeFragment : BrowseSupportFragment() {
                 else -> HomeFragmentDirections.toMediaLoading()
             }
 
-            is HomeItem -> HomeFragmentDirections.toBrowse()
-            else -> HomeFragmentDirections.toBrowse()
+            is HomeItem -> when (item.title) {
+                "Video on demand" -> HomeFragmentDirections.toBrowse(StreamType.VideoOnDemand)
+                "Series" -> HomeFragmentDirections.toBrowse(StreamType.Series)
+                else -> return@OnItemViewClickedListener
+            }
+
+            else -> return@OnItemViewClickedListener
         }.let {
             findNavController().navigate(it)
         }
