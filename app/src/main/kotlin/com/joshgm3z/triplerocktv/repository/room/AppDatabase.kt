@@ -16,7 +16,7 @@ import com.joshgm3z.triplerocktv.repository.room.series.SeriesStreamsDao
         IptvEpgListing::class,
         SearchHint::class,
     ],
-    version = 26
+    version = 27
 )
 @TypeConverters(SeasonConverter::class)
 abstract class AppDatabase : RoomDatabase() {
