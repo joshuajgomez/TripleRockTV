@@ -47,18 +47,18 @@ jobs:
       - name: Build Online Release APK
         run: ./gradlew assembleOnlineRelease
 
+      - name: Generate Tag Name
+        run: echo "RELEASE_TAG=v$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+
       - name: Prepare APK for Release
         run: |
           mkdir -p release_artifacts
-          cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
-
-      - name: Generate Tag Name
-        run: echo "RELEASE_TAG=$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+          cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-${{ env.RELEASE_TAG }}.apk
 
       - name: Publish master-release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v${{ env.RELEASE_TAG }}
+          tag_name: ${{ env.RELEASE_TAG }}
           files: release_artifacts/3RockTV-master.apk
           body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
         env:
