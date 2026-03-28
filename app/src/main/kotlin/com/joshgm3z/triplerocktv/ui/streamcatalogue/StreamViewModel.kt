@@ -4,7 +4,9 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.repository.StreamType
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +21,7 @@ class StreamViewModel
 constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
+    private val onlineRepository: MediaOnlineRepository,
 ) : ViewModel() {
 
     private val categoryId = savedStateHandle.get<Int>("categoryId")
@@ -39,5 +42,9 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = repository.fetchStreamsOfCategory(categoryId, streamType)
         }
+    }
+
+    suspend fun fetchMetadata(streamId: Int): MovieMetadata {
+        return onlineRepository.getMovieMetadata(streamId)
     }
 }

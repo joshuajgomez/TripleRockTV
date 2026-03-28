@@ -114,7 +114,7 @@
         android:label="StreamCatalogueFragment">
         <argument
             android:name="categoryId"
-            android:defaultValue="106"
+            android:defaultValue="240"
             app:argType="integer" />
         <argument
             android:name="categoryName"
@@ -122,7 +122,7 @@
             app:argType="string" />
         <argument
             android:name="streamType"
-            android:defaultValue="Series"
+            android:defaultValue="VideoOnDemand"
             app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toDetails"

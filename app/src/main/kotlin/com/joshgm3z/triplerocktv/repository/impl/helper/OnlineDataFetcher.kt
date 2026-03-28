@@ -114,6 +114,14 @@ constructor(
 
     suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
         if (streamType != StreamType.VideoOnDemand) return
+        getMovieData(streamId).let { movieMetaData ->
+            val updatedStreamData = streamDataDao.getByStreamId(streamId)
+                .copy(movieMetadata = movieMetaData)
+            streamDataDao.update(updatedStreamData)
+        }
+    }
+
+    suspend fun getMovieData(streamId: Int): MovieMetadata {
         iptvService.getVodInfo(streamId).info.let {
             val movieMetaData = MovieMetadata(
                 description = it.description,
@@ -124,9 +132,7 @@ constructor(
                 genre = it.genre,
                 totalDurationMs = (it.durationSecs?.toLong() ?: 0L) * 1000L,
             )
-            val updatedStreamData = streamDataDao.getByStreamId(streamId)
-                .copy(movieMetadata = movieMetaData)
-            streamDataDao.update(updatedStreamData)
+            return movieMetaData
         }
     }
 }

@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.repository.impl.helper.EPGFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.repository.retrofit.IptvService
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
 import com.joshgm3z.triplerocktv.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -98,6 +99,13 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
+    }
+
+    override suspend fun getMovieMetadata(streamId: Int): MovieMetadata {
+        if (iptvService == null) {
+            fetchIptvService()
+        }
+        return onlineDataFetcher.getMovieData(streamId)
     }
 
     override suspend fun getSeriesDataAndUpdate(streamId: Int) {

@@ -1,5 +1,7 @@
 package com.joshgm3z.triplerocktv.repository
 
+import com.joshgm3z.triplerocktv.repository.room.MovieMetadata
+
 enum class StreamType {
     VideoOnDemand,
     LiveTV,
@@ -26,5 +28,8 @@ interface MediaOnlineRepository {
     )
 
     suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType)
+
+    suspend fun getMovieMetadata(streamId: Int): MovieMetadata
+
     suspend fun getSeriesDataAndUpdate(streamId: Int)
 }
