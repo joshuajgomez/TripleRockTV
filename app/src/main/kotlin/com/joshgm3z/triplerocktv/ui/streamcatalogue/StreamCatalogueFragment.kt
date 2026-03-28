@@ -24,7 +24,7 @@ import javax.inject.Inject
 class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     private val viewModel: StreamViewModel by viewModels()
-    private val args by navArgs<StreamCatalogueFragmentArgs>()
+    private val args by navArgs<FocusedStreamCatalogueFragmentArgs>()
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
@@ -49,12 +49,12 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
         onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
             when (item) {
-                is StreamData -> StreamCatalogueFragmentDirections.toDetails().apply {
+                is StreamData -> FocusedStreamCatalogueFragmentDirections.toDetails().apply {
                     streamId = item.streamId
                     streamType = item.streamType
                 }
 
-                is SeriesStream -> StreamCatalogueFragmentDirections.toSeriesDetails().apply {
+                is SeriesStream -> FocusedStreamCatalogueFragmentDirections.toSeriesDetails().apply {
                     seriesId = item.seriesId
                 }
 
@@ -79,6 +79,5 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
                 }
             }
         }
-        viewModel.fetchStreams(args.categoryId, args.streamType)
     }
 }

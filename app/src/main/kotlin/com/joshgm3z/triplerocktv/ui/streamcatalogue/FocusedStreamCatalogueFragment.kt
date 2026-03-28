@@ -1,0 +1,126 @@
+package com.joshgm3z.triplerocktv.ui.streamcatalogue
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.leanback.app.VerticalGridSupportFragment
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.FocusHighlight
+import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.OnItemViewSelectedListener
+import androidx.leanback.widget.VerticalGridPresenter
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.databinding.FragmentFocusedStreamCatalogueBinding
+import com.joshgm3z.triplerocktv.repository.room.StreamData
+import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setVisible
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+@AndroidEntryPoint
+class FocusedStreamCatalogueFragment : Fragment() {
+    private val viewModel: StreamViewModel by viewModels()
+
+    @Inject
+    lateinit var streamPresenter: StreamPresenter
+
+    @Inject
+    lateinit var glideUtil: GlideUtil
+
+    lateinit var rowsAdapter: ArrayObjectAdapter
+
+    private lateinit var binding: FragmentFocusedStreamCatalogueBinding
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentFocusedStreamCatalogueBinding.inflate(inflater)
+        initRowFragment()
+        return binding.root
+    }
+
+    private fun initRowFragment() {
+        val gridFragment = VerticalGridSupportFragment()
+        gridFragment.gridPresenter = VerticalGridPresenter(
+            FocusHighlight.ZOOM_FACTOR_LARGE,
+            false
+        ).apply {
+            numberOfColumns = 5
+        }
+        rowsAdapter = ArrayObjectAdapter(streamPresenter)
+        gridFragment.adapter = rowsAdapter
+        gridFragment.onItemViewClickedListener = clickListener
+        gridFragment.setOnItemViewSelectedListener(selectionListener)
+
+        childFragmentManager.beginTransaction()
+            .replace(binding.flStreamRowContainer.id, gridFragment)
+            .commit()
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch {
+            viewModel.uiState.collectLatest {
+                it?.let {
+                    rowsAdapter.setItems(it, null)
+                }
+            }
+        }
+    }
+
+    private fun updateStreamData(streamData: StreamData) {
+        binding.tvTitle.text = streamData.name
+        binding.tvDescription.text = streamData.movieMetadata?.description
+        glideUtil.loadImage(
+            streamData.streamIcon,
+            binding.ivBackdrop
+        )
+    }
+
+    private fun updateSeriesStream(seriesStream: SeriesStream) {
+        binding.tvTitle.text = seriesStream.name
+        binding.tvDescription.text = seriesStream.plot
+        glideUtil.loadImage(
+            seriesStream.backdropUrl,
+            binding.ivBackdrop
+        )
+        binding.tvCast.text = "Cast: ${seriesStream.cast}"
+        binding.tvDirector.text = "Directed by: ${seriesStream.director}"
+        binding.tvDirector.setVisible(seriesStream.director?.isNotEmpty())
+    }
+
+    private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
+        when (item) {
+            is StreamData -> FocusedStreamCatalogueFragmentDirections.toDetails().apply {
+                streamId = item.streamId
+                streamType = item.streamType
+            }
+
+            is SeriesStream -> FocusedStreamCatalogueFragmentDirections.toSeriesDetails().apply {
+                seriesId = item.seriesId
+            }
+
+            else -> return@OnItemViewClickedListener
+        }.let {
+            findNavController().navigate(it)
+        }
+    }
+
+    private val selectionListener = OnItemViewSelectedListener { _, item, _, _ ->
+        when (item) {
+            is StreamData -> updateStreamData(item)
+            is SeriesStream -> updateSeriesStream(item)
+            else -> return@OnItemViewSelectedListener
+        }
+    }
+
+}

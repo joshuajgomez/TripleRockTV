@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/streamsCatalogue">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -110,11 +110,11 @@
 
     <fragment
         android:id="@+id/streamsCatalogue"
-        android:name="com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamCatalogueFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.streamcatalogue.FocusedStreamCatalogueFragment"
         android:label="StreamCatalogueFragment">
         <argument
             android:name="categoryId"
-            android:defaultValue="1"
+            android:defaultValue="106"
             app:argType="integer" />
         <argument
             android:name="categoryName"
@@ -122,7 +122,7 @@
             app:argType="string" />
         <argument
             android:name="streamType"
-            android:defaultValue="VideoOnDemand"
+            android:defaultValue="Series"
             app:argType="com.joshgm3z.triplerocktv.repository.StreamType" />
         <action
             android:id="@+id/toDetails"
