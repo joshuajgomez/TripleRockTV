@@ -5,6 +5,7 @@ on:
     branches: [ "master" ]
   pull_request:
     branches: [ "master" ]
+  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
 
 jobs:
   build:
@@ -46,16 +47,19 @@ jobs:
       - name: Build Online Release APK
         run: ./gradlew assembleOnlineRelease
 
+      - name: Generate Tag Name
+        run: echo "RELEASE_TAG=v$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+
       - name: Prepare APK for Release
         run: |
           mkdir -p release_artifacts
-          cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
+          cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-${{ env.RELEASE_TAG }}.apk
 
       - name: Publish master-release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: master-release
-          files: release_artifacts/3RockTV-master.apk
+          tag_name: ${{ env.RELEASE_TAG }}
+          files: release_artifacts/3RockTV-${{ env.RELEASE_TAG }}.apk
           body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
