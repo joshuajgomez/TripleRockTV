@@ -15,6 +15,7 @@ import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.databinding.FragmentFocusedStreamCatalogueBinding
+import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -94,8 +95,13 @@ class FocusedStreamCatalogueFragment : Fragment() {
             binding.ivBackdrop
         )
         binding.tvCast.text = "Cast: ${seriesStream.cast}"
+        binding.tvCast.setVisible(seriesStream.cast?.isNotEmpty())
         binding.tvDirector.text = "Directed by: ${seriesStream.director}"
         binding.tvDirector.setVisible(seriesStream.director?.isNotEmpty())
+        binding.metadataView.rating = seriesStream.rating.parseToFloat()
+        binding.metadataView.genre = seriesStream.genre
+        binding.metadataView.seasonCount = seriesStream.seasons?.size
+        binding.metadataView.showMyList = seriesStream.inMyList
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
