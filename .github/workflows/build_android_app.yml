@@ -52,10 +52,13 @@ jobs:
           mkdir -p release_artifacts
           cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
 
+      - name: Generate Tag Name
+        run: echo "RELEASE_TAG=v$(date +'%Y%m%d%H%M')" >> $GITHUB_ENV
+
       - name: Publish master-release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: v$(date +'%Y%m%d%H%M')
+          tag_name: v${{ env.RELEASE_TAG }}
           files: release_artifacts/3RockTV-master.apk
           body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
         env:
