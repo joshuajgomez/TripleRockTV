@@ -61,4 +61,13 @@ class MetadataView @JvmOverloads constructor(
             )
             field = value
         }
+
+    var seasonCount: Int? = null
+        set(value) {
+            binding.tvSeasonCount.setVisible(value != null)
+            binding.tvSeasonCount.text = context.getString(
+                R.string.text_after_dot, "$value seasons"
+            )
+            field = value
+        }
 }
