@@ -48,6 +48,7 @@ class GlideUtil
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
             .listener(glideErrorListener)
             .centerCrop()
+            .transition(DrawableTransitionOptions.withCrossFade())
             .into(imageView)
     }
 

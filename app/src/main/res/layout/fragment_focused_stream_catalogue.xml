@@ -17,19 +17,19 @@
         android:id="@+id/ll_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/diagonal_gradient_scrim"
+        android:background="#A0000000"
         android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingHorizontal="@dimen/focused_catalogue_edge_padding"
-        android:paddingTop="@dimen/focused_catalogue_edge_padding">
+        android:layout_height="match_parent">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="90dp"
+            android:layout_marginTop="30dp"
             android:maxEms="13"
             android:textColor="@color/white"
             android:textSize="25sp"
@@ -50,7 +50,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:ellipsize="end"
             android:maxEms="20"
+            android:maxLines="5"
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
             app:layout_constraintTop_toBottomOf="@+id/metadata_view"
@@ -83,7 +85,7 @@
         <FrameLayout
             android:id="@+id/fl_stream_row_container"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="320dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
