@@ -53,7 +53,7 @@ jobs:
           cp app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-master.apk
 
       - name: Generate Tag Name
-        run: echo "RELEASE_TAG=v$(date +'%Y%m%d')" >> $GITHUB_ENV
+        run: echo "RELEASE_TAG=v$(date +'%Y.%m.%d')" >> $GITHUB_ENV
 
       - name: Publish master-release
         uses: softprops/action-gh-release@v1
