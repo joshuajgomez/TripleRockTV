@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.repository.MediaLocalRepository
@@ -16,13 +17,24 @@ import javax.inject.Inject
 class StreamViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
 ) : ViewModel() {
+
+    private val categoryId = savedStateHandle.get<Int>("categoryId")
+        ?: throw IllegalStateException("categoryId not found")
+
+    private val streamType = savedStateHandle.get<StreamType>("streamType")
+        ?: throw IllegalStateException("streamType not found")
 
     private val _uiState = MutableStateFlow<List<Any>?>(null)
     val uiState = _uiState.asStateFlow()
 
-    fun fetchStreams(categoryId: Int, streamType: StreamType) {
+    init {
+        fetchStreams(categoryId, streamType)
+    }
+
+    private fun fetchStreams(categoryId: Int, streamType: StreamType) {
         Logger.debug("categoryId = [${categoryId}], browseType = [${streamType}]")
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = repository.fetchStreamsOfCategory(categoryId, streamType)
