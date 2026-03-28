@@ -18,6 +18,7 @@ import com.joshgm3z.triplerocktv.databinding.FragmentFocusedStreamCatalogueBindi
 import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.repository.room.StreamData
 import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -80,11 +81,22 @@ class FocusedStreamCatalogueFragment : Fragment() {
 
     private fun updateStreamData(streamData: StreamData) {
         binding.tvTitle.text = streamData.name
-        binding.tvDescription.text = streamData.movieMetadata?.description
-        glideUtil.loadImage(
-            streamData.streamIcon,
-            binding.ivBackdrop
-        )
+
+        lifecycleScope.launch {
+            val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId)
+            binding.tvDescription.text = updatedMovieMetadata.description
+            binding.tvCast.text = "Cast: ${updatedMovieMetadata.cast}"
+            binding.tvCast.setVisible(updatedMovieMetadata.cast?.isNotEmpty())
+            binding.tvDirector.text = "Directed by: ${updatedMovieMetadata.director}"
+            binding.tvDirector.setVisible(updatedMovieMetadata.director?.isNotEmpty())
+            binding.metadataView.genre = updatedMovieMetadata.genre
+            binding.metadataView.rating = streamData.rating
+            binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
+            glideUtil.loadImage(
+                updatedMovieMetadata.backPosterUrl,
+                binding.ivBackdrop
+            )
+        }
     }
 
     private fun updateSeriesStream(seriesStream: SeriesStream) {
