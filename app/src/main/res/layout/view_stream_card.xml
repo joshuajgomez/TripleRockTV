@@ -4,6 +4,7 @@
     android:layout_width="150dp"
     android:layout_height="200dp"
     android:background="@color/black"
+    android:foreground="@drawable/focusable_border_fg"
     android:clickable="true"
     android:focusable="true">
 
