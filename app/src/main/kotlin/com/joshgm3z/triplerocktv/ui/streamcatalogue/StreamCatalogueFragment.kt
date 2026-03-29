@@ -54,7 +54,7 @@ class StreamCatalogueFragment : Fragment() {
     private fun initRowFragment() {
         val gridFragment = VerticalGridSupportFragment()
         gridFragment.gridPresenter = VerticalGridPresenter(
-            FocusHighlight.ZOOM_FACTOR_LARGE,
+            FocusHighlight.ZOOM_FACTOR_XSMALL,
             false
         ).apply {
             numberOfColumns = 5

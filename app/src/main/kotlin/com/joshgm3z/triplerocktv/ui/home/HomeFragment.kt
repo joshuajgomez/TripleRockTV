@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
@@ -22,7 +23,12 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : BrowseSupportFragment() {
 
-    private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(ListRowPresenter())
+    private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(
+        ListRowPresenter(
+            FocusHighlight.ZOOM_FACTOR_XSMALL,
+            false
+        )
+    )
 
     @Inject
     lateinit var glideUtil: GlideUtil
