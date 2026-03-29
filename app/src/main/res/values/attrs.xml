@@ -4,5 +4,6 @@
     <attr name="cardColor" format="color" />
     <attr name="primaryColor" format="color" />
     <attr name="contentColor" format="color" />
+    <attr name="contentColor2" format="color" />
     <attr name="metadataTextColor" format="color" />
 </resources>
