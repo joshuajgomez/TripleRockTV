@@ -88,7 +88,12 @@ android {
         schemaDirectory("$projectDir/schemas")
     }
 
-    testOptions.unitTests.isReturnDefaultValues = true
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
@@ -140,4 +145,9 @@ dependencies {
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.mockk)
+
+    testImplementation("androidx.navigation:navigation-testing:2.8.5")
+    testImplementation("org.robolectric:robolectric:4.11.1")
+    testImplementation("androidx.test.ext:junit:1.2.1")
+    testImplementation("com.google.truth:truth:1.1.5")
 }
