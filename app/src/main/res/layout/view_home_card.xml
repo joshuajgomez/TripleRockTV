@@ -4,6 +4,7 @@
     android:layout_height="200dp"
     android:background="?attr/cardColor"
     android:focusable="true"
+    android:focusableInTouchMode="true"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="10dp">
@@ -12,6 +13,7 @@
         android:id="@+id/iv_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:duplicateParentState="true"
         android:src="@drawable/ic_star"
         android:tint="?attr/contentColor" />
 
@@ -20,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
+        android:duplicateParentState="true"
         android:text="Video on demand"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
