@@ -5,7 +5,8 @@
     android:layout_height="130dp"
     android:background="@color/black"
     android:clickable="true"
-    android:focusable="true">
+    android:focusable="true"
+    android:foreground="@drawable/focusable_border_fg">
 
     <ImageView
         android:layout_width="50dp"
