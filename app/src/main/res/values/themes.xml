@@ -5,6 +5,7 @@
         <item name="primaryColor">@color/orange</item>
         <item name="cardColor">@color/card_bg_color_selector</item>
         <item name="contentColor">@color/card_fg_color_selector</item>
+        <item name="contentColor2">@color/card_fg_color_selector2</item>
         <item name="metadataTextColor">@color/gray4.5</item>
     </style>
 </resources>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="150dp"
-    android:background="@drawable/episode_bg_selector">
+    android:background="?attr/cardColor">
 
     <ImageView
         android:id="@+id/iv_poster"
@@ -33,9 +33,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="5dp"
+        android:duplicateParentState="true"
         android:maxEms="13"
-        android:textColor="@color/white"
+        android:textColor="?attr/contentColor"
         android:textSize="12sp"
+        android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/iv_poster"
         app:layout_constraintTop_toTopOf="@+id/iv_poster"
         tools:text="@string/subtitle_file_name" />
@@ -52,9 +54,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxEms="13"
         android:maxLines="6"
+        android:textColor="?attr/contentColor2"
         android:textSize="11sp"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata"
