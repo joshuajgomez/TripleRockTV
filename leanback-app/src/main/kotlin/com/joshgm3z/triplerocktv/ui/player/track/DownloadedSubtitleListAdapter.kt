@@ -1,0 +1,79 @@
+package com.joshgm3z.triplerocktv.ui.player.track
+
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+import com.joshgm3z.triplerocktv.databinding.ItemDownloadedSubtitleBinding
+import com.joshgm3z.triplerocktv.core.repository.SubtitleData
+import com.joshgm3z.triplerocktv.core.util.languageName
+import com.joshgm3z.triplerocktv.core.util.visibleIf
+
+class DownloadedSubtitleListAdapter : RecyclerView.Adapter<DownloadedSubtitleListViewHolder>() {
+
+    var clickListener: DownloadedSubtitleListClickListener? = null
+
+    var subtitleList: List<SubtitleData> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): DownloadedSubtitleListViewHolder {
+        ItemDownloadedSubtitleBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        ).let { return DownloadedSubtitleListViewHolder(it.root) }
+    }
+
+    override fun onBindViewHolder(
+        holder: DownloadedSubtitleListViewHolder,
+        position: Int
+    ) {
+        val data = subtitleList[position]
+        holder.text = data.title
+        holder.language = data.language.languageName()
+        holder.downloadsCount = data.downloadCount
+        holder.listenClickEvent {
+            clickListener?.onSubtitleClicked(data)
+        }
+    }
+
+    override fun getItemCount(): Int = subtitleList.size
+
+}
+
+class DownloadedSubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    val binding = ItemDownloadedSubtitleBinding.bind(itemView)
+
+    var text: String = ""
+        set(value) {
+            binding.tvTitle.text = value
+            field = value
+        }
+
+    var language: String = ""
+        set(value) {
+            binding.tvLanguage.text = value
+            field = value
+        }
+
+    var downloadsCount: Int = 0
+        set(value) {
+            binding.tvDownloadCount.text = "$value downloads"
+            binding.llSubtitleCountContainer.visibility = visibleIf(value > 0)
+            field = value
+        }
+
+    fun listenClickEvent(onClick: () -> Unit) {
+        itemView.setOnClickListener { onClick() }
+    }
+}
+
+interface DownloadedSubtitleListClickListener {
+    fun onSubtitleClicked(subtitleData: SubtitleData)
+}
