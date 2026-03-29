@@ -254,7 +254,7 @@
         <argument
             android:name="trackType"
             android:defaultValue="Subtitle"
-            app:argType="com.joshgm3z.triplerocktv.ui.player.track.TrackType" />
+            app:argType="com.joshgm3z.triplerocktv.core.viewmodel.TrackType" />
         <action
             android:id="@+id/toSubtitleDownload"
             app:destination="@id/subtitleDownloaderFragment" />

@@ -32,8 +32,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.collections.component1
-import kotlin.collections.component2
 
 @AndroidEntryPoint
 class BrowseFragment : BrowseSupportFragment() {

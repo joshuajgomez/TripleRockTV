@@ -1,33 +1,27 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.hilt)
     kotlin("kapt")
+    id("androidx.room")
     id("androidx.navigation.safeargs")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
 }
 
 android {
-    namespace = "com.joshgm3z.triplerocktv"
+    namespace = "com.joshgm3z.triplerocktv.core"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.joshgm3z.triplerocktv"
+        applicationId = "com.joshgm3z.triplerocktv.core"
         minSdk = 34
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
-    }
-
-    signingConfigs {
-        create("release") {
-            storeFile = file("../security/default_keystore")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
-            keyAlias = System.getenv("KEY_ALIAS")
-            keyPassword = System.getenv("KEY_PASSWORD")
-        }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -37,54 +31,29 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        buildConfig = true
-        viewBinding = true
+        jvmTarget = "11"
     }
 
-    flavorDimensions += "environment"
-    productFlavors {
-        create("demo") {
-            dimension = "environment"
-        }
-        create("online") {
-            dimension = "environment"
-            isDefault = true
-        }
-        create("dev") {
-            dimension = "environment"
-            applicationIdSuffix = ".dev"
-            resValue("string", "app_name", "3TV-dev")
-        }
+    room {
+        schemaDirectory("$projectDir/schemas")
     }
 
-    sourceSets {
-        getByName("dev") {
-            java.srcDirs("src/online/kotlin")
-        }
-    }
-
-    androidComponents {
-        beforeVariants { variantBuilder ->
-            if (variantBuilder.buildType == "release" &&
-                listOf("dev", "demo").contains(variantBuilder.flavorName)
-            ) variantBuilder.enable = false
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+            isReturnDefaultValues = true
         }
     }
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.tv.foundation)

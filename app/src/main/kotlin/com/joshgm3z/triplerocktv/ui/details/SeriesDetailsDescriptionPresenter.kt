@@ -3,13 +3,7 @@ package com.joshgm3z.triplerocktv.ui.details
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.databinding.ViewSeriesDetailsDescriptionBinding
-import com.joshgm3z.triplerocktv.repository.impl.helper.parseToFloat
-import com.joshgm3z.triplerocktv.repository.room.StreamData
-import com.joshgm3z.triplerocktv.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.visibleIf
 
 class SeriesDetailsDescriptionPresenter : Presenter() {
