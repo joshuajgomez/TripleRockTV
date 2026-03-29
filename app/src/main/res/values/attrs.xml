@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="backgroundColor" format="color" />
-    <attr name="cardColor" format="color" />
     <attr name="primaryColor" format="color" />
-    <attr name="contentColor" format="color" />
-    <attr name="contentColor2" format="color" />
     <attr name="metadataTextColor" format="color" />
+
+    <attr name="cardBackgroundColor" format="color" />
+    <attr name="cardContentColor" format="color" />
+    <attr name="cardContentColor2" format="color" />
 </resources>
