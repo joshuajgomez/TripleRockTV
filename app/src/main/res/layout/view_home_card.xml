@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="200dp"
     android:background="?attr/cardColor"
@@ -11,11 +12,11 @@
 
     <ImageView
         android:id="@+id/iv_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:contentDescription="none"
         android:duplicateParentState="true"
-        android:src="@drawable/ic_star"
-        android:tint="?attr/contentColor" />
+        tools:src="@drawable/movie" />
 
     <TextView
         android:id="@+id/tv_title"
@@ -23,9 +24,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
         android:duplicateParentState="true"
-        android:text="Video on demand"
+        tools:text="Video on demand"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/contentColor" />
+        android:textColor="?attr/contentColor"
+        android:textStyle="bold" />
 
 </LinearLayout>
