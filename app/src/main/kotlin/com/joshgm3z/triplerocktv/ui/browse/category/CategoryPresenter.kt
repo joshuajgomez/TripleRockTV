@@ -1,8 +1,9 @@
 package com.joshgm3z.triplerocktv.ui.browse.category
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.bumptech.glide.Glide
+import com.joshgm3z.triplerocktv.databinding.ViewCategoryCardBinding
 import com.joshgm3z.triplerocktv.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
@@ -12,11 +13,10 @@ class CategoryPresenter
     private val glideUtil: GlideUtil
 ) : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val cardView = CategoryCardView(parent.context).apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-        }
-        return ViewHolder(cardView)
+        val binding = ViewCategoryCardBinding.inflate(
+            LayoutInflater.from(parent.context), parent, false
+        )
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any) {
@@ -32,16 +32,13 @@ class CategoryPresenter
             is CategoryData -> item.count
             else -> 0
         }
-        val cardView = viewHolder.view as CategoryCardView
-        cardView.titleView.text = title
-        cardView.countView.text = "$count videos"
-        glideUtil.loadImage(streamIcon, cardView.imageView)
+        val binding = ViewCategoryCardBinding.bind(viewHolder.view)
+        binding.tvTitle.text = title
+        binding.tvCount.text = "$count videos"
+        glideUtil.loadImage(streamIcon, binding.ivPoster)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val cardView = viewHolder.view as CategoryCardView
-        cardView.iconView.setImageResource(-1)
-        Glide.with(cardView)
-            .clear(cardView.imageView)
+
     }
 }
