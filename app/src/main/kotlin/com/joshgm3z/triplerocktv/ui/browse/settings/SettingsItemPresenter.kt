@@ -1,7 +1,9 @@
 package com.joshgm3z.triplerocktv.ui.browse.settings
 
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
+import com.joshgm3z.triplerocktv.databinding.ViewSettingCardBinding
 
 data class SettingItem(
     val title: String,
@@ -10,24 +12,23 @@ data class SettingItem(
 
 class SettingsItemPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
-        val cardView = SettingCardView(parent.context).apply {
-            isFocusable = true
-            isFocusableInTouchMode = true
-            // Set dimensions for the card
-        }
-        return ViewHolder(cardView)
+        val binding = ViewSettingCardBinding.inflate(
+            LayoutInflater.from(parent.context),
+            parent,
+            false
+        )
+        return ViewHolder(binding.root)
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
-        val cardView = viewHolder.view as SettingCardView
+        val binding = ViewSettingCardBinding.bind(viewHolder.view)
         val settingItem = item as SettingItem
-        cardView.titleView.text = settingItem.title
-
-        cardView.iconView.setImageResource(settingItem.iconRes)
+        binding.tvTitle.text = settingItem.title
+        binding.ivIcon.setImageResource(settingItem.iconRes)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val cardView = viewHolder.view as SettingCardView
-        cardView.iconView.setImageResource(-1)
+        val binding = ViewSettingCardBinding.bind(viewHolder.view)
+        binding.ivIcon.setImageResource(-1)
     }
 }
