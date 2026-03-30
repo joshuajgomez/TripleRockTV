@@ -1,0 +1,381 @@
+package com.joshgm3z.triplerocktv.ui.player
+
+import android.os.Bundle
+import android.view.View
+import android.view.ViewGroup
+import androidx.annotation.OptIn
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
+import androidx.leanback.app.VideoSupportFragment
+import androidx.leanback.app.VideoSupportFragmentGlueHost
+import androidx.leanback.media.PlaybackTransportControlGlue
+import androidx.leanback.widget.Action
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.PlaybackControlsRow
+import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.C.SELECTION_FLAG_DEFAULT
+import androidx.media3.common.MediaItem
+import androidx.media3.common.Player
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.SubtitleView
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.SubtitleData
+import com.joshgm3z.triplerocktv.core.util.Logger
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
+import androidx.core.net.toUri
+import androidx.media3.common.C
+import androidx.media3.common.text.CueGroup
+import com.joshgm3z.triplerocktv.core.repository.data.Episode
+import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
+import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
+import com.joshgm3z.triplerocktv.util.setBackground
+
+const val FAST_FORWARD_DURATION = 10000
+
+/**
+ * A fragment for playing video content.
+ */
+@UnstableApi
+@AndroidEntryPoint
+class PlaybackFragment : VideoSupportFragment() {
+
+    private val viewModel: PlaybackViewModel by viewModels()
+
+    private val trackViewModel: TrackSelectorViewModel by hiltNavGraphViewModels(
+        R.id.nav_graph
+    )
+
+    private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
+
+    private val args by navArgs<PlaybackFragmentArgs>()
+
+    private val player: ExoPlayer by lazy {
+        ExoPlayer.Builder(requireContext()).build()
+    }
+
+    private var videoTitle: String? = null
+
+    private val subtitleView: SubtitleView by lazy {
+        SubtitleView(requireContext()).apply {
+            setUserDefaultStyle()
+            setUserDefaultTextSize()
+        }
+    }
+
+    @OptIn(UnstableApi::class)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
+
+        player.addListener(errorListener(this))
+        player.addListener(playbackListener)
+        player.addListener(trackViewModel.subtitleTrackListener)
+
+        LeanbackPlayerAdapter(requireContext(), player, 16).apply {
+            setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
+            transportControlGlue = createControlGlue(this)
+        }
+
+        transportControlGlue.host = glueHost
+
+        requireActivity().setBackground(null)
+
+        viewModel.fetchStreamDetails(args.streamId, args.streamType, args.seriesId)
+        lifecycleScope.launch {
+            viewModel.playbackUiState.collectLatest {
+                it?.let { playbackUiState ->
+                    videoTitle = when (playbackUiState.playbackItem) {
+                        is StreamData -> (playbackUiState.playbackItem as StreamData).name
+                        is Episode -> (playbackUiState.playbackItem as Episode).title
+                        else -> ""
+                    }
+                    val videoSubTitle = when (playbackUiState.playbackItem) {
+                        is StreamData -> (playbackUiState.playbackItem as StreamData).movieMetadata?.genre
+                        else -> ""
+                    }
+                    videoSubTitle?.let { subtitle ->
+                        transportControlGlue.subtitle = subtitle
+                    }
+                    transportControlGlue.title = videoTitle
+                    transportControlGlue.isSeekEnabled = true
+                    transportControlGlue.playWhenPrepared()
+                    playVideo(it)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            trackViewModel.subtitleTrackToLoad.collectLatest { it ->
+                Logger.debug("subtitleTrackToLoad $it")
+                it?.let {
+                    trackViewModel.subtitleTrackToLoad.value = null
+                    var subtitleUrl: String? = null
+                    var subtitleLanguage = ""
+                    var subtitleTitle = ""
+                    when (it) {
+                        is SubtitleData -> {
+                            subtitleLanguage = it.language!!
+                            subtitleUrl = it.url
+                            subtitleTitle = it.title
+                            loadSubtitle(it)
+                        }
+
+                        is TrackInfo -> {
+                            subtitleLanguage = it.language!!
+                            subtitleTitle = it.label!!
+                            switchTrack(it)
+                        }
+
+                        else -> Logger.warn("Unknown track type: ${it::class.java}")
+                    }
+                    viewModel.updateSelectedSubtitle(subtitleLanguage, subtitleTitle, subtitleUrl)
+                }
+            }
+        }
+        lifecycleScope.launch {
+            trackViewModel.audioTrackToLoad.collectLatest { it ->
+                Logger.debug("audioTrackToLoad $it")
+                it?.let {
+                    trackViewModel.audioTrackToLoad.value = null
+                    switchTrack(it)
+                }
+            }
+        }
+
+        lifecycleScope.launch {
+            trackViewModel.trackButtonState.collectLatest {
+                Logger.debug("trackButtonState $it")
+            }
+        }
+    }
+
+    private fun switchTrack(trackInfo: TrackInfo) {
+        Logger.debug("trackInfo = [${trackInfo}]")
+        val parametersBuilder = player.trackSelectionParameters.buildUpon()
+
+        when (trackInfo.trackType) {
+            TrackType.Subtitle -> {
+                if (trackInfo.label == "Disabled") {
+                    // Completely disable text tracks
+                    parametersBuilder.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
+                } else {
+                    // Enable text tracks and prefer the selected language
+                    parametersBuilder
+                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                        .setPreferredTextLanguage(trackInfo.language)
+                }
+            }
+
+            TrackType.Audio -> {
+                parametersBuilder.setPreferredAudioLanguage(trackInfo.language)
+            }
+        }
+
+        player.trackSelectionParameters = parametersBuilder.build()
+    }
+
+    private fun loadSubtitle(subtitleData: SubtitleData) {
+        Logger.debug("subtitleData = [${subtitleData}]")
+        val currentMediaItem = player.currentMediaItem ?: return
+        val currentPosition = player.currentPosition
+        val playWhenReady = player.playWhenReady
+
+        // 1. Create the subtitle configuration
+        subtitleData.url ?: return
+        val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url!!.toUri())
+            .setMimeType("application/x-subrip")
+            .setLanguage(subtitleData.language)
+            .setLabel(subtitleData.title)
+            .setSelectionFlags(SELECTION_FLAG_DEFAULT)
+            .build()
+        player.trackSelectionParameters = player.trackSelectionParameters
+            .buildUpon()
+            .setPreferredTextLanguage(subtitleData.language) // Or any specific language code
+            .build()
+        // 2. Rebuild the MediaItem with the new subtitle
+        val updatedMediaItem = currentMediaItem.buildUpon()
+            .setSubtitleConfigurations(listOf(subtitleConfig))
+            .build()
+
+        // 3. Update the player
+        player.setMediaItem(
+            updatedMediaItem,
+            false
+        ) // false means don't reset position, but seek is safer
+        player.prepare()
+        player.seekTo(currentPosition)
+        player.playWhenReady = playWhenReady
+
+        Logger.info("Subtitle loaded from: ${subtitleData.url}")
+    }
+
+    private fun createControlGlue(
+        playerAdapter:
+        LeanbackPlayerAdapter
+    ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
+        return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
+            requireActivity(),
+            playerAdapter
+        ) {
+            private val ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+            }
+            private val audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
+            }
+
+            private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context)
+            private val rewindAction = PlaybackControlsRow.RewindAction(context)
+
+            override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {
+                adapter.add(rewindAction)
+                super.onCreatePrimaryActions(adapter)
+                adapter.add(fastForwardAction)
+            }
+
+            override fun onCreateSecondaryActions(adapter: ArrayObjectAdapter) {
+                adapter.add(ccAction)
+                adapter.add(audioAction)
+            }
+
+            override fun onActionClicked(action: Action) {
+                when (action) {
+                    ccAction -> {
+                        videoTitle?.let { title ->
+                            val action = PlaybackFragmentDirections.toTrackSelector()
+                            action.title = title
+                            action.trackType = TrackType.Subtitle
+                            findNavController().navigate(action)
+                        }
+                    }
+
+                    audioAction -> {
+                        val action = PlaybackFragmentDirections.toTrackSelector()
+                        action.trackType = TrackType.Audio
+                        findNavController().navigate(action)
+                    }
+
+                    rewindAction -> {
+                        val newPos =
+                            (player.currentPosition - FAST_FORWARD_DURATION).coerceAtLeast(0)
+                        player.seekTo(newPos)
+                    }
+
+                    // 5. Handle Fast Forward (seek forward 10 seconds)
+                    fastForwardAction -> {
+                        val newPos =
+                            (player.currentPosition + FAST_FORWARD_DURATION).coerceAtMost(player.duration)
+                        player.seekTo(newPos)
+                    }
+
+                    else -> {
+                        super.onActionClicked(action)
+                    }
+                }
+            }
+        }
+    }
+
+    private fun playVideo(uiState: PlaybackUiState) {
+        Logger.info("uiState=[$uiState]")
+        when (uiState.playbackItem) {
+            is Episode -> playVideoFromSerisStream(uiState.playbackItem as Episode, uiState.videoUrl)
+            is StreamData -> playVideoFromStreamData(uiState.playbackItem as StreamData, uiState.videoUrl)
+            else -> throw Exception("Unknown playback item type: ${uiState.playbackItem::class.java}")
+        }
+    }
+
+    private fun playVideoFromStreamData(
+        streamData: StreamData,
+        videoUrl: String
+    ) {
+        var mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
+        streamData.subtitleLanguage?.let {
+            if (it.isEmpty()) return@let
+            player.trackSelectionParameters = player.trackSelectionParameters
+                .buildUpon()
+                .setPreferredTextLanguage(it)
+                .build()
+        }
+        streamData.subtitleUrl?.let {
+            if (it.isEmpty()) return@let
+            val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
+                .setMimeType("application/x-subrip")
+                .setLanguage(streamData.subtitleLanguage)
+                .setLabel(streamData.subtitleTitle)
+                .setSelectionFlags(SELECTION_FLAG_DEFAULT)
+                .build()
+            mediaItem = mediaItem.buildUpon()
+                .setSubtitleConfigurations(listOf(subtitleConfig))
+                .build()
+        }
+
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        if (args.resume && streamData.startedWatching) {
+            player.seekTo(streamData.playedDuration)
+        }
+    }
+
+    private fun playVideoFromSerisStream(
+        episode: Episode,
+        videoUrl: String
+    ) {
+        val mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
+
+        player.setMediaItem(mediaItem)
+        player.prepare()
+        if (args.resume && episode.startedWatching) {
+            player.seekTo(episode.playedDuration)
+        }
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.keepScreenOn = true
+        subtitleView.let { sv ->
+            val parent = view as? ViewGroup ?: return
+
+            // Add to view hierarchy
+            parent.addView(sv)
+        }
+        lifecycleScope.launch {
+            PeriodicReminderUtility().getPeriodicReminder {
+                if (player.isPlaying)
+                    viewModel.updateLastPlayedPosition(player.currentPosition)
+            }
+        }
+    }
+
+    val playbackListener = object : Player.Listener {
+        override fun onCues(cueGroup: CueGroup) {
+            subtitleView.setCues(cueGroup.cues)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        viewModel.updateLastPlayedPosition(player.currentPosition)
+        transportControlGlue.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        player.release()
+    }
+}

@@ -20,4 +20,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "TripleRockTV"
-include(":app")
+include(":leanback-app")
+include(":core")

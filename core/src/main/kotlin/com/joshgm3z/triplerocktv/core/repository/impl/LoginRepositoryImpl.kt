@@ -1,0 +1,75 @@
+package com.joshgm3z.triplerocktv.core.repository.impl
+
+import com.joshgm3z.triplerocktv.core.repository.LoginRepository
+import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
+import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
+import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
+import kotlinx.coroutines.delay
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import javax.inject.Inject
+
+class LoginRepositoryImpl @Inject constructor(
+    private val localDataStore: LocalDatastore,
+    private val streamDataDao: StreamDataDao,
+    private val categoryDataDao: CategoryDataDao,
+    private val seriesStreamsDao: SeriesStreamsDao,
+    private val epgListingDao: EpgListingDao,
+    private val searchHintDao: SearchHintDao,
+) : LoginRepository {
+    override suspend fun tryLogin(
+        webUrl: String,
+        username: String,
+        password: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+        try {
+            // 1. Ensure URL ends with a slash for Retrofit
+            val baseUrl = if (webUrl.endsWith("/")) webUrl else "$webUrl/"
+
+            // 2. Build dynamic Retrofit instance
+            val retrofit = Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+
+            val service = retrofit.create(XtreamService::class.java)
+
+            // 3. Make the call
+            val response = service.validateLogin(username, password)
+
+            if (response.isSuccessful) {
+                val body = response.body()
+                // Xtream API returns auth = 1 on success
+                if (body?.user_info?.auth == 1) {
+                    localDataStore.storeCredentials(body, webUrl, password)
+                    delay(1000)
+                    onSuccess()
+                } else {
+                    onError("Invalid username or password")
+                }
+            } else {
+                onError("Server error: ${response.code()}")
+            }
+        } catch (e: Exception) {
+            delay(1000)
+            onError("Connection failed: ${e.localizedMessage ?: "Unknown error"}")
+        }
+    }
+
+    override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
+        localDataStore.clearAllData()
+        streamDataDao.deleteAll()
+        categoryDataDao.deleteAll()
+        seriesStreamsDao.deleteAllStreams()
+        epgListingDao.deleteAllEpgListings()
+        searchHintDao.deleteAll()
+
+        delay(1000)
+        onLogoutComplete()
+    }
+}

@@ -9,6 +9,6 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/main/kotlin/com/joshgm3z/triplerocktv/repository/retrofit/Secrets.kt
-/app/google-services.json
-/security/default_keystore
+core/src/main/kotlin/com/joshgm3z/triplerocktv/core/repository/retrofit/Secrets.kt
+leanback-app/google-services.json
+security/default_keystore
