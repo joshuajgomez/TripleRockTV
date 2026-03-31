@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
 
 class SeasonPresenter(
     var highlightSeasonNumber: Int? = null
@@ -27,14 +28,14 @@ class SeasonPresenter(
         val view = viewHolder.view as TextView
         view.text = "Season ${season.number}"
         when (season.number) {
-            highlightSeasonNumber -> android.R.color.white
-            else -> R.color.gray
+            highlightSeasonNumber -> view.context.getColorFromAttr(R.attr.colorCardContent)
+            else -> view.context.getColorFromAttr(R.attr.colorCardBackground)
         }.let {
             view.setBackgroundResource(it)
         }
         when (season.number) {
-            highlightSeasonNumber -> R.color.gray
-            else -> android.R.color.white
+            highlightSeasonNumber -> view.context.getColorFromAttr(R.attr.colorCardBackground)
+            else -> view.context.getColorFromAttr(R.attr.colorCardContent)
         }.let {
             view.setTextColor(ContextCompat.getColor(viewHolder.view.context, it))
         }

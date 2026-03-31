@@ -24,7 +24,7 @@ import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
 import com.joshgm3z.triplerocktv.util.setBackground

@@ -6,6 +6,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
 
 class SimpleTextPresenter : Presenter() {
 
@@ -16,7 +17,7 @@ class SimpleTextPresenter : Presenter() {
             // Basic styling - adjust as needed
             setPadding(24, 16, 24, 16)
             setTextColor(ContextCompat.getColor(context, android.R.color.white))
-            setBackgroundResource(R.color.gray)
+            setBackgroundColor(parent.context.getColorFromAttr(R.attr.colorCardBackground))
         }
         return ViewHolder(textView)
     }

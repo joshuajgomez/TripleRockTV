@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.core.util
+package com.joshgm3z.triplerocktv.util
 
 import android.content.Context
 import android.util.TypedValue
@@ -8,7 +8,7 @@ import com.joshgm3z.triplerocktv.R
 
 @ColorInt
 fun Context.getBackgroundColor(
-): Int = getColorFromAttr(R.attr.backgroundColor)
+): Int = getColorFromAttr(R.attr.colorBackground)
 
 @ColorInt
 fun Context.getColorFromAttr(

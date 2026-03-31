@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="200dp"
-    android:background="?attr/cardBackgroundColor"
+    android:background="@color/card_bg_color_selector"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:gravity="bottom"
@@ -25,7 +25,7 @@
         android:layout_marginTop="15dp"
         android:duplicateParentState="true"
         android:textAlignment="center"
-        android:textColor="?attr/cardContentColor"
+        android:textColor="@color/card_fg_color_selector"
         android:textStyle="bold"
         tools:text="Video on demand" />
 

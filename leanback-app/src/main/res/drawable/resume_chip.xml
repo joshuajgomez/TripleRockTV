@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- The background color (e.g., a semi-transparent dark grey or red) -->
-    <solid android:color="@color/gray" />
+    <solid
+        android:alpha="0.3"
+        android:color="?attr/colorCardContent" />
 
     <padding
+        android:bottom="2dp"
         android:left="5dp"
-        android:top="2dp"
         android:right="5dp"
-        android:bottom="2dp" />
+        android:top="2dp" />
 
     <!-- The corner radius -->
     <corners android:radius="4dp" />

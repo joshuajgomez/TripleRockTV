@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.databinding.FragmentSplashScreenBinding
-import com.joshgm3z.triplerocktv.core.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.Destination
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground

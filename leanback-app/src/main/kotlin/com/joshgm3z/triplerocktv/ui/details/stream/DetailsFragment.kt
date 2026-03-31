@@ -2,7 +2,6 @@ package com.joshgm3z.triplerocktv.ui.details.stream
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.DetailsSupportFragment
 import androidx.leanback.app.DetailsSupportFragmentBackgroundController
@@ -21,6 +20,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,7 +52,7 @@ class DetailsFragment : DetailsSupportFragment() {
         val detailsPresenter =
             DetailsOverviewRowPresenter(StreamDataDetailsDescriptionPresenter())
 
-        detailsPresenter.backgroundColor = ContextCompat.getColor(requireContext(), R.color.gray)
+        detailsPresenter.backgroundColor = requireContext().getColorFromAttr(R.attr.colorCardBackground)
 
         detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
             when (action.id) {
