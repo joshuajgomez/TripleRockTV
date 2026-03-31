@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.details
+package com.joshgm3z.triplerocktv.ui.details.series
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class GuidedSettingsFragment : GuidedStepSupportFragment() {
+class SettingsFragment : GuidedStepSupportFragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
 
@@ -210,7 +210,7 @@ class GuidedSettingsFragment : GuidedStepSupportFragment() {
     override fun onGuidedActionClicked(action: GuidedAction) {
         Logger.debug("action = [${action.id}]")
         when (action.id) {
-            idSignout -> GuidedSettingsFragmentDirections.toConfirmSignOutDialog()
+            idSignout -> SettingsFragmentDirections.toConfirmSignOutDialog()
                 .let { findNavController().navigate(it) }
 
             idBlur -> viewModel.setBlurSetting(action.isChecked)

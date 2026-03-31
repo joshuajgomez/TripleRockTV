@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.browse.recents
+package com.joshgm3z.triplerocktv.ui.browse
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

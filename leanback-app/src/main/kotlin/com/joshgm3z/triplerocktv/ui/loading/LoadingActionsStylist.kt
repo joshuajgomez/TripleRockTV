@@ -8,7 +8,7 @@ class LoadingActionsStylist : GuidedActionsStylist() {
     override fun onBindViewHolder(vh: ViewHolder, action: GuidedAction) {
         super.onBindViewHolder(vh, action)
         setIconSize(vh, 18)
-        when (GuidedLoadingFragment.focusedId) {
+        when (LoadingFragment.focusedId) {
             action.id -> vh.itemView.setBackgroundResource(R.drawable.bg_login_button)
             else -> vh.itemView.background = null
         }
