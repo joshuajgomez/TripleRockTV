@@ -17,12 +17,5 @@
             android:layout_height="100dp"
             android:src="@drawable/logo_3rocktv_cutout" />
 
-        <ProgressBar
-            android:id="@+id/progress_bar"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:indeterminateTint="?attr/primaryColor"
-            android:visibility="visible" />
     </LinearLayout>
 </FrameLayout>
