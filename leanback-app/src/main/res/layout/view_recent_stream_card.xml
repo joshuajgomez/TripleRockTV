@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="130dp"
-    android:background="@color/black"
+    android:background="?attr/colorBackground"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/focusable_border_fg">
@@ -59,7 +59,7 @@
             android:layout_height="10dp"
             android:layout_gravity="bottom"
             android:paddingHorizontal="3dp"
-            android:progressTint="@color/orange"
+            android:progressTint="?attr/colorPrimary"
             android:visibility="gone"
             tools:progress="30"
             tools:visibility="visible" />

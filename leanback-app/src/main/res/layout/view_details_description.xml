@@ -9,7 +9,7 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:textColor="?attr/colorCardContent"
         android:textSize="22sp"
         tools:text="Some movie with long name (2000)" />
 
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/metadata_gap"
-            android:textColor="?attr/metadataTextColor"
+            android:textColor="@color/color_card_content2"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:text="Comedy"
@@ -44,7 +44,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:textColor="?attr/metadataTextColor"
+            android:textColor="@color/color_card_content2"
             android:textSize="@dimen/metadata_text_size"
             tools:text="3.5" />
 
@@ -53,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/metadata_gap"
-            android:textColor="?attr/metadataTextColor"
+            android:textColor="@color/color_card_content2"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:text="&#8226; 1h 30m"
@@ -65,7 +65,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/metadata_gap"
             android:text="@string/subtitle_downloaded"
-            android:textColor="?attr/metadataTextColor"
+            android:textColor="@color/color_card_content2"
             android:textSize="@dimen/metadata_text_size"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -90,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="3dp"
                 android:text="My list"
-                android:textColor="?attr/metadataTextColor"
+                android:textColor="@color/color_card_content2"
                 android:textSize="@dimen/metadata_text_size" />
         </LinearLayout>
     </LinearLayout>
@@ -118,7 +118,7 @@
             android:layout_width="50dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="3dp"
-            android:progressTint="@color/orange"
+            android:progressTint="?attr/colorPrimary"
             tools:progress="30" />
 
         <TextView
@@ -126,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textColor="?attr/metadataTextColor"
+            android:textColor="@color/color_card_content2"
             android:textSize="12sp"
             tools:text="30m remaining" />
     </LinearLayout>

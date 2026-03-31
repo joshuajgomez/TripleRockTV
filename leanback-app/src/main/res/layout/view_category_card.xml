@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="140dp"
-    android:background="?attr/cardBackgroundColor"
+    android:background="@color/card_bg_color_selector"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -21,7 +21,7 @@
             android:layout_marginTop="12dp"
             android:duplicateParentState="true"
             android:src="@drawable/ic_video_file"
-            android:tint="?attr/cardContentColor" />
+            android:tint="@color/card_fg_color_selector" />
 
         <ImageView
             android:id="@+id/iv_poster"
@@ -48,9 +48,9 @@
             android:duplicateParentState="true"
             android:ellipsize="end"
             android:maxLines="2"
-            android:text="Category"
-            android:textColor="?attr/cardContentColor"
-            android:textStyle="bold" />
+            android:textColor="@color/card_fg_color_selector"
+            android:textStyle="bold"
+            tools:text="Category" />
 
         <TextView
             android:id="@+id/tv_count"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:maxLines="1"
-            android:textColor="?attr/cardContentColor2"
+            android:textColor="@color/card_fg_color_selector2"
             tools:text="5 videos" />
 
     </LinearLayout>
