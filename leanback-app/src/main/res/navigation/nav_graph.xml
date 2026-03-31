@@ -72,7 +72,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.login.GuidedLoginFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.login.LoginFragment"
         android:label="MediaLoginFragment">
         <action
             android:id="@+id/toMediaLoading"
@@ -83,7 +83,7 @@
 
     <fragment
         android:id="@+id/mediaLoadingFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.loading.GuidedLoadingFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.loading.LoadingFragment"
         android:label="MediaLoadingFragment">
         <action
             android:id="@+id/toHome"
@@ -134,7 +134,7 @@
 
     <fragment
         android:id="@+id/detailsFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.details.DetailsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.details.stream.DetailsFragment"
         android:label="DetailsFragment">
         <argument
             android:name="streamId"
@@ -151,7 +151,7 @@
 
     <fragment
         android:id="@+id/seriesDetailsFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.details.SeriesDetailsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.details.series.SeriesDetailsFragment"
         android:label="SeriesDetailsFragment">
         <argument
             android:name="seriesId"
@@ -227,7 +227,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.settings.GuidedSettingsFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.settings.SettingsFragment"
         android:label="SettingsFragment">
         <action
             android:id="@+id/toConfirmSignOutDialog"

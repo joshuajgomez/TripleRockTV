@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import kotlin.getValue
 
 @AndroidEntryPoint
-class GuidedLoadingFragment : GuidedStepSupportFragment() {
+class LoadingFragment : GuidedStepSupportFragment() {
 
     private val viewModel: MediaLoadingViewModel by viewModels()
 
@@ -43,7 +43,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                 when (it) {
                     is MediaLoadingUiState.Initial -> {}
                     is MediaLoadingUiState.Error -> findNavController().navigate(
-                        GuidedLoadingFragmentDirections.toError("${it.message}\n${it.summary}")
+                        LoadingFragmentDirections.toError("${it.message}\n${it.summary}")
                     )
 
                     is MediaLoadingUiState.Update -> {
@@ -61,7 +61,7 @@ class GuidedLoadingFragment : GuidedStepSupportFragment() {
                                 icon = R.drawable.ic_check_circle_green
                             )
                             delay(2000)
-                            findNavController().navigate(GuidedLoadingFragmentDirections.toHome())
+                            findNavController().navigate(LoadingFragmentDirections.toHome())
                         }
                     }
                 }

@@ -17,8 +17,8 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
-import com.joshgm3z.triplerocktv.ui.details.EpisodePresenter
-import com.joshgm3z.triplerocktv.ui.details.SeriesDetailsFragmentArgs
+import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorUiState
+import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

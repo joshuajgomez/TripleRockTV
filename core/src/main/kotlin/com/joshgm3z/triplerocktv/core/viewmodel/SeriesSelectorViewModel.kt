@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.details.series
+package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

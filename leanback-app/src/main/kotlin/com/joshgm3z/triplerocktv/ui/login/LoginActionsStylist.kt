@@ -8,12 +8,12 @@ class LoginActionsStylist : GuidedActionsStylist() {
     override fun onBindViewHolder(vh: ViewHolder, action: GuidedAction) {
         super.onBindViewHolder(vh, action)
         when (action.id) {
-            GuidedLoginFragment.idLogin -> {
+            LoginFragment.idLogin -> {
                 setIconSize(vh, 18)
                 vh.itemView.setBackgroundResource(R.drawable.bg_login_button)
             }
 
-            GuidedLoginFragment.idStatus -> setIconSize(vh, 28)
+            LoginFragment.idStatus -> setIconSize(vh, 28)
             else -> vh.itemView.background = null
         }
     }
