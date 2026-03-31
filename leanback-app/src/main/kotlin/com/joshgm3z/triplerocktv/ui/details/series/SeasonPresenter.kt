@@ -31,13 +31,13 @@ class SeasonPresenter(
             highlightSeasonNumber -> view.context.getColorFromAttr(R.attr.colorCardContent)
             else -> view.context.getColorFromAttr(R.attr.colorCardBackground)
         }.let {
-            view.setBackgroundResource(it)
+            view.setBackgroundColor(it)
         }
         when (season.number) {
-            highlightSeasonNumber -> view.context.getColorFromAttr(R.attr.colorCardBackground)
-            else -> view.context.getColorFromAttr(R.attr.colorCardContent)
+            highlightSeasonNumber -> R.attr.colorCardBackground
+            else -> R.attr.colorCardContent
         }.let {
-            view.setTextColor(ContextCompat.getColor(viewHolder.view.context, it))
+            view.setTextColor(view.context.getColorFromAttr(it))
         }
     }
 
