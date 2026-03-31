@@ -14,7 +14,6 @@ import com.joshgm3z.triplerocktv.core.viewmodel.Destination
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -54,10 +53,6 @@ class SplashScreenFragment : Fragment() {
                     findNavController().navigate(destination)
                 }
             }
-        }
-        lifecycleScope.launch {
-            delay(1200)
-            binding?.progressBar?.visibility = View.VISIBLE
         }
     }
 }
