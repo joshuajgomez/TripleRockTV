@@ -3,9 +3,11 @@ package com.joshgm3z.triplerocktv.impl
 import com.joshgm3z.triplerocktv.DemoData
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -45,13 +47,13 @@ constructor() : MediaLocalRepository {
     override suspend fun fetchStream(
         streamId: Int,
         streamType: StreamType
-    ): StreamData? = DemoData.allStreams.firstOrNull {
-        when (it) {
-            is StreamData -> it.streamId == streamId
-//            is SeriesStream -> it.seriesId == streamId
-            else -> false
-        }
-    }
+    ): StreamData = DemoData.sampleVodStreams.first { it.streamId == streamId }
+
+    override suspend fun fetchEpisode(
+        episodeId: Int,
+        seriesId: Int
+    ): Episode = DemoData.getSampleSeriesStreams()
+        .first { it.seriesId == seriesId }.seasons?.first()?.episodes!!.first()
 
     override fun streamDataFlow(
         streamId: Int,
@@ -64,23 +66,59 @@ constructor() : MediaLocalRepository {
         }
     }
 
+    override fun seriesStreamFlow(streamId: Int): Flow<SeriesStream> = flow {
+        DemoData.getSampleSeriesStreams().firstOrNull {
+            it.seriesId == streamId
+        }?.let {
+            emit(it)
+        }
+    }
+
     override suspend fun isContentEmpty(): Boolean = false
 
-    override suspend fun fetchRecentlyPlayed(): List<StreamData> {
-        return DemoData.sampleVodStreams.subList(0, 2) +
-                DemoData.sampleLiveStreams.subList(0, 1)
+    override suspend fun fetchRecentlyPlayedStreamData(): List<StreamData> {
+        return DemoData.sampleVodStreams
+    }
 
+    override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
+        return DemoData.getSampleSeriesStreams()
     }
 
     override suspend fun fetchMyList(): List<StreamData> {
         return DemoData.sampleVodStreams.filter { it.inMyList }
     }
 
-    override suspend fun updatePlayedDuration(streamId: Int, positionMs: Long) {}
+    override suspend fun fetchMyListSeries(): List<SeriesStream> {
+        return DemoData.getSampleSeriesStreams()
+    }
 
-    override suspend fun updateLastPlayedTimestamp(streamId: Int) {}
+    override suspend fun updatePlayedDuration(
+        streamId: Int,
+        positionMs: Long,
+        streamType: StreamType
+    ) {}
+
+    override suspend fun updateLastPlayedTimestamp(
+        streamId: Int,
+        streamType: StreamType,
+        timeStamp: Long
+    ) {}
+
+    override suspend fun updateEpisodeLastPlayedTimestamp(
+        episodeId: Int,
+        seriesId: Int,
+        timeStamp: Long
+    ) {}
+
+    override suspend fun updateEpisodePlayedDuration(
+        episodeId: Int,
+        seriesId: Int,
+        positionMs: Long
+    ) {}
 
     override suspend fun updateMyList(streamId: Int, add: Boolean) {}
+
+    override suspend fun updateMyListSeries(seriesId: Int, add: Boolean) {}
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,
