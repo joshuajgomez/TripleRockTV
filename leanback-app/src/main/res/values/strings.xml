@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">3RockTV</string>
-    <string name="text_after_dot">&#8226; %1$s</string>
+    <string name="dot">\u0020 &#8226; \u0020</string>
     <string name="subtitle_downloaded">&#8226; Subtitle downloaded</string>
     <string name="subtitle_file_name">Wonder.Woman.1984.2020.720p.WEB.H264-NAISU.ur</string>
     <string name="long_description">Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.</string>
