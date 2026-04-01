@@ -63,6 +63,6 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: release_artifacts/3RockTV-${{ env.RELEASE_TAG }}.apk
-          body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
+          body: "Auto-generated latest build from the ${{ github.ref_name }} branch. Uploaded on ${{ github.event_date }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
