@@ -57,11 +57,17 @@ class MetadataView @JvmOverloads constructor(
             updateMetadata()
         }
 
+    init {
+        if (isInEditMode) {
+            rating = 3.5f
+            duration = "1h 45m"
+            showMyList = true
+        }
+    }
+
     private fun updateMetadata() {
         removeAllViews()
         isFirst = true
-
-        setBackgroundColor(resources.getColor(R.color.color_primary, context.theme))
 
         addMetadata(genre)
         addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star_scaled)
@@ -70,13 +76,6 @@ class MetadataView @JvmOverloads constructor(
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
         addMetadata("$seasonCount seasons", seasonCount.isNonZero())
         addMetadata("Subtitle downloaded", subtitleDownloaded)
-    }
-
-    private fun Any?.isNonZero(): Boolean = when (this) {
-        is Int -> this > 0
-        is Long -> this > 0
-        is Float -> this > 0
-        else -> false
     }
 
     private fun addMetadata(
@@ -90,9 +89,18 @@ class MetadataView @JvmOverloads constructor(
 
         val tv = TextView(context)
         tv.text = text
+        tv.textSize = 12f
+        tv.alpha = 0.8f
         tv.setTextColor(resources.getColor(R.color.color_card_content2, context.theme))
         icon?.let { tv.setDrawable(it) }
         addView(tv)
+    }
+
+    private fun Any?.isNonZero(): Boolean = when (this) {
+        is Int -> this > 0
+        is Long -> this > 0
+        is Float -> this > 0
+        else -> false
     }
 
     private fun addDot() {

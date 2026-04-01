@@ -33,24 +33,14 @@ class StreamDataDetailsDescriptionPresenter : Presenter() {
             tvTimeRemaining.text = it.timeRemainingText()
             llProgressbarContainer.visibility = visibleIf((it.startedWatching))
 
-            tvRating.text = it.rating.toString()
-            llRatingContainer.visibility = visibleIf(it.rating > 0)
-
-            tvDuration.text = root.context.getString(
-                R.string.text_after_dot,
-                it.movieMetadata?.totalDurationMs?.toTextTime()
-            )
-            tvDuration.visibility = visibleIf((it.movieMetadata?.totalDurationMs ?: 0) > 0)
-
-            llMyListContainer.visibility = visibleIf(it.inMyList)
+            metadataView.rating = it.rating
+            metadataView.showMyList = it.inMyList
+            metadataView.subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
+            metadataView.duration = it.movieMetadata?.totalDurationMs?.toTextTime()
+            metadataView.genre = it.movieMetadata?.genre
 
             tvDescription.text = it.movieMetadata?.description
             tvDescription.visibility = visibleIf(!it.movieMetadata?.description.isNullOrEmpty())
-
-            tvSubtitleStatus.visibility = visibleIf(!it.subtitleUrl.isNullOrEmpty())
-
-            tvGenre.visibility = visibleIf(!it.movieMetadata?.genre.isNullOrEmpty())
-            tvGenre.text = it.movieMetadata?.genre
         }
     }
 
