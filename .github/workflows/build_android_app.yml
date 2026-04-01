@@ -51,7 +51,16 @@ jobs:
         run: ./gradlew leanback-app:assembleOnlineRelease
 
       - name: Generate Tag Name
-        run: echo "RELEASE_TAG=v$(date +'%Y.%m.%d')" >> $GITHUB_ENV
+        run: | 
+          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')" >> $GITHUB_ENV
+          echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            echo "TRIGGER_SOURCE=push to master" >> $GITHUB_ENV
+          else
+            echo "TRIGGER_SOURCE=manual trigger" >> $GITHUB_ENV
+          fi
 
       - name: Prepare APK for Release
         run: |
@@ -63,6 +72,6 @@ jobs:
         with:
           tag_name: ${{ env.RELEASE_TAG }}
           files: release_artifacts/3RockTV-${{ env.RELEASE_TAG }}.apk
-          body: "Auto-generated latest build from the ${{ github.ref_name }} branch."
+          body: "Auto-generated latest build triggered by ${{ env.TRIGGER_SOURCE }}. Uploaded on ${{ env.RELEASE_TIMESTAMP }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
