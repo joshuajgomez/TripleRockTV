@@ -2,15 +2,10 @@ package com.joshgm3z.triplerocktv.ui.details.series
 
 import android.content.Context
 import android.util.AttributeSet
-import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewFindButtonBinding
-import com.joshgm3z.triplerocktv.databinding.ViewMetadataBinding
-import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
-import com.joshgm3z.triplerocktv.core.util.setVisible
-import com.joshgm3z.triplerocktv.core.util.visibleIf
 
 class MetadataView @JvmOverloads constructor(
     context: Context,
@@ -18,56 +13,103 @@ class MetadataView @JvmOverloads constructor(
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
 
-    private val binding: ViewMetadataBinding = ViewMetadataBinding.inflate(
-        LayoutInflater.from(context),
-        this,
-        true
-    )
+    private var isFirst = true
 
     var rating: Float? = null
         set(value) {
-            binding.tvRating.setVisible(rating != null)
-            binding.tvRating.text = value.toString()
             field = value
+            updateMetadata()
         }
 
     var showMyList: Boolean = false
         set(value) {
-            binding.tvMyList.setVisible(showMyList)
             field = value
+            updateMetadata()
         }
 
     var genre: String? = null
         set(value) {
-            binding.tvGenre.setVisible(value != null)
-            binding.tvGenre.text = context.getString(R.string.text_after_dot, value)
             field = value
+            updateMetadata()
         }
 
     var duration: String? = null
         set(value) {
-            binding.tvDuration.setVisible(value != null)
-            binding.tvDuration.text = context.getString(
-                R.string.text_after_dot, value
-            )
             field = value
+            updateMetadata()
         }
 
     var episodeCount: Int? = null
         set(value) {
-            binding.tvEpisodeCount.setVisible(value != null)
-            binding.tvEpisodeCount.text = context.getString(
-                R.string.text_after_dot, "$value episodes"
-            )
             field = value
+            updateMetadata()
         }
 
     var seasonCount: Int? = null
         set(value) {
-            binding.tvSeasonCount.setVisible(value != null)
-            binding.tvSeasonCount.text = context.getString(
-                R.string.text_after_dot, "$value seasons"
-            )
             field = value
+            updateMetadata()
         }
+
+    var subtitleDownloaded: Boolean = false
+        set(value) {
+            field = value
+            updateMetadata()
+        }
+
+    private fun updateMetadata() {
+        removeAllViews()
+        isFirst = true
+
+        setBackgroundColor(resources.getColor(R.color.color_primary, context.theme))
+
+        addMetadata(genre)
+        addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star_scaled)
+        addMetadata(duration)
+        addMetadata("My list", showMyList, R.drawable.ic_check_scaled)
+        addMetadata("$episodeCount episodes", episodeCount.isNonZero())
+        addMetadata("$seasonCount seasons", seasonCount.isNonZero())
+        addMetadata("Subtitle downloaded", subtitleDownloaded)
+    }
+
+    private fun Any?.isNonZero(): Boolean = when (this) {
+        is Int -> this > 0
+        is Long -> this > 0
+        is Float -> this > 0
+        else -> false
+    }
+
+    private fun addMetadata(
+        text: String?,
+        show: Boolean = true,
+        icon: Int? = null,
+    ) {
+        if (!show) return
+        if (text.isNullOrEmpty()) return
+        if (!isFirst) addDot() else isFirst = false
+
+        val tv = TextView(context)
+        tv.text = text
+        tv.setTextColor(resources.getColor(R.color.color_card_content2, context.theme))
+        icon?.let { tv.setDrawable(it) }
+        addView(tv)
+    }
+
+    private fun addDot() {
+        TextView(context).let {
+            it.text = context.getString(R.string.dot)
+            addView(it)
+        }
+    }
+
+    private fun TextView.setDrawable(res: Int) {
+        setCompoundDrawablesWithIntrinsicBounds(
+            AppCompatResources.getDrawable(context, res),
+            null,
+            null,
+            null
+        )
+        compoundDrawablePadding = 5
+    }
 }
+
