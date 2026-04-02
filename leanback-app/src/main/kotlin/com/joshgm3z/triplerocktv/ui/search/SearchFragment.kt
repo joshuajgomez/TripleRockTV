@@ -13,6 +13,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
@@ -99,7 +100,7 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
         Logger.debug("searchHints = [${searchHints}]")
         rowsAdapter.clear()
         val header = HeaderItem(0, "Start typing to search")
-        val adapter = ArrayObjectAdapter(SimpleTextPresenter())
+        val adapter = ArrayObjectAdapter(SimpleTextPresenter(R.drawable.ic_history))
         adapter.addAll(0, searchHints)
         rowsAdapter.add(ListRow(header, adapter))
     }

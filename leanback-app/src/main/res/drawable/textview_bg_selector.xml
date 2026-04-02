@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape android:shape="rectangle">
+            <solid android:alpha="0.8" android:color="?attr/colorCardContent" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="?attr/colorCardContent" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:alpha="0.5" android:color="?attr/colorCardBackground" />
+            <corners android:radius="8dp" />
+        </shape>
+    </item>
+</selector>
