@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewEpisodeBinding
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
+import com.joshgm3z.triplerocktv.core.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -33,6 +34,9 @@ class EpisodePresenter
             tvEpisodeNumber.text =
                 context.getString(R.string.season_episode, episode.season, episode.episode_num)
             glideUtil.loadImage(episode.episodeInfo?.movie_image, ivPoster)
+
+            progressBar.progress = episode.progressPercent()
+            progressBar.setVisible(episode.startedWatching)
         }
     }
 

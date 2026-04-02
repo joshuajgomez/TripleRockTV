@@ -15,17 +15,34 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@drawable/avatar_movie" />
 
-    <TextView
-        android:id="@+id/tv_episode_number"
+    <LinearLayout
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:background="@drawable/gradient_scrim"
-        android:padding="5dp"
-        android:paddingTop="50dp"
-        android:textStyle="bold"
+        android:orientation="vertical"
+        android:paddingTop="20dp"
         app:layout_constraintBottom_toBottomOf="@id/iv_poster"
-        app:layout_constraintStart_toStartOf="@id/iv_poster"
-        tools:text="S1: E8" />
+        app:layout_constraintStart_toStartOf="@id/iv_poster">
+
+        <TextView
+            android:id="@+id/tv_episode_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:paddingTop="50dp"
+            android:textStyle="bold"
+            tools:text="S1: E8" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:progressTint="?attr/colorPrimary"
+            android:visibility="gone"
+            tools:progress="70"
+            tools:visibility="visible" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_title"
@@ -45,7 +62,7 @@
     <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
         android:id="@+id/metadata"
         android:layout_width="wrap_content"
-        android:layout_height="15dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
