@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.splash
 
+import android.graphics.drawable.Animatable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -43,7 +44,11 @@ class SplashScreenFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding?.ivLogo?.drawable.let {
+            if (it is Animatable) it.start()
+        }
         lifecycleScope.launch {
+            return@launch
             viewModel.navDirectionState.collectLatest {
                 when (it) {
                     Destination.Login -> SplashScreenFragmentDirections.toLogin()
