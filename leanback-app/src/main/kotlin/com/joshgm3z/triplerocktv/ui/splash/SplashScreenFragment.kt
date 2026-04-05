@@ -15,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.Destination
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -48,8 +49,8 @@ class SplashScreenFragment : Fragment() {
             if (it is Animatable) it.start()
         }
         lifecycleScope.launch {
-            return@launch
             viewModel.navDirectionState.collectLatest {
+                delay(3000)
                 when (it) {
                     Destination.Login -> SplashScreenFragmentDirections.toLogin()
                     Destination.Loading -> SplashScreenFragmentDirections.toLoading()
