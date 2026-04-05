@@ -13,9 +13,10 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/iv_logo"
             android:layout_width="100dp"
             android:layout_height="100dp"
-            android:src="@drawable/logo_3rocktv_cutout" />
+            android:src="@drawable/logo_avd_anim" />
 
     </LinearLayout>
 </FrameLayout>
