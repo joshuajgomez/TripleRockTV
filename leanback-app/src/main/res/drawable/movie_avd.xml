@@ -13,7 +13,7 @@
 
             <group
                 android:name="clapper_top"
-                android:pivotX="6"
+                android:pivotX="2"
                 android:pivotY="8">
                 <path
                     android:fillColor="@color/color_icon_bg"
@@ -32,7 +32,7 @@
                 android:propertyName="rotation"
                 android:repeatCount="1"
                 android:repeatMode="reverse"
-                android:valueFrom="-15"
+                android:valueFrom="-11"
                 android:valueTo="0"
                 android:valueType="floatType" />
         </aapt:attr>
