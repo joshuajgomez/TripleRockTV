@@ -1,6 +1,8 @@
 package com.joshgm3z.triplerocktv.ui.home
 
+import android.graphics.drawable.Animatable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.databinding.ViewHomeCardBinding
@@ -26,6 +28,13 @@ class HomeItemPresenter : Presenter() {
 
         binding.tvTitle.text = homeItem.title
         binding.ivIcon.setImageResource(homeItem.iconRes)
+
+        binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            if (!hasFocus) return@OnFocusChangeListener
+            binding.ivIcon.drawable.let {
+                if (it is Animatable) it.start()
+            }
+        }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
