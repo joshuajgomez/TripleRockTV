@@ -1,0 +1,36 @@
+<animated-vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt">
+    <aapt:attr name="android:drawable">
+        <vector
+            android:width="40dp"
+            android:height="40dp"
+            android:viewportWidth="24"
+            android:viewportHeight="24">
+
+            <!-- The Chevron (Angle Bracket) -->
+            <group android:name="front_card">
+                <path
+                    android:pathData="M2,4 l6,8l-6,8 M10,4l6,8l-6,8"
+                    android:strokeWidth="2.5"
+                    android:strokeColor="@color/color_card_content"
+                    android:strokeLineCap="round"
+                    android:strokeLineJoin="round" />
+            </group>
+
+        </vector>
+    </aapt:attr>
+
+    <target android:name="front_card">
+        <aapt:attr name="android:animation">
+            <!-- Adjusted valueTo slightly so it doesn't clip out of the smaller frame -->
+            <objectAnimator
+                android:duration="600"
+                android:interpolator="@android:anim/accelerate_decelerate_interpolator"
+                android:propertyName="translateX"
+                android:valueFrom="0"
+                android:valueTo="5"
+                android:valueType="floatType" />
+        </aapt:attr>
+    </target>
+
+</animated-vector>
