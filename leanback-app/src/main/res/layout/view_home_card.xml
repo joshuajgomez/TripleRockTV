@@ -16,7 +16,7 @@
         android:layout_height="60dp"
         android:contentDescription="none"
         android:duplicateParentState="true"
-        tools:src="@drawable/movie" />
+        tools:src="@drawable/movie_avd" />
 
     <TextView
         android:id="@+id/tv_title"

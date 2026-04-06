@@ -39,7 +39,9 @@ class HomeItemPresenter : Presenter() {
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val binding = ViewHomeCardBinding.bind(viewHolder.view)
-
+        binding.ivIcon.drawable.let {
+            if (it is Animatable) it.stop()
+        }
         binding.ivIcon.setImageResource(-1)
     }
 }
