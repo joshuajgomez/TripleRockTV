@@ -50,7 +50,7 @@ class SplashScreenFragment : Fragment() {
         }
         lifecycleScope.launch {
             viewModel.navDirectionState.collectLatest {
-                delay(3000)
+                delay(2500)
                 when (it) {
                     Destination.Login -> SplashScreenFragmentDirections.toLogin()
                     Destination.Loading -> SplashScreenFragmentDirections.toLoading()

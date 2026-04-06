@@ -14,7 +14,9 @@ import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
@@ -37,6 +39,8 @@ import javax.inject.Inject
 class BrowseFragment : BrowseSupportFragment() {
 
     private val viewModel: BrowseViewModel by viewModels()
+
+    private val args by navArgs<BrowseFragmentArgs>()
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
@@ -86,7 +90,12 @@ class BrowseFragment : BrowseSupportFragment() {
 
     private fun setupUI() {
         brandColor = requireContext().getBackgroundColor()
-        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.movie)
+        val icon = when (args.streamType) {
+            StreamType.VideoOnDemand -> R.drawable.movie_avd
+            StreamType.Series -> R.drawable.series_avd
+            StreamType.LiveTV -> R.drawable.livetv_avd
+        }
+        badgeDrawable = ContextCompat.getDrawable(requireContext(), icon)
 
         searchAffordanceColor = requireContext().getBackgroundColor()
     }

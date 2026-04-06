@@ -66,9 +66,9 @@ class HomeFragment : BrowseSupportFragment() {
         rowsAdapter.clear()
 
         val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
-        homeAdapter.add(HomeItem("Video on demand", R.drawable.movie))
-        homeAdapter.add(HomeItem("Series", R.drawable.icon_series))
-        homeAdapter.add(HomeItem("Live TV", R.drawable.icon_livetv))
+        homeAdapter.add(HomeItem("Video on demand", R.drawable.movie_avd))
+        homeAdapter.add(HomeItem("Series", R.drawable.series_avd))
+        homeAdapter.add(HomeItem("Live TV", R.drawable.livetv_avd))
         rowsAdapter.add(ListRow(homeAdapter))
 
         val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
