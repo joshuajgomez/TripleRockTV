@@ -17,9 +17,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/card_fg_color_selector"
         tools:text="@string/subtitle_file_name" />
 
     <LinearLayout

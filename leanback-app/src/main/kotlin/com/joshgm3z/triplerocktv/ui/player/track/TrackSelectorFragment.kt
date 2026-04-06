@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutTrackSelectorBinding
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
@@ -54,8 +55,7 @@ class TrackSelectorFragment : DialogFragment(), TrackListClickListener {
         }
         binding.tvTitle.text = "Select ${args.trackType.name.lowercase()}"
 
-        binding.findMoreButton.visibility =
-            if (args.trackType == TrackType.Subtitle) View.VISIBLE else View.GONE
+        binding.tvFindMoreButton.setVisible(args.trackType == TrackType.Subtitle)
         return binding.root
     }
 
@@ -70,10 +70,11 @@ class TrackSelectorFragment : DialogFragment(), TrackListClickListener {
                 if (!it.isNullOrEmpty()) adapter.trackList = it
             }
         }
-        binding.findMoreButton.setOnClickListener {
-            val action = TrackSelectorFragmentDirections.toSubtitleDownload()
-            action.keyword = args.title
-            findNavController().navigate(action)
+        binding.tvFindMoreButton.setOnClickListener {
+            TrackSelectorFragmentDirections.toSubtitleDownload().apply {
+                keyword = args.title
+                findNavController().navigate(this)
+            }
         }
     }
 
