@@ -3,7 +3,7 @@
     <!-- The background color (e.g., a semi-transparent dark grey or red) -->
     <solid
         android:alpha="0.3"
-        android:color="?attr/colorCardContent" />
+        android:color="?attr/colorSecondary" />
 
     <padding
         android:bottom="2dp"

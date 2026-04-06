@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/container_width"
     android:layout_height="@dimen/container_height"
-    android:background="?attr/cardBackgroundColor"
+    android:background="@color/card_bg_color_selector"
     android:orientation="vertical">
 
     <TextView

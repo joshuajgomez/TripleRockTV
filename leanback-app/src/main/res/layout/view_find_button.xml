@@ -16,15 +16,17 @@
         android:id="@+id/iv_search"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:src="@drawable/ic_search" />
+        android:duplicateParentState="true"
+        android:src="@drawable/ic_search"
+        android:tint="@color/card_fg_color_selector" />
 
     <TextView
         android:id="@+id/tv_find"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
+        android:duplicateParentState="true"
         android:text="@string/find_more_online"
-        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/card_fg_color_selector" />
 
 </LinearLayout>

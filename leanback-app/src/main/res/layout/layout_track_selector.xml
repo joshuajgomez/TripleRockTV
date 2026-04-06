@@ -26,11 +26,22 @@
         tools:itemCount="5"
         tools:listitem="@layout/item_track_info" />
 
-    <com.joshgm3z.triplerocktv.ui.player.track.FindButtonView
-        android:id="@+id/find_more_button"
+    <TextView
+        android:id="@+id/tv_find_more_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
+        android:background="@color/card_bg_color_selector"
+        android:clickable="true"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="5dp"
+        android:drawableTint="@color/card_fg_color_selector"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="2dp"
+        android:text="Find more"
+        android:textColor="@color/card_fg_color_selector"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
