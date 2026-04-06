@@ -30,8 +30,10 @@
                 android:duration="400"
                 android:interpolator="@android:anim/accelerate_decelerate_interpolator"
                 android:propertyName="rotation"
-                android:valueFrom="0"
-                android:valueTo="-15"
+                android:repeatCount="1"
+                android:repeatMode="reverse"
+                android:valueFrom="-15"
+                android:valueTo="0"
                 android:valueType="floatType" />
         </aapt:attr>
     </target>
