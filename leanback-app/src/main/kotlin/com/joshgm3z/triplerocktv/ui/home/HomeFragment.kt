@@ -38,7 +38,7 @@ class HomeFragment : BrowseSupportFragment() {
         adapter = rowsAdapter
         onItemViewClickedListener = itemViewClickedListener
 
-        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout)
+        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector)
     }
 
     private val itemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->

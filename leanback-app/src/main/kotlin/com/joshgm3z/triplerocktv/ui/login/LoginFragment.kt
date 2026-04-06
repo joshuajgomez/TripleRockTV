@@ -93,7 +93,7 @@ class LoginFragment : GuidedStepSupportFragment() {
             "Sign in", // Title
             "Sign in using your IPTV credentials", // Description
             "", // Breadcrumb
-            ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout) // Icon
+            ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector) // Icon
         )
     }
 
