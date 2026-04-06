@@ -86,7 +86,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
     private fun setupUI() {
         brandColor = requireContext().getBackgroundColor()
-        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_3rocktv_cutout)
+        badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.movie)
 
         searchAffordanceColor = requireContext().getBackgroundColor()
     }
