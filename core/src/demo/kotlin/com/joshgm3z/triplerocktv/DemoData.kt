@@ -19,7 +19,7 @@ class DemoData {
 
         val sampleVodStreams = listOf(
             StreamData(
-                streamId = 10001,
+                streamId = 652973,
                 num = 1,
                 name = "Inception (2010)",
                 streamTypeText = "movie",
