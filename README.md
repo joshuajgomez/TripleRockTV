@@ -1,4 +1,4 @@
-# 3RockTV
+<img src="extras/shapeshifter/logo.svg" width="200" height="200" align="center">
 
 A modern Android TV media streaming application.
 
