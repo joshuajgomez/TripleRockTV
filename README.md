@@ -1,6 +1,6 @@
 <img src="extras/shapeshifter/logo.svg" width="200" height="200" align="center">
 
-A modern Android TV media streaming application.
+A modern Android TV app for IPTV service.
 
 ### 🛠 Architecture & Tech Stack
 *   **📺 UI Framework:** Currently utilizes the **Leanback UI Toolkit** (Legacy). 
