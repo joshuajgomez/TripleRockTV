@@ -1,9 +1,12 @@
 package com.joshgm3z.triplerocktv.ui.player
 
+import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.view.KeyEvent
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.OptIn
+import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
@@ -30,25 +33,31 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import androidx.core.net.toUri
+import androidx.fragment.app.Fragment
 import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
+import com.joshgm3z.triplerocktv.databinding.FragmentPlayerBinding
 import com.joshgm3z.triplerocktv.util.setBackground
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlin.math.abs
 
-const val FAST_FORWARD_DURATION = 10000
+const val FAST_FORWARD_DURATION_SHORT = 10000
 
 /**
  * A fragment for playing video content.
  */
 @UnstableApi
 @AndroidEntryPoint
-class PlaybackFragment : VideoSupportFragment() {
+class PlaybackFragment : Fragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
 
@@ -73,11 +82,26 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    @OptIn(UnstableApi::class)
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val glueHost = VideoSupportFragmentGlueHost(this@PlaybackFragment)
+    private lateinit var binding: FragmentPlayerBinding
 
+    private var viewVisibilityUpdateJob: Job? = null
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentPlayerBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        view.keepScreenOn = true
+        initUi()
+    }
+
+    private fun initUi() {
         player.addListener(errorListener(this))
         player.addListener(playbackListener)
         player.addListener(trackViewModel.subtitleTrackListener)
@@ -87,7 +111,10 @@ class PlaybackFragment : VideoSupportFragment() {
             transportControlGlue = createControlGlue(this)
         }
 
-        transportControlGlue.host = glueHost
+        val videoSupportFragment =
+            childFragmentManager.findFragmentById(R.id.video_support_fragment) as? VideoSupportFragment
+
+        transportControlGlue.host = VideoSupportFragmentGlueHost(videoSupportFragment)
 
         requireActivity().setBackground(null)
 
@@ -114,7 +141,6 @@ class PlaybackFragment : VideoSupportFragment() {
                 }
             }
         }
-
         lifecycleScope.launch {
             trackViewModel.subtitleTrackToLoad.collectLatest { it ->
                 Logger.debug("subtitleTrackToLoad $it")
@@ -152,11 +178,21 @@ class PlaybackFragment : VideoSupportFragment() {
                 }
             }
         }
-
         lifecycleScope.launch {
             trackViewModel.trackButtonState.collectLatest {
                 Logger.debug("trackButtonState $it")
             }
+        }
+        lifecycleScope.launch {
+            PeriodicReminderUtility().getPeriodicReminder {
+                if (player.isPlaying)
+                    viewModel.updateLastPlayedPosition(player.currentPosition)
+            }
+        }
+        subtitleView.let { sv ->
+            val parent = view as? ViewGroup ?: return
+            // Add to view hierarchy
+            parent.addView(sv)
         }
     }
 
@@ -266,18 +302,9 @@ class PlaybackFragment : VideoSupportFragment() {
                         findNavController().navigate(action)
                     }
 
-                    rewindAction -> {
-                        val newPos =
-                            (player.currentPosition - FAST_FORWARD_DURATION).coerceAtLeast(0)
-                        player.seekTo(newPos)
-                    }
+                    rewindAction -> skipBackward()
 
-                    // 5. Handle Fast Forward (seek forward 10 seconds)
-                    fastForwardAction -> {
-                        val newPos =
-                            (player.currentPosition + FAST_FORWARD_DURATION).coerceAtMost(player.duration)
-                        player.seekTo(newPos)
-                    }
+                    fastForwardAction -> skipForward()
 
                     else -> {
                         super.onActionClicked(action)
@@ -290,8 +317,16 @@ class PlaybackFragment : VideoSupportFragment() {
     private fun playVideo(uiState: PlaybackUiState) {
         Logger.info("uiState=[$uiState]")
         when (uiState.playbackItem) {
-            is Episode -> playVideoFromSerisStream(uiState.playbackItem as Episode, uiState.videoUrl)
-            is StreamData -> playVideoFromStreamData(uiState.playbackItem as StreamData, uiState.videoUrl)
+            is Episode -> playVideoFromSerisStream(
+                uiState.playbackItem as Episode,
+                uiState.videoUrl
+            )
+
+            is StreamData -> playVideoFromStreamData(
+                uiState.playbackItem as StreamData,
+                uiState.videoUrl
+            )
+
             else -> throw Exception("Unknown playback item type: ${uiState.playbackItem::class.java}")
         }
     }
@@ -345,26 +380,54 @@ class PlaybackFragment : VideoSupportFragment() {
         }
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        view.keepScreenOn = true
-        subtitleView.let { sv ->
-            val parent = view as? ViewGroup ?: return
-
-            // Add to view hierarchy
-            parent.addView(sv)
-        }
-        lifecycleScope.launch {
-            PeriodicReminderUtility().getPeriodicReminder {
-                if (player.isPlaying)
-                    viewModel.updateLastPlayedPosition(player.currentPosition)
-            }
-        }
-    }
 
     val playbackListener = object : Player.Listener {
         override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
+        }
+
+        override fun onPositionDiscontinuity(
+            oldPosition: Player.PositionInfo,
+            newPosition: Player.PositionInfo,
+            reason: Int
+        ) {
+            if (reason == Player.DISCONTINUITY_REASON_SEEK) {
+                val skippedDuration = newPosition.positionMs - oldPosition.positionMs
+                Logger.debug("skippedDuration = [$skippedDuration]")
+                val durationSec = abs(skippedDuration) / 1000
+                // round off to nearest 10
+                val roundedSec = ((durationSec + 5) / 10) * 10
+                if (skippedDuration > 0) {
+                    binding.tvSkipForward.setVisibleForDuration("+${roundedSec}s")
+                } else {
+                    binding.tvSkipBack.setVisibleForDuration("-${roundedSec}s")
+                }
+            }
+            super.onPositionDiscontinuity(oldPosition, newPosition, reason)
+        }
+    }
+
+    private fun skipBackward() {
+        val newPos = (player.currentPosition - FAST_FORWARD_DURATION_SHORT).coerceAtLeast(0)
+        player.seekTo(newPos)
+    }
+
+    private fun skipForward() {
+        val newPos = (player.currentPosition + FAST_FORWARD_DURATION_SHORT).coerceAtLeast(0)
+        player.seekTo(newPos)
+    }
+
+    private fun View.setVisibleForDuration(
+        text: String,
+        duration: Long = 800L
+    ) {
+        val view = this as TextView
+        view.setVisible(true)
+        view.text = text
+        viewVisibilityUpdateJob?.cancel()
+        viewVisibilityUpdateJob = lifecycleScope.launch {
+            delay(duration)
+            view.setVisible(false)
         }
     }
 
