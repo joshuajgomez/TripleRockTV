@@ -1,21 +1,36 @@
-# 📺 3RockTV
-**Android TV app built with the Leanback library**
+# 3RockTV
 
-### 🎨 Flavors
-*   🌐 **online:** Actual app. Uses internet and local Room database.
-*   🧪 **demo:** Mocked calls to internet and local Room database.
-*   🛠️ **dev:** Same as online except different package name (`.dev` suffix).
+A modern Android TV media streaming application.
 
-### 🏗️ Modules
-*   📦 **core:** Contains `ViewModels` (e.g., `BrowseViewModel`), `Repositories`, and Room logic.
-*   📺 **leanback-app:** Contains Activity, Fragments, and Presenters for the Leanback library.
-*   🚀 **compose-app (Planned):** Modern UI implementation using Jetpack Compose for TV.
-
-### 📥 Releases
-Check the **Releases** panel on the right to see the latest APK.
+### 🛠 Architecture & Tech Stack
+*   **📺 UI Framework:** Currently utilizes the **Leanback UI Toolkit** (Legacy). 
+*   **🚀 Modernization:** Integration of **Jetpack Compose for TV** is in progress/planned to replace deprecated Leanback components.
+*   **💉 DI:** Hilt (Dagger)
+*   **📦 Local Storage:** Room Database
+*   **🌐 Networking:** Retrofit + GSON
 
 ---
-*Built with:*
-![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=flat&logo=kotlin&logoColor=white) 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=flat&logo=android&logoColor=white) 
-![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=flat&logo=sqlite&logoColor=white)
+
+### 🎨 Flavors
+*   ✅ **online:** Production version. Uses real network calls and local Room database.
+*   🧪 **demo:** Mocked version. Uses static local data for UI/UX testing without network requirements.
+*   🛠️ **dev:** Development version. Same as `online` but uses a separate package name (`.dev`) to allow side-by-side installation.
+
+---
+
+### 🏗️ Modules
+*   📦 **core:** Framework-agnostic logic. Contains ViewModels, Repositories, and Data sources (Room/Retrofit).
+*   📺 **leanback-app:** The legacy UI module containing Activities, Fragments, and Presenters based on `androidx.leanback`.
+*   🎨 **compose-app (Planned):** The modern UI module leveraging **Compose for TV** for a more flexible and declarative UI.
+
+---
+
+### 📥 Releases
+Check the **Releases** panel on the right for the latest APKs and changelogs.
+
+---
+
+### 💻 Tech Summary
+![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
+![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
+![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
