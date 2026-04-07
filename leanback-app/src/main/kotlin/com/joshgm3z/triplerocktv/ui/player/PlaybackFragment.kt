@@ -45,9 +45,11 @@ import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
 import com.joshgm3z.triplerocktv.databinding.FragmentPlayerBinding
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setBackground
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 import kotlin.math.abs
 
 const val FAST_FORWARD_DURATION_SHORT = 10000
@@ -85,6 +87,9 @@ class PlaybackFragment : Fragment() {
     private lateinit var binding: FragmentPlayerBinding
 
     private var viewVisibilityUpdateJob: Job? = null
+
+    @Inject
+    lateinit var glideUtil: GlideUtil
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -335,6 +340,7 @@ class PlaybackFragment : Fragment() {
         streamData: StreamData,
         videoUrl: String
     ) {
+        showInformation(streamData)
         var mediaItem = MediaItem.Builder()
             .setUri(videoUrl)
             .build()
@@ -362,6 +368,23 @@ class PlaybackFragment : Fragment() {
         player.prepare()
         if (args.resume && streamData.startedWatching) {
             player.seekTo(streamData.playedDuration)
+        }
+    }
+
+    private fun showInformation(streamData: StreamData) {
+        streamData.streamIcon?.let {
+            glideUtil.loadImage(it, binding.ivPoster)
+            binding.ivPoster.setVisible(true)
+        }
+        fun TextView.updateText(text: String?) {
+            if (text.isNullOrEmpty()) return
+            this.text = text
+            this.setVisible(true)
+        }
+        streamData.movieMetadata?.let {
+            binding.tvDescription.updateText(it.description)
+            binding.tvCast.updateText("Cast: ${it.cast}")
+            binding.tvDirector.updateText("Director: ${it.director}")
         }
     }
 
