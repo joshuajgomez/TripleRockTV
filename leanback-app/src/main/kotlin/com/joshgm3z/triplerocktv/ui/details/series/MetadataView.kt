@@ -6,6 +6,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
 
 class MetadataView @JvmOverloads constructor(
     context: Context,
@@ -91,7 +92,7 @@ class MetadataView @JvmOverloads constructor(
         tv.text = text
         tv.textSize = 12f
         tv.alpha = 0.8f
-        tv.setTextColor(resources.getColor(R.color.color_card_content2, context.theme))
+        tv.setTextColor(resources.getColor(R.color.color_card_content, context.theme))
         icon?.let { tv.setDrawable(it) }
         addView(tv)
     }
@@ -106,6 +107,7 @@ class MetadataView @JvmOverloads constructor(
     private fun addDot() {
         TextView(context).let {
             it.text = context.getString(R.string.dot)
+            it.setTextColor(context.getColorFromAttr(R.attr.colorPrimary))
             addView(it)
         }
     }
