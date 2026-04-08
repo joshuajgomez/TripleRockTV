@@ -47,11 +47,8 @@ jobs:
       - name: Run Unit Tests (:core)
         run: ./gradlew core:testOnlineDebugUnitTest
 
-      - name: Build Online Release APK (:leanback-app)
-        run: ./gradlew leanback-app:assembleOnlineRelease
-
       - name: Generate Tag Name
-        run: | 
+        run: |
           echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')" >> $GITHUB_ENV
           echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" == "pull_request" ]; then
@@ -61,6 +58,9 @@ jobs:
           else
             echo "TRIGGER_SOURCE=manual trigger" >> $GITHUB_ENV
           fi
+
+      - name: Build Online Release APK (:leanback-app)
+        run: ./gradlew leanback-app:assembleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG }}
 
       - name: Prepare APK for Release
         run: |

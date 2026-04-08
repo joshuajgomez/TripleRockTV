@@ -17,8 +17,8 @@ android {
         minSdk = 34
         targetSdk = 34
         versionCode = 1
-        versionName = "1.0"
-
+        val versionOverride = project.findProperty("versionNameOverride") as? String
+        versionName = versionOverride ?: "1.0-default"
     }
 
     signingConfigs {

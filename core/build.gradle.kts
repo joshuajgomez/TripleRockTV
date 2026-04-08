@@ -16,6 +16,10 @@ android {
         targetSdk = 36
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val versionOverride = project.findProperty("versionNameOverride") as? String
+        // Add a custom field to the core module's BuildConfig
+        buildConfigField("String", "VERSION_NAME", "\"${versionOverride ?: "1.0-core-default"}\"")
     }
 
     buildTypes {
@@ -56,10 +60,10 @@ android {
         }
         create("online") {
             dimension = "environment"
-            isDefault = true
         }
         create("dev") {
             dimension = "environment"
+            isDefault = true
         }
     }
 
@@ -91,6 +95,9 @@ dependencies {
 
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
+
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.firestore)
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)

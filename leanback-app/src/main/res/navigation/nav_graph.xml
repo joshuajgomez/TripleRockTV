@@ -25,6 +25,21 @@
             app:destination="@id/mediaLoadingFragment"
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toAccessDisabled"
+            app:destination="@id/accessDisabledFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toAppUpdateInfo"
+            app:destination="@id/appUpdateInfoFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/toError"
+            app:destination="@id/errorFragment"
+            app:popUpTo="@id/splashScreenFragment"
+            app:popUpToInclusive="true" />
     </fragment>
 
 
@@ -238,6 +253,24 @@
         android:id="@+id/errorFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.ErrorFragment"
         android:label="ErrorFragment">
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/accessDisabledFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.error.AccessDisabledFragment"
+        android:label="AccessDisabledFragment">
+        <argument
+            android:name="message"
+            app:argType="string" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/appUpdateInfoFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.error.AppUpdateInfoFragment"
+        android:label="AppUpdateInfoFragment">
         <argument
             android:name="message"
             app:argType="string" />
