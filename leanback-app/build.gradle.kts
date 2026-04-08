@@ -56,15 +56,17 @@ android {
     productFlavors {
         create("demo") {
             dimension = "environment"
-        }
-        create("online") {
-            dimension = "environment"
-            isDefault = true
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "3TV-demo")
         }
         create("dev") {
             dimension = "environment"
             applicationIdSuffix = ".dev"
             resValue("string", "app_name", "3TV-dev")
+            isDefault = true
+        }
+        create("online") {
+            dimension = "environment"
         }
     }
 
