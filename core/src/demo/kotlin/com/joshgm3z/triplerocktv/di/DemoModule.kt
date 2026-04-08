@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.di
 
+import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.impl.DemoLoginRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoMediaLocalRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoMediaOnlineRepositoryImpl
@@ -10,6 +11,7 @@ import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
+import com.joshgm3z.triplerocktv.impl.DemoAccessControlRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -42,4 +44,9 @@ abstract class DemoBindingModule {
     abstract fun bindSearchRepository(
         repo: DemoSearchRepositoryImpl
     ): SearchRepository
+
+    @Binds
+    abstract fun bindAccessControlRepository(
+        repo: DemoAccessControlRepositoryImpl
+    ): AccessControlRepository
 }

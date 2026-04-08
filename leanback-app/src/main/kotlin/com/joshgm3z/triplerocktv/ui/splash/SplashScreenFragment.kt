@@ -11,7 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.databinding.FragmentSplashScreenBinding
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
-import com.joshgm3z.triplerocktv.core.viewmodel.Destination
+import com.joshgm3z.triplerocktv.core.viewmodel.DestinationState
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -52,9 +52,13 @@ class SplashScreenFragment : Fragment() {
             viewModel.navDirectionState.collectLatest {
                 delay(2500)
                 when (it) {
-                    Destination.Login -> SplashScreenFragmentDirections.toLogin()
-                    Destination.Loading -> SplashScreenFragmentDirections.toLoading()
-                    else -> SplashScreenFragmentDirections.toHome()
+                    DestinationState.Login -> SplashScreenFragmentDirections.toLogin()
+                    DestinationState.Loading -> SplashScreenFragmentDirections.toLoading()
+                    is DestinationState.AccessDisabled -> SplashScreenFragmentDirections.toAccessDisabled(it.message)
+                    is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections.toAppUpdateInfo(it.message)
+                    is DestinationState.Error -> SplashScreenFragmentDirections.toError(it.message)
+                    DestinationState.Home -> SplashScreenFragmentDirections.toHome()
+                    else -> return@collectLatest
                 }.let { destination ->
                     findNavController().navigate(destination)
                 }
