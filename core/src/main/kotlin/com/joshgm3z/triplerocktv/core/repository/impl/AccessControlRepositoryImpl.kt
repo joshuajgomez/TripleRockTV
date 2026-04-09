@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.util.Logger
+import java.lang.NumberFormatException
 import javax.inject.Inject
 
 class AccessControlRepositoryImpl
@@ -46,26 +47,41 @@ class AccessControlRepositoryImpl
     }
 
     override suspend fun appUpdateState(): AccessState {
-        val currentAppVersion = BuildConfig.VERSION_NAME
-        Logger.debug("currentAppVersion = [$currentAppVersion]")
         val map = firestoreHelper.getDataMap(
             "access_control",
-            "force_app_version"
+            "forced_min_app_version"
         )
 
         if (map == null) return AccessState(enabled = true, reason = "No restrictions found")
 
         if (map.containsKey("version") && (map["version"] as String).isNotEmpty()) {
-            val version = map["version"] as String
-            if (currentAppVersion != version) {
+            val currentAppVersion = BuildConfig.VERSION_NAME
+            Logger.debug("currentAppVersion = [$currentAppVersion]")
+
+            val forcedMinAppversion = map["version"] as String
+            if (currentAppVersion.isOlderThan(forcedMinAppversion)) {
                 return AccessState(
                     enabled = false,
-                    reason = "Update to $version to continue using the app. " +
+                    reason = "Update to $forcedMinAppversion to continue using the app. " +
                             "You are currently on $currentAppVersion"
                 )
             }
         }
 
-        return AccessState(enabled = true, reason = "No forced versions found")
+        return AccessState(enabled = true, reason = "No need to force min version")
+    }
+
+}
+
+fun String.isOlderThan(version: String): Boolean {
+    fun String.toNumber(): Int = replace("v", "")
+        .replace(".", "")
+        .toInt()
+
+    return try {
+        this.toNumber() < version.toNumber()
+    } catch (e: NumberFormatException) {
+        Logger.error(e.message.toString())
+        false
     }
 }
