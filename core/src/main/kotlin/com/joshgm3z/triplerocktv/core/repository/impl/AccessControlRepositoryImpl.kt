@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
+import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
@@ -20,7 +21,6 @@ class AccessControlRepositoryImpl
         )
 
         if (map == null) return AccessState(enabled = true, reason = "No restrictions found")
-
 
         if (map.containsKey("global_access_enabled") && !(map["global_access_enabled"] as Boolean)) {
             val reason = if (!map.containsKey("global_access_reason")) "Reason unknown"
@@ -46,6 +46,26 @@ class AccessControlRepositoryImpl
     }
 
     override suspend fun appUpdateState(): AccessState {
-        return AccessState(enabled = true, reason = "Update to v202")
+        val currentAppVersion = BuildConfig.VERSION_NAME
+        Logger.debug("currentAppVersion = [$currentAppVersion]")
+        val map = firestoreHelper.getDataMap(
+            "access_control",
+            "force_app_version"
+        )
+
+        if (map == null) return AccessState(enabled = true, reason = "No restrictions found")
+
+        if (map.containsKey("version") && (map["version"] as String).isNotEmpty()) {
+            val version = map["version"] as String
+            if (currentAppVersion != version) {
+                return AccessState(
+                    enabled = false,
+                    reason = "Update to $version to continue using the app. " +
+                            "You are currently on $currentAppVersion"
+                )
+            }
+        }
+
+        return AccessState(enabled = true, reason = "No forced versions found")
     }
 }
