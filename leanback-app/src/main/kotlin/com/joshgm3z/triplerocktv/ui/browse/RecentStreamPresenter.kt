@@ -3,13 +3,13 @@ package com.joshgm3z.triplerocktv.ui.browse
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.ProgressBar
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewRecentStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -48,7 +48,7 @@ class RecentStreamPresenter
             streamTitle.text = title
             glideUtil.loadImage(imageUri, posterImage)
             progressBar.progress = progress
-            progressBar.visibility = if (progress > 0) ProgressBar.VISIBLE else ProgressBar.GONE
+            progressBar.setVisible(progress > 0)
         }
     }
 

@@ -20,7 +20,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.core.util.setVisible
+import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.StreamViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest

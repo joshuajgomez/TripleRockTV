@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutTrackSelectorBinding
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.setVisible
+import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
