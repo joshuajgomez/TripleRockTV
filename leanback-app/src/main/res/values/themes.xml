@@ -1,6 +1,7 @@
 <resources>
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
+        <item name="playbackProgressPrimaryColor">@color/color_primary</item>
         <item name="colorBackground">@color/color_background</item>
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorSecondary">@color/color_secondary</item>
