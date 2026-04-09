@@ -28,17 +28,18 @@ class AccessControlRepositoryImpl
             return AccessState(enabled = false, reason = reason)
         }
 
-        if (map.containsKey("banned_users")) {
-            val bannedUsersMap = map["banned_users"] as Map<*, *>
-            if (bannedUsersMap.containsKey(username)) {
-                var message = "User $username is banned"
-                val reason = bannedUsersMap[username] as String
-                if (reason.isNotEmpty()) message = "$message. Reason: $reason"
-                return AccessState(
-                    enabled = false,
-                    reason = message
-                )
-            }
+        val bannedUsers = firestoreHelper.getDataMap(
+            "access_control",
+            "banned_users"
+        )
+        if (bannedUsers != null && bannedUsers.containsKey(username)) {
+            var message = "User $username is banned"
+            val reason = bannedUsers[username] as String
+            if (reason.isNotEmpty()) message = "$message. Reason: $reason"
+            return AccessState(
+                enabled = false,
+                reason = message
+            )
         }
 
         return AccessState(enabled = true, reason = "No restrictions found")
