@@ -15,7 +15,6 @@ import com.joshgm3z.triplerocktv.core.viewmodel.DestinationState
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 

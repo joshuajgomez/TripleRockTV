@@ -3,13 +3,11 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
-import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -38,7 +36,6 @@ constructor(
     init {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            delay(500)
             val userInfo = localDatastore.getUserInfo()
             var accessState = accessControlRepository.getAccessState(userInfo?.username)
             var appUpdateState = accessControlRepository.appUpdateState()
