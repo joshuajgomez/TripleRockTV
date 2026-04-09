@@ -81,7 +81,6 @@ class BrowseFragment : BrowseSupportFragment() {
                     is BrowseUiState.VideoOnDemandState -> showStreamDataState(it)
                     is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
                     is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
-                    else -> throw Exception("Invalid state")
                 }
             }
         }
