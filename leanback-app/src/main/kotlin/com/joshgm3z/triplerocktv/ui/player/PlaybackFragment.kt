@@ -397,10 +397,10 @@ class PlaybackFragment : Fragment() {
                 val durationSec = abs(skippedDuration) / 1000
                 // round off to nearest 10
                 val roundedSec = ((durationSec + 5) / 10) * 10
-                if (skippedDuration > 0) {
-                    binding.tvSkipForward.setVisibleForDuration("+${roundedSec}s")
-                } else {
-                    binding.tvSkipBack.setVisibleForDuration("-${roundedSec}s")
+                when {
+                    roundedSec !in 10..80 -> {}
+                    skippedDuration > 0 -> binding.tvSkipForward.setVisibleForDuration("+ ${roundedSec}s")
+                    else -> binding.tvSkipBack.setVisibleForDuration("- ${roundedSec}s")
                 }
             }
             super.onPositionDiscontinuity(oldPosition, newPosition, reason)
