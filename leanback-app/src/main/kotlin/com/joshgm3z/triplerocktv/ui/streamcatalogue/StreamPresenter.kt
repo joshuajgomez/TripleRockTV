@@ -1,7 +1,6 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -13,6 +12,7 @@ import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -54,7 +54,7 @@ class StreamPresenter
         rating?.let {
             ratingTv.text = it.toString()
         }
-        ratingContainer.visibility = if (rating != null && rating > 0) View.VISIBLE else View.GONE
+        ratingContainer.setVisible(rating != null && rating > 0)
 
         titleView.text = title
         glideUtil.loadImage(imageUri, imageView)

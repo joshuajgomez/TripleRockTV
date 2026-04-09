@@ -13,7 +13,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
-import com.joshgm3z.triplerocktv.core.util.orIfDebug
+import com.joshgm3z.triplerocktv.util.orIfDebug
 import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay

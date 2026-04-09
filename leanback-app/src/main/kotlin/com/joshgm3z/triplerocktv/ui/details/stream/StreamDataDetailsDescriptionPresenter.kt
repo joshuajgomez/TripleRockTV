@@ -3,11 +3,10 @@ package com.joshgm3z.triplerocktv.ui.details.stream
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewDetailsDescriptionBinding
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
-import com.joshgm3z.triplerocktv.core.util.visibleIf
+import com.joshgm3z.triplerocktv.util.setVisible
 
 class StreamDataDetailsDescriptionPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
@@ -31,7 +30,7 @@ class StreamDataDetailsDescriptionPresenter : Presenter() {
 
             progressBar.progress = it.progressPercent()
             tvTimeRemaining.text = it.timeRemainingText()
-            llProgressbarContainer.visibility = visibleIf((it.startedWatching))
+            llProgressbarContainer.setVisible(it.startedWatching)
 
             metadataView.rating = it.rating
             metadataView.showMyList = it.inMyList
@@ -40,7 +39,7 @@ class StreamDataDetailsDescriptionPresenter : Presenter() {
             metadataView.genre = it.movieMetadata?.genre
 
             tvDescription.text = it.movieMetadata?.description
-            tvDescription.visibility = visibleIf(!it.movieMetadata?.description.isNullOrEmpty())
+            tvDescription.setVisible(!it.movieMetadata?.description.isNullOrEmpty())
         }
     }
 

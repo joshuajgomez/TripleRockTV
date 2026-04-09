@@ -3,8 +3,6 @@ package com.joshgm3z.triplerocktv.ui.player.track
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.GONE
-import android.view.View.VISIBLE
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
@@ -17,6 +15,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutSubtitleDownloaderBinding
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.SubtitleDownloaderViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,7 +69,7 @@ class SubtitleDownloaderFragment : DialogFragment(), DownloadedSubtitleListClick
                 Logger.debug("subtitleUiState = $it")
                 adapter.subtitleList = it ?: emptyList()
                 it?.let { subtitleList ->
-                    binding.tvError.visibility = if (subtitleList.isEmpty()) VISIBLE else GONE
+                    binding.tvError.setVisible(subtitleList.isEmpty())
                 }
                 binding.tvTitle.text = when {
                     it == null -> "Searching subtitles"
