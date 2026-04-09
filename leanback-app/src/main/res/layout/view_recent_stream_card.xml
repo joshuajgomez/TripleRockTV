@@ -46,7 +46,6 @@
             android:layout_height="wrap_content"
             android:maxLines="3"
             android:paddingHorizontal="8dp"
-            android:paddingBottom="7dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/white"
             tools:text="Some movie (2025)" />
@@ -58,7 +57,8 @@
             android:layout_width="match_parent"
             android:layout_height="10dp"
             android:layout_gravity="bottom"
-            android:paddingHorizontal="3dp"
+            android:layout_marginHorizontal="8dp"
+            android:layout_marginVertical="5dp"
             android:progressTint="?attr/colorPrimary"
             android:visibility="gone"
             tools:progress="30"
