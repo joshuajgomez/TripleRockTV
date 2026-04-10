@@ -101,7 +101,8 @@ class MediaOnlineRepositoryImpl
         onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
     }
 
-    override suspend fun getMovieMetadata(streamId: Int): MovieMetadata {
+    override suspend fun getMovieMetadata(streamId: Int): MovieMetadata? {
+        Logger.debug("streamId = [${streamId}]")
         if (iptvService == null) {
             fetchIptvService()
         }

@@ -29,7 +29,7 @@ interface MediaOnlineRepository {
 
     suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType)
 
-    suspend fun getMovieMetadata(streamId: Int): MovieMetadata
+    suspend fun getMovieMetadata(streamId: Int): MovieMetadata?
 
     suspend fun getSeriesDataAndUpdate(streamId: Int)
 }
