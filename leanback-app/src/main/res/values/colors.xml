@@ -10,4 +10,5 @@
     <color name="color_icon_bg">#616161</color>
     <color name="color_icon_main">#3A3A3A</color>
     <color name="color_icon_accent">@color/color_primary</color>
+    <color name="dark_transparent_color">#80000000</color>
 </resources>

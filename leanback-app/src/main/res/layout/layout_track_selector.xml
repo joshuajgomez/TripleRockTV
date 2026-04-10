@@ -26,6 +26,16 @@
         tools:itemCount="5"
         tools:listitem="@layout/item_track_info" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_online_subtitle_list"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:visibility="visible"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:itemCount="5"
+        tools:listitem="@layout/item_downloaded_subtitle" />
+
     <TextView
         android:id="@+id/tv_find_more_button"
         android:layout_width="wrap_content"
@@ -46,4 +56,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
+    <LinearLayout
+        android:id="@+id/ll_loading_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_transparent_color"
+        android:visibility="visible">
+
+        <ProgressBar
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            android:layout_gravity="bottom"
+            android:indeterminate="true"
+            android:indeterminateTint="?attr/colorPrimary" />
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

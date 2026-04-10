@@ -287,16 +287,16 @@ class PlaybackFragment : Fragment() {
                 when (action) {
                     ccAction -> {
                         videoTitle?.let { title ->
+                            trackViewModel.onOpenTrackSelectorClicked(TrackType.Subtitle)
                             val action = PlaybackFragmentDirections.toTrackSelector()
                             action.title = title
-                            action.trackType = TrackType.Subtitle
                             findNavController().navigate(action)
                         }
                     }
 
                     audioAction -> {
+                        trackViewModel.onOpenTrackSelectorClicked(TrackType.Audio)
                         val action = PlaybackFragmentDirections.toTrackSelector()
-                        action.trackType = TrackType.Audio
                         findNavController().navigate(action)
                     }
 
