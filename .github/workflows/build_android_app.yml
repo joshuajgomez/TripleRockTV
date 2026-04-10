@@ -50,6 +50,7 @@ jobs:
       - name: Generate Tag Name
         run: |
           echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')" >> $GITHUB_ENV
+          echo "RELEASE_CODE=$(TZ='Europe/Stockholm' date +'%Y%m%d')" >> $GITHUB_ENV
           echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
@@ -60,7 +61,7 @@ jobs:
           fi
 
       - name: Build Online Release APK (:leanback-app)
-        run: ./gradlew leanback-app:assembleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG }}
+        run: ./gradlew leanback-app:assembleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
       - name: Prepare APK for Release
         run: |
