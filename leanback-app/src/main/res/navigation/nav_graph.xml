@@ -284,13 +284,6 @@
             android:name="title"
             android:defaultValue="Wonder Woman 1984"
             app:argType="string" />
-        <argument
-            android:name="trackType"
-            android:defaultValue="Subtitle"
-            app:argType="com.joshgm3z.triplerocktv.core.viewmodel.TrackType" />
-        <action
-            android:id="@+id/toSubtitleDownload"
-            app:destination="@id/subtitleDownloaderFragment" />
     </dialog>
 
     <dialog

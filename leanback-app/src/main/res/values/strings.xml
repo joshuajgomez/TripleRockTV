@@ -8,4 +8,5 @@
     <string name="my_list">My list</string>
     <string name="season_episode">S%1$d: E%2$d</string>
     <string name="find_more_online">Find more online</string>
+    <string name="open_subtitles">Subtitles from <font color="#FB8C00">OpenSubtitles.com</font></string>
 </resources>

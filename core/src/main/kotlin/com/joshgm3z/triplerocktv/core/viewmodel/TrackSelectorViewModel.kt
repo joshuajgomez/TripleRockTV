@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.annotation.OptIn
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.media3.common.C
 import androidx.media3.common.C.FORMAT_HANDLED
 import androidx.media3.common.Format
@@ -10,11 +11,15 @@ import androidx.media3.common.Player
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import com.joshgm3z.triplerocktv.core.BuildConfig
+import com.joshgm3z.triplerocktv.core.repository.SubtitleData
+import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class TrackInfo(
@@ -38,16 +43,30 @@ data class TrackButtonState(
     val enableAudioButton: Boolean = false,
 )
 
+sealed class ListState {
+    class SubtitleTracks(val list: List<TrackInfo>) : ListState()
+    class AudioTracks(val list: List<TrackInfo>) : ListState()
+    class OnlineSubtitleTracks(val list: List<SubtitleData>) : ListState()
+}
+
+data class TrackSelectorUiState(
+    val isLoading: Boolean = false,
+    val listState: ListState? = null,
+)
+
 @HiltViewModel
 class TrackSelectorViewModel
 @Inject
-constructor() : ViewModel() {
+constructor(
+    private val subtitleRepository: SubtitleRepository
+) : ViewModel() {
 
-    private val _subtitleTrackListState = MutableStateFlow<List<TrackInfo>?>(null)
-    val subtitleTrackListState = _subtitleTrackListState.asStateFlow()
+    private val _uiState = MutableStateFlow<TrackSelectorUiState?>(TrackSelectorUiState())
+    val uiState = _uiState.asStateFlow()
 
-    private val _audioTrackListState = MutableStateFlow<List<TrackInfo>?>(null)
-    val audioTrackListState = _audioTrackListState.asStateFlow()
+    private lateinit var subtitleTracks: List<TrackInfo>
+
+    private lateinit var audioTracks: List<TrackInfo>
 
     var subtitleTrackToLoad = MutableStateFlow<Any?>(null)
 
@@ -58,8 +77,8 @@ constructor() : ViewModel() {
 
     init {
         if (BuildConfig.FLAVOR == "demo") {
-            _subtitleTrackListState.value = getDemoTracks(TrackType.Subtitle)
-            _audioTrackListState.value = getDemoTracks(TrackType.Audio)
+            subtitleTracks = getDemoTracks(TrackType.Subtitle)
+            audioTracks = getDemoTracks(TrackType.Audio)
         }
     }
 
@@ -81,11 +100,58 @@ constructor() : ViewModel() {
         return list
     }
 
+    fun loadTracksOfType(trackType: TrackType) {
+        _uiState.update {
+            TrackSelectorUiState(
+                listState = when (trackType) {
+                    TrackType.Subtitle -> ListState.SubtitleTracks(subtitleTracks)
+                    else -> ListState.AudioTracks(audioTracks)
+                }
+            )
+        }
+    }
+
+    fun onFindMoreClicked(title: String) {
+        _uiState.update { it?.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            val subtitles = subtitleRepository.findSubtitles(title)
+            _uiState.update {
+                it?.copy(
+                    isLoading = false,
+                    listState = ListState.OnlineSubtitleTracks(subtitles)
+                )
+            }
+        }
+    }
+
     fun onTrackClicked(trackInfo: TrackInfo) {
         Logger.debug("trackInfo = [${trackInfo}]")
+        if (trackInfo.isSelected) {
+            closeTrackSelectionPopup()
+            return
+        }
+
         when (trackInfo.trackType) {
             TrackType.Subtitle -> subtitleTrackToLoad.value = trackInfo
             else -> audioTrackToLoad.value = trackInfo
+        }
+    }
+
+    private fun closeTrackSelectionPopup() {
+        viewModelScope.launch {
+            delay(1500)
+            _uiState.value = null
+        }
+    }
+
+    fun onDownloadedSubtitleClick(subtitleData: SubtitleData) {
+        Logger.debug("subtitleData.title = [${subtitleData.title}]")
+        _uiState.update { it?.copy(isLoading = true) }
+
+        viewModelScope.launch {
+            val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
+            subtitleTrackToLoad.value = subtitleData.copy(url = url)
         }
     }
 
@@ -93,27 +159,31 @@ constructor() : ViewModel() {
         override fun onTracksChanged(tracks: Tracks) {
             super.onTracksChanged(tracks)
 
-            val subtitleTracks = mutableListOf<TrackInfo>()
-            val audioTracks = mutableListOf<TrackInfo>()
+            val subtitleTracks_ = mutableListOf<TrackInfo>()
+            val audioTracks_ = mutableListOf<TrackInfo>()
 
             tracks.groups.forEachIndexed { groupIndex, group ->
                 if (group.type.isSubtitleTrack())
-                    subtitleTracks.addAll(group.parseTracks(groupIndex, TrackType.Subtitle))
+                    subtitleTracks_.addAll(group.parseTracks(groupIndex, TrackType.Subtitle))
                 if (group.type.isAudioTrack())
-                    audioTracks.addAll(group.parseTracks(groupIndex, TrackType.Audio))
+                    audioTracks_.addAll(group.parseTracks(groupIndex, TrackType.Audio))
             }
 
             _trackButtonState.update {
                 it.copy(
-                    enableCaptionsButton = subtitleTracks.isNotEmpty(),
-                    enableAudioButton = audioTracks.isNotEmpty()
+                    enableCaptionsButton = true,
+                    enableAudioButton = audioTracks_.isNotEmpty()
                 )
             }
-            _subtitleTrackListState.value = subtitleTracks.plusDisableSubtitleTrack()
-            _audioTrackListState.value = audioTracks
+            subtitleTracks = subtitleTracks_.plusDisableSubtitleTrack()
+            audioTracks = audioTracks_
+
+            if (subtitleTracks.size > 1) {
+                loadTracksOfType(TrackType.Subtitle)
+                closeTrackSelectionPopup()
+            }
         }
     }
-
 }
 
 private fun MutableList<TrackInfo>.plusDisableSubtitleTrack(): MutableList<TrackInfo> =
