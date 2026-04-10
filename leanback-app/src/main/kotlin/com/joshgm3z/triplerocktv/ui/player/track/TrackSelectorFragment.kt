@@ -108,6 +108,11 @@ class TrackSelectorFragment : DialogFragment(),
         adapter.trackList = list
         binding.rvOnlineSubtitleList.setVisible(false)
         binding.rvTrackList.setVisible(true)
+        binding.rvTrackList.post {
+            binding.rvTrackList.layoutManager
+                ?.findViewByPosition(list.indexOfFirst { it.isSelected })
+                ?.requestFocus()
+        }
     }
 
     override fun onDestroyView() {
