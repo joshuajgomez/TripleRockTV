@@ -84,6 +84,10 @@ class PlaybackFragment : Fragment() {
 
     private var viewVisibilityUpdateJob: Job? = null
 
+    private lateinit var ccAction: PlaybackControlsRow.ClosedCaptioningAction
+
+    private lateinit var audioAction: PlaybackControlsRow.ClosedCaptioningAction
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -179,6 +183,11 @@ class PlaybackFragment : Fragment() {
         lifecycleScope.launch {
             trackViewModel.trackButtonState.collectLatest {
                 Logger.debug("trackButtonState $it")
+                val secondaryAdapter =
+                    transportControlGlue.controlsRow?.secondaryActionsAdapter as? ArrayObjectAdapter
+                secondaryAdapter?.clear()
+                if (it.enableCaptionsButton) secondaryAdapter?.add(ccAction)
+                if (it.enableAudioButton) secondaryAdapter?.add(audioAction)
             }
         }
         lifecycleScope.launch {
@@ -258,17 +267,16 @@ class PlaybackFragment : Fragment() {
         playerAdapter:
         LeanbackPlayerAdapter
     ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
+        ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+        }
+        audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
+            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
+        }
         return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
             requireActivity(),
             playerAdapter
         ) {
-            private val ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
-            }
-            private val audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
-            }
-
             private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context)
             private val rewindAction = PlaybackControlsRow.RewindAction(context)
 
