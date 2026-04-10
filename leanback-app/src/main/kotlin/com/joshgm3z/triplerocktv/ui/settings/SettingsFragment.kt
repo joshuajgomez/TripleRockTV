@@ -13,6 +13,7 @@ import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
@@ -37,6 +38,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
         val idBlur = 1L
         val idSignout = 2L
+        val idAppVersion = 3L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -122,7 +124,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 .subActions(getCredentialSubActions()) // Attach the sub-actions here
                 .build()
         )
-        actions.add(
+        /*actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idBlur) // Main Action ID
                 .title("Enable blur effect")
@@ -130,11 +132,20 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 .checked(false)
                 .description("Uncheck this if app seems slow due to blur")
                 .build()
-        )
+        )*/
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idSignout) // Main Action ID
                 .title("Sign out")
+                .build()
+        )
+        actions.add(
+            GuidedAction.Builder(requireContext())
+                .id(idAppVersion) // Main Action ID
+                .title("App version")
+                .description(BuildConfig.VERSION_NAME)
+                .focusable(false)
+                .infoOnly(true)
                 .build()
         )
     }
