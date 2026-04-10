@@ -77,13 +77,13 @@ jobs:
       - name: Prepare APK for Release
         run: |
           mkdir -p release_artifacts
-          cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-app.apk
+          cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-leanback-app.apk
 
       - name: Publish master-release
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_TAG }}
-          files: release_artifacts/3RockTV-app.apk
+          files: release_artifacts/3RockTV-leanback-app.apk
           body: "Auto-generated latest build triggered by ${{ env.TRIGGER_SOURCE }}. Uploaded on ${{ env.RELEASE_TIMESTAMP }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
