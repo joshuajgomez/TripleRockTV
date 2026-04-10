@@ -171,7 +171,7 @@ constructor(
 
             _trackButtonState.update {
                 it.copy(
-                    enableCaptionsButton = subtitleTracks_.isNotEmpty(),
+                    enableCaptionsButton = true,
                     enableAudioButton = audioTracks_.isNotEmpty()
                 )
             }
