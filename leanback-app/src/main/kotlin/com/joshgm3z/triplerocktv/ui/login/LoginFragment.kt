@@ -48,21 +48,22 @@ class LoginFragment : GuidedStepSupportFragment() {
                 }
             }
         }
-        copyInputToTitle(actions[idServerUrl.toInt()])
-        copyInputToTitle(actions[idUsername.toInt()])
-        copyInputToTitle(actions[idPassword.toInt()])
+        copyInputToTitle(findActionById(idServerUrl))
+        copyInputToTitle(findActionById(idUsername))
+        copyInputToTitle(findActionById(idPassword))
     }
 
 
     private fun enableViews(enable: Boolean) {
         listOf(
-            actions[idServerUrl.toInt()],
-            actions[idUsername.toInt()],
-            actions[idPassword.toInt()],
-            actions[idLogin.toInt()],
+            findActionById(idServerUrl),
+            findActionById(idUsername),
+            findActionById(idPassword),
+            findActionById(idLogin),
         ).forEach {
+            if (it == null) return@forEach
             it.isEnabled = enable
-            notifyActionChanged(it.id.toInt())
+            notifyActionChanged(findActionPositionById(it.id))
         }
     }
 
@@ -149,19 +150,19 @@ class LoginFragment : GuidedStepSupportFragment() {
         description: String? = null,
         icon: Int? = null
     ) {
-        val action = actions[idStatus.toInt()]
+        val action = findActionById(idStatus) ?: return
         action.title = message ?: ""
         action.description = description ?: ""
         action.icon = if (icon == null) null
         else ContextCompat.getDrawable(requireContext(), icon)
-        notifyActionChanged(idStatus.toInt())
+        notifyActionChanged(findActionPositionById(idStatus))
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
         if (action.id == idLogin) {
-            val serverUrl = actions[idServerUrl.toInt()].editTitle.toString()
-            val username = actions[idUsername.toInt()].editTitle.toString()
-            val password = actions[idPassword.toInt()].editTitle.toString()
+            val serverUrl = findActionById(idServerUrl)?.editTitle?.trim().toString()
+            val username = findActionById(idUsername)?.editTitle?.trim().toString()
+            val password = findActionById(idPassword)?.editTitle?.trim().toString()
             // Handle login logic here
 
             if (isInputValid()) loginViewModel.onLoginClick(serverUrl, username, password)
@@ -169,17 +170,17 @@ class LoginFragment : GuidedStepSupportFragment() {
     }
 
     private fun isInputValid(): Boolean {
-        val serverUrlEt = actions[idServerUrl.toInt()].editTitle
+        val serverUrlEt = findActionById(idServerUrl)?.editTitle?.trim()
         if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == "http://") {
-            selectedActionPosition = idServerUrl.toInt()
+            selectedActionPosition = findActionPositionById(idServerUrl)
             return false
         }
-        if (actions[idUsername.toInt()].editTitle.isNullOrEmpty()) {
-            selectedActionPosition = idUsername.toInt()
+        if (findActionById(idUsername)?.editTitle?.trim().isNullOrEmpty()) {
+            selectedActionPosition = findActionPositionById(idUsername)
             return false
         }
-        if (actions[idPassword.toInt()].editTitle.isNullOrEmpty()) {
-            selectedActionPosition = idPassword.toInt()
+        if (findActionById(idPassword)?.editTitle?.trim().isNullOrEmpty()) {
+            selectedActionPosition = findActionPositionById(idPassword)
             return false
         }
 
@@ -195,9 +196,10 @@ class LoginFragment : GuidedStepSupportFragment() {
         copyInputToTitle(action)
     }
 
-    private fun copyInputToTitle(action: GuidedAction) {
-        if (action.id == idServerUrl || action.id == idUsername || action.id == idPassword) {
-            val userInput = action.editTitle.toString()
+    private fun copyInputToTitle(action: GuidedAction?) {
+        action ?: return
+        if (listOf(idServerUrl, idUsername, idPassword).contains(action.id)) {
+            val userInput = action.editTitle?.toString()
             if (userInput.isNullOrEmpty()) return
             action.title = userInput
 
