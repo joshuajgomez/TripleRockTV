@@ -26,13 +26,11 @@ A modern Android TV app for IPTV service.
 ---
 
 ### 📥 Downloads
-[![Download APK](https://img.shields.io/badge/Download-APK-green.svg)](https://bit.ly/4tHBq8v)
+[![Download APK](https://img.shields.io/badge/Download-APK-green.svg)](https://bit.ly/423g3Cs)
 
-<img src="extras/github_3RockTV-app.apk_qrcode.png" width="120" height="120" align="center">
+`https://bit.ly/423g3Cs`
 
-`https://bit.ly/4tHBq8v`
-
-[![AFTVnews](https://img.shields.io/badge/aftv.news_Code-4262342-orange?style=for-the-badge&logo=android)](https://aftv.news/4262342)
+[![AFTVnews](https://img.shields.io/badge/aftv.news_Code-3348110-orange?style=for-the-badge&logo=android)](https://aftv.news/3348110)
 
 
 Check the **Releases** panel on the right for older versions.
