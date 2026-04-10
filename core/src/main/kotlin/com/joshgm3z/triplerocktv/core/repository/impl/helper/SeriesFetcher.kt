@@ -102,22 +102,27 @@ constructor(
     }
 
     suspend fun getSeriesDataAndUpdate(streamId: Int) {
-        iptvService.getSeriesDetails(seriesId = streamId).let { it ->
-            val seasons = it.seasons.map { seasonData ->
-                Season(
-                    episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
-                    number = seasonData.seasonNumber ?: -1,
-                    name = seasonData.name ?: "",
-                    coverImageUrl = seasonData.cover ?: "",
-                    voteAverage = seasonData.voteAverage ?: 0f,
-                    overview = seasonData.overview ?: "",
-                )
+        try {
+            iptvService.getSeriesDetails(seriesId = streamId).let { it ->
+                val seasons = it.seasons.map { seasonData ->
+                    Season(
+                        episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
+                        number = seasonData.seasonNumber ?: -1,
+                        name = seasonData.name ?: "",
+                        coverImageUrl = seasonData.cover ?: "",
+                        voteAverage = seasonData.voteAverage ?: 0f,
+                        overview = seasonData.overview ?: "",
+                    )
+                }
+                Logger.debug("seasons = [$seasons]")
+                val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
+                seriesStreamsDao.getBySeriesId(streamId).copy(seasons = filteredSeasons).let {
+                    seriesStreamsDao.update(it)
+                }
             }
-            Logger.debug("seasons = [$seasons]")
-            val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
-            seriesStreamsDao.getBySeriesId(streamId).copy(seasons = filteredSeasons).let {
-                seriesStreamsDao.update(it)
-            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            e.printStackTrace()
         }
     }
 }
