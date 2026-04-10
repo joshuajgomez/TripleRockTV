@@ -18,6 +18,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.DestinationState
 import com.joshgm3z.triplerocktv.core.viewmodel.SplashViewModel
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -51,6 +52,7 @@ class SplashScreenFragment : Fragment() {
             if (it is Animatable) it.start()
         }
         lifecycleScope.launch {
+            delay(1000)
             viewModel.navDirectionState.collectLatest {
                 if (it is DestinationState.Home) {
                     Firebase.analytics.setUserId(it.userName)
