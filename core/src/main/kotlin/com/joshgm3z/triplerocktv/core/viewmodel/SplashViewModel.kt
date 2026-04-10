@@ -16,7 +16,7 @@ import javax.inject.Inject
 sealed class DestinationState {
     object Login : DestinationState()
     object Loading : DestinationState()
-    object Home : DestinationState()
+    class Home(val userName: String? = null) : DestinationState()
     class Error(val message: String) : DestinationState()
     class AccessDisabled(val message: String) : DestinationState()
     class AppUpdateNeeded(val message: String) : DestinationState()
@@ -48,7 +48,7 @@ constructor(
 
                 userInfo == null -> DestinationState.Login
                 repository.isContentEmpty() -> DestinationState.Loading
-                else -> DestinationState.Home
+                else -> DestinationState.Home(userName = userInfo.username)
             }
         }
     }

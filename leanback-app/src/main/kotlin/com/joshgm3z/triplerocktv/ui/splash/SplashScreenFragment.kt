@@ -9,6 +9,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.databinding.FragmentSplashScreenBinding
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.DestinationState
@@ -49,13 +52,17 @@ class SplashScreenFragment : Fragment() {
         }
         lifecycleScope.launch {
             viewModel.navDirectionState.collectLatest {
+                if (it is DestinationState.Home) {
+                    Firebase.analytics.setUserId(it.userName)
+                    Firebase.crashlytics.setUserId(it.userName ?: "Unknown user")
+                }
                 when (it) {
                     DestinationState.Login -> SplashScreenFragmentDirections.toLogin()
                     DestinationState.Loading -> SplashScreenFragmentDirections.toLoading()
                     is DestinationState.AccessDisabled -> SplashScreenFragmentDirections.toAccessDisabled(it.message)
                     is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections.toAppUpdateInfo(it.message)
                     is DestinationState.Error -> SplashScreenFragmentDirections.toError(it.message)
-                    DestinationState.Home -> SplashScreenFragmentDirections.toHome()
+                    is DestinationState.Home -> SplashScreenFragmentDirections.toHome()
                     else -> return@collectLatest
                 }.let { destination ->
                     findNavController().navigate(destination)
