@@ -63,6 +63,17 @@ jobs:
       - name: Build Online Release APK (:leanback-app)
         run: ./gradlew leanback-app:assembleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
+      - name: Clear Existing Release and Tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ env.RELEASE_TAG }}
+        run: |
+          # Delete the release if it exists
+          gh release delete $TAG_NAME --yes || echo "No release found"
+          
+          # Delete the tag on the remote to avoid 'already exists' conflicts
+          git push --delete origin $TAG_NAME || echo "No tag found"
+
       - name: Prepare APK for Release
         run: |
           mkdir -p release_artifacts
