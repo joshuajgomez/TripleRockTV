@@ -25,8 +25,10 @@ A modern Android TV app for IPTV service.
 
 ---
 
-### 📥 Releases
+### 📥 Downloads
 [![Download APK](https://img.shields.io/badge/Download-APK-green.svg)](https://bit.ly/4tHBq8v)
+
+<img src="extras/github_3RockTV-app.apk_qrcode.png" width="120" height="120" align="center">
 
 `https://bit.ly/4tHBq8v`
 
