@@ -164,7 +164,9 @@ constructor(
             subtitleTracks = subtitleTracks_.plusDisableSubtitleTrack()
             audioTracks = audioTracks_
 
-            if (subtitleTracks_.isNotEmpty()) onOpenTrackSelectorClicked(TrackType.Subtitle)
+            if (subtitleTracks.size > 1) {
+                onOpenTrackSelectorClicked(TrackType.Subtitle)
+            }
         }
     }
 }
