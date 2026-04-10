@@ -15,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -49,7 +50,7 @@ sealed class ListState {
 }
 
 data class TrackSelectorUiState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val listState: ListState? = null,
 )
 
@@ -60,7 +61,7 @@ constructor(
     private val subtitleRepository: SubtitleRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(TrackSelectorUiState())
+    private val _uiState = MutableStateFlow<TrackSelectorUiState?>(TrackSelectorUiState())
     val uiState = _uiState.asStateFlow()
 
     private lateinit var subtitleTracks: List<TrackInfo>
@@ -99,10 +100,9 @@ constructor(
         return list
     }
 
-    fun onOpenTrackSelectorClicked(trackType: TrackType) {
+    fun loadTracksOfType(trackType: TrackType) {
         _uiState.update {
-            it.copy(
-                isLoading = false,
+            TrackSelectorUiState(
                 listState = when (trackType) {
                     TrackType.Subtitle -> ListState.SubtitleTracks(subtitleTracks)
                     else -> ListState.AudioTracks(audioTracks)
@@ -112,11 +112,12 @@ constructor(
     }
 
     fun onFindMoreClicked(title: String) {
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.update { it?.copy(isLoading = true) }
+
         viewModelScope.launch {
             val subtitles = subtitleRepository.findSubtitles(title)
             _uiState.update {
-                it.copy(
+                it?.copy(
                     isLoading = false,
                     listState = ListState.OnlineSubtitleTracks(subtitles)
                 )
@@ -126,15 +127,28 @@ constructor(
 
     fun onTrackClicked(trackInfo: TrackInfo) {
         Logger.debug("trackInfo = [${trackInfo}]")
+        if (trackInfo.isSelected) {
+            closeTrackSelectionPopup()
+            return
+        }
+
         when (trackInfo.trackType) {
             TrackType.Subtitle -> subtitleTrackToLoad.value = trackInfo
             else -> audioTrackToLoad.value = trackInfo
         }
     }
 
+    private fun closeTrackSelectionPopup() {
+        viewModelScope.launch {
+            delay(1500)
+            _uiState.value = null
+        }
+    }
+
     fun onDownloadedSubtitleClick(subtitleData: SubtitleData) {
         Logger.debug("subtitleData.title = [${subtitleData.title}]")
-        _uiState.update { it.copy(isLoading = true) }
+        _uiState.update { it?.copy(isLoading = true) }
+
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             subtitleTrackToLoad.value = subtitleData.copy(url = url)
@@ -165,7 +179,8 @@ constructor(
             audioTracks = audioTracks_
 
             if (subtitleTracks.size > 1) {
-                onOpenTrackSelectorClicked(TrackType.Subtitle)
+                loadTracksOfType(TrackType.Subtitle)
+                closeTrackSelectionPopup()
             }
         }
     }

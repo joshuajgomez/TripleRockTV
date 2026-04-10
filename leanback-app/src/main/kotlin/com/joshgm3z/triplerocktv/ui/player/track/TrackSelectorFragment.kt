@@ -19,7 +19,6 @@ import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlin.getValue
@@ -70,10 +69,10 @@ class TrackSelectorFragment : DialogFragment(),
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 Logger.debug("uiState = $it")
-                binding.llLoadingOverlay.setVisible(it.isLoading)
-                binding.tvFindMoreButton.setVisible(it.listState is ListState.SubtitleTracks)
+                binding.llLoadingOverlay.setVisible(it?.isLoading)
+                binding.tvFindMoreButton.setVisible(it?.listState is ListState.SubtitleTracks)
 
-                when (it.listState) {
+                when (it?.listState) {
                     is ListState.SubtitleTracks -> {
                         binding.tvTitle.text = "Subtitles tracks"
                         showTracks((it.listState as ListState.SubtitleTracks).list)
@@ -89,7 +88,7 @@ class TrackSelectorFragment : DialogFragment(),
                         showOnlineSubtitles((it.listState as ListState.OnlineSubtitleTracks).list)
                     }
 
-                    else -> return@collectLatest
+                    else -> findNavController().popBackStack()
                 }
             }
         }
@@ -99,6 +98,8 @@ class TrackSelectorFragment : DialogFragment(),
     }
 
     private fun showOnlineSubtitles(list: List<SubtitleData>) {
+        if (downloadedSubtitleAdapter.subtitleList.isNotEmpty()) return
+
         downloadedSubtitleAdapter.subtitleList = list
         binding.rvOnlineSubtitleList.setVisible(true)
         binding.rvTrackList.setVisible(false)
@@ -121,11 +122,7 @@ class TrackSelectorFragment : DialogFragment(),
     }
 
     override fun onTrackClicked(trackInfo: TrackInfo) {
-        if (!trackInfo.isSelected) viewModel.onTrackClicked(trackInfo)
-        lifecycleScope.launch {
-            delay(1000)
-            findNavController().popBackStack()
-        }
+        viewModel.onTrackClicked(trackInfo)
     }
 
     override fun onSubtitleClicked(subtitleData: SubtitleData) {
