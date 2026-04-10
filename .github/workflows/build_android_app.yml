@@ -64,6 +64,7 @@ jobs:
         run: ./gradlew leanback-app:assembleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
       - name: Clear Existing Release and Tag
+        if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           TAG_NAME: ${{ env.RELEASE_TAG }}
@@ -75,11 +76,13 @@ jobs:
           git push --delete origin $TAG_NAME || echo "No tag found"
 
       - name: Prepare APK for Release
+        if: github.event_name != 'pull_request'
         run: |
           mkdir -p release_artifacts
           cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-leanback-app.apk
 
       - name: Publish master-release
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
           tag_name: ${{ env.RELEASE_TAG }}
