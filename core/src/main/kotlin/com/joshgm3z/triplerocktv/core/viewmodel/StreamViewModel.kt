@@ -44,7 +44,7 @@ constructor(
         }
     }
 
-    suspend fun fetchMetadata(streamId: Int): MovieMetadata {
+    suspend fun fetchMetadata(streamId: Int): MovieMetadata? {
         return onlineRepository.getMovieMetadata(streamId)
     }
 }

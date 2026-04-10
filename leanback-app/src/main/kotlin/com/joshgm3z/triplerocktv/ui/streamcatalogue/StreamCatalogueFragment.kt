@@ -85,7 +85,8 @@ class StreamCatalogueFragment : Fragment() {
         binding.tvTitle.text = streamData.name
 
         lifecycleScope.launch {
-            val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId)
+            val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId) ?: return@launch
+
             binding.tvDescription.text = updatedMovieMetadata.description
             binding.tvCast.text = "Cast: ${updatedMovieMetadata.cast}"
             binding.tvCast.setVisible(updatedMovieMetadata.cast?.isNotEmpty())

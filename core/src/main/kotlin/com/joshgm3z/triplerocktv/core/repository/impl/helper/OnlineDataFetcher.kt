@@ -121,18 +121,24 @@ constructor(
         }
     }
 
-    suspend fun getMovieData(streamId: Int): MovieMetadata {
-        iptvService.getVodInfo(streamId).info.let {
-            val movieMetaData = MovieMetadata(
-                description = it.description,
-                backPosterUrl = it.backdropPath?.firstOrNull(),
-                cast = it.cast,
-                director = it.director,
-                actors = it.actors,
-                genre = it.genre,
-                totalDurationMs = (it.durationSecs?.toLong() ?: 0L) * 1000L,
-            )
-            return movieMetaData
+    suspend fun getMovieData(streamId: Int): MovieMetadata? {
+        Logger.debug("streamId = [${streamId}]")
+        return try {
+            iptvService.getVodInfo(streamId).info.let {
+                MovieMetadata(
+                    description = it.description,
+                    backPosterUrl = it.backdropPath?.firstOrNull(),
+                    cast = it.cast,
+                    director = it.director,
+                    actors = it.actors,
+                    genre = it.genre,
+                    totalDurationMs = (it.durationSecs?.toLong() ?: 0L) * 1000L,
+                )
+            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            e.printStackTrace()
+            null
         }
     }
 }
