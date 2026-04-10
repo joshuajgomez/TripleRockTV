@@ -32,6 +32,9 @@ A modern Android TV app for IPTV service.
 
 `https://bit.ly/4tHBq8v`
 
+[![AFTVnews](https://img.shields.io/badge/aftv.news_Code-4262342-orange?style=for-the-badge&logo=android)](https://aftv.news/4262342)
+
+
 Check the **Releases** panel on the right for older versions.
 
 ---
