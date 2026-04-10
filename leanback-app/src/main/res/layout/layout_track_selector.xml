@@ -13,7 +13,7 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
         android:text="Select a subtitle"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,17 +41,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:background="@color/card_bg_color_selector"
+        android:background="@drawable/find_more_chip"
         android:clickable="true"
         android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="5dp"
-        android:drawableTint="@color/card_fg_color_selector"
+        android:drawablePadding="3dp"
+        android:drawableTint="@color/button_fg_color_selector"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:paddingHorizontal="10dp"
-        android:paddingVertical="2dp"
-        android:text="Find more"
-        android:textColor="@color/card_fg_color_selector"
+        android:paddingVertical="3dp"
+        android:text="OpenSubtitles.com"
+        android:textColor="@color/button_fg_color_selector"
+        android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
@@ -61,7 +62,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/dark_transparent_color"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ProgressBar
             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
