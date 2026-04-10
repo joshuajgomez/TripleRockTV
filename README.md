@@ -26,7 +26,11 @@ A modern Android TV app for IPTV service.
 ---
 
 ### 📥 Releases
-Check the **Releases** panel on the right for the latest APKs and changelogs.
+[![Download APK](https://img.shields.io/badge/Download-APK-green.svg)](https://bit.ly/4tHBq8v)
+
+`https://bit.ly/4tHBq8v`
+
+Check the **Releases** panel on the right for older versions.
 
 ---
 
