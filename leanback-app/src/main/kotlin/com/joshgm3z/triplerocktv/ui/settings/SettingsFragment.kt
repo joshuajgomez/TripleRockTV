@@ -13,7 +13,7 @@ import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.core.BuildConfig
+import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
