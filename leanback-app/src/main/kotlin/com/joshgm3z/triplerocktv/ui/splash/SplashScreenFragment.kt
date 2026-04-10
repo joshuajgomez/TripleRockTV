@@ -52,7 +52,7 @@ class SplashScreenFragment : Fragment() {
             if (it is Animatable) it.start()
         }
         lifecycleScope.launch {
-            delay(1000)
+            delay(2000)
             viewModel.navDirectionState.collectLatest {
                 if (it is DestinationState.Home) {
                     Firebase.analytics.setUserId(it.userName)
