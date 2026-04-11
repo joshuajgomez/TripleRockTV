@@ -17,24 +17,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_track_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="200dp"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_track_info" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_online_subtitle_list"
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:visibility="visible"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title"
-        tools:itemCount="5"
-        tools:listitem="@layout/item_downloaded_subtitle" />
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="No subtitles found online"
+            android:textAlignment="center"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_track_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_track_info" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_online_subtitle_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="visible"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_title"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_downloaded_subtitle" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tv_find_more_button"
