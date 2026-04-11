@@ -13,6 +13,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.orIfDebug
 import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,6 +41,7 @@ class LoginFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.Login)
         lifecycleScope.launch {
             loginViewModel.uiState.collectLatest {
                 when {

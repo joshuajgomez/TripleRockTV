@@ -36,6 +36,8 @@ import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
@@ -99,6 +101,8 @@ class PlaybackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.Player)
+
         view.keepScreenOn = true
         initUi()
     }

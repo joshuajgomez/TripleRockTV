@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -62,6 +63,9 @@ class LoginRepositoryImpl @Inject constructor(
     }
 
     override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
+        localDataStore.getUserInfo()?.let {
+            FirebaseLogger.logUserLogout(it.username)
+        }
         localDataStore.clearAllData()
         streamDataDao.deleteAll()
         categoryDataDao.deleteAll()
