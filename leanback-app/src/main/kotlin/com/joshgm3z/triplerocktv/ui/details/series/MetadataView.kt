@@ -92,7 +92,7 @@ class MetadataView @JvmOverloads constructor(
         tv.text = text
         tv.textSize = 12f
         tv.alpha = 0.8f
-        tv.setTextColor(resources.getColor(R.color.color_card_content, context.theme))
+        tv.setTextColor(resources.getColor(com.joshgm3z.triplerocktv.core.R.color.color_card_content, context.theme))
         icon?.let { tv.setDrawable(it) }
         addView(tv)
     }
