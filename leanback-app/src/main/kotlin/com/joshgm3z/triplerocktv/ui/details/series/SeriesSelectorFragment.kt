@@ -17,6 +17,8 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -66,6 +68,7 @@ class SeriesSelectorFragment : RowsSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.SeriesEpisodes)
 
         verticalGridView.setPadding(0, 80, 0, 0)
 

@@ -14,8 +14,10 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.BuildConfig
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -43,6 +45,8 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.Settings)
+
         lifecycleScope.launch {
             viewModel.credentialState.collectLatest {
                 updateBlurSettings(it.isBlurSettingEnabled)

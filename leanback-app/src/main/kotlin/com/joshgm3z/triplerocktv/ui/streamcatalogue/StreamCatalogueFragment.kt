@@ -14,11 +14,14 @@ import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.databinding.FragmentStreamCatalogueBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.StreamViewModel
@@ -41,6 +44,8 @@ class StreamCatalogueFragment : Fragment() {
     lateinit var rowsAdapter: ArrayObjectAdapter
 
     private lateinit var binding: FragmentStreamCatalogueBinding
+
+    private val args: StreamCatalogueFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +77,8 @@ class StreamCatalogueFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 it?.let {

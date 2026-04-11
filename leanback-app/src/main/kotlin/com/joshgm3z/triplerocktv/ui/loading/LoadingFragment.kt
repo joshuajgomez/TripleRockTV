@@ -14,6 +14,8 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.MediaLoadingUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.MediaLoadingViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -38,6 +40,8 @@ class LoadingFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        FirebaseLogger.logScreenView(ScreenName.MediaUpdate)
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 when (it) {

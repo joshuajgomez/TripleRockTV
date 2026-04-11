@@ -5,6 +5,21 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.analytics.analytics
 
+enum class ScreenName(val value: String) {
+    Splash("splash"),
+    Login("login"),
+    MediaUpdate("media_update"),
+    Error("error"),
+    Browse("browse"),
+    Home("home"),
+    Settings("settings"),
+    Catalogue("catalogue"),
+    VideoOnDemandDetails("video_on_demand_details"),
+    SeriesDetails("series_details"),
+    SeriesEpisodes("series_episodes"),
+    Player("player"),
+}
+
 class FirebaseLogger {
 
     private var firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
@@ -42,10 +57,24 @@ class FirebaseLogger {
             )
         }
 
+        fun logUserLogout(username: String) {
+            getInstance().logCustomEvent(
+                "user_logout",
+                mapOf("logout_username" to username)
+            )
+        }
+
         fun logUserLoginFail(username: String) {
             getInstance().logCustomEvent(
                 "user_login_fail",
                 mapOf("login_failed_username" to username)
+            )
+        }
+
+        fun logScreenView(screenName: ScreenName, params: Map<String, String> = emptyMap()) {
+            getInstance().logCustomEvent(
+                "screen_view",
+                mapOf("screen_name" to screenName.name).plus(params)
             )
         }
     }

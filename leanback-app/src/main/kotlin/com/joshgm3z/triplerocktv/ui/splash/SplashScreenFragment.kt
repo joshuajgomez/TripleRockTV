@@ -9,6 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.databinding.FragmentSplashScreenBinding
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.DestinationState
@@ -48,6 +50,7 @@ class SplashScreenFragment : Fragment() {
         binding?.ivLogo?.drawable.let {
             if (it is Animatable) it.start()
         }
+        FirebaseLogger.logScreenView(ScreenName.Splash)
         lifecycleScope.launch {
             delay(2000)
             viewModel.navDirectionState.collectLatest {
