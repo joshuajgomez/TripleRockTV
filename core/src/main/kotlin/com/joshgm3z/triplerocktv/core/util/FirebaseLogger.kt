@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.util
+package com.joshgm3z.triplerocktv.core.util
 
 import android.os.Bundle
 import com.google.firebase.Firebase
@@ -29,7 +29,24 @@ class FirebaseLogger {
         }
 
         fun logGlideError(uri: String) {
-            getInstance().logCustomEvent("glide_error", mapOf("uri" to uri))
+            getInstance().logCustomEvent(
+                "glide_error",
+                mapOf("glide_error_uri" to uri)
+            )
+        }
+
+        fun logUserLogin(username: String) {
+            getInstance().logCustomEvent(
+                "user_login",
+                mapOf("login_username" to username)
+            )
+        }
+
+        fun logUserLoginFail(username: String) {
+            getInstance().logCustomEvent(
+                "user_login_fail",
+                mapOf("login_failed_username" to username)
+            )
         }
     }
 }

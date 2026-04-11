@@ -2,7 +2,11 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -50,12 +54,16 @@ class LoginViewModel
                 password = password,
                 onSuccess = {
                     Logger.debug("Login successful")
+                    FirebaseLogger.logUserLogin(username)
+                    Firebase.analytics.setUserId(username)
+                    Firebase.crashlytics.setUserId(username)
                     _uiState.update {
                         it.copy(loginSuccess = true, loading = false)
                     }
                 },
                 onError = { error ->
                     Logger.warn("Login failed")
+                    FirebaseLogger.logUserLoginFail(username)
                     _uiState.update {
                         it.copy(errorMessage = error, loading = false)
                     }

@@ -2,6 +2,9 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.Firebase
+import com.google.firebase.analytics.analytics
+import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
@@ -37,6 +40,10 @@ constructor(
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDatastore.getUserInfo()
+            userInfo?.let {
+                Firebase.analytics.setUserId(it.username)
+                Firebase.crashlytics.setUserId(it.username)
+            }
             var accessState = accessControlRepository.getAccessState(userInfo?.username)
             var appUpdateState = accessControlRepository.appUpdateState()
 
