@@ -22,4 +22,15 @@
         android:textColor="?attr/colorPrimary"
         android:visibility="gone"
         tools:text="Demo mode" />
+
+    <ImageView
+        android:id="@+id/iv_qrcode"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_gravity="bottom|end"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:src="@drawable/avatar_movie"
+        android:visibility="gone" />
 </FrameLayout>

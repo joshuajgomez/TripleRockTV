@@ -2,11 +2,18 @@ package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.joshgm3z.triplerocktv.core.util.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirestoreHelper @Inject constructor() {
-
+class FirestoreHelper @Inject constructor(
+    private val scope: CoroutineScope
+) {
     private val db = FirebaseFirestore.getInstance()
 
     suspend fun getDataMap(collectionPath: String, documentId: String): Map<String, Any>? {
@@ -20,4 +27,25 @@ class FirestoreHelper @Inject constructor() {
         }
     }
 
+    fun createDocumentIdInCollection(collection: String): String {
+        return db.collection(collection).document().id
+    }
+
+    fun listenToDataMap(
+        collection: String,
+        documentId: String,
+        onData: (Map<String, Any>) -> Unit
+    ) {
+        db.collection(collection)
+            .document(documentId)
+            .addSnapshotListener { snapshot, _ ->
+                if (snapshot != null && snapshot.exists()) {
+                    val data = snapshot.data
+                    if (data != null) {
+                        Logger.debug("data = [${data}]")
+                        onData(data)
+                    }
+                }
+            }
+    }
 }
