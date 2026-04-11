@@ -265,22 +265,30 @@ class PlaybackFragment : Fragment() {
         Logger.info("Subtitle loaded from: ${subtitleData.url}")
     }
 
+    private fun Int.getDrawable() = ContextCompat.getDrawable(
+        requireContext(), this
+    )
+
     private fun createControlGlue(
         playerAdapter:
         LeanbackPlayerAdapter
     ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
         ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_subtitles)
+            icon = R.drawable.ic_subtitles.getDrawable()
         }
         audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-            icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_voice)
+            icon = R.drawable.ic_voice.getDrawable()
         }
         return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
             requireActivity(),
             playerAdapter
         ) {
-            private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context)
-            private val rewindAction = PlaybackControlsRow.RewindAction(context)
+            private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context).apply {
+                icon = R.drawable.skip_10s.getDrawable()
+            }
+            private val rewindAction = PlaybackControlsRow.RewindAction(context).apply {
+                icon = R.drawable.rewind_10s.getDrawable()
+            }
 
             override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {
                 adapter.add(rewindAction)
