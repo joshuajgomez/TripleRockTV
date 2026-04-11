@@ -95,8 +95,6 @@ class DetailsFragment : DetailsSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.VideoOnDemandDetails)
-
         lifecycleScope.launch {
             viewModel.streamData.collectLatest {
                 it?.let { streamData ->
@@ -158,6 +156,8 @@ class DetailsFragment : DetailsSupportFragment() {
 
     override fun onResume() {
         super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.VideoOnDemandDetails)
+
         backgroundImageUrl ?: return
         glideUtil.getBitmap(uri = backgroundImageUrl, dimMode = DimMode.Dark) { bitmap ->
             if (!isVisible) return@getBitmap

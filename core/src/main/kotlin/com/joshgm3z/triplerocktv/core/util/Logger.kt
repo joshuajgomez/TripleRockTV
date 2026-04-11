@@ -66,3 +66,10 @@ class Logger {
         }
     }
 }
+
+fun callerName(): String {
+    val element = Thread.currentThread().stackTrace[5]
+    var className = element.className
+    className = className.substring(className.lastIndexOf(".") + 1)
+    return className
+}

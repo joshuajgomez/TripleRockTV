@@ -6,6 +6,8 @@ import androidx.core.content.ContextCompat
 import androidx.leanback.R
 import androidx.leanback.app.ErrorSupportFragment
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.ScreenName
 
 class ErrorFragment : ErrorSupportFragment() {
 
@@ -20,5 +22,10 @@ class ErrorFragment : ErrorSupportFragment() {
         buttonClickListener = View.OnClickListener {
             parentFragmentManager.popBackStack()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.message))
     }
 }

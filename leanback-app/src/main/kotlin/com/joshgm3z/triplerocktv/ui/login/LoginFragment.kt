@@ -41,7 +41,6 @@ class LoginFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Login)
         lifecycleScope.launch {
             loginViewModel.uiState.collectLatest {
                 when {
@@ -222,5 +221,10 @@ class LoginFragment : GuidedStepSupportFragment() {
             idPassword -> idLogin
             else -> -1
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Login)
     }
 }

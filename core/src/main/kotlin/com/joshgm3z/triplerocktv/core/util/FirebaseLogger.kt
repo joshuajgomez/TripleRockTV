@@ -71,10 +71,18 @@ class FirebaseLogger {
             )
         }
 
-        fun logScreenView(screenName: ScreenName, params: Map<String, String> = emptyMap()) {
+        fun logScreenView(
+            screenName: ScreenName,
+            params: Map<String, String> = emptyMap(),
+        ) {
             getInstance().logCustomEvent(
-                "screen_view",
-                mapOf("screen_name" to screenName.name).plus(params)
+                FirebaseAnalytics.Event.SCREEN_VIEW,
+                mapOf(
+                    FirebaseAnalytics.Param.SCREEN_NAME to screenName.name,
+                    FirebaseAnalytics.Param.SCREEN_CLASS to callerName(),
+                ).plus(params).apply {
+                    Logger.debug("logScreenView: $this")
+                }
             )
         }
     }

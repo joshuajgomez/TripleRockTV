@@ -45,8 +45,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Settings)
-
         lifecycleScope.launch {
             viewModel.credentialState.collectLatest {
                 updateBlurSettings(it.isBlurSettingEnabled)
@@ -301,5 +299,10 @@ class SettingsFragment : GuidedStepSupportFragment() {
         copyInputToTitle(action)
         // Return ACTION_NEXT to move to next field, or action.id to stay
         return action.id
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Settings)
     }
 }

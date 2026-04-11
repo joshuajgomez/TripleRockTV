@@ -65,8 +65,6 @@ class HomeFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Home)
-
         rowsAdapter.clear()
 
         val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
@@ -90,5 +88,10 @@ class HomeFragment : BrowseSupportFragment() {
             if (!isVisible) return@getBitmap
             requireActivity().setBackground(it)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Home)
     }
 }
