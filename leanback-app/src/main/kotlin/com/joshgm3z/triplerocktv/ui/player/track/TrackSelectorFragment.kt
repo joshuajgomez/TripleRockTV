@@ -69,10 +69,17 @@ class TrackSelectorFragment : DialogFragment(),
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 Logger.debug("uiState = $it")
-                binding.llLoadingOverlay.setVisible(it?.isLoading)
-                binding.tvFindMoreButton.setVisible(it?.listState is ListState.SubtitleTracks)
+                it ?: run {
+                    findNavController().popBackStack()
+                    return@collectLatest
+                }
 
-                when (it?.listState) {
+                binding.llLoadingOverlay.setVisible(it.isLoading)
+                binding.tvFindMoreButton.setVisible(it.listState is ListState.SubtitleTracks)
+                binding.tvStatus.text = it.statusText
+                binding.tvStatus.setVisible(it.statusText.isNotEmpty())
+
+                when (it.listState) {
                     is ListState.SubtitleTracks -> {
                         binding.tvTitle.text = "Subtitles tracks"
                         showTracks((it.listState as ListState.SubtitleTracks).list)
@@ -88,7 +95,7 @@ class TrackSelectorFragment : DialogFragment(),
                         showOnlineSubtitles((it.listState as ListState.OnlineSubtitleTracks).list)
                     }
 
-                    else -> findNavController().popBackStack()
+                    else -> return@collectLatest
                 }
             }
         }

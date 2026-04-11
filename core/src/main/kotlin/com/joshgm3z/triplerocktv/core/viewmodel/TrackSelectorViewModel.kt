@@ -51,6 +51,7 @@ sealed class ListState {
 
 data class TrackSelectorUiState(
     val isLoading: Boolean = false,
+    val statusText: String = "",
     val listState: ListState? = null,
 )
 
@@ -116,7 +117,15 @@ constructor(
 
         viewModelScope.launch {
             val subtitles = subtitleRepository.findSubtitles(title)
-            _uiState.update {
+            if (subtitles.isEmpty()) {
+                delay(1000)
+                _uiState.update {
+                    it?.copy(
+                        isLoading = false,
+                        statusText = "No subtitles found online"
+                    )
+                }
+            } else _uiState.update {
                 it?.copy(
                     isLoading = false,
                     listState = ListState.OnlineSubtitleTracks(subtitles)
