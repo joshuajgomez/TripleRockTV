@@ -54,10 +54,6 @@ class SplashScreenFragment : Fragment() {
         lifecycleScope.launch {
             delay(2000)
             viewModel.navDirectionState.collectLatest {
-                if (it is DestinationState.Home) {
-                    Firebase.analytics.setUserId(it.userName)
-                    Firebase.crashlytics.setUserId(it.userName ?: "Unknown user")
-                }
                 when (it) {
                     DestinationState.Login -> SplashScreenFragmentDirections.toLogin()
                     DestinationState.Loading -> SplashScreenFragmentDirections.toLoading()

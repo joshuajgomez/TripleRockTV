@@ -23,6 +23,7 @@ import com.bumptech.glide.request.transition.Transition
 import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.wasabeef.glide.transformations.BlurTransformation
@@ -136,7 +137,7 @@ private val glideErrorListener = object : RequestListener<Drawable> {
         isFirstResource: Boolean
     ): Boolean {
         if (model is String) {
-            Logger.Companion.error("Glide failed to load image: $model")
+            Logger.error("Glide failed to load image: $model")
             FirebaseLogger.logGlideError(model)
         }
         return false
