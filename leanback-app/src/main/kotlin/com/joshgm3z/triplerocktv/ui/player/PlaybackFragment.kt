@@ -284,10 +284,10 @@ class PlaybackFragment : Fragment() {
             playerAdapter
         ) {
             private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context).apply {
-                icon = R.drawable.skip_10s.getDrawable()
+                icon = R.drawable.forward_10s.getDrawable()
             }
             private val rewindAction = PlaybackControlsRow.RewindAction(context).apply {
-                icon = R.drawable.rewind_10s.getDrawable()
+                icon = R.drawable.replay_10s.getDrawable()
             }
 
             override fun onCreatePrimaryActions(adapter: ArrayObjectAdapter) {
