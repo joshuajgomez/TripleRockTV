@@ -3,25 +3,33 @@ package com.joshgm3z.triplerocktv.ui.home
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.viewmodel.HomeItem
+import com.joshgm3z.triplerocktv.core.viewmodel.HomeViewModel
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BrowseSupportFragment() {
+
+    private val viewModel: HomeViewModel by viewModels()
 
     private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(
         ListRowPresenter(
@@ -40,6 +48,7 @@ class HomeFragment : BrowseSupportFragment() {
         adapter = rowsAdapter
         onItemViewClickedListener = itemViewClickedListener
 
+        progressBarManager.show()
         badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector)
     }
 
@@ -65,20 +74,24 @@ class HomeFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        rowsAdapter.clear()
+        lifecycleScope.launch {
+            viewModel.homeListState.collectLatest {
+                if (it.isEmpty()) return@collectLatest
 
-        val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
-        homeAdapter.add(HomeItem("Video on demand", R.drawable.movie_avd))
-        homeAdapter.add(HomeItem("Series", R.drawable.series_avd))
-        homeAdapter.add(HomeItem("Live TV", R.drawable.livetv_avd))
-        rowsAdapter.add(ListRow(homeAdapter))
+                progressBarManager.hide()
+                rowsAdapter.clear()
 
-        val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-        settingsAdapter.add(SettingItem("Update", R.drawable.icon_download))
-        settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
-        settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
-        rowsAdapter.add(ListRow(settingsAdapter))
+                val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
+                homeAdapter.addAll(0, it)
+                rowsAdapter.add(ListRow(homeAdapter))
 
+                val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
+                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download))
+                settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
+                settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
+                rowsAdapter.add(ListRow(settingsAdapter))
+            }
+        }
 
         glideUtil.getBitmap(
             uri = "http://riseiptv.xyz:8080/images/f84cfc4a649186588214ccff8a8c335a.jpg",
