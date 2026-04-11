@@ -5,12 +5,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
+import com.joshgm3z.triplerocktv.core.viewmodel.HomeItem
 import com.joshgm3z.triplerocktv.databinding.ViewHomeCardBinding
-
-data class HomeItem(
-    val title: String,
-    val iconRes: Int,
-)
 
 class HomeItemPresenter : Presenter() {
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
