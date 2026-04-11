@@ -10,11 +10,13 @@ import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.getQrCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,35 +29,31 @@ class OnlineTyperViewModel
     private val _qrCodeBitmapState = MutableStateFlow<Bitmap?>(null)
     val qrCodeBitmapState = _qrCodeBitmapState.asStateFlow()
 
-    private val _inputTextFlow = MutableStateFlow("")
-    val inputTextFlow = _inputTextFlow.asStateFlow()
-        get() {
-            startInputTextFlow()
-            return field
+    val inputTextFlow: StateFlow<String> = callbackFlow {
+        val sessionId = repository.newTypingSessionId()
+
+        if (sessionId == null) {
+            Logger.error("sessionId is null")
+            close()
+            return@callbackFlow
         }
 
-    private fun startInputTextFlow() {
-        Logger.debug("entry")
-        viewModelScope.launch {
-            val sessionId = repository.newTypingSessionId()
-            Logger.debug("sessionId = [$sessionId]")
-            if (sessionId == null) {
-                Logger.error("sessionId is null")
-                return@launch
-            }
+        // Generate and set the QR code when collection starts
+        val appUrl = context.getString(R.string.online_typer_app_url)
+        val bitmap = "$appUrl?id=$sessionId".getQrCode()
+        _qrCodeBitmapState.value = bitmap
 
-            val appUrl = context.getString(R.string.online_typer_app_url)
-            val bitmap = "$appUrl?id=$sessionId".getQrCode()
-            if (bitmap == null) {
-                Logger.error("bitmap is null")
-                return@launch
-            }
-
-            _qrCodeBitmapState.value = bitmap
-            repository.listenInput(sessionId) {
-                Logger.debug("input = $it")
-                _inputTextFlow.value = it
-            }
+        // Listen for input updates
+        repository.listenInput(sessionId) {
+            trySend(it)
         }
-    }
+        awaitClose {
+            Logger.debug("Cleaning up session: $sessionId")
+            _qrCodeBitmapState.value = null
+        }
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(100),
+        initialValue = ""
+    )
 }
