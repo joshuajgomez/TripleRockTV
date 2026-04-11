@@ -274,10 +274,10 @@ class PlaybackFragment : Fragment() {
         LeanbackPlayerAdapter
     ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
         ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-            icon = R.drawable.ic_subtitles.getDrawable()
+            icon = R.drawable.ic_cc.getDrawable()
         }
         audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-            icon = R.drawable.ic_voice.getDrawable()
+            icon = R.drawable.ic_audio.getDrawable()
         }
         return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
             requireActivity(),
