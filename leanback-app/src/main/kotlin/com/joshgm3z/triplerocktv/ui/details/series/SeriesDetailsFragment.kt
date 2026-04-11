@@ -115,8 +115,6 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.SeriesDetails)
-
         lifecycleScope.launch {
             viewModel.seriesDetailsUiState.collectLatest {
                 it?.let { updateDetails(it) }
@@ -191,6 +189,8 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     override fun onResume() {
         super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.SeriesDetails)
+
         backgroundImageUrl ?: return
         glideUtil.getBitmap(uri = backgroundImageUrl, dimMode = DimMode.Dark) { bitmap ->
             if (!isVisible) return@getBitmap

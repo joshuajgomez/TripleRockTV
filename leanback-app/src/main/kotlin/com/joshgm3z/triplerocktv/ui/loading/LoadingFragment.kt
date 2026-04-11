@@ -40,8 +40,6 @@ class LoadingFragment : GuidedStepSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.MediaUpdate)
-
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 when (it) {
@@ -165,4 +163,8 @@ class LoadingFragment : GuidedStepSupportFragment() {
         return LoadingActionsStylist()
     }
 
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.MediaUpdate)
+    }
 }

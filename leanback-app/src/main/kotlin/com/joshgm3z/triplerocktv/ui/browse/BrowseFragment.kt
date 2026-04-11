@@ -74,8 +74,6 @@ class BrowseFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Browse, mapOf("browse_streamType" to args.streamType.name))
-
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 Logger.debug("uiState = $it")
@@ -235,6 +233,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Browse, mapOf("browse_streamType" to args.streamType.name))
+
         viewModel.onViewResume()
     }
 }

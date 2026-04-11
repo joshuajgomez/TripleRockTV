@@ -68,8 +68,6 @@ class SeriesSelectorFragment : RowsSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.SeriesEpisodes)
-
         verticalGridView.setPadding(0, 80, 0, 0)
 
         lifecycleScope.launch {
@@ -154,5 +152,10 @@ class SeriesSelectorFragment : RowsSupportFragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.SeriesEpisodes)
     }
 }

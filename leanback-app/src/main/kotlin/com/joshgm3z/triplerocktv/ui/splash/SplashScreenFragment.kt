@@ -50,7 +50,6 @@ class SplashScreenFragment : Fragment() {
         binding?.ivLogo?.drawable.let {
             if (it is Animatable) it.start()
         }
-        FirebaseLogger.logScreenView(ScreenName.Splash)
         lifecycleScope.launch {
             delay(2000)
             viewModel.navDirectionState.collectLatest {
@@ -67,5 +66,10 @@ class SplashScreenFragment : Fragment() {
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Splash)
     }
 }

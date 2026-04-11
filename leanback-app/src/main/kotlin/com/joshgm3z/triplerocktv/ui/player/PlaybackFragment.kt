@@ -101,8 +101,6 @@ class PlaybackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Player)
-
         view.keepScreenOn = true
         initUi()
     }
@@ -439,6 +437,11 @@ class PlaybackFragment : Fragment() {
             delay(duration)
             view.setVisible(false)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Player)
     }
 
     override fun onPause() {

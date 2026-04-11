@@ -77,8 +77,6 @@ class StreamCatalogueFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        FirebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
-
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 it?.let {
@@ -151,4 +149,8 @@ class StreamCatalogueFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        FirebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
+    }
 }
