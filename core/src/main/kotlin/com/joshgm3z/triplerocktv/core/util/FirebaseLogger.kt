@@ -52,7 +52,7 @@ class FirebaseLogger {
 
         fun logUserLogin(username: String) {
             getInstance().logCustomEvent(
-                "user_login",
+                FirebaseAnalytics.Event.LOGIN,
                 mapOf("login_username" to username)
             )
         }
