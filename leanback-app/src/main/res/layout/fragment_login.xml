@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000"
+    android:paddingHorizontal="100dp"
+    android:paddingVertical="50dp">
+
+    <LinearLayout
+        android:id="@+id/ll_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/iv_logo"
+            android:layout_width="100dp"
+            android:layout_height="70dp"
+            android:src="@drawable/logo_vd_vector" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:maxEms="9"
+            android:text="Login using your IPTV credentials"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/include_login_form"
+        layout="@layout/layout_login_form"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="80dp"
+        app:layout_constraintEnd_toStartOf="@id/ll_divider"
+        app:layout_constraintTop_toTopOf="@id/ll_divider" />
+
+    <LinearLayout
+        android:id="@+id/ll_divider"
+        android:layout_width="1dp"
+        android:layout_height="300dp"
+        android:layout_marginTop="30dp"
+        android:background="?attr/colorPrimary"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ll_header" />
+
+    <include
+        android:id="@+id/include_qrcode_form"
+        layout="@layout/layout_qrcode_form"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        app:layout_constraintStart_toEndOf="@id/ll_divider"
+        app:layout_constraintTop_toTopOf="@id/ll_divider" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
