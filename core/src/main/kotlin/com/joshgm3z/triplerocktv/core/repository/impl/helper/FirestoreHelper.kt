@@ -28,7 +28,7 @@ class FirestoreHelper
 
     suspend fun createDocumentIdInCollection(collection: String): String {
         val document = db.collection(collection)
-            .add("input" to "")
+            .add(mapOf("input" to ""))
             .await()
         return document.id
     }
