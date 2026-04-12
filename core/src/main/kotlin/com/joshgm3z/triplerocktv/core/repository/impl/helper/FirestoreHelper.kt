@@ -11,9 +11,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
-class FirestoreHelper @Inject constructor(
-    private val scope: CoroutineScope
-) {
+class FirestoreHelper
+@Inject constructor() {
     private val db = FirebaseFirestore.getInstance()
 
     suspend fun getDataMap(collectionPath: String, documentId: String): Map<String, Any>? {
