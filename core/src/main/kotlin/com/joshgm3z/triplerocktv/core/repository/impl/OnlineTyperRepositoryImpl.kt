@@ -15,8 +15,11 @@ class OnlineTyperRepositoryImpl
 ) : OnlineTyperRepository {
 
     override suspend fun newTypingSessionId(): String {
-//        return firestoreHelper.createDocumentIdInCollection(COLLECTION)
-        return "8YbHPUozYpVk2StV0smE"
+        return firestoreHelper.createDocumentIdInCollection(COLLECTION)
+    }
+
+    override suspend fun deleteTypingSessionId(sessionId: String) {
+        firestoreHelper.deleteDocumentWithId(COLLECTION, sessionId)
     }
 
     override fun listenInput(sessionId: String, onInput: (String) -> Unit) {

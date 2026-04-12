@@ -23,14 +23,36 @@
         android:visibility="gone"
         tools:text="Demo mode" />
 
-    <ImageView
-        android:id="@+id/iv_qrcode"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+    <LinearLayout
+        android:id="@+id/ll_qr_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
+        android:layout_marginEnd="80dp"
+        android:layout_marginBottom="20dp"
+        android:background="@drawable/black_chip"
         android:clickable="false"
         android:focusable="false"
         android:focusableInTouchMode="false"
-        android:src="@drawable/avatar_movie"
-        android:visibility="gone" />
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="7dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:id="@+id/iv_qrcode"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/avatar_movie" />
+
+        <TextView
+            android:layout_marginTop="3dp"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="@string/qrcode_summary"
+            android:textAlignment="center"
+            android:textStyle="bold" />
+    </LinearLayout>
 </FrameLayout>

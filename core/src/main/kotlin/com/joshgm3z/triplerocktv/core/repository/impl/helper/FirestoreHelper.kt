@@ -48,4 +48,18 @@ class FirestoreHelper @Inject constructor(
                 }
             }
     }
+
+    suspend fun deleteDocumentWithId(collection: String, sessionId: String): Boolean {
+        return try {
+            db.collection(collection)
+                .document(sessionId)
+                .delete()
+                .await()
+            Logger.debug("Deleted $collection/$sessionId")
+            true
+        } catch (e: Exception) {
+            Logger.error("Failed to delete $collection/$sessionId: ${e.message}")
+            false
+        }
+    }
 }

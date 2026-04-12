@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -50,6 +51,9 @@ class OnlineTyperViewModel
         awaitClose {
             Logger.debug("Cleaning up session: $sessionId")
             _qrCodeBitmapState.value = null
+            viewModelScope.launch {
+                repository.deleteTypingSessionId(sessionId)
+            }
         }
     }.stateIn(
         scope = viewModelScope,
