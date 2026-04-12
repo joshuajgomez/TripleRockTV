@@ -2,7 +2,9 @@ package com.joshgm3z.triplerocktv.ui.search
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.SearchSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.HeaderItem
@@ -19,6 +21,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.viewmodel.OnlineTyperViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,6 +36,8 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     private val viewModel: SearchViewModel by viewModels()
+
+    private val onlineTyperViewModel: OnlineTyperViewModel by activityViewModels()
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
@@ -56,6 +61,11 @@ class SearchFragment : SearchSupportFragment(), SearchSupportFragment.SearchResu
                         is SearchUiState.Result -> updateSearchResult(it.searchUiState as SearchUiState.Result)
                     }
                 }
+            }
+        }
+        lifecycleScope.launch {
+            onlineTyperViewModel.inputTextFlow.collectLatest {
+                setSearchQuery(it, false)
             }
         }
         setupClickListeners()

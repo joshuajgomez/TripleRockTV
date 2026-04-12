@@ -91,6 +91,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.livedata.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
     implementation(libs.androidx.annotation)
+    implementation(libs.androidx.media3.exoplayer)
+
     kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
@@ -101,10 +103,11 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.firebase.crashlytics)
 
+    implementation(libs.zxing.android.embedded)
+
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
     kapt(libs.room.compiler)
-    implementation(libs.androidx.media3.exoplayer)
     testImplementation(kotlin("test"))
 
     testImplementation(libs.kotlinx.coroutines.test)
