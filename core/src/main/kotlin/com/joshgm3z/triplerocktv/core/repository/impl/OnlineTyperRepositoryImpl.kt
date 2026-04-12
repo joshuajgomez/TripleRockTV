@@ -25,7 +25,7 @@ class OnlineTyperRepositoryImpl
     override fun listenInput(sessionId: String, onInput: (String) -> Unit) {
         Logger.debug("sessionId = [${sessionId}]")
         firestoreHelper.listenToDataMap(COLLECTION, sessionId) {
-            onInput(it["input"] as String)
+            (it["input"] as? String)?.let { input -> onInput(input) }
         }
     }
 }

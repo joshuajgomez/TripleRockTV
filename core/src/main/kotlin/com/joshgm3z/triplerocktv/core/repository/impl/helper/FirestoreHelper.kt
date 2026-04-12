@@ -27,8 +27,11 @@ class FirestoreHelper @Inject constructor(
         }
     }
 
-    fun createDocumentIdInCollection(collection: String): String {
-        return db.collection(collection).document().id
+    suspend fun createDocumentIdInCollection(collection: String): String {
+        val document = db.collection(collection)
+            .add("input" to "")
+            .await()
+        return document.id
     }
 
     fun listenToDataMap(
