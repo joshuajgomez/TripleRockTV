@@ -5,8 +5,10 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.GuidedStepSupportFragment
+import androidx.leanback.widget.Action
 import androidx.leanback.widget.GuidanceStylist
 import androidx.leanback.widget.GuidedAction
 import androidx.leanback.widget.GuidedActionsStylist
@@ -18,6 +20,7 @@ import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.viewmodel.OnlineTyperViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,6 +32,8 @@ import kotlin.getValue
 class SettingsFragment : GuidedStepSupportFragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    private val onlineTyperViewModel: OnlineTyperViewModel by activityViewModels()
 
     companion object {
         val idCredential = 0L
@@ -57,6 +62,60 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 }
             }
         }
+        lifecycleScope.launch {
+            onlineTyperViewModel.inputTextFlow.collectLatest { inputText ->
+                Logger.debug("inputTextFlow = [${inputText}]")
+                val findSelectedAction = findSelectedAction()
+                Logger.debug("findSelectedAction = [${findSelectedAction}]")
+                findSelectedAction?.let {
+                    it.editTitle = inputText
+                    // 2. Find the ViewHolder and update the text view directly to avoid "notifyItemChanged" collapse
+                    val subGridView = guidedActionsStylist.subActionsGridView
+                    if (subGridView != null) {
+                        val subActions = findActionById(idCredential)?.subActions
+                        val index = subActions?.indexOf(it) ?: -1
+
+                        if (index != -1) {
+                            val vh = subGridView.findViewHolderForAdapterPosition(index) as? GuidedActionsStylist.ViewHolder
+                            if (vh != null) {
+                                // This updates the UI immediately without triggering the adapter lifecycle that causes collapse
+                                vh.titleView?.text = inputText
+                            } else {
+                                // Fallback if view isn't bound, though unlikely for a focused item
+                                subGridView.adapter?.notifyItemChanged(index)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    private fun findSelectedAction(): GuidedAction? {
+        // 1. Check if a sub-action is focused (this is usually what's visible when typing)
+        val subActions = findActionById(idCredential)?.subActions
+        if (subActions != null) {
+            val subGridView = guidedActionsStylist.subActionsGridView
+            if (subGridView != null && subGridView.hasFocus()) {
+                val focusedView = subGridView.focusedChild
+                val position = subGridView.getChildAdapterPosition(focusedView)
+                if (position != -1 && position < subActions.size) {
+                    return subActions[position]
+                }
+            }
+        }
+
+        // 2. Fallback to main actions list
+        val mainGridView = guidedActionsStylist.actionsGridView
+        if (mainGridView != null && mainGridView.hasFocus()) {
+            val focusedView = mainGridView.focusedChild
+            val position = mainGridView.getChildAdapterPosition(focusedView)
+            if (position != -1 && position < actions.size) {
+                return actions[position]
+            }
+        }
+
+        return null
     }
 
     private fun updateBlurSettings(enabled: Boolean) {
