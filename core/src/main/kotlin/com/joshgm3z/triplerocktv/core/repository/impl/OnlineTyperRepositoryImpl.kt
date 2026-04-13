@@ -14,7 +14,7 @@ class OnlineTyperRepositoryImpl
     private val firestoreHelper: FirestoreHelper
 ) : OnlineTyperRepository {
 
-    override suspend fun newTypingSessionId(): String {
+    override suspend fun newTypingSessionId(): String? {
         return firestoreHelper.createDocumentIdInCollection(COLLECTION)
     }
 

@@ -1,14 +1,20 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import android.content.Context
+import android.graphics.Bitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
+import com.joshgm3z.triplerocktv.core.R
+import com.joshgm3z.triplerocktv.core.repository.CompanionLoginRepository
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.getQrCode
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -34,9 +40,24 @@ data class UserInfo(
 class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository,
+    private val companionLoginRepository: CompanionLoginRepository,
+    @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
+
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
+
+    private val _qrCodeUiState = MutableStateFlow<Bitmap?>(null)
+    val qrCodeUiState = _qrCodeUiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            companionLoginRepository.newLoginSessionId()?.let {
+                val appUrl = context.getString(R.string.online_typer_app_url)
+                _qrCodeUiState.value = "$appUrl?id=$it".getQrCode()
+            }
+        }
+    }
 
     fun onLoginClick(
         webUrl: String,

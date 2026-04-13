@@ -10,9 +10,10 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/iv_qrcode"
             android:layout_width="120dp"
             android:layout_height="120dp"
-            android:src="@drawable/qrcode" />
+            android:background="#fff" />
 
         <TextView
             android:id="@+id/tv_qrcode_title"

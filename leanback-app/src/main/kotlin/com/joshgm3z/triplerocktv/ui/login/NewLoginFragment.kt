@@ -57,6 +57,11 @@ class NewLoginFragment : Fragment() {
                 )
             }
         }
+        lifecycleScope.launch {
+            viewModel.qrCodeUiState.collectLatest {
+                binding.includeQrcodeForm.ivQrcode.setImageBitmap(it)
+            }
+        }
         initListeners()
         initUi()
     }

@@ -33,14 +33,26 @@ constructor(
         xtreamUserResponse: XtreamUserResponse,
         webUrl: String,
         password: String,
-    ) {
-        dataStore.edit { preferences ->
-            preferences[USERNAME] = xtreamUserResponse.user_info?.username ?: ""
-            preferences[EXPIRY_DATE] = xtreamUserResponse.user_info?.exp_date ?: ""
-            preferences[PASSWORD] = password
-            preferences[SERVER_URL] = webUrl
-            preferences[SERVER_PORT] = xtreamUserResponse.server_info?.port ?: ""
-        }
+    ) = storeCredentials(
+        xtreamUserResponse.user_info?.username ?: "",
+        xtreamUserResponse.user_info?.exp_date ?: "",
+        xtreamUserResponse.server_info?.port ?: "",
+        webUrl,
+        password
+    )
+
+    suspend fun storeCredentials(
+        username: String,
+        expiryDate: String,
+        port: String,
+        webUrl: String,
+        password: String,
+    ) = dataStore.edit { preferences ->
+        preferences[USERNAME] = username
+        preferences[EXPIRY_DATE] = expiryDate
+        preferences[PASSWORD] = password
+        preferences[SERVER_URL] = webUrl
+        preferences[SERVER_PORT] = port
     }
 
     suspend fun getUserInfo() = dataStore.data.firstOrNull()?.let {
