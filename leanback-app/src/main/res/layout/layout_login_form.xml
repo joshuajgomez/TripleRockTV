@@ -33,7 +33,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:backgroundTint="?attr/colorPrimary"
+        android:background="@drawable/bg_button"
+        android:clickable="true"
+        android:focusable="true"
         android:text="Login"
         android:textColor="#000" />
 </LinearLayout>
