@@ -17,12 +17,12 @@ class CompanionLoginRepositoryImpl
     private val localDatastore: LocalDatastore,
     private val scope: CoroutineScope,
 ) : CompanionLoginRepository {
+
     override suspend fun newLoginSessionId(): String? {
-//        return firestoreHelper.createDocumentIdInCollection(
-        //        COLLECTION_NAME,
-        //        mapOf("status" to "idle")
-        //)
-        return "QNAhBw4Xi6ljBaURzVT2"
+        return firestoreHelper.createDocumentIdInCollection(
+            COLLECTION_NAME,
+            mapOf("status" to "idle")
+        )
     }
 
     override suspend fun deleteLoginSessionId(sessionId: String) {
