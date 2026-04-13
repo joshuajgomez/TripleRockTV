@@ -8,4 +8,14 @@
         <item name="colorCardBackground">@color/color_card_background</item>
         <item name="colorCardContent">@color/color_card_content</item>
     </style>
+
+    <style name="LeanbackEditText">
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">8dp</item>
+        <item name="android:layout_marginTop">5dp</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:focusable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
 </resources>
