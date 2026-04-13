@@ -39,6 +39,7 @@ class CompanionLoginRepositoryImpl
                 "verifying" -> onState(CompanionLoginState.Verifying)
                 "success" -> {
                     scope.launch {
+                        Logger.debug("success $COLLECTION_NAME/$sessionId: $it")
                         delay(1000)
                         if (listOf(
                                 "username",
@@ -46,7 +47,19 @@ class CompanionLoginRepositoryImpl
                                 "password",
                                 "port",
                                 "server_url"
-                            ).all { key -> it.contains(key) }
+                            ).all { key ->
+                                if (!it.containsKey(key)) return@all false
+
+                                val value = it[key]
+
+                                if (value is String)
+                                    if (value.isEmpty()) return@all false
+
+                                if (value is Long)
+                                    if (value.toString().isEmpty()) return@all false
+
+                                return@all true
+                            }
                         ) {
                             localDatastore.storeCredentials(
                                 username = it["username"] as String,
