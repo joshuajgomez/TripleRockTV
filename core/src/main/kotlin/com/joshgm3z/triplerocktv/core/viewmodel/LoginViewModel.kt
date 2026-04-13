@@ -45,7 +45,7 @@ class LoginViewModel
     ) {
         Logger.entry()
         _uiState.update {
-            it.copy(loading = true, errorMessage = null)
+            it.copy(loading = true, errorMessage = null, loginSuccess = false)
         }
         viewModelScope.launch {
             repository.tryLogin(

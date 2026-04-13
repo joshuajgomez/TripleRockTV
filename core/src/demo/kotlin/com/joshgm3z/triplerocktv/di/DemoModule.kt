@@ -9,9 +9,11 @@ import com.joshgm3z.triplerocktv.impl.DemoSubtitleRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
+import com.joshgm3z.triplerocktv.core.repository.OnlineTyperRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.impl.DemoAccessControlRepositoryImpl
+import com.joshgm3z.triplerocktv.impl.DemoOnlineTyperRepositoryImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -49,4 +51,9 @@ abstract class DemoBindingModule {
     abstract fun bindAccessControlRepository(
         repo: DemoAccessControlRepositoryImpl
     ): AccessControlRepository
+
+    @Binds
+    abstract fun bindOnlineTyperRepository(
+        repo: DemoOnlineTyperRepositoryImpl
+    ): OnlineTyperRepository
 }
