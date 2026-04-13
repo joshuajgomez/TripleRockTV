@@ -4,34 +4,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#000"
-    android:paddingHorizontal="100dp"
-    android:paddingVertical="50dp">
+    android:paddingHorizontal="50dp"
+    android:paddingVertical="30dp">
 
-    <LinearLayout
-        android:id="@+id/ll_header"
-        android:layout_width="wrap_content"
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="80dp"
+        android:layout_height="50dp"
+        android:src="@drawable/logo_vd_vector"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:maxEms="9"
+        android:text="Welcome to 3RockTV"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/iv_logo" />
 
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="100dp"
-            android:layout_height="70dp"
-            android:src="@drawable/logo_vd_vector" />
+    <TextView
+        android:id="@+id/tv_title2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:maxEms="9"
+        android:text="Login using your IPTV credentials"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:maxEms="9"
-            android:text="Login using your IPTV credentials"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-    </LinearLayout>
 
     <include
         android:id="@+id/include_login_form"
@@ -46,12 +54,12 @@
         android:id="@+id/ll_divider"
         android:layout_width="1dp"
         android:layout_height="300dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
         android:background="?attr/colorPrimary"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/ll_header" />
+        app:layout_constraintTop_toBottomOf="@id/tv_title2" />
 
     <include
         android:id="@+id/include_qrcode_form"
@@ -59,6 +67,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintStart_toEndOf="@id/ll_divider"
         app:layout_constraintTop_toTopOf="@id/ll_divider" />
 
