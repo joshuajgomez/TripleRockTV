@@ -26,9 +26,12 @@ class FirestoreHelper
         }
     }
 
-    suspend fun createDocumentIdInCollection(collection: String): String? {
+    suspend fun createDocumentIdInCollection(
+        collection: String,
+        initialData: Map<String, Any> = mapOf("input" to "")
+    ): String? {
         val document = db.collection(collection)
-            .add(mapOf("input" to ""))
+            .add(initialData)
             .await()
         return document.id
     }

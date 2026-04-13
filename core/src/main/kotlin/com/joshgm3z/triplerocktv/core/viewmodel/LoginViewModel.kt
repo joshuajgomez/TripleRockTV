@@ -9,6 +9,7 @@ import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.R
 import com.joshgm3z.triplerocktv.core.repository.CompanionLoginRepository
+import com.joshgm3z.triplerocktv.core.repository.CompanionLoginState
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
@@ -53,8 +54,21 @@ class LoginViewModel
     init {
         viewModelScope.launch {
             companionLoginRepository.newLoginSessionId()?.let {
-                val appUrl = context.getString(R.string.online_typer_app_url)
+                val appUrl = context.getString(R.string.companion_login_app_url)
                 _qrCodeUiState.value = "$appUrl?id=$it".getQrCode()
+                listenStatus(it)
+            }
+        }
+    }
+
+    private fun listenStatus(sessionId: String) {
+        companionLoginRepository.listenStatus(sessionId) { status ->
+            _uiState.update {
+                it.copy(
+                    loading = status == CompanionLoginState.Verifying,
+                    loginSuccess = status == CompanionLoginState.Success,
+                    errorMessage = if (status == CompanionLoginState.Error) "Login failed" else null,
+                )
             }
         }
     }

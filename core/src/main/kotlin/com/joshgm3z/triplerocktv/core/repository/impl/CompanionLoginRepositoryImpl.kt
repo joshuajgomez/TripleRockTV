@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.repository.CompanionLoginRepository
 import com.joshgm3z.triplerocktv.core.repository.CompanionLoginState
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
+import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -17,7 +18,11 @@ class CompanionLoginRepositoryImpl
     private val scope: CoroutineScope,
 ) : CompanionLoginRepository {
     override suspend fun newLoginSessionId(): String? {
-        return firestoreHelper.createDocumentIdInCollection(COLLECTION_NAME)
+//        return firestoreHelper.createDocumentIdInCollection(
+        //        COLLECTION_NAME,
+        //        mapOf("status" to "idle")
+        //)
+        return "QNAhBw4Xi6ljBaURzVT2"
     }
 
     override suspend fun deleteLoginSessionId(sessionId: String) {
@@ -29,20 +34,33 @@ class CompanionLoginRepositoryImpl
         onState: (CompanionLoginState) -> Unit,
     ) {
         firestoreHelper.listenToDataMap(COLLECTION_NAME, sessionId) {
-            when (it["status"] as String) {
+            when (it["status"] as? String) {
                 "idle" -> onState(CompanionLoginState.Idle)
                 "verifying" -> onState(CompanionLoginState.Verifying)
                 "success" -> {
                     scope.launch {
-                        localDatastore.storeCredentials(
-                            username = it["username"] as String,
-                            expiryDate = it["expiry_date"] as String,
-                            password = it["password"] as String,
-                            port = it["port"] as String,
-                            webUrl = it["web_url"] as String,
-                        )
                         delay(1000)
-                        onState(CompanionLoginState.Success)
+                        if (listOf(
+                                "username",
+                                "expiry_date",
+                                "password",
+                                "port",
+                                "server_url"
+                            ).all { key -> it.contains(key) }
+                        ) {
+                            localDatastore.storeCredentials(
+                                username = it["username"] as String,
+                                expiryDate = (it["expiry_date"] as Long).toString(),
+                                password = it["password"] as String,
+                                port = (it["port"] as Long).toString(),
+                                webUrl = it["server_url"] as String,
+                            )
+                            onState(CompanionLoginState.Success)
+                        } else {
+                            Logger.error("Missing some keys in firestore data $COLLECTION_NAME/$sessionId: $it")
+                            onState(CompanionLoginState.Error)
+                            return@launch
+                        }
                     }
                 }
 
