@@ -113,6 +113,8 @@ dependencies {
     implementation(libs.androidx.media3.hls)
     implementation(libs.glide.transformations)
 
+    implementation(libs.androidx.core.splashscreen)
+
     testImplementation(kotlin("test"))
 
     testImplementation(libs.kotlinx.coroutines.test)

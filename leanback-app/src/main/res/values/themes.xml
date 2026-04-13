@@ -1,5 +1,20 @@
 <resources>
 
+    <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- Background color of the splash screen -->
+        <item name="windowSplashScreenBackground">#FFFFFF</item>
+
+        <!-- The icon in the center (Vector drawable recommended) -->
+        <item name="windowSplashScreenAnimatedIcon">@drawable/logo_avd_anim</item>
+
+        <!-- The duration the icon is displayed (works only on Android 12+) -->
+        <!-- Note: This doesn't control how long the splash stays; that depends on the app load -->
+        <item name="windowSplashScreenAnimationDuration">200</item>
+
+        <!-- The theme to switch to after the splash screen is done -->
+        <item name="postSplashScreenTheme">@style/Theme.TripleRockTV.Leanback</item>
+    </style>
+
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
         <item name="playbackProgressPrimaryColor">@color/color_primary</item>
         <item name="colorBackground">@color/color_background</item>
