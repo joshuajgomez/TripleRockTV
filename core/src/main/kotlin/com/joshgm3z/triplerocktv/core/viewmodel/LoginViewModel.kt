@@ -7,13 +7,9 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
-import com.joshgm3z.triplerocktv.core.R
-import com.joshgm3z.triplerocktv.core.repository.CompanionLoginRepository
-import com.joshgm3z.triplerocktv.core.repository.CompanionLoginState
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.getQrCode
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +37,6 @@ data class UserInfo(
 class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository,
-    private val companionLoginRepository: CompanionLoginRepository,
     @param:ApplicationContext private val context: Context,
 ) : ViewModel() {
 
@@ -50,28 +45,6 @@ class LoginViewModel
 
     private val _qrCodeUiState = MutableStateFlow<Bitmap?>(null)
     val qrCodeUiState = _qrCodeUiState.asStateFlow()
-
-    init {
-        viewModelScope.launch {
-            companionLoginRepository.newLoginSessionId()?.let {
-                val appUrl = context.getString(R.string.companion_login_app_url)
-                _qrCodeUiState.value = "$appUrl?id=$it".getQrCode()
-                listenStatus(it)
-            }
-        }
-    }
-
-    private fun listenStatus(sessionId: String) {
-        companionLoginRepository.listenStatus(sessionId) { status ->
-            _uiState.update {
-                it.copy(
-                    loading = status == CompanionLoginState.Verifying,
-                    loginSuccess = status == CompanionLoginState.Success,
-                    errorMessage = if (status == CompanionLoginState.Error) "Login failed" else null,
-                )
-            }
-        }
-    }
 
     fun onLoginClick(
         webUrl: String,
