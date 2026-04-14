@@ -15,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.MediaLoadingUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.MediaLoadingViewModel
@@ -44,9 +45,13 @@ class LoadingFragment : GuidedStepSupportFragment() {
             viewModel.uiState.collectLatest {
                 when (it) {
                     is MediaLoadingUiState.Initial -> {}
-                    is MediaLoadingUiState.Error -> findNavController().navigate(
-                        LoadingFragmentDirections.toLoadingError("${it.message}\n${it.summary}")
-                    )
+                    is MediaLoadingUiState.Error -> try {
+                        findNavController().navigate(
+                            LoadingFragmentDirections.toLoadingError("${it.message}\n${it.summary}")
+                        )
+                    } catch (e: Exception) {
+                        Logger.error(e.message.toString())
+                    }
 
                     is MediaLoadingUiState.Update -> {
                         it.map.forEach { (type, state) ->
