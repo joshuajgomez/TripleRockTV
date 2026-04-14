@@ -45,7 +45,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
                 when (it) {
                     is MediaLoadingUiState.Initial -> {}
                     is MediaLoadingUiState.Error -> findNavController().navigate(
-                        LoadingFragmentDirections.toError("${it.message}\n${it.summary}")
+                        LoadingFragmentDirections.toLoadingError("${it.message}\n${it.summary}")
                     )
 
                     is MediaLoadingUiState.Update -> {
