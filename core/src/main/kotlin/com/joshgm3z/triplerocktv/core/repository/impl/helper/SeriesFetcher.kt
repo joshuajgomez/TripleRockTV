@@ -61,6 +61,8 @@ constructor(
         }
 
         if (seriesStreamListToStore.isNotEmpty() && categoriesToStore.isNotEmpty()) {
+            Logger.info("storing categories = [${categoriesToStore.size}], streams = [${seriesStreamListToStore.size}]")
+
             categoryDataDao.replaceData(StreamType.Series, categoriesToStore)
             seriesStreamsDao.replaceData(seriesStreamListToStore)
 
