@@ -26,35 +26,42 @@ constructor(
 
     suspend fun fetchContent(
         streamType: StreamType,
-        limit: Int? = null,
         onFetch: (LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
-        val categories = fetchCategories(streamType).let {
-            if (limit != null) it.subList(0, limit) else it
-        }
-        val total = categories.size
-        if (total > 0) {
-            // Clear existing data only if network call is successful
-            categoryDataDao.deleteAllOfType(streamType)
-            streamDataDao.deleteAllOfType(streamType)
-        } else {
-            onFetch(LoadingState(0, LoadingStatus.Error))
-            return
-        }
+        val categories = fetchCategories(streamType)
+
+        val streamDataListToStore = mutableListOf<StreamData>()
+        val categoriesToStore = mutableListOf<CategoryData>()
 
         categories.forEachIndexed { index, it ->
-            fetchAndStoreContent(it)
+            val list = fetchStreamDataList(it)
+            if (list.isNotEmpty()) {
+                categoriesToStore.add(it.apply {
+                    count = list.size
+                    firstStreamIcon = list.firstOrNull()?.streamIcon
+                })
+                streamDataListToStore.addAll(list)
+            }
             onFetch(
                 LoadingState(
-                    percent = (index.toFloat() / total * 100).toInt(),
+                    percent = (index.toFloat() / categories.size * 100).toInt(),
                     status = LoadingStatus.Ongoing
                 )
             )
             delay(REQUEST_DELAY)
         }
-        onFetch(LoadingState(100, LoadingStatus.Complete))
+        if (categoriesToStore.isNotEmpty() && streamDataListToStore.isNotEmpty()) {
+            Logger.info("storing categories = [${categoriesToStore.size}], streams = [${streamDataListToStore.size}]")
+
+            categoryDataDao.replaceData(streamType, categoriesToStore)
+            streamDataDao.replaceData(streamType, streamDataListToStore)
+
+            onFetch(LoadingState(100, LoadingStatus.Complete))
+        } else {
+            onFetch(LoadingState(0, LoadingStatus.Error))
+        }
     }
 
     private suspend fun fetchCategories(streamType: StreamType): List<CategoryData> {
@@ -74,7 +81,7 @@ constructor(
     }
 
 
-    private suspend fun fetchAndStoreContent(categoryData: CategoryData) {
+    private suspend fun fetchStreamDataList(categoryData: CategoryData): List<StreamData> {
         val streams = when (categoryData.streamType) {
             StreamType.VideoOnDemand -> iptvService.getVodStreams(
                 username,
@@ -92,11 +99,7 @@ constructor(
         }
         Logger.debug("streamType=${categoryData.streamType}, categoryId=${categoryData.categoryId}, streams.size=${streams.size}")
 
-        categoryDataDao.insert(categoryData.apply {
-            count = streams.size
-            firstStreamIcon = streams.firstOrNull()?.streamIcon
-        })
-        streamDataDao.insertAll(streams.map {
+        return streams.map {
             StreamData(
                 num = it.num,
                 name = it.name,
@@ -110,7 +113,7 @@ constructor(
                 rating = it.rating.parseToFloat(),
                 epgChannelId = it.epgChannelId,
             )
-        })
+        }
     }
 
     suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {

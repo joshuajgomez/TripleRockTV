@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.leanback.R
 import androidx.leanback.app.ErrorSupportFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
@@ -20,7 +21,7 @@ class LoadingErrorFragment : ErrorSupportFragment() {
         buttonText = "Dismiss"
 
         buttonClickListener = View.OnClickListener {
-            parentFragmentManager.popBackStack()
+            findNavController().navigate(LoadingErrorFragmentDirections.toSplash())
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 
 @Dao
@@ -19,6 +20,15 @@ interface CategoryDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(categoryData: CategoryData)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(categoryDataList: List<CategoryData>)
+
+    @Transaction
+    suspend fun replaceData(streamType: StreamType, categoryDataList: List<CategoryData>) {
+        deleteAllOfType(streamType)
+        insertAll(categoryDataList)
+    }
 
     @Query("DELETE FROM category_data")
     suspend fun deleteAll()

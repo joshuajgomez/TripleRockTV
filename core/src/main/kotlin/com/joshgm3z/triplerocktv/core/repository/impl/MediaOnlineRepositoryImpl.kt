@@ -81,7 +81,7 @@ class MediaOnlineRepositoryImpl
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             onlineDataFetcher.fetchContent(
-                streamType = StreamType.LiveTV, onError = onError, limit = LIMIT,
+                streamType = StreamType.LiveTV, onError = onError,
                 onFetch = { onFetch(StreamType.LiveTV, it) },
             )
             seriesFetcher.fetchContent(onFetch = onFetch, onError = onError)

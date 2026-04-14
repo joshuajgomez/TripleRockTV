@@ -34,19 +34,22 @@ constructor(
             if (limit != null) it.subList(0, limit) else it
         }
         val total = categories.size
-        if (total > 0) {
-            categoryDataDao.deleteAllOfType(StreamType.Series)
-            seriesStreamsDao.deleteAllStreams()
-        } else {
-            onFetch(
-                StreamType.Series,
-                LoadingState(0, LoadingStatus.Error)
-            )
-            return
-        }
+
+        val seriesStreamListToStore = mutableListOf<SeriesStream>()
+        val categoriesToStore = mutableListOf<CategoryData>()
 
         categories.forEachIndexed { index, it ->
-            fetchAndStoreSeries(it)
+            val list = fetchSeries(it)
+            if (list.isNotEmpty()) {
+                categoriesToStore.add(
+                    it.apply {
+                        count = list.size
+                        firstStreamIcon = list.firstOrNull()?.coverImageUrl
+                    }
+                )
+                seriesStreamListToStore.addAll(list)
+            }
+
             onFetch(
                 StreamType.Series,
                 LoadingState(
@@ -56,10 +59,21 @@ constructor(
             )
             delay(REQUEST_DELAY)
         }
-        onFetch(
-            StreamType.Series,
-            LoadingState(100, LoadingStatus.Complete)
-        )
+
+        if (seriesStreamListToStore.isNotEmpty() && categoriesToStore.isNotEmpty()) {
+            categoryDataDao.replaceData(StreamType.Series, categoriesToStore)
+            seriesStreamsDao.replaceData(seriesStreamListToStore)
+
+            onFetch(
+                StreamType.Series,
+                LoadingState(100, LoadingStatus.Complete)
+            )
+        } else {
+            onFetch(
+                StreamType.Series,
+                LoadingState(0, LoadingStatus.Error)
+            )
+        }
     }
 
     private suspend fun fetchSeriesCategories(): List<CategoryData> =
@@ -74,15 +88,11 @@ constructor(
             Logger.debug("fetchSeriesCategories: $this")
         }
 
-    private suspend fun fetchAndStoreSeries(category: CategoryData) {
+    private suspend fun fetchSeries(category: CategoryData): List<SeriesStream> {
         val series = iptvService.getSeries(username, password, category.categoryId)
         Logger.debug("categoryId=${category.categoryId}, series.size=${series.size}")
 
-        categoryDataDao.insert(category.apply {
-            count = series.size
-            firstStreamIcon = series.firstOrNull()?.cover
-        })
-        seriesStreamsDao.insertStreams(series.map {
+        return series.map {
             SeriesStream(
                 num = it.num,
                 name = it.name,
@@ -98,7 +108,7 @@ constructor(
                 rating = it.rating,
                 backdropUrl = it.backdropPath.firstOrNull()
             )
-        })
+        }
     }
 
     suspend fun getSeriesDataAndUpdate(streamId: Int) {
