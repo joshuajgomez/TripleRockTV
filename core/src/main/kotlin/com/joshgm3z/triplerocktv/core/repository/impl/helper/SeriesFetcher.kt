@@ -76,7 +76,7 @@ constructor(
 
     private suspend fun fetchAndStoreSeries(category: CategoryData) {
         val series = iptvService.getSeries(username, password, category.categoryId)
-        Logger.debug("fetchAndStoreSeries: $series")
+        Logger.debug("categoryId=${category.categoryId}, series.size=${series.size}")
 
         categoryDataDao.insert(category.apply {
             count = series.size

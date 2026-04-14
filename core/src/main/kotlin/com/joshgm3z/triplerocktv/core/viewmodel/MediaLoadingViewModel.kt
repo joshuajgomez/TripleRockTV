@@ -41,7 +41,6 @@ class MediaLoadingViewModel
                     with(_uiState.value) {
                         val updatedMap = when (this) {
                             is MediaLoadingUiState.Update -> {
-                                Logger.debug("fetchContent: found map $map")
                                 if (!map.containsKey(type)) return@with
                                 map.toMutableMap()
                                     .apply { set(type, state) }

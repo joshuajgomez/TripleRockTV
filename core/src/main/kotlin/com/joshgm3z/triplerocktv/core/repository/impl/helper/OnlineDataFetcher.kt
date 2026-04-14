@@ -90,6 +90,7 @@ constructor(
 
             else -> emptyList()
         }
+        Logger.debug("streamType=${categoryData.streamType}, categoryId=${categoryData.categoryId}, streams.size=${streams.size}")
 
         categoryDataDao.insert(categoryData.apply {
             count = streams.size
