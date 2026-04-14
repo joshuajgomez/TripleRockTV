@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import kotlinx.coroutines.flow.Flow
@@ -27,6 +28,12 @@ interface StreamDataDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(streams: List<StreamData>)
+
+    @Transaction
+    suspend fun replaceData(streamType: StreamType, streamDataList: List<StreamData>) {
+        deleteAllOfType(streamType)
+        insertAll(streamDataList)
+    }
 
     @Update
     suspend fun update(streamData: StreamData)
