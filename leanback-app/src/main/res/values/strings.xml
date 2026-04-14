@@ -10,4 +10,5 @@
     <string name="find_more_online">Find more online</string>
     <string name="open_subtitles">Subtitles from <font color="#FB8C00">OpenSubtitles.com</font></string>
     <string name="qrcode_summary">Scan to type with your phone</string>
+    <string name="opensubtitles_com">OpenSubtitles.com</string>
 </resources>

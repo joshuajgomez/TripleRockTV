@@ -66,26 +66,19 @@
         android:focusableInTouchMode="true"
         android:paddingHorizontal="10dp"
         android:paddingVertical="3dp"
-        android:text="OpenSubtitles.com"
+        android:text="@string/opensubtitles_com"
         android:textColor="@color/button_fg_color_selector"
         android:textSize="17sp"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />
 
-    <LinearLayout
-        android:id="@+id/ll_loading_overlay"
+    <com.joshgm3z.triplerocktv.ui.common.LoadingOverlay
+        android:id="@+id/loading_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_transparent_color"
-        android:visibility="gone">
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <ProgressBar
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="5dp"
-            android:layout_gravity="bottom"
-            android:indeterminate="true"
-            android:indeterminateTint="?attr/colorPrimary" />
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -74,14 +74,14 @@ class TrackSelectorFragment : DialogFragment(),
                     return@collectLatest
                 }
 
-                binding.llLoadingOverlay.setVisible(it.isLoading)
+                binding.loadingOverlay.setVisible(it.isLoading)
                 binding.tvFindMoreButton.setVisible(it.listState is ListState.SubtitleTracks)
                 binding.tvStatus.text = it.statusText
                 binding.tvStatus.setVisible(it.statusText.isNotEmpty())
 
                 when (it.listState) {
                     is ListState.SubtitleTracks -> {
-                        binding.tvTitle.text = "Subtitles tracks"
+                        binding.tvTitle.text = "Subtitle tracks"
                         showTracks((it.listState as ListState.SubtitleTracks).list)
                     }
 
