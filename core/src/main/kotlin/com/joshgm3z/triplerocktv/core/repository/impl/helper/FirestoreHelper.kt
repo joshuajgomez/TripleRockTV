@@ -2,12 +2,6 @@ package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.joshgm3z.triplerocktv.core.util.Logger
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -26,9 +20,29 @@ class FirestoreHelper
         }
     }
 
-    suspend fun createDocumentIdInCollection(collection: String): String {
+    suspend fun addDocumentWithId(
+        collection: String,
+        documentId: String,
+        dataMap: Map<String, Any> = mapOf("input" to "")
+    ): Boolean {
+        return try {
+            db.collection(collection)
+                .document(documentId)
+                .set(dataMap)
+                .await()
+            true
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            false
+        }
+    }
+
+    suspend fun createDocumentIdInCollection(
+        collection: String,
+        dataMap: Map<String, Any> = mapOf("input" to "")
+    ): String {
         val document = db.collection(collection)
-            .add(mapOf("input" to ""))
+            .add(dataMap)
             .await()
         return document.id
     }
@@ -51,16 +65,16 @@ class FirestoreHelper
             }
     }
 
-    suspend fun deleteDocumentWithId(collection: String, sessionId: String): Boolean {
+    suspend fun deleteDocumentWithId(collection: String, documentId: String): Boolean {
         return try {
             db.collection(collection)
-                .document(sessionId)
+                .document(documentId)
                 .delete()
                 .await()
-            Logger.debug("Deleted $collection/$sessionId")
+            Logger.debug("Deleted $collection/$documentId")
             true
         } catch (e: Exception) {
-            Logger.error("Failed to delete $collection/$sessionId: ${e.message}")
+            Logger.error("Failed to delete $collection/$documentId: ${e.message}")
             false
         }
     }

@@ -31,7 +31,7 @@ class OnlineTyperViewModel
     val qrCodeBitmapState = _qrCodeBitmapState.asStateFlow()
 
     val inputTextFlow: StateFlow<String> = callbackFlow {
-        val sessionId = repository.newTypingSessionId()
+        val sessionId = repository.newTypingSessionUrl()
 
         if (sessionId == null) {
             Logger.error("sessionId is null")
@@ -52,7 +52,7 @@ class OnlineTyperViewModel
             Logger.debug("Cleaning up session: $sessionId")
             _qrCodeBitmapState.value = null
             viewModelScope.launch {
-                repository.deleteTypingSessionId(sessionId)
+                repository.deleteTypingSession()
             }
         }
     }.stateIn(

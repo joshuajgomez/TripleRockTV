@@ -24,6 +24,7 @@ constructor(
         private val SERVER_URL = stringPreferencesKey("server_url")
         private val LAST_CONTENT_UPDATE = stringPreferencesKey("last_content_update")
         private val SERVER_PORT = stringPreferencesKey("server_port")
+        private val SESSION_ID = stringPreferencesKey("session_id")
         private val EXPIRY_DATE = stringPreferencesKey("expiry_date")
 
         private val BLUR_SETTING = booleanPreferencesKey("blur_setting")
@@ -33,6 +34,7 @@ constructor(
         xtreamUserResponse: XtreamUserResponse,
         webUrl: String,
         password: String,
+        sessionId: String,
     ) {
         dataStore.edit { preferences ->
             preferences[USERNAME] = xtreamUserResponse.user_info?.username ?: ""
@@ -40,6 +42,7 @@ constructor(
             preferences[PASSWORD] = password
             preferences[SERVER_URL] = webUrl
             preferences[SERVER_PORT] = xtreamUserResponse.server_info?.port ?: ""
+            preferences[SESSION_ID] = sessionId
         }
     }
 
@@ -50,6 +53,7 @@ constructor(
             webUrl = it[SERVER_URL] ?: return null,
             expiryDate = it[EXPIRY_DATE] ?: return null,
             lastContentUpdate = it[LAST_CONTENT_UPDATE] ?: "",
+            sessionId = it[SESSION_ID] ?: ""
         )
     }
 
