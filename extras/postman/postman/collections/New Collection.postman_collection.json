@@ -428,6 +428,82 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "xmltv",
+      "id": "4fc9429d-92a6-4b33-ba03-d43add6ba2ed",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://riseiptv.xyz:8080/xmltv.php?username=jgomez554&password=38333563",
+          "protocol": "http",
+          "host": [
+            "riseiptv",
+            "xyz"
+          ],
+          "port": "8080",
+          "path": [
+            "xmltv.php"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "jgomez554",
+              "uuid": "9096498c-2fc7-48d5-bcec-57c21ebbb733"
+            },
+            {
+              "key": "password",
+              "value": "38333563",
+              "uuid": "4e0cc894-5b13-462a-9e57-b3a96d03e220"
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "get_simple_date_table",
+      "id": "56ce9761-dc9b-44b0-9445-a9ae97563c4d",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://riseiptv.xyz:8080/player_api.php?username=jgomez554&password=38333563&action=get_simple_date_table&stream_id=384213",
+          "protocol": "http",
+          "host": [
+            "riseiptv",
+            "xyz"
+          ],
+          "port": "8080",
+          "path": [
+            "player_api.php"
+          ],
+          "query": [
+            {
+              "key": "username",
+              "value": "jgomez554",
+              "uuid": "9096498c-2fc7-48d5-bcec-57c21ebbb733"
+            },
+            {
+              "key": "password",
+              "value": "38333563",
+              "uuid": "4e0cc894-5b13-462a-9e57-b3a96d03e220"
+            },
+            {
+              "key": "action",
+              "value": "get_simple_date_table",
+              "uuid": "cd483789-eaac-42e7-92ac-19038b61e959"
+            },
+            {
+              "key": "stream_id",
+              "value": "384213",
+              "uuid": "e27a1d19-88d7-48e2-b4ff-cbb40502cda9"
+            }
+          ]
+        }
+      },
+      "response": []
     }
   ]
 }

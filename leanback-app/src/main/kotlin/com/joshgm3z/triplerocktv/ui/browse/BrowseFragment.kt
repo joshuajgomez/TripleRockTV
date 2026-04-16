@@ -159,6 +159,13 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
+        if (uiState.newlyAdded.isNotEmpty()) {
+            val header = HeaderItem(0, "Newly added")
+            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+            listRowAdapter.addAll(0, uiState.newlyAdded)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+
         fun addRow(
             id: Long,
             header: String,

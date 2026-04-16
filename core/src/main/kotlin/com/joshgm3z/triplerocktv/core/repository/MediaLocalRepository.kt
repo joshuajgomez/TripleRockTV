@@ -36,6 +36,8 @@ interface MediaLocalRepository {
 
     suspend fun fetchMyList(): List<StreamData>
 
+    suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData>
+
     suspend fun fetchMyListSeries(): List<SeriesStream>
 
     suspend fun updatePlayedDuration(streamId: Int, positionMs: Long, streamType: StreamType)

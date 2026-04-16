@@ -108,6 +108,11 @@ class MediaLocalRepositoryImpl @Inject constructor(
         return streamDataDao.getMyList10()
     }
 
+    override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
+        return if (streamType == StreamType.VideoOnDemand) streamDataDao.getNewlyAdded10()
+        else emptyList()
+    }
+
     override suspend fun fetchMyListSeries(): List<SeriesStream> {
         return seriesStreamsDao.getMyList10()
     }
