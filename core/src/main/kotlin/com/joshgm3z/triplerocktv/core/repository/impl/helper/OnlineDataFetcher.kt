@@ -69,13 +69,13 @@ constructor(
         }
         when {
             categoriesToStore.isEmpty() || streamDataListToStore.isEmpty() -> onError(
-                "Unable to sync content. Try again later.",
-                errorMessage
+                "Unable to sync content",
+                "Try again later"
             )
 
             errorMessage.isNotEmpty() -> onError(
-                "Unable to fully sync content. Some content not available.",
-                errorMessage
+                "Unable to fully sync content",
+                "You can still use the app. But some content might not be available."
             )
 
             else -> onFetch(
