@@ -49,16 +49,21 @@ interface StreamDataDao {
     @Query(
         "SELECT * FROM stream_data WHERE lastPlayed > 0 " +
                 "AND playedDuration > :minPlaybackDuration " +
+                "AND streamType = :streamType " +
                 "AND totalDurationMs - playedDuration > :minDurationLeft " +
                 "ORDER BY lastPlayed DESC LIMIT 5"
     )
     suspend fun getLastPlayed10(
+        streamType: StreamType,
         minPlaybackDuration: Long = MIN_PLAYBACK_DURATION,
         minDurationLeft: Long = MIN_DURATION_LEFT
     ): List<StreamData>
 
-    @Query("SELECT * FROM stream_data WHERE inMyList IS true ORDER BY timeAddedToList DESC LIMIT 5")
-    suspend fun getMyList10(): List<StreamData>
+    @Query("SELECT * FROM stream_data " +
+            "WHERE inMyList IS true " +
+            "AND streamType = :streamType " +
+            "ORDER BY timeAddedToList DESC LIMIT 5")
+    suspend fun getMyList5(streamType: StreamType): List<StreamData>
 
     @Query("SELECT * FROM stream_data ORDER BY added DESC LIMIT 10")
     suspend fun getNewlyAdded10(): List<StreamData>

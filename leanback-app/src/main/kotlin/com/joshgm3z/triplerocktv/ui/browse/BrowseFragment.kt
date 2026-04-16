@@ -80,7 +80,7 @@ class BrowseFragment : BrowseSupportFragment() {
                 if (it !is BrowseUiState.Loading) progressBarManager.hide()
                 when (it) {
                     is BrowseUiState.Loading -> progressBarManager.show()
-                    is BrowseUiState.VideoOnDemandState -> showStreamDataState(it)
+                    is BrowseUiState.StreamDataState -> showStreamDataState(it)
                     is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
                     is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
                 }
@@ -142,7 +142,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun showStreamDataState(uiState: BrowseUiState.VideoOnDemandState) {
+    private fun showStreamDataState(uiState: BrowseUiState.StreamDataState) {
         rowsAdapter.clear()
 
         if (uiState.recentPlayed.isNotEmpty()) {
@@ -240,7 +240,10 @@ class BrowseFragment : BrowseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Browse, mapOf("browse_streamType" to args.streamType.name))
+        FirebaseLogger.logScreenView(
+            ScreenName.Browse,
+            mapOf("browse_streamType" to args.streamType.name)
+        )
 
         viewModel.onViewResume()
     }

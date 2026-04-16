@@ -20,7 +20,7 @@ sealed class BrowseUiState {
     data object Loading : BrowseUiState()
     data class Error(val message: String) : BrowseUiState()
 
-    data class VideoOnDemandState(
+    data class StreamDataState(
         val myList: List<StreamData> = emptyList(),
         val recentPlayed: List<StreamData> = emptyList(),
         val newlyAdded: List<StreamData> = emptyList(),
@@ -59,9 +59,9 @@ class BrowseViewModel @Inject constructor(
         seriesCategories = repository.fetchCategories(StreamType.Series),
     )
 
-    private suspend fun getVideoOnDemandState() = BrowseUiState.VideoOnDemandState(
-        myList = repository.fetchMyList(),
-        recentPlayed = repository.fetchRecentlyPlayedStreamData(),
+    private suspend fun getVideoOnDemandState() = BrowseUiState.StreamDataState(
+        myList = repository.fetchMyList(StreamType.VideoOnDemand),
+        recentPlayed = repository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
         newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
         categoryMap = mapOf(
             "All movies" to repository.fetchCategories(StreamType.VideoOnDemand),
@@ -84,11 +84,21 @@ class BrowseViewModel @Inject constructor(
         )
     )
 
+    private suspend fun getLiveTvState() = BrowseUiState.StreamDataState(
+        myList = repository.fetchMyList(StreamType.LiveTV),
+        recentPlayed = repository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
+        newlyAdded = repository.fetchNewlyAdded(StreamType.LiveTV),
+        categoryMap = mapOf(
+            "Live TV" to repository.fetchCategories(StreamType.LiveTV)
+        )
+    )
+
     fun onViewResume() {
         viewModelScope.launch(Dispatchers.IO) {
             _uiState.value = when (streamType) {
                 StreamType.VideoOnDemand -> getVideoOnDemandState()
                 StreamType.Series -> getSeriesStreamState()
+                StreamType.LiveTV -> getLiveTvState()
                 else -> throw IllegalArgumentException("Invalid stream type")
             }
         }
