@@ -2,6 +2,8 @@
 <resources>
     <dimen name="container_width">600dp</dimen>
     <dimen name="container_height">300dp</dimen>
+    <dimen name="error_dialog_width">330dp</dimen>
+    <dimen name="error_dialog_height">230dp</dimen>
     <dimen name="metadata_gap">5dp</dimen>
     <dimen name="metadata_text_size">12sp</dimen>
     <dimen name="focused_catalogue_edge_padding">40dp</dimen>

@@ -107,9 +107,7 @@
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/toLoadingError"
-            app:destination="@id/loadingErrorFragment"
-            app:popUpTo="@id/mediaLoadingFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/loadingErrorFragment" />
     </fragment>
 
     <fragment
@@ -258,7 +256,7 @@
             app:argType="string" />
     </fragment>
 
-    <fragment
+    <dialog
         android:id="@+id/loadingErrorFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.LoadingErrorFragment"
         android:label="LoadingErrorFragment">
@@ -273,7 +271,7 @@
             app:destination="@id/splashScreenFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-    </fragment>
+    </dialog>
 
     <fragment
         android:id="@+id/accessDisabledFragment"
