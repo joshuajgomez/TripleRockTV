@@ -80,8 +80,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
         actionId: Long,
         loadingState: LoadingState
     ) {
-        val toInt = actionId.toInt()
-        val action = actions[toInt]
+        val action = findActionById(actionId)
         when (loadingState.status) {
             LoadingStatus.Initial -> "Waiting"
             LoadingStatus.Ongoing -> {
@@ -93,7 +92,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
             LoadingStatus.Error -> "Download error"
         }.let { action.description = it }
 
-        notifyActionChanged(toInt)
+        notifyActionChanged(findActionPositionById(actionId))
     }
 
     private fun showOverallStatus(
@@ -106,7 +105,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
             action.description = description ?: ""
             action.icon = if (icon == null) null
             else ContextCompat.getDrawable(requireContext(), icon)
-            notifyActionChanged(action.id.toInt())
+            notifyActionChanged(findActionPositionById(action.id))
         }
     }
 
