@@ -4,14 +4,15 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
 
-class LoadingErrorFragment : Fragment() {
+class LoadingErrorFragment : DialogFragment() {
 
     private lateinit var binding: FragmentErrorBinding
 
@@ -24,6 +25,14 @@ class LoadingErrorFragment : Fragment() {
     ): View {
         binding = FragmentErrorBinding.inflate(inflater)
         return binding.root
+    }
+
+    override fun onStart() {
+        super.onStart()
+        dialog?.window?.setLayout(
+            requireContext().resources.getDimensionPixelSize(R.dimen.error_dialog_width),
+            requireContext().resources.getDimensionPixelSize(R.dimen.error_dialog_height)
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
