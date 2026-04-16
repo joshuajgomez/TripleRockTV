@@ -2,11 +2,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
-import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
+import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
@@ -15,11 +11,7 @@ import javax.inject.Inject
 
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
-    private val streamDataDao: StreamDataDao,
-    private val categoryDataDao: CategoryDataDao,
-    private val seriesStreamsDao: SeriesStreamsDao,
-    private val epgListingDao: EpgListingDao,
-    private val searchHintDao: SearchHintDao,
+    private val appDatabase: AppDatabase,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -67,11 +59,7 @@ class LoginRepositoryImpl @Inject constructor(
             FirebaseLogger.logUserLogout(it.username)
         }
         localDataStore.clearAllData()
-        streamDataDao.deleteAll()
-        categoryDataDao.deleteAll()
-        seriesStreamsDao.deleteAllStreams()
-        epgListingDao.deleteAllEpgListings()
-        searchHintDao.deleteAll()
+        appDatabase.clearAllTables()
 
         delay(1000)
         onLogoutComplete()
