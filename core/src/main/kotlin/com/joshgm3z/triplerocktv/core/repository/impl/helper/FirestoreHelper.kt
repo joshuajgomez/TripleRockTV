@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -28,7 +29,7 @@ class FirestoreHelper
         return try {
             db.collection(collection)
                 .document(documentId)
-                .set(dataMap)
+                .set(dataMap, SetOptions.merge())
                 .await()
             true
         } catch (e: Exception) {

@@ -10,6 +10,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
 
+private const val collection_logged_users = "logged_in_users"
+
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val appDatabase: AppDatabase,
@@ -41,7 +43,14 @@ class LoginRepositoryImpl @Inject constructor(
                 val body = response.body()
                 // Xtream API returns auth = 1 on success
                 if (body?.user_info?.auth == 1) {
-                    val sessionId = firestoreHelper.createDocumentIdInCollection("logged_in_users")
+                    val sessionId = firestoreHelper.createDocumentIdInCollection(
+                        collection_logged_users,
+                        mapOf(
+                            "username" to username,
+                            "timestamp" to System.currentTimeMillis(),
+                            "status" to "logged in"
+                        )
+                    )
                     localDataStore.storeCredentials(
                         body,
                         webUrl,
@@ -65,6 +74,14 @@ class LoginRepositoryImpl @Inject constructor(
     override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
         localDataStore.getUserInfo()?.let {
             FirebaseLogger.logUserLogout(it.username)
+            firestoreHelper.addDocumentWithId(
+                collection_logged_users,
+                it.sessionId,
+                mapOf(
+                    "timestamp" to System.currentTimeMillis(),
+                    "status" to "logged out"
+                )
+            )
         }
         localDataStore.clearAllData()
         appDatabase.clearAllTables()
