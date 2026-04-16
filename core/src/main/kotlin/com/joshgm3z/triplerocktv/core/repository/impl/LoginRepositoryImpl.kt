@@ -78,6 +78,7 @@ class LoginRepositoryImpl @Inject constructor(
                 collection_logged_users,
                 it.sessionId,
                 mapOf(
+                    "username" to it.username,
                     "timestamp" to System.currentTimeMillis(),
                     "status" to "logged out"
                 )
