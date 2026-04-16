@@ -136,7 +136,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
                 .focusable(false)
                 .build()
         )
-        actions.add(
+        /*actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idLiveTv)
                 .title("Live TV")
@@ -151,7 +151,7 @@ class LoadingFragment : GuidedStepSupportFragment() {
                 .description("Waiting")
                 .focusable(false)
                 .build()
-        )
+        )*/
 
         actions.add(
             GuidedAction.Builder(requireContext())
