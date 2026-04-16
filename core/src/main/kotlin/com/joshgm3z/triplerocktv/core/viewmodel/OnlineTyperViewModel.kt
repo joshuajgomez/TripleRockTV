@@ -31,25 +31,24 @@ class OnlineTyperViewModel
     val qrCodeBitmapState = _qrCodeBitmapState.asStateFlow()
 
     val inputTextFlow: StateFlow<String> = callbackFlow {
-        val sessionId = repository.newTypingSessionUrl()
+        val webUrl = repository.newTypingSessionUrl()
 
-        if (sessionId == null) {
-            Logger.error("sessionId is null")
+        if (webUrl == null) {
+            Logger.error("webUrl is null")
             close()
             return@callbackFlow
         }
 
         // Generate and set the QR code when collection starts
-        val appUrl = context.getString(R.string.online_typer_app_url)
-        val bitmap = "$appUrl?id=$sessionId".getQrCode()
+        val bitmap = webUrl.getQrCode()
         _qrCodeBitmapState.value = bitmap
 
         // Listen for input updates
-        repository.listenInput(sessionId) {
+        repository.listenInput {
             trySend(it)
         }
         awaitClose {
-            Logger.debug("Cleaning up session: $sessionId")
+            Logger.debug("Cleaning up session")
             _qrCodeBitmapState.value = null
             viewModelScope.launch {
                 repository.deleteTypingSession()
