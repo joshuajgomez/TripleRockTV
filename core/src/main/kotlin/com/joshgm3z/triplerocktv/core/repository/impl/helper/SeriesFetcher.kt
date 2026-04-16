@@ -26,7 +26,7 @@ constructor(
 
     suspend fun fetchContent(
         limit: Int? = null,
-        onFetch: (StreamType, LoadingState) -> Unit,
+        onFetch: (LoadingState) -> Unit,
         onError: (String, String) -> Unit
     ) {
         Logger.entry()
@@ -38,26 +38,32 @@ constructor(
         val seriesStreamListToStore = mutableListOf<SeriesStream>()
         val categoriesToStore = mutableListOf<CategoryData>()
 
-        categories.forEachIndexed { index, it ->
-            val list = fetchSeries(it)
-            if (list.isNotEmpty()) {
-                categoriesToStore.add(
-                    it.apply {
-                        count = list.size
-                        firstStreamIcon = list.firstOrNull()?.coverImageUrl
-                    }
-                )
-                seriesStreamListToStore.addAll(list)
-            }
+        var errorMessage = ""
+        try {
+            categories.forEachIndexed { index, it ->
+                val list = fetchSeries(it)
+                if (list.isNotEmpty()) {
+                    categoriesToStore.add(
+                        it.apply {
+                            count = list.size
+                            firstStreamIcon = list.firstOrNull()?.coverImageUrl
+                        }
+                    )
+                    seriesStreamListToStore.addAll(list)
+                }
 
-            onFetch(
-                StreamType.Series,
-                LoadingState(
-                    percent = (index.toFloat() / total * 100).toInt(),
-                    status = LoadingStatus.Ongoing
+                onFetch(
+                    LoadingState(
+                        percent = (index.toFloat() / total * 100).toInt(),
+                        status = LoadingStatus.Ongoing
+                    )
                 )
-            )
-            delay(REQUEST_DELAY)
+                delay(REQUEST_DELAY)
+            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            e.printStackTrace()
+            errorMessage = e.message.toString()
         }
 
         if (seriesStreamListToStore.isNotEmpty() && categoriesToStore.isNotEmpty()) {
@@ -65,15 +71,22 @@ constructor(
 
             categoryDataDao.replaceData(StreamType.Series, categoriesToStore)
             seriesStreamsDao.replaceData(seriesStreamListToStore)
+        }
 
-            onFetch(
-                StreamType.Series,
-                LoadingState(100, LoadingStatus.Complete)
+        when {
+            categoriesToStore.isEmpty() || seriesStreamListToStore.isEmpty() -> onError(
+                "Unable to sync content",
+                "Try again later"
             )
-        } else {
-            onFetch(
-                StreamType.Series,
-                LoadingState(0, LoadingStatus.Error)
+            errorMessage.isNotEmpty() -> onError(
+                "Unable to fully sync content",
+                "You can still use the app. But some content might not be available."
+            )
+            else -> onFetch(
+                LoadingState(
+                    percent = 100,
+                    status = LoadingStatus.Complete
+                )
             )
         }
     }

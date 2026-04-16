@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:maxEms="13"
-        android:text="Unable to full sync content"
+        android:text="Unable to fully sync content"
         android:textAlignment="center"
         android:textColor="?attr/colorCardContent"
         android:textSize="20sp"

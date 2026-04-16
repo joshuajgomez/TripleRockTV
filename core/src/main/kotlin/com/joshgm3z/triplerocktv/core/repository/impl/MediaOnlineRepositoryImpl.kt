@@ -76,15 +76,18 @@ class MediaOnlineRepositoryImpl
             fetchIptvService()
         }
         try {
-            onlineDataFetcher.fetchContent(
+            /*onlineDataFetcher.fetchContent(
                 streamType = StreamType.VideoOnDemand, onError = onError,
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             onlineDataFetcher.fetchContent(
                 streamType = StreamType.LiveTV, onError = onError,
                 onFetch = { onFetch(StreamType.LiveTV, it) },
+            )*/
+            seriesFetcher.fetchContent(
+                onFetch = { onFetch(StreamType.Series, it) },
+                onError = onError
             )
-            seriesFetcher.fetchContent(onFetch = onFetch, onError = onError)
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
             onError("Unable to fetch categories.", e.message ?: "")
