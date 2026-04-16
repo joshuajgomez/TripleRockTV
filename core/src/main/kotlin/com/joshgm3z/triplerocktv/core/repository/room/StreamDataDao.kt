@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StreamDataDao {
-    @Query("SELECT * FROM stream_data WHERE categoryId = :categoryId AND streamType = :streamType")
+    @Query("SELECT * FROM stream_data " +
+            "WHERE categoryId = :categoryId AND streamType = :streamType " +
+            "ORDER BY added DESC")
     fun getAllFromCategoryAndType(
         categoryId: Int,
         streamType: StreamType
@@ -57,6 +59,9 @@ interface StreamDataDao {
 
     @Query("SELECT * FROM stream_data WHERE inMyList IS true ORDER BY timeAddedToList DESC LIMIT 5")
     suspend fun getMyList10(): List<StreamData>
+
+    @Query("SELECT * FROM stream_data ORDER BY added DESC LIMIT 10")
+    suspend fun getNewlyAdded10(): List<StreamData>
 
     @Query("UPDATE stream_data SET lastPlayed = :lastPlayed WHERE streamId = :streamId")
     suspend fun updateLastPlayedTimestamp(
