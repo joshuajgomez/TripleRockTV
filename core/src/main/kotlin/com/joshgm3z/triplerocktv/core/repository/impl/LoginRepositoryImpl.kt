@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
@@ -12,6 +13,7 @@ import javax.inject.Inject
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val appDatabase: AppDatabase,
+    private val firestoreHelper: FirestoreHelper
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -39,7 +41,13 @@ class LoginRepositoryImpl @Inject constructor(
                 val body = response.body()
                 // Xtream API returns auth = 1 on success
                 if (body?.user_info?.auth == 1) {
-                    localDataStore.storeCredentials(body, webUrl, password)
+                    val sessionId = firestoreHelper.createDocumentIdInCollection("logged_in_users")
+                    localDataStore.storeCredentials(
+                        body,
+                        webUrl,
+                        password,
+                        sessionId
+                    )
                     delay(1000)
                     onSuccess()
                 } else {
