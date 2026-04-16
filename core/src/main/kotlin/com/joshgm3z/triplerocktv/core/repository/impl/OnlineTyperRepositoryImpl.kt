@@ -10,7 +10,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-const val COLLECTION = "online_typing_sessions"
+private const val COLLECTION = "online_typing_sessions"
 
 class OnlineTyperRepositoryImpl
 @Inject constructor(
