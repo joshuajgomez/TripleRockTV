@@ -1,32 +1,43 @@
 package com.joshgm3z.triplerocktv.ui.error
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.leanback.R
-import androidx.leanback.app.ErrorSupportFragment
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
 
-class LoadingErrorFragment : ErrorSupportFragment() {
+class LoadingErrorFragment : Fragment() {
 
-    val args: ErrorFragmentArgs by navArgs()
+    private lateinit var binding: FragmentErrorBinding
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.lb_ic_sad_cloud)
-        message = args.message
-        buttonText = "Dismiss"
+    private val args: LoadingErrorFragmentArgs by navArgs()
 
-        buttonClickListener = View.OnClickListener {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentErrorBinding.inflate(inflater)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.tvTitle.text = args.title
+        binding.tvSubtitle.text = args.summary
+        binding.btnBack.requestFocus()
+        binding.btnBack.setOnClickListener {
             findNavController().navigate(LoadingErrorFragmentDirections.toSplash())
         }
     }
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.message))
+        FirebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.title))
     }
 }
