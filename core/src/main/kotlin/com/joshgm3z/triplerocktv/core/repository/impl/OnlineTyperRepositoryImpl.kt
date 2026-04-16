@@ -39,7 +39,7 @@ class OnlineTyperRepositoryImpl
         firestoreHelper.deleteDocumentWithId(COLLECTION, sessionId)
     }
 
-    override fun listenInput(sessionId: String, onInput: (String) -> Unit) {
+    override fun listenInput(onInput: (String) -> Unit) {
         Logger.debug("sessionId = [${sessionId}]")
         firestoreHelper.listenToDataMap(COLLECTION, sessionId) {
             (it["input"] as? String)?.let { input -> onInput(input) }
