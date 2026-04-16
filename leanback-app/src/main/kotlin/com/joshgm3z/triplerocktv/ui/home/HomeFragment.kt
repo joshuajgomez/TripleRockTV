@@ -63,6 +63,7 @@ class HomeFragment : BrowseSupportFragment() {
             is HomeItem -> when (item.title) {
                 "Video on demand" -> HomeFragmentDirections.toBrowse(StreamType.VideoOnDemand)
                 "Series" -> HomeFragmentDirections.toBrowse(StreamType.Series)
+                "Live TV" -> HomeFragmentDirections.toBrowse(StreamType.LiveTV)
                 else -> return@OnItemViewClickedListener
             }
 

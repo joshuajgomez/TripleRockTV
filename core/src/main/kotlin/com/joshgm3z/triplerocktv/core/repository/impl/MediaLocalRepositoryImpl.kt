@@ -81,8 +81,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
-    override suspend fun fetchRecentlyPlayedStreamData(): List<StreamData> {
-        return streamDataDao.getLastPlayed10()
+    override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
+        return streamDataDao.getLastPlayed10(streamType)
     }
 
     override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
@@ -104,8 +104,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         return false
     }
 
-    override suspend fun fetchMyList(): List<StreamData> {
-        return streamDataDao.getMyList10()
+    override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
+        return streamDataDao.getMyList5(streamType)
     }
 
     override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
