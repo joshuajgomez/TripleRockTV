@@ -35,32 +35,55 @@ constructor(
         val streamDataListToStore = mutableListOf<StreamData>()
         val categoriesToStore = mutableListOf<CategoryData>()
 
-        categories.forEachIndexed { index, it ->
-            val list = fetchStreamDataList(it)
-            if (list.isNotEmpty()) {
-                categoriesToStore.add(it.apply {
-                    count = list.size
-                    firstStreamIcon = list.firstOrNull()?.streamIcon
-                })
-                streamDataListToStore.addAll(list)
-            }
-            onFetch(
-                LoadingState(
-                    percent = (index.toFloat() / categories.size * 100).toInt(),
-                    status = LoadingStatus.Ongoing
+        var errorMessage = ""
+        try {
+            categories.forEachIndexed { index, it ->
+                val list = fetchStreamDataList(it)
+                if (list.isNotEmpty()) {
+                    categoriesToStore.add(it.apply {
+                        count = list.size
+                        firstStreamIcon = list.firstOrNull()?.streamIcon
+                    })
+                    streamDataListToStore.addAll(list)
+                }
+                onFetch(
+                    LoadingState(
+                        percent = (index.toFloat() / categories.size * 100).toInt(),
+                        status = LoadingStatus.Ongoing
+                    )
                 )
-            )
-            delay(REQUEST_DELAY)
+                delay(REQUEST_DELAY)
+            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            e.printStackTrace()
+            errorMessage = e.message.toString()
         }
+
         if (categoriesToStore.isNotEmpty() && streamDataListToStore.isNotEmpty()) {
             Logger.info("storing categories = [${categoriesToStore.size}], streams = [${streamDataListToStore.size}]")
 
             categoryDataDao.replaceData(streamType, categoriesToStore)
             streamDataDao.replaceData(streamType, streamDataListToStore)
 
-            onFetch(LoadingState(100, LoadingStatus.Complete))
-        } else {
-            onFetch(LoadingState(0, LoadingStatus.Error))
+        }
+        when {
+            categoriesToStore.isEmpty() || streamDataListToStore.isEmpty() -> onError(
+                "Unable to sync content. Try again later.",
+                errorMessage
+            )
+
+            errorMessage.isNotEmpty() -> onError(
+                "Unable to fully sync content. Some content not available.",
+                errorMessage
+            )
+
+            else -> onFetch(
+                LoadingState(
+                    percent = 100,
+                    status = LoadingStatus.Complete
+                )
+            )
         }
     }
 
