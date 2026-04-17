@@ -55,6 +55,11 @@ data class TrackSelectorUiState(
     val listState: ListState? = null,
 )
 
+sealed class LoadTrack {
+    class OfflineTrack(val trackInfo: TrackInfo) : LoadTrack()
+    class OnlineSubtitle(val subtitleData: SubtitleData) : LoadTrack()
+}
+
 @HiltViewModel
 class TrackSelectorViewModel
 @Inject
@@ -69,9 +74,8 @@ constructor(
 
     private lateinit var audioTracks: List<TrackInfo>
 
-    var subtitleTrackToLoad = MutableStateFlow<Any?>(null)
-
-    var audioTrackToLoad = MutableStateFlow<TrackInfo?>(null)
+    private val _trackToLoad = MutableStateFlow<LoadTrack?>(null)
+    val trackToLoad = _trackToLoad.asStateFlow()
 
     private val _trackButtonState = MutableStateFlow(TrackButtonState())
     val trackButtonState = _trackButtonState.asStateFlow()
@@ -141,15 +145,13 @@ constructor(
             return
         }
 
-        when (trackInfo.trackType) {
-            TrackType.Subtitle -> subtitleTrackToLoad.value = trackInfo
-            else -> audioTrackToLoad.value = trackInfo
-        }
+        _trackToLoad.value = LoadTrack.OfflineTrack(trackInfo)
     }
 
     private fun closeTrackSelectionPopup() {
         viewModelScope.launch {
-            delay(1500)
+            _trackToLoad.value = null
+            delay(1000)
             _uiState.value = null
         }
     }
@@ -160,7 +162,7 @@ constructor(
 
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
-            subtitleTrackToLoad.value = subtitleData.copy(url = url)
+            _trackToLoad.value = LoadTrack.OnlineSubtitle(subtitleData.copy(url = url))
         }
     }
 
@@ -188,7 +190,12 @@ constructor(
             audioTracks = audioTracks_
 
             if (subtitleTracks.size > 1) {
-                loadTracksOfType(TrackType.Subtitle)
+                with(trackToLoad.value) {
+                    when {
+                        this is LoadTrack.OfflineTrack -> loadTracksOfType(trackInfo.trackType)
+                        else -> loadTracksOfType(TrackType.Subtitle)
+                    }
+                }
                 closeTrackSelectionPopup()
             }
         }
