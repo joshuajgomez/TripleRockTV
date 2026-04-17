@@ -48,6 +48,7 @@ import com.joshgm3z.triplerocktv.databinding.FragmentPlayerBinding
 import com.joshgm3z.triplerocktv.util.setBackground
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import javax.inject.Inject
 import kotlin.math.abs
 
 const val FAST_FORWARD_DURATION_SHORT = 10000
@@ -89,6 +90,9 @@ class PlaybackFragment : Fragment() {
     private lateinit var ccAction: PlaybackControlsRow.ClosedCaptioningAction
 
     private lateinit var audioAction: PlaybackControlsRow.ClosedCaptioningAction
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -449,7 +453,7 @@ class PlaybackFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Player)
+        firebaseLogger.logScreenView(ScreenName.Player)
     }
 
     override fun onPause() {

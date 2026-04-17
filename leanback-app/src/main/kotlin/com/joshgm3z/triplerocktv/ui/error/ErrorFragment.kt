@@ -8,10 +8,16 @@ import androidx.leanback.app.ErrorSupportFragment
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ErrorFragment : ErrorSupportFragment() {
 
     val args: ErrorFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +32,6 @@ class ErrorFragment : ErrorSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.message))
+        firebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.message))
     }
 }

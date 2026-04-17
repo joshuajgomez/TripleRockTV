@@ -1,9 +1,8 @@
 package com.joshgm3z.triplerocktv.core.util
 
 import android.os.Bundle
-import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.analytics.analytics
+import javax.inject.Inject
 
 enum class ScreenName(val value: String) {
     Splash("splash"),
@@ -20,9 +19,10 @@ enum class ScreenName(val value: String) {
     Player("player"),
 }
 
-class FirebaseLogger {
-
-    private var firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
+class FirebaseLogger
+@Inject constructor(
+    private val firebaseAnalytics: FirebaseAnalytics
+) {
 
     fun logCustomEvent(eventName: String, params: Map<String, String>) {
         // Firebase analytics disabled for core module due to missing google-services.json
@@ -33,57 +33,46 @@ class FirebaseLogger {
         firebaseAnalytics.logEvent(eventName, bundle)
     }
 
-    companion object {
-        private var INSTANCE: FirebaseLogger? = null
+    fun logGlideError(uri: String) {
+        logCustomEvent(
+            "glide_error",
+            mapOf("glide_error_uri" to uri)
+        )
+    }
 
-        private fun getInstance(): FirebaseLogger {
-            if (INSTANCE == null) {
-                INSTANCE = FirebaseLogger()
+    fun logUserLogin(username: String) {
+        logCustomEvent(
+            FirebaseAnalytics.Event.LOGIN,
+            mapOf("login_username" to username)
+        )
+    }
+
+    fun logUserLogout(username: String) {
+        logCustomEvent(
+            "user_logout",
+            mapOf("logout_username" to username)
+        )
+    }
+
+    fun logUserLoginFail(username: String) {
+        logCustomEvent(
+            "user_login_fail",
+            mapOf("login_failed_username" to username)
+        )
+    }
+
+    fun logScreenView(
+        screenName: ScreenName,
+        params: Map<String, String> = emptyMap(),
+    ) {
+        logCustomEvent(
+            FirebaseAnalytics.Event.SCREEN_VIEW,
+            mapOf(
+                FirebaseAnalytics.Param.SCREEN_NAME to screenName.name,
+                FirebaseAnalytics.Param.SCREEN_CLASS to callerName(),
+            ).plus(params).apply {
+                Logger.debug("logScreenView: $this")
             }
-            return INSTANCE!!
-        }
-
-        fun logGlideError(uri: String) {
-            getInstance().logCustomEvent(
-                "glide_error",
-                mapOf("glide_error_uri" to uri)
-            )
-        }
-
-        fun logUserLogin(username: String) {
-            getInstance().logCustomEvent(
-                FirebaseAnalytics.Event.LOGIN,
-                mapOf("login_username" to username)
-            )
-        }
-
-        fun logUserLogout(username: String) {
-            getInstance().logCustomEvent(
-                "user_logout",
-                mapOf("logout_username" to username)
-            )
-        }
-
-        fun logUserLoginFail(username: String) {
-            getInstance().logCustomEvent(
-                "user_login_fail",
-                mapOf("login_failed_username" to username)
-            )
-        }
-
-        fun logScreenView(
-            screenName: ScreenName,
-            params: Map<String, String> = emptyMap(),
-        ) {
-            getInstance().logCustomEvent(
-                FirebaseAnalytics.Event.SCREEN_VIEW,
-                mapOf(
-                    FirebaseAnalytics.Param.SCREEN_NAME to screenName.name,
-                    FirebaseAnalytics.Param.SCREEN_CLASS to callerName(),
-                ).plus(params).apply {
-                    Logger.debug("logScreenView: $this")
-                }
-            )
-        }
+        )
     }
 }

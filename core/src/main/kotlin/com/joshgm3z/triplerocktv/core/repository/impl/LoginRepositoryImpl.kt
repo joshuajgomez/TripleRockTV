@@ -15,7 +15,8 @@ private const val collection_logged_users = "logged_in_users"
 class LoginRepositoryImpl @Inject constructor(
     private val localDataStore: LocalDatastore,
     private val appDatabase: AppDatabase,
-    private val firestoreHelper: FirestoreHelper
+    private val firestoreHelper: FirestoreHelper,
+    private val firebaseLogger: FirebaseLogger,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -73,7 +74,7 @@ class LoginRepositoryImpl @Inject constructor(
 
     override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
         localDataStore.getUserInfo()?.let {
-            FirebaseLogger.logUserLogout(it.username)
+            firebaseLogger.logUserLogout(it.username)
             firestoreHelper.addDocumentWithId(
                 collection_logged_users,
                 it.sessionId,

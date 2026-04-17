@@ -41,6 +41,9 @@ class StreamCatalogueFragment : Fragment() {
     @Inject
     lateinit var glideUtil: GlideUtil
 
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
+
     lateinit var rowsAdapter: ArrayObjectAdapter
 
     private lateinit var binding: FragmentStreamCatalogueBinding
@@ -151,6 +154,6 @@ class StreamCatalogueFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
+        firebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
     }
 }
