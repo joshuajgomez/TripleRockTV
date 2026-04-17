@@ -76,7 +76,7 @@ constructor() : MediaLocalRepository {
 
     override suspend fun isContentEmpty(): Boolean = false
 
-    override suspend fun fetchRecentlyPlayedStreamData(): List<StreamData> {
+    override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
         return DemoData.sampleVodStreams
     }
 
@@ -84,7 +84,11 @@ constructor() : MediaLocalRepository {
         return DemoData.getSampleSeriesStreams()
     }
 
-    override suspend fun fetchMyList(): List<StreamData> {
+    override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
+        return DemoData.sampleVodStreams.filter { it.inMyList }
+    }
+
+    override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
         return DemoData.sampleVodStreams.filter { it.inMyList }
     }
 

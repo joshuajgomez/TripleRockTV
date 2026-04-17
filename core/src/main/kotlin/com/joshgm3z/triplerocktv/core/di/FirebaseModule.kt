@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv
+package com.joshgm3z.triplerocktv.core.di
 
 import com.google.firebase.Firebase
 import com.google.firebase.analytics.FirebaseAnalytics
