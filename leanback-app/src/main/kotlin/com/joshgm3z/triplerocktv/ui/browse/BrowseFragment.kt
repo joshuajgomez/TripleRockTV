@@ -54,6 +54,9 @@ class BrowseFragment : BrowseSupportFragment() {
     lateinit var glideUtil: GlideUtil
 
     @Inject
+    lateinit var firebaseLogger: FirebaseLogger
+
+    @Inject
     lateinit var categoryPresenter: CategoryPresenter
 
     private val episodeToSeriesMap = mutableMapOf<Int, Int>()
@@ -240,7 +243,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(
+        firebaseLogger.logScreenView(
             ScreenName.Browse,
             mapOf("browse_streamType" to args.streamType.name)
         )

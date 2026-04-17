@@ -35,6 +35,7 @@ class GlideUtil
 @Inject constructor(
     scope: CoroutineScope,
     private val localDatastore: LocalDatastore,
+    private val firebaseLogger: FirebaseLogger,
     @param:ApplicationContext private val context: Context,
 ) {
     private var serverUrl = ""
@@ -93,6 +94,32 @@ class GlideUtil
             else -> this
         }
     }
+
+    private val glideErrorListener = object : RequestListener<Drawable> {
+        override fun onLoadFailed(
+            e: GlideException?,
+            model: Any?,
+            target: Target<Drawable?>?,
+            isFirstResource: Boolean
+        ): Boolean {
+            if (model is String) {
+                Logger.error("Glide failed to load image: $model")
+                firebaseLogger.logGlideError(model)
+            }
+            return false
+        }
+
+        override fun onResourceReady(
+            resource: Drawable?,
+            model: Any?,
+            target: Target<Drawable?>?,
+            dataSource: DataSource?,
+            isFirstResource: Boolean
+        ): Boolean {
+            return false
+        }
+
+    }
 }
 
 val invalidUrls = listOf(
@@ -110,7 +137,7 @@ fun String?.alternateUri(serverUrl: String): String? = when {
 
     else -> this
 }.apply {
-    Logger.Companion.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
+    Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
 
 enum class DimMode(val value: Int) {
@@ -128,29 +155,3 @@ private fun colorFilter(dimMode: DimMode) = PorterDuffColorFilter(
     ), // 180 is the darkness (0-255). Increase for darker, decrease for lighter.
     PorterDuff.Mode.SRC_ATOP
 )
-
-private val glideErrorListener = object : RequestListener<Drawable> {
-    override fun onLoadFailed(
-        e: GlideException?,
-        model: Any?,
-        target: Target<Drawable?>?,
-        isFirstResource: Boolean
-    ): Boolean {
-        if (model is String) {
-            Logger.error("Glide failed to load image: $model")
-            FirebaseLogger.logGlideError(model)
-        }
-        return false
-    }
-
-    override fun onResourceReady(
-        resource: Drawable?,
-        model: Any?,
-        target: Target<Drawable?>?,
-        dataSource: DataSource?,
-        isFirstResource: Boolean
-    ): Boolean {
-        return false
-    }
-
-}

@@ -41,6 +41,9 @@ class HomeFragment : BrowseSupportFragment() {
     @Inject
     lateinit var glideUtil: GlideUtil
 
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -106,6 +109,6 @@ class HomeFragment : BrowseSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Home)
+        firebaseLogger.logScreenView(ScreenName.Home)
     }
 }

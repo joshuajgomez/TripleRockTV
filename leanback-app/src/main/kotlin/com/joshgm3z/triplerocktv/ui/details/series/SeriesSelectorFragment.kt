@@ -41,6 +41,9 @@ class SeriesSelectorFragment : RowsSupportFragment() {
     @Inject
     lateinit var glideUtil: GlideUtil
 
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
+
     private val seasonPresenter = SeasonPresenter()
 
     private val seasonRowAdapter = ArrayObjectAdapter(seasonPresenter)
@@ -156,6 +159,6 @@ class SeriesSelectorFragment : RowsSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.SeriesEpisodes)
+        firebaseLogger.logScreenView(ScreenName.SeriesEpisodes)
     }
 }

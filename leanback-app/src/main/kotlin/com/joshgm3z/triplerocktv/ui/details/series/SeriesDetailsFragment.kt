@@ -43,6 +43,9 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
     @Inject
     lateinit var glideUtil: GlideUtil
 
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
+
     private lateinit var detailsBackground: DetailsSupportFragmentBackgroundController
 
     private lateinit var rowsAdapter: ArrayObjectAdapter
@@ -189,7 +192,7 @@ class SeriesDetailsFragment : DetailsSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.SeriesDetails)
+        firebaseLogger.logScreenView(ScreenName.SeriesDetails)
 
         backgroundImageUrl ?: return
         glideUtil.getBitmap(uri = backgroundImageUrl, dimMode = DimMode.Dark) { bitmap ->

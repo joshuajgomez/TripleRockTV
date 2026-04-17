@@ -35,6 +35,7 @@ data class UserInfo(
 class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository,
+    private val firebaseLogger: FirebaseLogger,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(LoginUiState())
     val uiState = _uiState.asStateFlow()
@@ -55,7 +56,7 @@ class LoginViewModel
                 password = password,
                 onSuccess = {
                     Logger.debug("Login successful")
-                    FirebaseLogger.logUserLogin(username)
+                    firebaseLogger.logUserLogin(username)
                     Firebase.analytics.setUserId(username)
                     Firebase.crashlytics.setUserId(username)
                     _uiState.update {
@@ -64,7 +65,7 @@ class LoginViewModel
                 },
                 onError = { error ->
                     Logger.warn("Login failed")
-                    FirebaseLogger.logUserLoginFail(username)
+                    firebaseLogger.logUserLoginFail(username)
                     _uiState.update {
                         it.copy(errorMessage = error, loading = false)
                     }
