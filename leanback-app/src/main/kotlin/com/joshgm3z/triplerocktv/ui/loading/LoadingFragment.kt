@@ -23,12 +23,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.getValue
 
 @AndroidEntryPoint
 class LoadingFragment : GuidedStepSupportFragment() {
 
     private val viewModel: MediaLoadingViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     companion object {
         val idVod = 0L
@@ -169,6 +173,6 @@ class LoadingFragment : GuidedStepSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.MediaUpdate)
+        firebaseLogger.logScreenView(ScreenName.MediaUpdate)
     }
 }

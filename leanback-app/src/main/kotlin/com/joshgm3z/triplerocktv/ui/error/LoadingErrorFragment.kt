@@ -11,12 +11,18 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoadingErrorFragment : DialogFragment() {
 
     private lateinit var binding: FragmentErrorBinding
 
     private val args: LoadingErrorFragmentArgs by navArgs()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,6 +53,6 @@ class LoadingErrorFragment : DialogFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.title))
+        firebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to args.title))
     }
 }

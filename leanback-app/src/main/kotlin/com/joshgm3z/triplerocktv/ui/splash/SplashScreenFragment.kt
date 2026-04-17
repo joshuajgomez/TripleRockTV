@@ -20,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SplashScreenFragment : Fragment() {
@@ -27,6 +28,9 @@ class SplashScreenFragment : Fragment() {
     private var binding: FragmentSplashScreenBinding? = null
 
     private val viewModel: SplashViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,6 +74,6 @@ class SplashScreenFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Splash)
+        firebaseLogger.logScreenView(ScreenName.Splash)
     }
 }

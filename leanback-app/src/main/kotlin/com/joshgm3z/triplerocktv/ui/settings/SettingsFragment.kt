@@ -23,12 +23,16 @@ import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.getValue
 
 @AndroidEntryPoint
 class SettingsFragment : GuidedStepSupportFragment() {
 
     private val viewModel: SettingsViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     companion object {
         val idCredential = 0L
@@ -303,6 +307,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Settings)
+        firebaseLogger.logScreenView(ScreenName.Settings)
     }
 }

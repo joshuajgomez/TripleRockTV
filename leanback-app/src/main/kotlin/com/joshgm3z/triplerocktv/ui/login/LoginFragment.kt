@@ -21,12 +21,16 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 import kotlin.getValue
 
 @AndroidEntryPoint
 class LoginFragment : GuidedStepSupportFragment() {
 
     private val loginViewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var firebaseLogger: FirebaseLogger
 
     companion object {
         val idServerUrl = 0L
@@ -225,6 +229,6 @@ class LoginFragment : GuidedStepSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        FirebaseLogger.logScreenView(ScreenName.Login)
+        firebaseLogger.logScreenView(ScreenName.Login)
     }
 }
