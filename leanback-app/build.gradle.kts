@@ -106,6 +106,8 @@ dependencies {
     implementation(libs.glide)
 
     implementation(platform(libs.firebase.bom))
+    testImplementation(libs.firebase.analytics)
+    testImplementation(libs.firebase.firestore)
 
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
@@ -122,4 +124,12 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.junit)
     testImplementation(libs.truth)
+
+    testImplementation("com.google.dagger:hilt-android-testing:2.54")
+    kaptTest("com.google.dagger:hilt-android-compiler:2.54")
+    testImplementation("org.robolectric:robolectric:4.12.1")
+    debugImplementation("androidx.fragment:fragment-testing:1.8.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
+
+    testImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
