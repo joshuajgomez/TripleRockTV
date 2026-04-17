@@ -38,6 +38,7 @@ import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.viewmodel.LoadTrack
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
@@ -146,39 +147,24 @@ class PlaybackFragment : Fragment() {
             }
         }
         lifecycleScope.launch {
-            trackViewModel.subtitleTrackToLoad.collectLatest { it ->
+            trackViewModel.trackToLoad.collectLatest { it ->
                 Logger.debug("subtitleTrackToLoad $it")
                 it?.let {
-                    trackViewModel.subtitleTrackToLoad.value = null
-                    var subtitleUrl: String? = null
-                    var subtitleLanguage = ""
-                    var subtitleTitle = ""
                     when (it) {
-                        is SubtitleData -> {
-                            subtitleLanguage = it.language!!
-                            subtitleUrl = it.url
-                            subtitleTitle = it.title
-                            loadSubtitle(it)
+                        is LoadTrack.OnlineSubtitle -> with(it.subtitleData) {
+                            loadSubtitle(this)
+                            viewModel.updateSelectedSubtitle(language ?: "", title, url)
                         }
 
-                        is TrackInfo -> {
-                            subtitleLanguage = it.language!!
-                            subtitleTitle = it.label!!
-                            switchTrack(it)
+                        is LoadTrack.OfflineTrack -> with(it.trackInfo) {
+                            switchTrack(this)
+                            if (trackType == TrackType.Subtitle) viewModel.updateSelectedSubtitle(
+                                language ?: "",
+                                label ?: "",
+                                null
+                            )
                         }
-
-                        else -> Logger.warn("Unknown track type: ${it::class.java}")
                     }
-                    viewModel.updateSelectedSubtitle(subtitleLanguage, subtitleTitle, subtitleUrl)
-                }
-            }
-        }
-        lifecycleScope.launch {
-            trackViewModel.audioTrackToLoad.collectLatest { it ->
-                Logger.debug("audioTrackToLoad $it")
-                it?.let {
-                    trackViewModel.audioTrackToLoad.value = null
-                    switchTrack(it)
                 }
             }
         }
