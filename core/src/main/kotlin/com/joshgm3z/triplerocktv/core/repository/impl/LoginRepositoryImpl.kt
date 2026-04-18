@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -69,6 +70,26 @@ class LoginRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             delay(1000)
             onError("Connection failed: ${e.localizedMessage ?: "Unknown error"}")
+        }
+    }
+
+    override suspend fun addIfNotExist() {
+        localDataStore.getUserInfo()?.let {
+            if (firestoreHelper.documentExists(
+                    collection_logged_users,
+                    it.sessionId
+                )
+            ) return
+
+            firestoreHelper.addDocumentWithId(
+                collection_logged_users,
+                it.sessionId,
+                mapOf(
+                    "username" to it.username,
+                    "timestamp" to System.currentTimeMillis(),
+                    "status" to "logged in"
+                )
+            )
         }
     }
 

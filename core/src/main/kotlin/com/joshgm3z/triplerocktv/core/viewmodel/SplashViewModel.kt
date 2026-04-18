@@ -6,6 +6,7 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
+import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.Logger
@@ -19,7 +20,7 @@ import javax.inject.Inject
 sealed class DestinationState {
     object Login : DestinationState()
     object Loading : DestinationState()
-    class Home(val userName: String? = null) : DestinationState()
+    object Home : DestinationState()
     class Error(val message: String) : DestinationState()
     class AccessDisabled(val message: String) : DestinationState()
     class AppUpdateNeeded(val message: String) : DestinationState()
@@ -31,6 +32,7 @@ class SplashViewModel
 constructor(
     localDatastore: LocalDatastore,
     repository: MediaLocalRepository,
+    loginRepository: LoginRepository,
     accessControlRepository: AccessControlRepository,
 ) : ViewModel() {
     private val _navDirectionState = MutableStateFlow<DestinationState?>(null)
@@ -43,6 +45,7 @@ constructor(
             userInfo?.let {
                 Firebase.analytics.setUserId(it.username)
                 Firebase.crashlytics.setUserId(it.username)
+                loginRepository.addIfNotExist()
             }
             var accessState = accessControlRepository.getAccessState(userInfo?.username)
             var appUpdateState = accessControlRepository.appUpdateState()
@@ -55,7 +58,7 @@ constructor(
 
                 userInfo == null -> DestinationState.Login
                 repository.isContentEmpty() -> DestinationState.Loading
-                else -> DestinationState.Home(userName = userInfo.username)
+                else -> DestinationState.Home
             }
         }
     }
