@@ -22,6 +22,17 @@ class FirestoreHelper
         }
     }
 
+    suspend fun documentExists(collection: String, documentId: String) = try {
+        db.collection(collection)
+            .document(documentId)
+            .get()
+            .await()
+            .exists()
+    } catch (e: Exception) {
+        Logger.error(e.message.toString())
+        false
+    }
+
     suspend fun addDocumentWithId(
         collection: String,
         documentId: String,
