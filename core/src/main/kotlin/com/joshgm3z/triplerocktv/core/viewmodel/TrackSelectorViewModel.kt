@@ -140,12 +140,8 @@ constructor(
 
     fun onTrackClicked(trackInfo: TrackInfo) {
         Logger.debug("trackInfo = [${trackInfo}]")
-        if (trackInfo.isSelected) {
-            closeTrackSelectionPopup()
-            return
-        }
-
-        _trackToLoad.value = LoadTrack.OfflineTrack(trackInfo)
+        if (!trackInfo.isSelected) _trackToLoad.value = LoadTrack.OfflineTrack(trackInfo)
+        closeTrackSelectionPopup()
     }
 
     private fun closeTrackSelectionPopup() {
@@ -189,15 +185,8 @@ constructor(
             subtitleTracks = subtitleTracks_.plusDisableSubtitleTrack()
             audioTracks = audioTracks_
 
-            if (subtitleTracks.size > 1) {
-                with(trackToLoad.value) {
-                    when {
-                        this is LoadTrack.OfflineTrack -> loadTracksOfType(trackInfo.trackType)
-                        else -> loadTracksOfType(TrackType.Subtitle)
-                    }
-                }
+            if (trackToLoad.value is LoadTrack.OnlineSubtitle && subtitleTracks.size > 1)
                 closeTrackSelectionPopup()
-            }
         }
     }
 }

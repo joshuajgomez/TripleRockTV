@@ -7,7 +7,7 @@
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
-    android:paddingHorizontal="10dp"
+    android:paddingHorizontal="15dp"
     android:paddingVertical="8dp">
 
     <RadioButton
