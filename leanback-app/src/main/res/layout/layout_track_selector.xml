@@ -60,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
-        android:background="@drawable/find_more_chip"
+        android:background="@drawable/focusable_border_bg"
         android:clickable="true"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="3dp"
