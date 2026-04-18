@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.databinding.ItemTrackInfoBinding
 import com.joshgm3z.triplerocktv.core.util.languageName
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
@@ -13,9 +14,15 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
 
     var clickListener: TrackListClickListener? = null
 
+    private var selectedPosition = -1
+    private var overrideChecked = false
+
     var trackList: List<TrackInfo> = emptyList()
         set(value) {
+            Logger.debug("trackList = $value")
             field = value
+            selectedPosition = -1
+            overrideChecked = false
             notifyDataSetChanged()
         }
 
@@ -35,16 +42,24 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
         position: Int
     ) {
         val data = trackList[position]
-        holder.text = data.label ?: data.language ?: "Unknown"
-        holder.language = data.language.languageName()
-        holder.checked = data.isSelected
+        if (data.label == "Disabled") {
+            holder.language = "Disabled"
+            holder.text = ""
+        } else {
+            holder.text = data.label ?: data.language ?: "Unknown"
+            holder.language = data.language.languageName()
+        }
+        holder.checked = !overrideChecked && data.isSelected
+        if (holder.checked) selectedPosition = holder.bindingAdapterPosition
         holder.listenClickEvent {
+            overrideChecked = true
+            holder.checked = true
+            notifyItemChanged(selectedPosition)
             clickListener?.onTrackClicked(data)
         }
     }
 
     override fun getItemCount(): Int = trackList.size
-
 }
 
 class TrackListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -52,21 +67,22 @@ class TrackListViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var text: String = ""
         set(value) {
-            binding.tvTitle.text = value
             field = value
+            binding.tvTitle.text = value
+            binding.tvTitle.setVisible(value.isNotEmpty())
         }
 
     var language: String = ""
         set(value) {
-            binding.tvLanguage.text = value
             field = value
+            binding.tvLanguage.text = value
             binding.tvLanguage.setVisible(value.isNotEmpty())
         }
 
     var checked: Boolean = false
         set(value) {
-            binding.rbTrack.isChecked = value
             field = value
+            binding.rbTrack.isChecked = value
         }
 
     fun listenClickEvent(onClick: () -> Unit) {

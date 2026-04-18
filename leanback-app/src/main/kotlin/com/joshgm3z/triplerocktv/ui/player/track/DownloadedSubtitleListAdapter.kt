@@ -64,9 +64,9 @@ class DownloadedSubtitleListViewHolder(itemView: View) : RecyclerView.ViewHolder
 
     var downloadsCount: Int = 0
         set(value) {
-            binding.tvDownloadCount.text = "$value downloads"
-            binding.llSubtitleCountContainer.setVisible(value > 0)
             field = value
+            binding.tvDownloadCount.text = "$value"
+            binding.tvDownloadCount.setVisible(value > 0)
         }
 
     fun listenClickEvent(onClick: () -> Unit) {

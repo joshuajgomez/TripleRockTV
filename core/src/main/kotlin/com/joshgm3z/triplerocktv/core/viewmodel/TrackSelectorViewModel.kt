@@ -32,7 +32,9 @@ data class TrackInfo(
     val isSupported: Boolean,
     val isSelected: Boolean,
     val trackType: TrackType,
-)
+) {
+    override fun toString() = "\n${language}:$label,isSelected=$isSelected"
+}
 
 enum class TrackType {
     Subtitle, Audio
@@ -70,7 +72,11 @@ constructor(
     private val _uiState = MutableStateFlow<TrackSelectorUiState?>(TrackSelectorUiState())
     val uiState = _uiState.asStateFlow()
 
-    private lateinit var subtitleTracks: List<TrackInfo>
+    private var subtitleTracks: List<TrackInfo> = emptyList()
+        set(value) {
+            field = value
+            Logger.debug("subtitleTracks = $value")
+        }
 
     private lateinit var audioTracks: List<TrackInfo>
 

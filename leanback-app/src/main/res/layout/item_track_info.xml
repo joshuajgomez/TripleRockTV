@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_bg_color_selector"
+    android:background="@drawable/focusable_border_bg"
     android:clickable="true"
     android:focusable="true"
     android:orientation="horizontal"
-    android:paddingHorizontal="15dp"
+    android:paddingHorizontal="18dp"
     android:paddingVertical="8dp">
 
     <RadioButton
@@ -16,27 +17,41 @@
         android:layout_height="wrap_content"
         android:buttonTint="?attr/colorPrimary"
         android:clickable="false"
-        android:focusable="false" />
+        android:focusable="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_language"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:background="@drawable/language_chip"
-        android:paddingHorizontal="5dp"
-        android:textSize="@dimen/metadata_text_size"
-        tools:text="Korean" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_height="match_parent"
         android:duplicateParentState="true"
-        android:ellipsize="end"
-        android:maxLines="1"
-        android:textColor="@color/card_fg_color_selector"
-        tools:text="@string/subtitle_file_name" />
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rb_track"
+        app:layout_constraintTop_toTopOf="parent">
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_language"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:duplicateParentState="true"
+            android:paddingHorizontal="5dp"
+            android:textColor="@color/color_card_content"
+            tools:text="Korean" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:alpha="0.8"
+            android:duplicateParentState="true"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@color/color_card_content2"
+            android:textSize="@dimen/metadata_text_size"
+            tools:text="@string/subtitle_file_name" />
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
