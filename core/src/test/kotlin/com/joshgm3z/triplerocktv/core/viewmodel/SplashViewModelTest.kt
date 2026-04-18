@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
+import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import io.mockk.coEvery
@@ -26,6 +27,7 @@ class SplashViewModelTest {
     private val localDatastore: LocalDatastore = mockk()
     private val repository: MediaLocalRepository = mockk()
     private val accessControlRepository: AccessControlRepository = mockk()
+    private val loginRepository: LoginRepository = mockk()
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -49,7 +51,7 @@ class SplashViewModelTest {
         } returns AccessState(enabled = false, reason = "Account Suspended")
         coEvery { accessControlRepository.appUpdateState() } returns mockk()
 
-        viewModel = SplashViewModel(localDatastore, repository, accessControlRepository)
+        viewModel = SplashViewModel(localDatastore, repository, loginRepository, accessControlRepository )
         // Act
         advanceUntilIdle() // Wait for init block coroutine to finish
 
