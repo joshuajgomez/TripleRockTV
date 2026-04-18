@@ -1,68 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/list_item_bg_color_selector"
+    android:background="@drawable/focusable_border_bg"
     android:clickable="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:orientation="vertical"
-    android:paddingHorizontal="15dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="10dp">
+    android:orientation="horizontal"
+    android:paddingHorizontal="18dp"
+    android:paddingTop="3dp"
+    android:paddingBottom="7dp">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/ic_circle_arrow_downward"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
+        android:layout_marginStart="8dp"
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/card_fg_color_selector"
+        android:textColor="@color/color_card_content"
+        app:layout_constraintStart_toEndOf="@id/iv_icon"
+        app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/subtitle_file_name" />
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
         android:layout_marginTop="3dp"
-        android:orientation="horizontal">
+        android:background="@drawable/language_chip"
+        android:textColor="?attr/colorPrimary"
+        android:textSize="@dimen/metadata_text_size"
+        app:layout_constraintStart_toStartOf="@id/tv_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="Korean" />
 
-        <TextView
-            android:id="@+id/tv_language"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/language_chip"
-            android:textSize="@dimen/metadata_text_size"
-            tools:text="Korean" />
-
-        <LinearLayout
-            android:id="@+id/ll_subtitle_count_container"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/metadata_gap"
-            android:background="@drawable/downloads_count_chip"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:contentDescription=""
-                android:src="@drawable/ic_download" />
-
-            <TextView
-                android:id="@+id/tv_download_count"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="3dp"
-                android:textColor="?attr/colorCardContent"
-                android:textSize="@dimen/metadata_text_size"
-                tools:text="335 downloads" />
-        </LinearLayout>
-    </LinearLayout>
-</LinearLayout>
+    <TextView
+        android:id="@+id/tv_download_count"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="3dp"
+        android:drawableStart="@drawable/ic_arrow_downward_14"
+        android:drawablePadding="1dp"
+        android:drawableTint="@color/color_primary"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/metadata_text_size"
+        app:layout_constraintBottom_toBottomOf="@id/tv_language"
+        app:layout_constraintStart_toEndOf="@id/tv_language"
+        app:layout_constraintTop_toTopOf="@id/tv_language"
+        tools:text="335" />
+</androidx.constraintlayout.widget.ConstraintLayout>
 
 

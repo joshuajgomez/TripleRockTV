@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_primary">#FB8C00</color>
-    <color name="color_secondary">#143A17</color>
+    <color name="color_primary_background">#30311B00</color>
+    <color name="color_secondary">#4FCBE4</color>
     <color name="color_background">#000</color>
     <color name="color_card_background">#1D1D1D</color>
+    <color name="color_card_background2">#282828</color>
     <color name="color_card_content">#DBDBDB</color>
 
     <color name="color_logo_main">#fff</color>
