@@ -1,11 +1,11 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
+import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
-import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -47,11 +47,7 @@ class LoginRepositoryImpl @Inject constructor(
                 if (body?.user_info?.auth == 1) {
                     val sessionId = firestoreHelper.createDocumentIdInCollection(
                         collection_logged_users,
-                        mapOf(
-                            "username" to username,
-                            "timestamp" to System.currentTimeMillis(),
-                            "status" to "logged in"
-                        )
+                        buildUserMap(username, "logged in")
                     )
                     localDataStore.storeCredentials(
                         body,
@@ -73,6 +69,16 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    private fun buildUserMap(
+        username: String,
+        status: String
+    ) = mapOf(
+        "username" to username,
+        "timestamp" to System.currentTimeMillis(),
+        "status" to status,
+        "app_version" to BuildConfig.VERSION_NAME,
+    )
+
     override suspend fun addIfNotExist() {
         localDataStore.getUserInfo()?.let {
             if (firestoreHelper.documentExists(
@@ -84,11 +90,7 @@ class LoginRepositoryImpl @Inject constructor(
             firestoreHelper.addDocumentWithId(
                 collection_logged_users,
                 it.sessionId,
-                mapOf(
-                    "username" to it.username,
-                    "timestamp" to System.currentTimeMillis(),
-                    "status" to "logged in"
-                )
+                buildUserMap(it.username, "logged in")
             )
         }
     }
@@ -99,11 +101,7 @@ class LoginRepositoryImpl @Inject constructor(
             firestoreHelper.addDocumentWithId(
                 collection_logged_users,
                 it.sessionId,
-                mapOf(
-                    "username" to it.username,
-                    "timestamp" to System.currentTimeMillis(),
-                    "status" to "logged out"
-                )
+                buildUserMap(it.username, "logged out")
             )
         }
         localDataStore.clearAllData()
