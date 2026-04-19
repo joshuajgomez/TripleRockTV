@@ -49,6 +49,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
             holder.text = data.label ?: data.language ?: "Unknown"
             holder.language = data.language.languageName()
         }
+        holder.binding.ivOnline.setVisible(data.id.contains("online"))
         holder.checked = !overrideChecked && data.isSelected
         if (holder.checked) selectedPosition = holder.bindingAdapterPosition
         holder.listenClickEvent {

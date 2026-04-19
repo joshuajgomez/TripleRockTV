@@ -231,6 +231,7 @@ class PlaybackFragment : Fragment() {
         val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url!!.toUri())
             .setMimeType("application/x-subrip")
             .setLanguage(subtitleData.language)
+            .setId("online")
             .setLabel(subtitleData.title)
             .setSelectionFlags(SELECTION_FLAG_DEFAULT)
             .build()
@@ -355,6 +356,7 @@ class PlaybackFragment : Fragment() {
             if (it.isEmpty()) return@let
             val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(it.toUri())
                 .setMimeType("application/x-subrip")
+                .setId("online")
                 .setLanguage(streamData.subtitleLanguage)
                 .setLabel(streamData.subtitleTitle)
                 .setSelectionFlags(SELECTION_FLAG_DEFAULT)
