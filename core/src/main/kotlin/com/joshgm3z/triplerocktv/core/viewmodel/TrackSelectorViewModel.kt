@@ -23,6 +23,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class TrackInfo(
+    val id: String,
     val groupIndex: Int,
     val trackIndexInGroup: Int,
     val mimeType: String?,
@@ -33,7 +34,7 @@ data class TrackInfo(
     val isSelected: Boolean,
     val trackType: TrackType,
 ) {
-    override fun toString() = "\n${language}:$label,isSelected=$isSelected"
+    override fun toString() = "\n{$language,$isSelected,$label}"
 }
 
 enum class TrackType {
@@ -97,6 +98,7 @@ constructor(
         val list = mutableListOf<TrackInfo>()
         repeat(5) {
             list += TrackInfo(
+                id = "",
                 groupIndex = 0,
                 trackIndexInGroup = 0,
                 mimeType = MimeTypes.APPLICATION_MP4,
@@ -159,7 +161,7 @@ constructor(
     }
 
     fun onDownloadedSubtitleClick(subtitleData: SubtitleData) {
-        Logger.debug("subtitleData.title = [${subtitleData.title}]")
+        Logger.debug("subtitleData.title = [${subtitleData}]")
         _uiState.update { it?.copy(isLoading = true) }
 
         viewModelScope.launch {
@@ -202,7 +204,7 @@ private fun MutableList<TrackInfo>.plusDisableSubtitleTrack(): MutableList<Track
         if (any { it.label == "Disabled" }) return@apply
         add(
             TrackInfo(
-                0, 0, "", language = "", label = "Disabled", 0,
+                "disabled", 0, 0, "", language = "", label = "Disabled", 0,
                 false, !any { it.isSelected }, TrackType.Subtitle
             )
         )
@@ -216,7 +218,10 @@ private fun Tracks.Group.parseTracks(
     val tracks = mutableListOf<TrackInfo>()
     for (i in 0 until length) {
         val format: Format = getTrackFormat(i)
+        if (trackType == TrackType.Subtitle)
+            Logger.info("\n${format.language},${isTrackSelected(i)},${format.label}")
         tracks += TrackInfo(
+            id = format.id ?: "",
             groupIndex = groupIndex,
             trackIndexInGroup = i,
             mimeType = format.sampleMimeType,
@@ -227,7 +232,7 @@ private fun Tracks.Group.parseTracks(
             isSelected = isTrackSelected(i),
             trackType = trackType
         ).apply {
-            Logger.debug("TrackType$trackType=$this")
+//            Logger.debug("trackType=$trackType,$this")
         }
     }
     return tracks

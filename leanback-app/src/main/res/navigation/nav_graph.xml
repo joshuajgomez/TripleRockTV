@@ -203,7 +203,7 @@
         android:label="PlaybackFragment">
         <argument
             android:name="streamId"
-            android:defaultValue="24585"
+            android:defaultValue="692556"
             app:argType="integer" />
         <argument
             android:name="seriesId"
