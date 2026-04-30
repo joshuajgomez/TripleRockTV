@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.ClickListener {
+class SearchFragment2 : Fragment() {
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -43,7 +43,9 @@ class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.Clic
         initViews()
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                binding.rvHints.adapter = SimpleTextAdapter(it.searchHints, this@SearchFragment2)
+                binding.rvHints.adapter = SimpleTextAdapter(it.searchHints) { text ->
+                    binding.keyboardView.text = text
+                }
                 when (it.searchUiState) {
                     is SearchUiState.Initial -> showInitialUi()
 
@@ -67,24 +69,20 @@ class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.Clic
     }
 
     private fun initViews() {
-        binding.keyboardView.listener = this
+        binding.keyboardView.listener = object : KeyboardViewListener {
+            override fun onTextChange(text: String) {
+                binding.etInput.setText(text)
+                viewModel.onSearchInputChange(text)
+            }
+        }
         binding.rvSearchList.adapter = streamAdapter
-    }
-
-    override fun onTextChange(text: String) {
-        binding.etInput.setText(text)
-        viewModel.onSearchInputChange(text)
-    }
-
-    override fun onClick(item: String) {
-        binding.keyboardView.text = item
     }
 
     private fun updateSearchResult(result: SearchUiState.Result) {
         val results = result.streamDataList + result.seriesStreams
         binding.tvStatus.text = when {
             results.isEmpty() -> "No results found"
-            else -> "Found ${results.size} for result for '${result.query}'"
+            else -> ""
         }
         streamAdapter.items = results
     }

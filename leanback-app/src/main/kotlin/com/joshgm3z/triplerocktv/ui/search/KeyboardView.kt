@@ -14,7 +14,7 @@ class KeyboardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr), KeyListener {
+) : LinearLayout(context, attrs, defStyleAttr) {
 
     var listener: KeyboardViewListener? = null
 
@@ -30,7 +30,9 @@ class KeyboardView @JvmOverloads constructor(
         }
 
     init {
-        binding.rvKeyboard.adapter = KeyboardAdapter(this)
+        binding.rvKeyboard.adapter = KeyboardAdapter {
+            text = text.plus(it)
+        }
         binding.ivSpace.setOnClickListener {
             text = text.plus(" ")
         }
@@ -40,10 +42,6 @@ class KeyboardView @JvmOverloads constructor(
             }
         }
     }
-
-    override fun onClick(key: String) {
-        text = text.plus(key)
-    }
 }
 
 interface KeyboardViewListener {
@@ -51,7 +49,7 @@ interface KeyboardViewListener {
 }
 
 private class KeyboardAdapter(
-    private val keyListener: KeyListener
+    private val onKeyClick: (String) -> Unit
 ) : RecyclerView.Adapter<KeyViewHolder>() {
     private val keys = listOf(
         "a", "b", "c", "d", "e", "f",
@@ -81,7 +79,7 @@ private class KeyboardAdapter(
         val binding = ItemKeyboardBinding.bind(holder.itemView)
         binding.tvKey.text = keys[position]
         binding.tvKey.setOnClickListener {
-            keyListener.onClick(keys[position])
+            onKeyClick(keys[position])
         }
     }
 
@@ -90,7 +88,3 @@ private class KeyboardAdapter(
 }
 
 private class KeyViewHolder(view: View) : RecyclerView.ViewHolder(view)
-
-interface KeyListener {
-    fun onClick(key: String)
-}

@@ -8,7 +8,7 @@ import com.joshgm3z.triplerocktv.databinding.ItemTextBinding
 
 class SimpleTextAdapter(
     private val items: List<String>,
-    private val listener: ClickListener,
+    private val onTextClick: (String) -> Unit,
 ) : RecyclerView.Adapter<SimpleTextViewHolder>() {
 
     override fun onCreateViewHolder(
@@ -30,15 +30,11 @@ class SimpleTextAdapter(
         val binding = ItemTextBinding.bind(holder.itemView)
         binding.root.text = items[position]
         binding.root.setOnClickListener {
-            listener.onClick(items[position])
+            onTextClick(items[position])
         }
     }
 
     override fun getItemCount() = items.size
-
-    interface ClickListener {
-        fun onClick(item: String)
-    }
 }
 
 class SimpleTextViewHolder(view: View) : RecyclerView.ViewHolder(view)
