@@ -8,7 +8,7 @@
 
     <com.joshgm3z.triplerocktv.ui.search.KeyboardView
         android:id="@+id/keyboard_view"
-        android:layout_width="230dp"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -16,9 +16,12 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hints"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/keyboard_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/keyboard_view"
@@ -47,6 +50,8 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="Search results for"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,14 +60,13 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_list"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_input"
         app:layout_constraintTop_toBottomOf="@+id/tv_status"
-        app:spanCount="5"
+        app:spanCount="4"
         tools:listitem="@layout/view_stream_card" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,8 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
-import androidx.leanback.widget.ItemBridgeAdapter
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.databinding.ItemKeyboardBinding
 import com.joshgm3z.triplerocktv.databinding.ViewKeyboardBinding
@@ -25,7 +23,7 @@ class KeyboardView @JvmOverloads constructor(
         this, true
     )
 
-    private var text = ""
+    var text = ""
         set(value) {
             field = value
             listener?.onTextChange(value)

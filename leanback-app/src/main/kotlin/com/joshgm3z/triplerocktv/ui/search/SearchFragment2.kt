@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
-import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
@@ -63,7 +62,8 @@ class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.Clic
 
     private fun showInitialUi() {
         streamAdapter.items = emptyList()
-        binding.tvStatus.text = "Start typing to see results"
+        binding.tvStatus.text = ""
+        binding.rvSearchList.isFocusable = false
     }
 
     private fun initViews() {
@@ -77,12 +77,15 @@ class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.Clic
     }
 
     override fun onClick(item: String) {
-        binding.etInput.setText(item)
-        viewModel.onSearchInputChange(item)
+        binding.keyboardView.text = item
     }
 
     private fun updateSearchResult(result: SearchUiState.Result) {
-        binding.tvStatus.text = "Search results for ${result.query}"
-        streamAdapter.items = result.streamDataList
+        val results = result.streamDataList + result.seriesStreams
+        binding.tvStatus.text = when {
+            results.isEmpty() -> "No results found"
+            else -> "Found ${results.size} for result for '${result.query}'"
+        }
+        streamAdapter.items = results
     }
 }
