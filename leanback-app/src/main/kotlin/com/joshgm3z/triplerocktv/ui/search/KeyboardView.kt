@@ -34,6 +34,7 @@ class KeyboardView @JvmOverloads constructor(
             text = text.plus(it)
         }
         binding.ivSpace.setOnClickListener {
+            if (text.trim().isEmpty()) return@setOnClickListener
             text = text.plus(" ")
         }
         binding.ivBackspace.setOnClickListener {
