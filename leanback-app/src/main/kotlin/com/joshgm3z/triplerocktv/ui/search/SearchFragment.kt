@@ -42,19 +42,17 @@ class SearchFragment : Fragment() {
     }
 
     private fun onSearchResultClick(it: Any) {
-        val action = SearchFragmentDirections.toDetails()
         var text = ""
         when (it) {
-            is StreamData -> action.apply {
+            is StreamData -> SearchFragmentDirections.toDetails().apply {
                 text = it.name
                 streamId = it.streamId
                 streamType = it.streamType
             }
 
-            is SeriesStream -> action.apply {
+            is SeriesStream -> SearchFragmentDirections.toSeriesDetails().apply {
                 text = it.name
-                streamId = it.seriesId
-                streamType = StreamType.Series
+                seriesId = it.seriesId
             }
 
             else -> return

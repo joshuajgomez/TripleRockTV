@@ -72,7 +72,7 @@ constructor(
                     text,
                     StreamType.LiveTV
                 ),
-                seriesStreams = emptyList()
+                seriesStreams = repository.searchSeriesByName(text)
             )
             _uiState.update { it.copy(searchUiState = searchUiState) }
         }
