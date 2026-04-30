@@ -5,21 +5,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.VerticalGridPresenter
+import androidx.lifecycle.lifecycleScope
+import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragment2 : Fragment(), KeyboardViewListener {
+class SearchFragment2 : Fragment(), KeyboardViewListener, SimpleTextAdapter.ClickListener {
 
     private lateinit var binding: FragmentSearchBinding
 
-    lateinit var rowsAdapter: ArrayObjectAdapter
+    private lateinit var rowsAdapter: ArrayObjectAdapter
+
+    private val viewModel: SearchViewModel by viewModels()
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
@@ -36,11 +43,15 @@ class SearchFragment2 : Fragment(), KeyboardViewListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        lifecycleScope.launch {
+            viewModel.uiState.collectLatest {
+                binding.rvHints.adapter = SimpleTextAdapter(it.searchHints, this@SearchFragment2)
+            }
+        }
     }
 
     private fun initViews() {
         binding.keyboardView.listener = this
-
         val gridFragment = VerticalGridSupportFragment()
         gridFragment.gridPresenter = VerticalGridPresenter(
             FocusHighlight.ZOOM_FACTOR_XSMALL,
@@ -60,5 +71,9 @@ class SearchFragment2 : Fragment(), KeyboardViewListener {
 
     override fun onTextChange(text: String) {
         binding.etInput.setText(text)
+    }
+
+    override fun onClick(item: String) {
+        binding.etInput.setText(item)
     }
 }
