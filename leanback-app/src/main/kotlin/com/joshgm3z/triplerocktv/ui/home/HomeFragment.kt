@@ -83,7 +83,7 @@ class HomeFragment : BrowseSupportFragment() {
                 rowsAdapter.add(ListRow(homeAdapter))
 
                 val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download))
+                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download, viewModel.lastUpdatedTime?:""))
                 settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
                 settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
                 rowsAdapter.add(ListRow(settingsAdapter))
