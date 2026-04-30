@@ -18,9 +18,6 @@ import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeItem
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeViewModel
-import com.joshgm3z.triplerocktv.util.DimMode
-import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -28,7 +25,6 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BrowseSupportFragment() {
-
     private val viewModel: HomeViewModel by viewModels()
 
     private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(
@@ -37,9 +33,6 @@ class HomeFragment : BrowseSupportFragment() {
             false
         )
     )
-
-    @Inject
-    lateinit var glideUtil: GlideUtil
 
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
@@ -90,20 +83,11 @@ class HomeFragment : BrowseSupportFragment() {
                 rowsAdapter.add(ListRow(homeAdapter))
 
                 val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download))
+                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download, viewModel.lastUpdatedTime?:""))
                 settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
                 settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
                 rowsAdapter.add(ListRow(settingsAdapter))
             }
-        }
-
-        glideUtil.getBitmap(
-            uri = "http://riseiptv.xyz:8080/images/f84cfc4a649186588214ccff8a8c335a.jpg",
-            blur = true,
-            dimMode = DimMode.Dark
-        ) {
-            if (!isVisible) return@getBitmap
-            requireActivity().setBackground(it)
         }
     }
 

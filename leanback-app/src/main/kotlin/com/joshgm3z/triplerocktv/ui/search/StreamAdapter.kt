@@ -1,37 +1,46 @@
-package com.joshgm3z.triplerocktv.ui.streamcatalogue
+package com.joshgm3z.triplerocktv.ui.search
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.leanback.widget.Presenter
-import com.bumptech.glide.Glide
-import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.util.setVisible
+import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setVisible
 import javax.inject.Inject
 
-class StreamPresenter
+class StreamAdapter
 @Inject constructor(
     private val glideUtil: GlideUtil,
-) : Presenter() {
+    private val onClick: (Any) -> Unit,
+) : RecyclerView.Adapter<StreamAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
+    var items: List<Any> = emptyList()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
+
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): ViewHolder {
         val binding = ViewStreamCardBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+            LayoutInflater.from(parent.context), parent, false
         )
         return ViewHolder(binding.root)
     }
 
-    override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
-        val binding = ViewStreamCardBinding.bind(viewHolder.view)
+    override fun onBindViewHolder(
+        holder: ViewHolder,
+        position: Int
+    ) {
+        val binding = ViewStreamCardBinding.bind(holder.itemView)
+        val item = items[position]
+
         val title = when (item) {
             is StreamData -> item.name
             is SeriesStream -> item.name
@@ -53,11 +62,11 @@ class StreamPresenter
 
         binding.streamTitle.text = title
         glideUtil.loadImage(imageUri, binding.posterImage)
+
+        binding.root.setOnClickListener { onClick(item) }
     }
 
-    override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
-        Glide.with(imageView.context).clear(imageView)
-    }
+    override fun getItemCount() = items.size
 
+    class ViewHolder(view: View) : RecyclerView.ViewHolder(view)
 }

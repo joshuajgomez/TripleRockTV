@@ -1,10 +1,12 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import android.text.format.DateUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.R
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,13 +23,26 @@ data class HomeItem(
 class HomeViewModel
 @Inject constructor(
     repository: MediaLocalRepository,
+    localDatastore: LocalDatastore
 ) : ViewModel() {
 
     private val _homeListState = MutableStateFlow<List<HomeItem>>(emptyList())
     val homeListState = _homeListState.asStateFlow()
 
+    var lastUpdatedTime: String? = null
+
+    fun Long.relativeTime() = DateUtils.getRelativeTimeSpanString(
+        this,
+        System.currentTimeMillis(),
+        DateUtils.MINUTE_IN_MILLIS
+    ).toString()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            localDatastore.getUserInfo()?.let {
+                if (it.lastContentUpdate == "") return@let
+                lastUpdatedTime = "Last updated\n${it.lastContentUpdate.toLong().relativeTime()}"
+            }
             val categories = arrayListOf<HomeItem>()
             repository.fetchCategories(StreamType.VideoOnDemand).let {
                 if (it.isNotEmpty()) categories.add(
