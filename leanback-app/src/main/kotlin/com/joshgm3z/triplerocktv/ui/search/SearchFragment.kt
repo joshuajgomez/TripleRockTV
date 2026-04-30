@@ -99,6 +99,7 @@ class SearchFragment : Fragment() {
         streamAdapter.items = emptyList()
         binding.tvStatus.text = ""
         binding.rvSearchList.isFocusable = false
+        binding.rvHints.isFocusable = false
     }
 
     private fun initViews() {
