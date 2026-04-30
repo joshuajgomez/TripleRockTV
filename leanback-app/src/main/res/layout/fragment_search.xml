@@ -5,11 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background"
-    android:padding="20dp">
+    android:padding="30dp">
 
     <com.joshgm3z.triplerocktv.ui.search.KeyboardView
         android:id="@+id/keyboard_view"
-        android:layout_width="180dp"
+        android:layout_width="240dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

@@ -4,4 +4,6 @@
     style="@style/KeyTextStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:text="Comedy" />
+    android:lines="1"
+    android:ellipsize="middle"
+    tools:text="The Man from earth (2009)" />
