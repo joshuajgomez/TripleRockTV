@@ -81,6 +81,7 @@ private class KeyboardAdapter(
         binding.tvKey.setOnClickListener {
             onKeyClick(keys[position])
         }
+        if (position == 0) binding.tvKey.requestFocus()
     }
 
     override fun getItemCount() = keys.size
