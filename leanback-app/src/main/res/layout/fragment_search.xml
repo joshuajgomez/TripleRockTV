@@ -32,10 +32,10 @@
         android:hint="Search movies and tv shows"
         android:padding="10dp"
         android:textColor="#000"
-        android:textColorHint="@color/color_card_background"
+        android:textColorHint="#80000000"
         app:layout_constraintStart_toEndOf="@id/keyboard_view"
         app:layout_constraintTop_toTopOf="parent"
-        tools:text="Gladiator" />
+        tools:text="" />
 
     <FrameLayout
         android:id="@+id/fl_stream_row_container"
