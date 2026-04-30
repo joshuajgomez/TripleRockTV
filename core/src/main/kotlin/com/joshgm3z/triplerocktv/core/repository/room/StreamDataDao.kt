@@ -20,7 +20,7 @@ interface StreamDataDao {
     ): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE name LIKE '%' || :streamName || '%' LIMIT :limit")
-    fun searchByName(streamName: String, limit: Int = 5): List<StreamData>
+    fun searchByName(streamName: String, limit: Int = 10): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun getByStreamId(streamId: Int): StreamData

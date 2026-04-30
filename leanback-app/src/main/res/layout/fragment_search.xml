@@ -15,16 +15,18 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hints"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_width="230dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="@id/keyboard_view"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/keyboard_view"
         tools:listitem="@layout/item_text" />
 
     <EditText
         android:id="@+id/et_input"
-        android:layout_width="500dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:background="#fff"
@@ -35,15 +37,32 @@
         android:padding="10dp"
         android:textColor="#000"
         android:textColorHint="#80000000"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/keyboard_view"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="" />
 
-    <FrameLayout
-        android:id="@+id/fl_stream_row_container"
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="Search results for"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/et_input"
+        app:layout_constraintTop_toBottomOf="@+id/et_input" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_search_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="10dp"
+        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/et_input" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_status"
+        app:spanCount="5"
+        tools:listitem="@layout/view_stream_card" />
 </androidx.constraintlayout.widget.ConstraintLayout>
