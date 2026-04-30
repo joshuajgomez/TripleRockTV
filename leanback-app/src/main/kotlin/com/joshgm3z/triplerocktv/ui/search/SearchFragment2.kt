@@ -7,10 +7,15 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
+import com.joshgm3z.triplerocktv.util.GlideUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -27,7 +32,37 @@ class SearchFragment2 : Fragment() {
     lateinit var streamPresenter: StreamPresenter
 
     @Inject
-    lateinit var streamAdapter: StreamAdapter
+    lateinit var glideUtil: GlideUtil
+
+    private lateinit var streamAdapter: StreamAdapter
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        streamAdapter = StreamAdapter(glideUtil) { onSearchResultClick(it) }
+    }
+
+    private fun onSearchResultClick(it: Any) {
+        val action = SearchFragmentDirections.toDetails()
+        var text = ""
+        when (it) {
+            is StreamData -> action.apply {
+                text = it.name
+                streamId = it.streamId
+                streamType = it.streamType
+            }
+
+            is SeriesStream -> action.apply {
+                text = it.name
+                streamId = it.seriesId
+                streamType = StreamType.Series
+            }
+
+            else -> return
+        }.let { action ->
+            viewModel.saveSearchHint(text)
+            findNavController().navigate(action)
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,

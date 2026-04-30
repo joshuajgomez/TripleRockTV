@@ -14,7 +14,8 @@ import javax.inject.Inject
 
 class StreamAdapter
 @Inject constructor(
-    private val glideUtil: GlideUtil
+    private val glideUtil: GlideUtil,
+    private val onClick: (Any) -> Unit,
 ) : RecyclerView.Adapter<StreamAdapter.ViewHolder>() {
 
     var items: List<Any> = emptyList()
@@ -61,6 +62,8 @@ class StreamAdapter
 
         binding.streamTitle.text = title
         glideUtil.loadImage(imageUri, binding.posterImage)
+
+        binding.root.setOnClickListener { onClick(item) }
     }
 
     override fun getItemCount() = items.size
