@@ -1,13 +1,16 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.databinding.ViewSettingCardBinding
+import com.joshgm3z.triplerocktv.util.setVisible
 
 data class SettingItem(
     val title: String,
     val iconRes: Int,
+    val subtitle: String? = null,
 )
 
 class SettingsItemPresenter : Presenter() {
@@ -25,6 +28,8 @@ class SettingsItemPresenter : Presenter() {
         val settingItem = item as SettingItem
         binding.tvTitle.text = settingItem.title
         binding.ivIcon.setImageResource(settingItem.iconRes)
+        item.subtitle?.let { binding.tvSubtitle.text = it }
+        binding.tvSubtitle.setVisible(item.subtitle != null)
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

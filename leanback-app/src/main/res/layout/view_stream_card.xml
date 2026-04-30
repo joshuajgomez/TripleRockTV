@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="200dp"
+    android:layout_margin="5dp"
     android:background="?attr/colorBackground"
     android:clickable="true"
     android:focusable="true"
@@ -41,26 +42,13 @@
             android:textColor="@android:color/white"
             tools:text="Some movie with long name(2025) " />
 
-        <LinearLayout
-            android:id="@+id/ll_rating_container"
+        <TextView
+            android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:gravity="center_vertical"
-            android:visibility="gone"
-            tools:visibility="visible">
-
-            <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
-                android:src="@drawable/ic_star" />
-
-            <TextView
-                android:id="@+id/tv_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="12sp"
-                tools:text="3.5" />
-        </LinearLayout>
+            android:drawableStart="@drawable/ic_star_scaled"
+            android:drawablePadding="2dp"
+            android:textSize="12sp"
+            tools:text="3.5" />
     </LinearLayout>
 </FrameLayout>

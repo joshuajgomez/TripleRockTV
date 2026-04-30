@@ -7,7 +7,7 @@
     android:focusableInTouchMode="true"
     android:gravity="center"
     android:orientation="vertical"
-    android:paddingHorizontal="10dp">
+    android:paddingHorizontal="8dp">
 
     <ImageView
         android:id="@+id/iv_icon"
@@ -21,11 +21,25 @@
         android:id="@+id/tv_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:duplicateParentState="true"
         android:text="Setting"
         android:textAlignment="center"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/card_fg_color_selector" />
+        android:textColor="@color/card_fg_color_selector"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tv_subtitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:alpha="0.7"
+        android:duplicateParentState="true"
+        android:text="last updated\n3 days ago"
+        android:textAlignment="center"
+        android:textColor="@color/card_fg_color_selector"
+        android:textSize="10sp"
+        android:visibility="gone" />
 
 </LinearLayout>

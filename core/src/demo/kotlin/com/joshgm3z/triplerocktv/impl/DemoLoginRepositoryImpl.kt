@@ -25,6 +25,8 @@ constructor() : LoginRepository {
         }
     }
 
+    override suspend fun addIfNotExist() {}
+
     override suspend fun tryLogout(onLogoutCompleter: () -> Unit) {
         delay(1000)
         onLogoutCompleter()
