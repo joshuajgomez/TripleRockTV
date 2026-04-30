@@ -11,9 +11,11 @@ import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.VerticalGridPresenter
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
+import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
-class SearchFragment2 : Fragment() {
+@AndroidEntryPoint
+class SearchFragment2 : Fragment(), KeyboardViewListener {
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -31,7 +33,14 @@ class SearchFragment2 : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+    }
+
     private fun initViews() {
+        binding.keyboardView.listener = this
+
         val gridFragment = VerticalGridSupportFragment()
         gridFragment.gridPresenter = VerticalGridPresenter(
             FocusHighlight.ZOOM_FACTOR_XSMALL,
@@ -47,5 +56,9 @@ class SearchFragment2 : Fragment() {
         childFragmentManager.beginTransaction()
             .replace(binding.flStreamRowContainer.id, gridFragment)
             .commit()
+    }
+
+    override fun onTextChange(text: String) {
+        binding.etInput.setText(text)
     }
 }

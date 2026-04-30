@@ -16,20 +16,45 @@ class KeyboardView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : LinearLayout(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr), KeyListener {
+
+    var listener: KeyboardViewListener? = null
 
     private val binding = ViewKeyboardBinding.inflate(
         LayoutInflater.from(context),
         this, true
     )
 
+    private var text = ""
+        set(value) {
+            field = value
+            listener?.onTextChange(value)
+        }
+
     init {
-        binding.rvKeyboard.layoutManager = GridLayoutManager(context, 6)
-        binding.rvKeyboard.adapter = KeyboardAdapter()
+        binding.rvKeyboard.adapter = KeyboardAdapter(this)
+        binding.ivSpace.setOnClickListener {
+            text = text.plus(" ")
+        }
+        binding.ivBackspace.setOnClickListener {
+            if (text.isNotEmpty()) {
+                text = text.dropLast(1)
+            }
+        }
+    }
+
+    override fun onClick(key: String) {
+        text = text.plus(key)
     }
 }
 
-private class KeyboardAdapter : RecyclerView.Adapter<KeyViewHolder>() {
+interface KeyboardViewListener {
+    fun onTextChange(text: String)
+}
+
+private class KeyboardAdapter(
+    private val keyListener: KeyListener
+) : RecyclerView.Adapter<KeyViewHolder>() {
     private val keys = listOf(
         "a", "b", "c", "d", "e", "f",
         "g", "h", "i", "j", "k", "l",
@@ -57,6 +82,9 @@ private class KeyboardAdapter : RecyclerView.Adapter<KeyViewHolder>() {
     ) {
         val binding = ItemKeyboardBinding.bind(holder.itemView)
         binding.tvKey.text = keys[position]
+        binding.tvKey.setOnClickListener {
+            keyListener.onClick(keys[position])
+        }
     }
 
     override fun getItemCount() = keys.size
@@ -64,3 +92,7 @@ private class KeyboardAdapter : RecyclerView.Adapter<KeyViewHolder>() {
 }
 
 private class KeyViewHolder(view: View) : RecyclerView.ViewHolder(view)
+
+interface KeyListener {
+    fun onClick(key: String)
+}

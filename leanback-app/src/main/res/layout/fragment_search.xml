@@ -26,11 +26,16 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:background="#fff"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Search movies and tv shows"
         android:padding="10dp"
-        android:text="Gladiator"
         android:textColor="#000"
+        android:textColorHint="@color/color_card_background"
         app:layout_constraintStart_toEndOf="@id/keyboard_view"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Gladiator" />
 
     <FrameLayout
         android:id="@+id/fl_stream_row_container"
