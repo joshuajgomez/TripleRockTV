@@ -42,6 +42,9 @@ class KeyboardView @JvmOverloads constructor(
                 text = text.dropLast(1)
             }
         }
+        binding.ivClear.setOnClickListener {
+            text = ""
+        }
     }
 }
 

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/KeyTextStyle"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_marginTop="5dp"
+    android:background="@color/list_item_bg_color_selector"
+    android:ellipsize="end"
     android:lines="1"
-    android:ellipsize="middle"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp"
+    android:textColor="@color/card_fg_color_selector2"
     tools:text="The Man from earth (2009)" />
