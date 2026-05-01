@@ -83,6 +83,7 @@ class SearchFragment : Fragment() {
                     binding.keyboardView.text = text
                 }
                 binding.tvStatus.text = it.statusText
+                binding.tvStatus.setVisible(it.statusText.isNotEmpty())
                 binding.tvStreamsTitle.setVisible(it.showRecentAddedTitle)
                 streamAdapter.items = it.streams
                 binding.rvSearchList.layoutAnimation =

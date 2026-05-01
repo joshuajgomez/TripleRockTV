@@ -56,7 +56,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="No results found"
@@ -83,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_status,tv_streams_title" />
+        app:constraint_referenced_ids="et_input,tv_streams_title" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_search_list"
