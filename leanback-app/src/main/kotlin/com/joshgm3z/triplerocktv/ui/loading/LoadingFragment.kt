@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.loading
 
 import android.os.Bundle
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.GuidedStepSupportFragment
@@ -72,12 +73,23 @@ class LoadingFragment : GuidedStepSupportFragment() {
                                 icon = R.drawable.ic_check_circle_green
                             )
                             delay(2000)
-                            findNavController().navigate(LoadingFragmentDirections.toHome())
+                            findNavController().navigate(LoadingFragmentDirections.toSplash())
                         }
                     }
                 }
             }
         }
+        setupBackstackListener()
+    }
+
+    private fun setupBackstackListener() {
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    findNavController().navigate(LoadingFragmentDirections.toDownloadCancelDialog())
+                }
+            })
     }
 
     fun updateStatus(
