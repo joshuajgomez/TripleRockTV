@@ -101,13 +101,16 @@
         android:name="com.joshgm3z.triplerocktv.ui.loading.LoadingFragment"
         android:label="MediaLoadingFragment">
         <action
-            android:id="@+id/toHome"
-            app:destination="@id/homeFragment"
-            app:popUpTo="@id/homeFragment"
+            android:id="@+id/toSplash"
+            app:destination="@id/splashScreenFragment"
+            app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
         <action
             android:id="@+id/toLoadingError"
             app:destination="@id/loadingErrorFragment" />
+        <action
+            android:id="@+id/toDownloadCancelDialog"
+            app:destination="@id/downloadCancelDialog" />
     </fragment>
 
     <fragment
@@ -304,6 +307,17 @@
             android:name="title"
             android:defaultValue="Wonder Woman 1984"
             app:argType="string" />
+    </dialog>
+
+    <dialog
+        android:id="@+id/downloadCancelDialog"
+        android:name="com.joshgm3z.triplerocktv.ui.loading.DownloadCancelDialog"
+        android:label="DownloadCancelDialog">
+        <action
+            android:id="@+id/toSplash"
+            app:destination="@id/splashScreenFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </dialog>
 
 </navigation>
