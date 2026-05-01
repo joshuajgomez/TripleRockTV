@@ -16,6 +16,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -79,30 +80,16 @@ class SearchFragment : Fragment() {
                 binding.rvHints.adapter = SimpleTextAdapter(it.searchHints) { text ->
                     binding.keyboardView.text = text
                 }
-                when (it.searchUiState) {
-                    is SearchUiState.Initial -> showInitialUi()
-
-                    is SearchUiState.Loading -> showLoadingUi()
-
-                    is SearchUiState.Result -> updateSearchResult(it.searchUiState as SearchUiState.Result)
-                }
+                binding.tvStatus.text = it.statusText
+                binding.tvStreamsTitle.setVisible(it.showRecentAddedTitle)
+                streamAdapter.items = it.streams
             }
         }
     }
 
-    private fun showLoadingUi() {
-        streamAdapter.items = emptyList()
-        binding.tvStatus.text = "Searching"
-    }
-
-    private fun showInitialUi() {
-        streamAdapter.items = emptyList()
-        binding.tvStatus.text = ""
+    private fun initViews() {
         binding.rvSearchList.isFocusable = false
         binding.rvHints.isFocusable = false
-    }
-
-    private fun initViews() {
         binding.keyboardView.listener = object : KeyboardViewListener {
             override fun onTextChange(text: String) {
                 binding.etInput.setText(text)
@@ -110,14 +97,5 @@ class SearchFragment : Fragment() {
             }
         }
         binding.rvSearchList.adapter = streamAdapter
-    }
-
-    private fun updateSearchResult(result: SearchUiState.Result) {
-        val results = result.streamDataList + result.seriesStreams
-        binding.tvStatus.text = when {
-            results.isEmpty() -> "No results found"
-            else -> ""
-        }
-        streamAdapter.items = results
     }
 }

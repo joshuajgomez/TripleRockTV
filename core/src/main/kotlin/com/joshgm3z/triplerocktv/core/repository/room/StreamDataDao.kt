@@ -6,21 +6,24 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.joshgm3z.triplerocktv.core.repository.SEARCH_LIMIT
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface StreamDataDao {
-    @Query("SELECT * FROM stream_data " +
-            "WHERE categoryId = :categoryId AND streamType = :streamType " +
-            "ORDER BY added DESC")
+    @Query(
+        "SELECT * FROM stream_data " +
+                "WHERE categoryId = :categoryId AND streamType = :streamType " +
+                "ORDER BY added DESC"
+    )
     fun getAllFromCategoryAndType(
         categoryId: Int,
         streamType: StreamType
     ): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE name LIKE '%' || :streamName || '%' LIMIT :limit")
-    fun searchByName(streamName: String, limit: Int = 8): List<StreamData>
+    fun searchByName(streamName: String, limit: Int = SEARCH_LIMIT): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun getByStreamId(streamId: Int): StreamData
@@ -59,10 +62,12 @@ interface StreamDataDao {
         minDurationLeft: Long = MIN_DURATION_LEFT
     ): List<StreamData>
 
-    @Query("SELECT * FROM stream_data " +
-            "WHERE inMyList IS true " +
-            "AND streamType = :streamType " +
-            "ORDER BY timeAddedToList DESC LIMIT 5")
+    @Query(
+        "SELECT * FROM stream_data " +
+                "WHERE inMyList IS true " +
+                "AND streamType = :streamType " +
+                "ORDER BY timeAddedToList DESC LIMIT 5"
+    )
     suspend fun getMyList5(streamType: StreamType): List<StreamData>
 
     @Query("SELECT * FROM stream_data ORDER BY added DESC LIMIT 10")

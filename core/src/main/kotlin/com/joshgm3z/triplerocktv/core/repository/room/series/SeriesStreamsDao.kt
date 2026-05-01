@@ -6,14 +6,15 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import com.joshgm3z.triplerocktv.core.repository.SEARCH_LIMIT
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SeriesStreamsDao {
 
-    @Query("SELECT * FROM series_stream WHERE name LIKE '%' || :streamName || '%'")
-    fun searchStreams(streamName: String): List<SeriesStream>
+    @Query("SELECT * FROM series_stream WHERE name LIKE '%' || :streamName || '%' LIMIT :limit")
+    fun searchStreams(streamName: String, limit: Int = SEARCH_LIMIT): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
     fun getBySeriesId(seriesId: Int): SeriesStream
