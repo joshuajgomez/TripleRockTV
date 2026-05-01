@@ -16,9 +16,22 @@
             style="@style/KeyTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="1dp"
             android:layout_weight="1"
             android:src="@drawable/outline_space_bar_24"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_clear"
+            style="@style/KeyTextStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
+            android:layout_marginEnd="1dp"
+            android:layout_weight="1"
+            android:src="@drawable/baseline_delete_forever_24"
+            app:layout_constraintStart_toEndOf="@id/iv_backspace"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
@@ -26,6 +39,7 @@
             style="@style/KeyTextStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="1dp"
             android:layout_weight="1"
             android:src="@drawable/baseline_backspace_24"
             app:layout_constraintStart_toEndOf="@id/iv_backspace"
