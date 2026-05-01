@@ -4,10 +4,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
@@ -83,6 +85,9 @@ class SearchFragment : Fragment() {
                 binding.tvStatus.text = it.statusText
                 binding.tvStreamsTitle.setVisible(it.showRecentAddedTitle)
                 streamAdapter.items = it.streams
+                binding.rvSearchList.layoutAnimation =
+                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
+                binding.rvSearchList.scheduleLayoutAnimation()
             }
         }
     }
