@@ -29,7 +29,7 @@ class SettingsItemPresenter : Presenter() {
         binding.tvTitle.text = settingItem.title
         binding.ivIcon.setImageResource(settingItem.iconRes)
         item.subtitle?.let { binding.tvSubtitle.text = it }
-        binding.tvSubtitle.setVisible(item.subtitle != null)
+        binding.tvSubtitle.setVisible(!item.subtitle.isNullOrEmpty())
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

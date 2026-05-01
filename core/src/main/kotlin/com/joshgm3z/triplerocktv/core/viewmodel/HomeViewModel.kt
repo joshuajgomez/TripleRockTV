@@ -1,12 +1,12 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
-import android.text.format.DateUtils
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.R
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.relativeTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,12 +30,6 @@ class HomeViewModel
     val homeListState = _homeListState.asStateFlow()
 
     var lastUpdatedTime: String? = null
-
-    fun Long.relativeTime() = DateUtils.getRelativeTimeSpanString(
-        this,
-        System.currentTimeMillis(),
-        DateUtils.MINUTE_IN_MILLIS
-    ).toString()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
