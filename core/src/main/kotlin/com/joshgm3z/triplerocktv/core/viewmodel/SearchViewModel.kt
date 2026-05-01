@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
@@ -15,40 +16,36 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class SearchUiData(
+data class SearchUiState(
     val searchHints: List<String> = emptyList(),
-    val searchUiState: SearchUiState = SearchUiState.Initial,
+    val streams: List<Any> = emptyList(),
+    val statusText: String = "",
+    val showRecentAddedTitle: Boolean = false,
 )
-
-sealed class SearchUiState {
-    object Initial : SearchUiState()
-    object Loading : SearchUiState()
-    data class Result(
-        val query: String,
-        val streamDataList: List<StreamData>,
-        val seriesStreams: List<SeriesStream>,
-    ) : SearchUiState() {
-        fun isEmpty() = streamDataList.isEmpty() && seriesStreams.isEmpty()
-    }
-}
 
 @HiltViewModel
 class SearchViewModel
 @Inject
 constructor(
-    private val repository: SearchRepository
+    private val repository: SearchRepository,
+    private val mediaLocalRepository: MediaLocalRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SearchUiData())
+    private val _uiState = MutableStateFlow(SearchUiState())
     val uiState = _uiState.asStateFlow()
+
+    private var recentStreams: List<Any> = emptyList()
 
     private var job: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
+            recentStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
             _uiState.update {
                 it.copy(
-                    searchHints = repository.getSearchTextList()
+                    searchHints = repository.getSearchTextList(),
+                    streams = recentStreams,
+                    showRecentAddedTitle = recentStreams.isNotEmpty()
                 )
             }
         }
@@ -58,23 +55,40 @@ constructor(
         this.job?.cancel()
 
         if (text.isEmpty()) {
-            _uiState.update { it.copy(searchUiState = SearchUiState.Initial) }
+            _uiState.update {
+                it.copy(
+                    statusText = "",
+                    streams = recentStreams,
+                    showRecentAddedTitle = recentStreams.isNotEmpty()
+                )
+            }
             return
         }
-        _uiState.update { it.copy(searchUiState = SearchUiState.Loading) }
+        _uiState.update { it.copy(statusText = "Searching...") }
         val job = viewModelScope.launch(Dispatchers.IO) {
-            val searchUiState = SearchUiState.Result(
-                query = text,
-                streamDataList = repository.searchStreamByName(
-                    text,
-                    StreamType.VideoOnDemand
-                ) + repository.searchStreamByName(
-                    text,
-                    StreamType.LiveTV
-                ),
-                seriesStreams = repository.searchSeriesByName(text)
-            )
-            _uiState.update { it.copy(searchUiState = searchUiState) }
+            val searchResult = repository.searchStreamByName(
+                text,
+                StreamType.VideoOnDemand
+            ) + repository.searchStreamByName(
+                text,
+                StreamType.LiveTV
+            ) + repository.searchSeriesByName(text)
+
+            _uiState.update {
+                if (searchResult.isEmpty()) {
+                    it.copy(
+                        streams = recentStreams,
+                        statusText = "No results found",
+                        showRecentAddedTitle = true
+                    )
+                } else {
+                    it.copy(
+                        streams = searchResult,
+                        statusText = "",
+                        showRecentAddedTitle = false
+                    )
+                }
+            }
         }
         this.job = job
         job.invokeOnCompletion {

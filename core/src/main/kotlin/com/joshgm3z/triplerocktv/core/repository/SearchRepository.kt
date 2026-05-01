@@ -3,6 +3,8 @@ package com.joshgm3z.triplerocktv.core.repository
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 
+const val SEARCH_LIMIT = 10
+
 interface SearchRepository {
     suspend fun searchStreamByName(name: String, streamType: StreamType): List<StreamData>
 
