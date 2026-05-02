@@ -22,4 +22,19 @@
         <item name="android:clickable">true</item>
         <item name="android:focusableInTouchMode">true</item>
     </style>
+
+    <style name="ButtonStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">20dp</item>
+        <item name="android:textColor">@color/button_fg_color_selector</item>
+        <item name="android:drawableTint">@color/button_fg_color_selector</item>
+        <item name="android:background">@drawable/button_background</item>
+        <item name="android:textSize">@dimen/text_size_small</item>
+        <item name="android:textAlignment">textStart</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:drawablePadding">5dp</item>
+    </style>
 </resources>

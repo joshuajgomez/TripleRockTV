@@ -56,7 +56,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
             app:layout_constraintTop_toBottomOf="@+id/metadata_view"
-            tools:text="@string/long_description" />
+            tools:text="@string/sample_long_description" />
 
         <FrameLayout
             android:id="@+id/fl_stream_row_container"

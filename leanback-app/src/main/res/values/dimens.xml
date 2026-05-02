@@ -10,5 +10,7 @@
     <dimen name="screen_edge_padding">30dp</dimen>
     <dimen name="text_size_large">25sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
-    <dimen name="text_size_small">15sp</dimen>
+    <dimen name="text_size_small">13sp</dimen>
+    <dimen name="poster_width">150dp</dimen>
+    <dimen name="poster_height">200dp</dimen>
 </resources>
