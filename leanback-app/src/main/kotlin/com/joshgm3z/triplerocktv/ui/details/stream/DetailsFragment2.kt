@@ -86,7 +86,6 @@ class DetailsFragment2 : Fragment() {
                 }
             }
         }
-        viewModel.fetchStreamDetails(args.streamId, args.streamType)
     }
 
     private fun updateDetails(streamData: StreamData) {

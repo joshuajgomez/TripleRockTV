@@ -105,7 +105,6 @@ class DetailsFragment : DetailsSupportFragment() {
                 }
             }
         }
-        viewModel.fetchStreamDetails(args.streamId, args.streamType)
     }
 
     private fun updateDetails(streamData: StreamData) {
