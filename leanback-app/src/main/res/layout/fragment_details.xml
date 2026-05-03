@@ -1,28 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background">
-
-    <ImageView
-        android:id="@+id/iv_backdrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        tools:src="@drawable/backdrop_office" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/dark_transparent_color" />
 
     <LinearLayout
         android:layout_width="300dp"
         android:layout_height="match_parent"
         android:background="@color/color_card_background"
         android:orientation="vertical"
-        android:padding="@dimen/screen_edge_padding">
+        android:paddingStart="@dimen/screen_edge_padding"
+        android:paddingTop="@dimen/screen_edge_padding"
+        android:paddingEnd="10dp">
 
         <TextView
             android:id="@+id/tv_title"
@@ -99,8 +89,8 @@
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginStart="10dp"
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="20dp"
                 android:duplicateParentState="true"
                 android:progress="30"
                 android:progressBackgroundTint="@color/progress_bg_color_selector"
@@ -150,4 +140,12 @@
             tools:visibility="visible" />
 
     </LinearLayout>
-</FrameLayout>
+
+    <ImageView
+        android:id="@+id/iv_backdrop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="null"
+        android:scaleType="centerCrop"
+        tools:src="@drawable/backdrop_office" />
+</LinearLayout>

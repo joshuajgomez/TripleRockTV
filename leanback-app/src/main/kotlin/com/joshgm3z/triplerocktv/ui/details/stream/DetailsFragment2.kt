@@ -102,6 +102,10 @@ class DetailsFragment2 : Fragment() {
         } else {
             binding.btnPlay.requestFocus()
         }
+        binding.flResumeContainer.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.progressBar.setVisible(hasFocus)
+            }
         binding.btnRemoveMyList.setVisible(streamData.inMyList)
         binding.btnAddMyList.setVisible(!streamData.inMyList)
 
@@ -115,7 +119,7 @@ class DetailsFragment2 : Fragment() {
         imageUrl ?: return
         if (backgroundImageUrl == imageUrl) return
         backgroundImageUrl = imageUrl
-        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.Dark) { bitmap ->
+        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.None) { bitmap ->
             if (!isVisible) return@getBitmap
             binding.ivBackdrop.setImageBitmap(bitmap)
         }
