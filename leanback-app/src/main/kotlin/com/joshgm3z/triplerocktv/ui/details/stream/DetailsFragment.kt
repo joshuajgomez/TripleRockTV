@@ -1,37 +1,31 @@
 package com.joshgm3z.triplerocktv.ui.details.stream
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.leanback.app.DetailsSupportFragment
-import androidx.leanback.app.DetailsSupportFragmentBackgroundController
-import androidx.leanback.widget.Action
-import androidx.leanback.widget.ArrayObjectAdapter
-import androidx.leanback.widget.ClassPresenterSelector
-import androidx.leanback.widget.DetailsOverviewRow
-import androidx.leanback.widget.DetailsOverviewRowPresenter
-import androidx.leanback.widget.OnActionClickedListener
-import androidx.leanback.widget.SparseArrayObjectAdapter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
+import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.ScreenName
-import com.joshgm3z.triplerocktv.util.getColorFromAttr
-import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
-import com.joshgm3z.triplerocktv.util.setBackground
+import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.getValue
 
 @AndroidEntryPoint
-class DetailsFragment : DetailsSupportFragment() {
+class DetailsFragment : Fragment() {
+    private lateinit var binding: FragmentDetailsBinding
 
     private val viewModel: DetailsViewModel by viewModels()
 
@@ -43,57 +37,43 @@ class DetailsFragment : DetailsSupportFragment() {
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
-    private lateinit var detailsBackground: DetailsSupportFragmentBackgroundController
-    private lateinit var rowsAdapter: ArrayObjectAdapter
-
     private var backgroundImageUrl: String? = null
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        detailsBackground = DetailsSupportFragmentBackgroundController(this)
-
-        val presenterSelector = ClassPresenterSelector()
-        val detailsPresenter =
-            DetailsOverviewRowPresenter(StreamDataDetailsDescriptionPresenter())
-
-        detailsPresenter.backgroundColor = requireContext().getColorFromAttr(R.attr.colorCardBackground)
-
-        detailsPresenter.onActionClickedListener = OnActionClickedListener { action ->
-            when (action.id) {
-                ACTION_PLAY -> DetailsFragmentDirections.toPlayback().apply {
-                    streamId = args.streamId
-                    streamType = args.streamType
-                    findNavController().navigate(this)
-                }
-
-                ACTION_RESUME -> DetailsFragmentDirections.toPlayback().apply {
-                    resume = true
-                    streamId = args.streamId
-                    streamType = args.streamType
-                    findNavController().navigate(this)
-                }
-
-                ACTION_FAVORITE -> viewModel.addToMyList()
-                ACTION_REMOVE_FAVORITE -> viewModel.removeFromMyList()
-
-                else -> return@OnActionClickedListener
-            }
-        }
-
-        presenterSelector.addClassPresenter(DetailsOverviewRow::class.java, detailsPresenter)
-        rowsAdapter = ArrayObjectAdapter(presenterSelector)
-        adapter = rowsAdapter
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        binding = FragmentDetailsBinding.inflate(LayoutInflater.from(context))
+        setupClickListeners()
+        return binding.root
     }
 
-    private fun handleBlur(imageUrl: String?) {
-        imageUrl ?: return
-        if (backgroundImageUrl == imageUrl) return
-        backgroundImageUrl = imageUrl
-        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.Dark) { bitmap ->
-            if (!isVisible) return@getBitmap
-            requireActivity().setBackground(bitmap)
+    private fun setupClickListeners() {
+        binding.flResumeContainer.setOnClickListener {
+            DetailsFragmentDirections.toPlayback().apply {
+                resume = true
+                streamId = args.streamId
+                streamType = args.streamType
+                findNavController().navigate(this)
+            }
         }
+        binding.btnStartOver.setOnClickListener {
+            DetailsFragmentDirections.toPlayback().apply {
+                streamId = args.streamId
+                streamType = args.streamType
+                findNavController().navigate(this)
+            }
+        }
+        binding.btnPlay.setOnClickListener {
+            DetailsFragmentDirections.toPlayback().apply {
+                streamId = args.streamId
+                streamType = args.streamType
+                findNavController().navigate(this)
+            }
+        }
+        binding.btnAddMyList.setOnClickListener { viewModel.addToMyList() }
+        binding.btnRemoveMyList.setOnClickListener { viewModel.removeFromMyList() }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -108,69 +88,40 @@ class DetailsFragment : DetailsSupportFragment() {
     }
 
     private fun updateDetails(streamData: StreamData) {
-        Logger.debug("streamData = [${streamData}]")
         handleBlur(streamData.movieMetadata?.backPosterUrl)
-
-        val existingRow = if (rowsAdapter.size() > 0) {
-            rowsAdapter.get(0) as? DetailsOverviewRow
-        } else {
-            null
-        }
-
-        val detailsRow = if (existingRow != null) {
-            // Reuse the existing row and update its data object
-            existingRow.item = streamData
-            existingRow
-        } else {
-            // Create a new row if it's the first time
-            DetailsOverviewRow(streamData)
-        }
-
-        val actionAdapter = SparseArrayObjectAdapter()
+        binding.tvTitle.text = streamData.name
+        binding.tvDescription.text = streamData.movieMetadata?.description
+        binding.tvCast.text = "Cast: " + streamData.movieMetadata?.cast
+        binding.tvDirector.text = "Director: " + streamData.movieMetadata?.director
+        binding.flResumeContainer.setVisible(streamData.startedWatching)
+        binding.btnStartOver.setVisible(streamData.startedWatching)
+        binding.btnPlay.setVisible(!streamData.startedWatching)
         if (streamData.startedWatching) {
-            actionAdapter.set(ACTION_RESUME.toInt(), Action(ACTION_RESUME, "Resume"))
-            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Start over"))
+            binding.progressBar.progress = streamData.progressPercent()
+            binding.flResumeContainer.requestFocus()
         } else {
-            actionAdapter.set(ACTION_PLAY.toInt(), Action(ACTION_PLAY, "Play"))
+            binding.btnPlay.requestFocus()
         }
-        if (streamData.inMyList) actionAdapter.set(
-            ACTION_REMOVE_FAVORITE.toInt(),
-            Action(ACTION_REMOVE_FAVORITE, "Remove from my list")
-        ) else actionAdapter.set(
-            ACTION_FAVORITE.toInt(),
-            Action(ACTION_FAVORITE, "Add to my list")
-        )
+        binding.flResumeContainer.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.progressBar.setVisible(hasFocus)
+            }
+        binding.btnRemoveMyList.setVisible(streamData.inMyList)
+        binding.btnAddMyList.setVisible(!streamData.inMyList)
 
-        detailsRow.actionsAdapter = actionAdapter
-
-        glideUtil.getBitmap(streamData.streamIcon) {
-            detailsRow.setImageBitmap(requireContext(), it)
-            rowsAdapter.notifyArrayItemRangeChanged(0, rowsAdapter.size())
-        }
-
-        if (existingRow == null) {
-            rowsAdapter.add(detailsRow)
-        } else {
-            // If it was an update, notify the adapter immediately for text/action changes
-            rowsAdapter.notifyArrayItemRangeChanged(0, 1)
-        }
+        binding.metadataView.rating = streamData.rating
+        binding.tvGenre.text = streamData.movieMetadata?.genre
+        binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
+        binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
     }
 
-    override fun onResume() {
-        super.onResume()
-        firebaseLogger.logScreenView(ScreenName.VideoOnDemandDetails)
-
-        backgroundImageUrl ?: return
-        glideUtil.getBitmap(uri = backgroundImageUrl, dimMode = DimMode.Dark) { bitmap ->
+    private fun handleBlur(imageUrl: String?) {
+        imageUrl ?: return
+        if (backgroundImageUrl == imageUrl) return
+        backgroundImageUrl = imageUrl
+        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.None) { bitmap ->
             if (!isVisible) return@getBitmap
-            requireActivity().setBackground(bitmap)
+            binding.ivBackdrop.setImageBitmap(bitmap)
         }
-    }
-
-    companion object {
-        private const val ACTION_RESUME = 1L
-        private const val ACTION_PLAY = 2L
-        private const val ACTION_FAVORITE = 3L
-        private const val ACTION_REMOVE_FAVORITE = 4L
     }
 }
