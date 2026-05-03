@@ -18,17 +18,16 @@
         android:background="@color/dark_transparent_color" />
 
     <LinearLayout
-        android:layout_width="400dp"
+        android:layout_width="300dp"
         android:layout_height="match_parent"
         android:background="@color/color_card_background"
         android:orientation="vertical"
-        android:padding="20dp">
+        android:padding="@dimen/screen_edge_padding">
 
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:textSize="@dimen/text_size_medium"
             android:textStyle="bold"
             tools:text="@string/sample_movie_name" />
@@ -39,10 +38,19 @@
             android:layout_height="wrap_content" />
 
         <TextView
+            android:id="@+id/tv_genre"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:textColor="@color/color_primary"
+            android:textSize="@dimen/text_size_small"
+            tools:text="Comedy, Horror" />
+
+        <TextView
             android:id="@+id/tv_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:textSize="@dimen/text_size_small"
             tools:text="@string/sample_long_description" />
 
@@ -69,15 +77,21 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="40dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:visibility="gone"
             tools:visibility="visible">
 
-            <Button
+            <TextView
                 android:id="@+id/btn_resume"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/baseline_play_arrow_14"
+                android:duplicateParentState="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
                 android:text="Resume" />
 
             <ProgressBar
@@ -86,12 +100,15 @@
                 android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="10dp"
+                android:duplicateParentState="true"
                 android:progress="30"
+                android:progressBackgroundTint="@color/progress_bg_color_selector"
                 android:progressTint="@color/button_fg_color_selector" />
+
         </FrameLayout>
 
-        <Button
+        <TextView
             android:id="@+id/btn_play"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
@@ -102,7 +119,7 @@
             android:visibility="gone"
             tools:visibility="gone" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_start_over"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
@@ -112,23 +129,23 @@
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_add_my_list"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/baseline_delete_forever_14"
+            android:drawableStart="@drawable/baseline_playlist_add_14"
             android:text="Add to list"
             android:visibility="gone"
             tools:visibility="visible" />
 
-        <Button
+        <TextView
             android:id="@+id/btn_remove_my_list"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableStart="@drawable/baseline_delete_forever_14"
-            android:text="Remove from list"
+            android:drawableStart="@drawable/baseline_playlist_add_check_14"
+            android:text="Added to list"
             android:visibility="gone"
             tools:visibility="visible" />
 

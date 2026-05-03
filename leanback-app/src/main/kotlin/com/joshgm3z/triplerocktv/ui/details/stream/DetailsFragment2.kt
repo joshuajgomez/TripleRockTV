@@ -16,7 +16,6 @@ import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.util.setBackground
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -99,7 +98,7 @@ class DetailsFragment2 : Fragment() {
         binding.btnPlay.setVisible(!streamData.startedWatching)
         if (streamData.startedWatching) {
             binding.progressBar.progress = streamData.progressPercent()
-            binding.btnResume.requestFocus()
+            binding.flResumeContainer.requestFocus()
         } else {
             binding.btnPlay.requestFocus()
         }
@@ -107,10 +106,9 @@ class DetailsFragment2 : Fragment() {
         binding.btnAddMyList.setVisible(!streamData.inMyList)
 
         binding.metadataView.rating = streamData.rating
-        binding.metadataView.showMyList = streamData.inMyList
+        binding.tvGenre.text = streamData.movieMetadata?.genre
         binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
         binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
-        binding.metadataView.genre = streamData.movieMetadata?.genre
     }
 
     private fun handleBlur(imageUrl: String?) {
