@@ -96,10 +96,6 @@ class StreamCatalogueFragment : Fragment() {
             val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId) ?: return@launch
 
             binding.tvDescription.text = updatedMovieMetadata.description
-            binding.tvCast.text = "Cast: ${updatedMovieMetadata.cast}"
-            binding.tvCast.setVisible(updatedMovieMetadata.cast?.isNotEmpty())
-            binding.tvDirector.text = "Directed by: ${updatedMovieMetadata.director}"
-            binding.tvDirector.setVisible(updatedMovieMetadata.director?.isNotEmpty())
             binding.metadataView.genre = updatedMovieMetadata.genre
             binding.metadataView.rating = streamData.rating
             binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
@@ -117,10 +113,6 @@ class StreamCatalogueFragment : Fragment() {
             seriesStream.backdropUrl,
             binding.ivBackdrop
         )
-        binding.tvCast.text = "Cast: ${seriesStream.cast}"
-        binding.tvCast.setVisible(seriesStream.cast?.isNotEmpty())
-        binding.tvDirector.text = "Directed by: ${seriesStream.director}"
-        binding.tvDirector.setVisible(seriesStream.director?.isNotEmpty())
         binding.metadataView.rating = seriesStream.rating.parseToFloat()
         binding.metadataView.genre = seriesStream.genre
         binding.metadataView.seasonCount = seriesStream.seasons?.size
@@ -154,6 +146,9 @@ class StreamCatalogueFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        firebaseLogger.logScreenView(ScreenName.Catalogue, mapOf("catalogue_streamType" to args.streamType.name))
+        firebaseLogger.logScreenView(
+            ScreenName.Catalogue,
+            mapOf("catalogue_streamType" to args.streamType.name)
+        )
     }
 }

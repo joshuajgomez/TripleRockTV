@@ -2,8 +2,6 @@
     <string name="app_name">3RockTV</string>
     <string name="dot">\u0020 &#8226; \u0020</string>
     <string name="subtitle_downloaded">&#8226; Subtitle downloaded</string>
-    <string name="subtitle_file_name">Wonder.Woman.1984.2020.720p.WEB.H264-NAISU.ur</string>
-    <string name="long_description">Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.</string>
     <string name="episode_title">Episode %1$d:\n%2$s</string>
     <string name="my_list">My list</string>
     <string name="season_episode">S%1$d: E%2$d</string>
@@ -11,4 +9,8 @@
     <string name="open_subtitles">Subtitles from <font color="#FB8C00">OpenSubtitles.com</font></string>
     <string name="qrcode_summary">Scan to type with your phone</string>
     <string name="opensubtitles_com">OpenSubtitles.com</string>
+
+    <string name="subtitle_file_name">Wonder.Woman.1984.2020.720p.WEB.H264-NAISU.ur</string>
+    <string name="sample_movie_name">Wonder Women 1984 (2020)</string>
+    <string name="sample_long_description">Robert McCall, who serves an unflinching justice for the exploited and oppressed, embarks on a relentless, globe-trotting quest for vengeance when his former partner is murdered.</string>
 </resources>
