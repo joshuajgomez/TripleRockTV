@@ -4,6 +4,7 @@ import com.joshgm3z.triplerocktv.DemoData
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import javax.inject.Inject
 
 class DemoSearchRepositoryImpl
@@ -21,6 +22,12 @@ class DemoSearchRepositoryImpl
         }
 
         else -> emptyList()
+    }
+
+    override suspend fun searchSeriesByName(name: String): List<SeriesStream> {
+        return DemoData.getSampleSeriesStreams().filter {
+            it.name.contains(name, ignoreCase = true)
+        }
     }
 
     override suspend fun addSearchText(searchText: String) {}

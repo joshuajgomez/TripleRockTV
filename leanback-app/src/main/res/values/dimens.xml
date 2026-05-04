@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="container_width">600dp</dimen>
+    <dimen name="popup_width">450dp</dimen>
+    <dimen name="popup_height">230dp</dimen>
     <dimen name="container_height">300dp</dimen>
     <dimen name="error_dialog_width">330dp</dimen>
     <dimen name="error_dialog_height">230dp</dimen>
