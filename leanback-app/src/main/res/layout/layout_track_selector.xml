@@ -55,23 +55,16 @@
             tools:listitem="@layout/item_downloaded_subtitle" />
     </LinearLayout>
 
-    <TextView
+    <Button
         android:id="@+id/tv_find_more_button"
+        style="@style/ButtonStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="15dp"
-        android:background="@drawable/focusable_border_bg"
-        android:clickable="true"
         android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="3dp"
-        android:drawableTint="?attr/colorPrimary"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:paddingHorizontal="12dp"
-        android:paddingVertical="5dp"
         android:text="@string/opensubtitles_com"
-        android:textColor="?attr/colorPrimary"
-        android:textSize="17sp"
+        android:textAllCaps="false"
+        android:textSize="@dimen/text_size_medium"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title" />

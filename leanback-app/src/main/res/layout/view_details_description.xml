@@ -27,7 +27,7 @@
         android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="6"
-        android:text="@string/long_description" />
+        android:text="@string/sample_long_description" />
 
     <LinearLayout
         android:id="@+id/ll_progressbar_container"

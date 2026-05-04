@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
@@ -20,6 +21,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     localDatastore: LocalDatastore,
+    savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
     private val onlineRepository: MediaOnlineRepository,
 ) : ViewModel() {
@@ -35,9 +37,13 @@ class DetailsViewModel @Inject constructor(
         viewModelScope.launch {
             isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
         }
+        val streamId = savedStateHandle.get<Int>("streamId")
+        val streamType = savedStateHandle.get<StreamType>("streamType")
+        if (streamId != null && streamType != null)
+            fetchStreamDetails(streamId, streamType)
     }
 
-    fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
+    private fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
         this.streamId = streamId
         viewModelScope.launch {
             repository.streamDataFlow(streamId, streamType).collectLatest {

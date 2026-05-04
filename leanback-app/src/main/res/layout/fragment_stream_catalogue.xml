@@ -56,31 +56,7 @@
             android:textSize="12sp"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
             app:layout_constraintTop_toBottomOf="@+id/metadata_view"
-            tools:text="@string/long_description" />
-
-        <TextView
-            android:id="@+id/tv_cast"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:alpha="0.7"
-            android:maxEms="20"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_description"
-            tools:text="Cast: Chris Pratt, Bryce Dallas Howard, Isabella Sermon" />
-
-        <TextView
-            android:id="@+id/tv_director"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="3dp"
-            android:alpha="0.7"
-            android:maxEms="20"
-            android:textSize="12sp"
-            app:layout_constraintStart_toStartOf="@+id/tv_title"
-            app:layout_constraintTop_toBottomOf="@+id/tv_cast"
-            tools:text="Directed by: Bryan Woods" />
+            tools:text="@string/sample_long_description" />
 
         <FrameLayout
             android:id="@+id/fl_stream_row_container"
