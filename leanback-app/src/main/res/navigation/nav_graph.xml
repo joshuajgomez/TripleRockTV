@@ -266,7 +266,7 @@
 
     <dialog
         android:id="@+id/loadingErrorFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.error.LoadingErrorFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.error.LoadingErrorDialog"
         android:label="LoadingErrorFragment">
         <argument
             android:name="title"
