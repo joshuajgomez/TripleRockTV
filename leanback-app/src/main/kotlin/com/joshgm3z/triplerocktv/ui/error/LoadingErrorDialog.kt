@@ -10,17 +10,16 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
-import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
 import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class LoadingErrorFragment : DialogFragment() {
+class LoadingErrorDialog : DialogFragment() {
 
     private lateinit var binding: LayoutDialogBinding
 
-    private val args: LoadingErrorFragmentArgs by navArgs()
+    private val args: LoadingErrorDialogArgs by navArgs()
 
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
@@ -46,9 +45,9 @@ class LoadingErrorFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvTitle.text = args.title
         binding.tvSubtitle.text = args.summary
-        binding.btnPositive.requestFocus()
+        binding.btnPositive.text = "Dismiss"
         binding.btnPositive.setOnClickListener {
-            findNavController().navigate(LoadingErrorFragmentDirections.toSplash())
+            findNavController().navigate(LoadingErrorDialogDirections.toSplash())
         }
     }
 
