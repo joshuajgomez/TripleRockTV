@@ -11,13 +11,14 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
+import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class LoadingErrorFragment : DialogFragment() {
 
-    private lateinit var binding: FragmentErrorBinding
+    private lateinit var binding: LayoutDialogBinding
 
     private val args: LoadingErrorFragmentArgs by navArgs()
 
@@ -29,15 +30,15 @@ class LoadingErrorFragment : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentErrorBinding.inflate(inflater)
+        binding = LayoutDialogBinding.inflate(inflater)
         return binding.root
     }
 
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
-            requireContext().resources.getDimensionPixelSize(R.dimen.error_dialog_width),
-            requireContext().resources.getDimensionPixelSize(R.dimen.error_dialog_height)
+            requireContext().resources.getDimensionPixelSize(R.dimen.popup_width),
+            requireContext().resources.getDimensionPixelSize(R.dimen.popup_height)
         )
     }
 
@@ -45,8 +46,8 @@ class LoadingErrorFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvTitle.text = args.title
         binding.tvSubtitle.text = args.summary
-        binding.btnBack.requestFocus()
-        binding.btnBack.setOnClickListener {
+        binding.btnPositive.requestFocus()
+        binding.btnPositive.setOnClickListener {
             findNavController().navigate(LoadingErrorFragmentDirections.toSplash())
         }
     }

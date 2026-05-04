@@ -8,6 +8,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
+import com.joshgm3z.triplerocktv.util.setVisible
 
 class DownloadCancelDialog : DialogFragment() {
     private lateinit var binding: LayoutDialogBinding
@@ -24,13 +25,14 @@ class DownloadCancelDialog : DialogFragment() {
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
-            requireContext().resources.getDimensionPixelSize(R.dimen.container_width),
-            requireContext().resources.getDimensionPixelSize(R.dimen.container_height)
+            requireContext().resources.getDimensionPixelSize(R.dimen.popup_width),
+            requireContext().resources.getDimensionPixelSize(R.dimen.popup_height)
         )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.btnNegative.setVisible(true)
         binding.btnPositive.setOnClickListener {
             findNavController().navigate(DownloadCancelDialogDirections.toSplash())
         }
