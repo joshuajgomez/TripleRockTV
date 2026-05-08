@@ -10,9 +10,7 @@
         android:layout_height="match_parent"
         android:background="@color/color_card_background"
         android:orientation="vertical"
-        android:paddingStart="@dimen/screen_edge_padding"
-        android:paddingTop="@dimen/screen_edge_padding"
-        android:paddingEnd="10dp">
+        android:padding="@dimen/screen_edge_padding">
 
         <TextView
             android:id="@+id/tv_title"
@@ -23,6 +21,7 @@
             tools:text="@string/sample_movie_name" />
 
         <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+            android:layout_marginTop="5dp"
             android:id="@+id/metadata_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -148,6 +147,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:contentDescription="null"
+        android:visibility="visible"
+        tools:visibility="gone"
         android:scaleType="centerCrop"
         tools:src="@drawable/backdrop_office" />
 </LinearLayout>
