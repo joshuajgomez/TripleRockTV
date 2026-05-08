@@ -88,6 +88,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun updateDetails(streamData: StreamData) {
+        binding.placeholder.root.setVisible(false)
         handleBlur(streamData.movieMetadata?.backPosterUrl)
         binding.tvTitle.text = streamData.name
         binding.tvDescription.text = streamData.movieMetadata?.description

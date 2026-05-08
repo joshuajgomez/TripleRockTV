@@ -5,4 +5,8 @@
     <attr name="colorBackground" format="color" />
     <attr name="colorCardBackground" format="color" />
     <attr name="colorCardContent" format="color" />
+
+    <declare-styleable name="PlaceholderView">
+        <attr name="placeholderTint" format="color" />
+    </declare-styleable>
 </resources>
