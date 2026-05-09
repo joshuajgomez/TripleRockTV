@@ -88,12 +88,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun updateDetails(streamData: StreamData) {
-        binding.placeholder.root.setVisible(false)
-        handleBlur(streamData.movieMetadata?.backPosterUrl)
         binding.tvTitle.text = streamData.name
-        binding.tvDescription.text = streamData.movieMetadata?.description
-        binding.tvCast.text = "Cast: " + streamData.movieMetadata?.cast
-        binding.tvDirector.text = "Director: " + streamData.movieMetadata?.director
         binding.flResumeContainer.setVisible(streamData.startedWatching)
         binding.btnStartOver.setVisible(streamData.startedWatching)
         binding.btnPlay.setVisible(!streamData.startedWatching)
@@ -111,9 +106,25 @@ class DetailsFragment : Fragment() {
         binding.btnAddMyList.setVisible(!streamData.inMyList)
 
         binding.metadataView.rating = streamData.rating
-        binding.tvGenre.text = streamData.movieMetadata?.genre
         binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
-        binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
+
+        streamData.movieMetadata?.let { movieMetadata ->
+            binding.placeholder.root.setVisible(false)
+
+            handleBlur(movieMetadata.backPosterUrl)
+
+            binding.tvDescription.setVisible(!movieMetadata.description.isNullOrEmpty())
+            binding.tvDescription.text = movieMetadata.description
+
+            binding.tvCast.setVisible(!movieMetadata.cast.isNullOrEmpty())
+            binding.tvCast.text = "Cast: " + movieMetadata.cast
+
+            binding.tvDirector.setVisible(!movieMetadata.director.isNullOrEmpty())
+            binding.tvDirector.text = "Director: " + movieMetadata.director
+
+            binding.tvGenre.text = movieMetadata.genre
+            binding.metadataView.duration = movieMetadata.totalDurationMs.toTextTime()
+        }
     }
 
     private fun handleBlur(imageUrl: String?) {

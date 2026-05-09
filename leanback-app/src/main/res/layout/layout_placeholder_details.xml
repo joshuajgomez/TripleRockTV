@@ -7,24 +7,13 @@
 
     <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:tint="@color/color_primary" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginTop="5dp" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
-        android:layout_height="20dp"
-        android:layout_marginTop="10dp"
         app:placeholderTint="@color/color_primary" />
 
     <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:layout_marginTop="10dp" />
+        android:layout_marginTop="6dp" />
 
     <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
         android:layout_width="match_parent"
@@ -35,28 +24,4 @@
         android:layout_width="match_parent"
         android:layout_height="35dp"
         android:layout_marginTop="10dp" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="18dp"
-        app:placeholderTint="@color/color_primary" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="7dp"
-        app:placeholderTint="@color/color_primary" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="7dp"
-        app:placeholderTint="@color/color_primary" />
-
-    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginTop="7dp"
-        app:placeholderTint="@color/color_primary" />
 </LinearLayout>
