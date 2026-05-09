@@ -13,6 +13,7 @@
     <dimen name="text_size_large">25sp</dimen>
     <dimen name="text_size_medium">20sp</dimen>
     <dimen name="text_size_small">13sp</dimen>
+    <dimen name="button_drawable_size">20dp</dimen>
     <dimen name="poster_width">150dp</dimen>
     <dimen name="poster_height">200dp</dimen>
 </resources>
