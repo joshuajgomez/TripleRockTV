@@ -109,18 +109,19 @@ class DetailsFragment : Fragment() {
         binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
 
         streamData.movieMetadata?.let { movieMetadata ->
-            binding.placeholder.root.setVisible(false)
-
             handleBlur(movieMetadata.backPosterUrl)
 
-            binding.tvDescription.setVisible(!movieMetadata.description.isNullOrEmpty())
-            binding.tvDescription.text = movieMetadata.description
+            if (!movieMetadata.description.isNullOrEmpty())
+                binding.tvDescription.text = movieMetadata.description
+            else binding.tvDescription.setVisible(false)
 
-            binding.tvCast.setVisible(!movieMetadata.cast.isNullOrEmpty())
-            binding.tvCast.text = "Cast: " + movieMetadata.cast
+            if (!movieMetadata.cast.isNullOrEmpty())
+                binding.tvCast.text = "Cast: " + movieMetadata.cast
+            else binding.tvCast.setVisible(false)
 
-            binding.tvDirector.setVisible(!movieMetadata.director.isNullOrEmpty())
-            binding.tvDirector.text = "Director: " + movieMetadata.director
+            if (!movieMetadata.director.isNullOrEmpty())
+                binding.tvDirector.text = "Director: " + movieMetadata.director
+            else binding.tvDirector.setVisible(false)
 
             binding.tvGenre.text = movieMetadata.genre
             binding.metadataView.duration = movieMetadata.totalDurationMs.toTextTime()

@@ -61,7 +61,7 @@
         <FrameLayout
             android:id="@+id/fl_stream_row_container"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="390dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

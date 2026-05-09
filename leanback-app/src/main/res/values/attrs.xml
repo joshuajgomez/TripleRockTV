@@ -9,4 +9,8 @@
     <declare-styleable name="PlaceholderView">
         <attr name="placeholderTint" format="color" />
     </declare-styleable>
+    <declare-styleable name="DelayedTextView">
+        <attr name="color" format="color" />
+        <attr name="placeholderWidth" format="dimension" />
+    </declare-styleable>
 </resources>

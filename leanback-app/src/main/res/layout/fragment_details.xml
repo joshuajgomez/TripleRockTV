@@ -6,7 +6,20 @@
     android:layout_height="match_parent"
     android:background="@color/color_background">
 
+    <ImageView
+        android:id="@+id/iv_backdrop"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:contentDescription="null"
+        android:scaleType="centerCrop"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fl_sidebar"
+        tools:src="@drawable/backdrop_office"
+        tools:visibility="visible" />
+
     <FrameLayout
+        android:id="@+id/fl_sidebar"
         android:layout_width="310dp"
         android:layout_height="match_parent"
         android:background="@color/color_card_background"
@@ -35,53 +48,59 @@
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-    <TextView
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_genre"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textColor="@color/color_primary"
         android:textSize="@dimen/text_size_small"
+        app:color="@color/color_primary"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata_view"
-        tools:text="Comedy, Horror" />
+        tools:text="" />
 
-    <TextView
-        android:id="@+id/tv_description"
-        android:layout_width="wrap_content"
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+        android:id="@+id/tv_cast"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:ellipsize="end"
+        android:alpha="0.6"
+        android:lines="2"
         android:maxEms="17"
-        android:maxLines="9"
         android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_genre"
-        tools:text="@string/sample_long_description" />
-
-    <TextView
-        android:id="@+id/tv_cast"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:alpha="0.8"
-        android:maxEms="17"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_description"
         tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
 
-    <TextView
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_director"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:alpha="0.8"
+        android:alpha="0.6"
         android:maxEms="17"
         android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/tv_cast"
         tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:lines="6"
+        android:maxEms="17"
+        android:maxLines="9"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_director"
+        tools:text="@string/sample_long_description" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -171,26 +190,5 @@
             android:visibility="gone"
             tools:visibility="visible" />
     </LinearLayout>
-
-    <include
-        android:id="@+id/placeholder"
-        layout="@layout/layout_placeholder_details"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toTopOf="@+id/tv_genre"
-        tools:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/iv_backdrop"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:contentDescription="null"
-        android:scaleType="centerCrop"
-        android:visibility="visible"
-        tools:src="@drawable/backdrop_office"
-        tools:visibility="gone" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
