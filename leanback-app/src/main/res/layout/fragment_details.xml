@@ -1,157 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_background">
 
     <FrameLayout
-        android:layout_width="300dp"
+        android:layout_width="310dp"
         android:layout_height="match_parent"
         android:background="@color/color_card_background"
-        android:padding="@dimen/screen_edge_padding">
+        android:padding="@dimen/screen_edge_padding"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_edge_padding"
+        android:layout_marginTop="@dimen/screen_edge_padding"
+        android:maxEms="17"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@string/sample_movie_name" />
+
+    <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+        android:id="@+id/metadata_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <TextView
+        android:id="@+id/tv_genre"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/color_primary"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/metadata_view"
+        tools:text="Comedy, Horror" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:ellipsize="end"
+        android:maxEms="17"
+        android:maxLines="9"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_genre"
+        tools:text="@string/sample_long_description" />
+
+    <TextView
+        android:id="@+id/tv_cast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.8"
+        android:maxEms="17"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description"
+        tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    <TextView
+        android:id="@+id/tv_director"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.8"
+        android:maxEms="17"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cast"
+        tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/screen_edge_padding"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title">
+
+        <FrameLayout
+            android:id="@+id/fl_resume_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="@+id/tv_title"
+            app:layout_constraintTop_toBottomOf="@+id/tv_director"
+            tools:visibility="visible">
 
             <TextView
-                android:id="@+id/tv_title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="@dimen/text_size_medium"
-                android:textStyle="bold"
-                tools:text="@string/sample_movie_name" />
-
-            <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
-                android:id="@+id/metadata_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="5dp" />
-
-            <TextView
-                android:id="@+id/tv_genre"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/color_primary"
-                android:textSize="@dimen/text_size_small"
-                tools:text="Comedy, Horror" />
-
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ellipsize="end"
-                android:maxLines="7"
-                android:textSize="@dimen/text_size_small"
-                tools:text="@string/sample_long_description" />
-
-            <TextView
-                android:id="@+id/tv_cast"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:alpha="0.8"
-                android:textSize="@dimen/text_size_small"
-                tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-            <TextView
-                android:id="@+id/tv_director"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:alpha="0.8"
-                android:textSize="@dimen/text_size_small"
-                tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-            <FrameLayout
-                android:id="@+id/fl_resume_container"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:focusableInTouchMode="true"
-                android:visibility="gone"
-                tools:visibility="visible">
-
-                <TextView
-                    android:id="@+id/btn_resume"
-                    style="@style/ButtonStyle"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableStart="@drawable/baseline_play_arrow_14"
-                    android:duplicateParentState="true"
-                    android:focusable="false"
-                    android:focusableInTouchMode="false"
-                    android:text="Resume" />
-
-                <ProgressBar
-                    android:id="@+id/progress_bar"
-                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                    android:layout_width="60dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center|end"
-                    android:layout_marginEnd="20dp"
-                    android:duplicateParentState="true"
-                    android:progress="30"
-                    android:progressBackgroundTint="@color/progress_bg_color_selector"
-                    android:progressTint="@color/button_fg_color_selector" />
-
-            </FrameLayout>
-
-            <TextView
-                android:id="@+id/btn_play"
+                android:id="@+id/btn_resume"
                 style="@style/ButtonStyle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:drawableStart="@drawable/baseline_play_arrow_14"
-                android:text="Play"
-                android:visibility="gone"
-                tools:visibility="gone" />
+                android:duplicateParentState="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:text="Resume" />
 
-            <TextView
-                android:id="@+id/btn_start_over"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_replay_14"
-                android:text="Start over"
-                android:visibility="gone"
-                tools:visibility="visible" />
+                android:layout_gravity="center|end"
+                android:layout_marginEnd="20dp"
+                android:duplicateParentState="true"
+                android:progress="30"
+                android:progressBackgroundTint="@color/progress_bg_color_selector"
+                android:progressTint="@color/button_fg_color_selector" />
 
-            <TextView
-                android:id="@+id/btn_add_my_list"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_playlist_add_14"
-                android:text="Add to list"
-                android:visibility="gone"
-                tools:visibility="visible" />
+        </FrameLayout>
 
-            <TextView
-                android:id="@+id/btn_remove_my_list"
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableStart="@drawable/baseline_playlist_add_check_14"
-                android:text="Added to list"
-                android:visibility="gone"
-                tools:visibility="visible" />
-
-        </LinearLayout>
-
-        <include
-            android:id="@+id/placeholder"
-            layout="@layout/layout_placeholder_details"
+        <TextView
+            android:id="@+id/btn_play"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:drawableStart="@drawable/baseline_play_arrow_14"
+            android:text="Play"
             android:visibility="gone"
             tools:visibility="gone" />
-    </FrameLayout>
+
+        <TextView
+            android:id="@+id/btn_start_over"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/baseline_replay_14"
+            android:text="Start over"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_add_my_list"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/baseline_playlist_add_14"
+            android:text="Add to list"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_remove_my_list"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/baseline_playlist_add_check_14"
+            android:text="Added to list"
+            android:visibility="gone"
+            tools:visibility="visible" />
+    </LinearLayout>
+
+    <include
+        android:id="@+id/placeholder"
+        layout="@layout/layout_placeholder_details"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toTopOf="@+id/tv_genre"
+        tools:visibility="visible" />
 
     <ImageView
         android:id="@+id/iv_backdrop"
@@ -162,4 +192,5 @@
         android:visibility="visible"
         tools:src="@drawable/backdrop_office"
         tools:visibility="gone" />
-</LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
