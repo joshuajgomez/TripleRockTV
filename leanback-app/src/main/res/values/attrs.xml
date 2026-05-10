@@ -11,6 +11,8 @@
     </declare-styleable>
     <declare-styleable name="DelayedTextView">
         <attr name="color" format="color" />
+        <attr name="text" format="string" />
         <attr name="placeholderWidth" format="dimension" />
+        <attr name="placeholderHeight" format="dimension" />
     </declare-styleable>
 </resources>

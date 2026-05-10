@@ -3,44 +3,61 @@ package com.joshgm3z.triplerocktv.ui.common
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.AttributeSet
-import android.view.ViewGroup
+import android.view.LayoutInflater
 import android.view.animation.AnimationUtils
-import androidx.appcompat.widget.AppCompatTextView
+import android.widget.LinearLayout
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.databinding.ViewDelayedTextBinding
+import com.joshgm3z.triplerocktv.util.setVisible
+import androidx.core.content.withStyledAttributes
+import com.joshgm3z.triplerocktv.core.util.Logger
 
 class DelayedTextView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : AppCompatTextView(context, attrs, defStyleAttr) {
+) : LinearLayout(context, attrs, defStyleAttr) {
+
+    private val binding = ViewDelayedTextBinding.inflate(
+        LayoutInflater.from(context), this, true
+    )
 
     init {
-        setBackgroundResource(R.drawable.placeholder_bg)
-        setPadding(0, 0, 0, 0)
         attrs?.let {
-            val typedArray = context.obtainStyledAttributes(it, R.styleable.DelayedTextView)
-            val tintColor = typedArray.getColor(
-                R.styleable.DelayedTextView_color,
-                context.getColor(com.joshgm3z.triplerocktv.core.R.color.color_card_content)
-            )
-            if (tintColor != 0) {
-                backgroundTintList = ColorStateList.valueOf(tintColor)
-                setTextColor(tintColor)
+            context.withStyledAttributes(it, R.styleable.DelayedTextView) {
+                getColor(
+                    R.styleable.DelayedTextView_color,
+                    0
+                ).let { tintColor ->
+                    if (tintColor == 0) return@let
+                    binding.placeholder.placeHolderTint = tintColor
+                    binding.tvText.setTextColor(tintColor)
+                }
+                getString(R.styleable.DelayedTextView_text).let { defaultText ->
+                    text = defaultText
+                }
+                getDimensionPixelSize(
+                    R.styleable.DelayedTextView_placeholderWidth,
+                    0
+                ).let { dimen ->
+                    if (dimen == 0) return@let
+                    binding.placeholder.layoutParams.width = dimen
+                }
+                getDimensionPixelSize(
+                    R.styleable.DelayedTextView_placeholderHeight,
+                    0
+                ).let { dimen ->
+                    if (dimen == 0) return@let
+                    binding.placeholder.layoutParams.height = dimen
+                }
             }
-
-            typedArray.recycle()
         }
-
-        val animation = AnimationUtils.loadAnimation(context, R.anim.placeholder_fade_in)
-        startAnimation(animation)
     }
 
     var text: String? = null
         set(value) {
-            if (value != null) {
-                background = null
-                clearAnimation()
-            }
-            setText(value)
+            binding.placeholder.setVisible(value == null)
+            binding.tvText.text = value
+            field = value
         }
 }
