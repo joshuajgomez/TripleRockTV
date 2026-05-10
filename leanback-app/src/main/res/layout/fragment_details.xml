@@ -50,42 +50,15 @@
 
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_genre"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textSize="@dimen/text_size_small"
         app:color="@color/color_primary"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata_view"
+        app:placeholderWidth="130dp"
         tools:text="Comedy" />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_cast"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:alpha="0.6"
-        android:lines="2"
-        android:maxEms="17"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_genre"
-        tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_director"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:alpha="0.6"
-        android:maxEms="17"
-        android:textSize="@dimen/text_size_small"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_cast"
-        tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
 
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_description"
@@ -99,8 +72,37 @@
         android:textSize="@dimen/text_size_small"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_director"
+        app:layout_constraintTop_toBottomOf="@+id/tv_genre"
+        app:placeholderHeight="100dp"
         tools:text="@string/sample_long_description" />
+
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+        android:id="@+id/tv_cast"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.6"
+        android:lines="2"
+        android:maxEms="17"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_description"
+        tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+        android:id="@+id/tv_director"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.6"
+        android:maxEms="17"
+        android:textSize="@dimen/text_size_small"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
+        app:layout_constraintStart_toStartOf="@+id/tv_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_cast"
+        app:placeholderWidth="180dp"
+        tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
 
     <LinearLayout
         android:layout_width="0dp"

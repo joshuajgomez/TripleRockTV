@@ -124,6 +124,8 @@ class DetailsFragment : Fragment() {
             else binding.tvDirector.setVisible(false)
 
             binding.tvGenre.text = movieMetadata.genre
+            binding.tvGenre.setVisible(!movieMetadata.genre.isNullOrEmpty())
+
             binding.metadataView.duration = movieMetadata.totalDurationMs.toTextTime()
         }
     }

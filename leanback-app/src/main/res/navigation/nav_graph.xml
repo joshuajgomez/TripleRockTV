@@ -159,7 +159,7 @@
         android:label="DetailsFragment">
         <argument
             android:name="streamId"
-            android:defaultValue="20642"
+            android:defaultValue="145682"
             app:argType="integer" />
         <argument
             android:name="streamType"

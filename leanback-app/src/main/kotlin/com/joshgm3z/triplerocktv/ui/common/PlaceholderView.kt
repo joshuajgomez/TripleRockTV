@@ -35,4 +35,12 @@ class PlaceholderView @JvmOverloads constructor(
         val animation = AnimationUtils.loadAnimation(context, R.anim.placeholder_fade_in)
         binding.root.startAnimation(animation)
     }
+
+    var placeHolderTint: Int? = null
+        set(value) {
+            if (value != null) {
+                binding.root.backgroundTintList = ColorStateList.valueOf(value)
+            }
+            field = value
+        }
 }
