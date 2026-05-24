@@ -14,7 +14,7 @@ android {
 
     defaultConfig {
         applicationId = "com.joshgm3z.triplerocktv"
-        minSdk = 34
+        minSdk = 32
         targetSdk = 34
         val versionOverride = project.findProperty("versionCodeOverride") as? String
         versionCode = versionOverride?.toInt() ?: 1
