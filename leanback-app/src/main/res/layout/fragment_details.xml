@@ -14,22 +14,21 @@
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fl_sidebar"
+        app:layout_constraintStart_toStartOf="parent"
         tools:src="@drawable/backdrop_office"
         tools:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/fl_sidebar"
-        android:layout_width="310dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/color_card_background"
-        android:padding="@dimen/screen_edge_padding"
+        android:background="@drawable/gradient_transparent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="260dp"
+        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/screen_edge_padding"
         android:layout_marginTop="@dimen/screen_edge_padding"
@@ -68,7 +67,7 @@
         android:ellipsize="end"
         android:lines="6"
         android:maxEms="17"
-        android:maxLines="9"
+        android:maxLines="7"
         android:textSize="@dimen/text_size_small"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
