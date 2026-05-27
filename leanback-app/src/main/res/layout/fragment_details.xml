@@ -64,6 +64,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:alpha="0.8"
         android:ellipsize="end"
         android:lines="6"
         android:maxEms="17"
@@ -106,7 +107,7 @@
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/screen_edge_padding"
+        android:layout_marginBottom="40dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
