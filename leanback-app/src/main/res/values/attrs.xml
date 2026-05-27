@@ -10,6 +10,7 @@
         <attr name="placeholderTint" format="color" />
     </declare-styleable>
     <declare-styleable name="DelayedTextView">
+        <attr name="android:textSize" />
         <attr name="color" format="color" />
         <attr name="text" format="string" />
         <attr name="placeholderWidth" format="dimension" />

@@ -50,6 +50,13 @@ class DelayedTextView @JvmOverloads constructor(
                     if (dimen == 0) return@let
                     binding.placeholder.layoutParams.height = dimen
                 }
+                getDimensionPixelSize(
+                    R.styleable.DelayedTextView_android_textSize,
+                    0
+                ).let { textSize ->
+                    if (textSize == 0) return@let
+                    binding.tvText.textSize = textSize.toFloat()
+                }
             }
         }
     }
