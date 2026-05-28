@@ -18,6 +18,15 @@ class SeasonAdapter(
         }
 
     var selectedSeasonNumber: Int? = null
+        set(value) {
+            field?.let {
+                notifyItemChanged(it - 1)
+            }
+            field = value
+            value?.let {
+                notifyItemChanged(it - 1)
+            }
+        }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
