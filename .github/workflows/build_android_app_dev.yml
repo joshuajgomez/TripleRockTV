@@ -1,11 +1,11 @@
-name: Publish Beta Release
+name: Publish dev-release
 
 on:
   push:
     branches: [ "dev" ] # Change this to the branch you want to listen to
 
 jobs:
-  publish-beta:
+  publish-dev-release:
     runs-on: ubuntu-latest
 
     # Permission needed to delete/create releases
@@ -50,7 +50,7 @@ jobs:
             echo "TRIGGER_SOURCE=manual trigger" >> $GITHUB_ENV
           fi
 
-      - name: Build Online Release APK (:leanback-app)
+      - name: Build Dev Release APK (:leanback-app)
         run: ./gradlew leanback-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
       - name: Clear Existing Release and Tag
