@@ -41,3 +41,5 @@ Check the **Releases** panel on the right for older versions.
 ![Kotlin](https://img.shields.io/badge/kotlin-%237F52FF.svg?style=for-the-badge&logo=kotlin&logoColor=white)
 ![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
 ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=for-the-badge&logo=sqlite&logoColor=white)
+
+[![dev-release](https://img.shields.io/badge/dev.release-7569968-orange?style=for-the-badge&logo=android)](https://aftv.news/7569968)
