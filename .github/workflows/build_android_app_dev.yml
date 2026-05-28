@@ -1,0 +1,89 @@
+name: Publish Beta Release
+
+on:
+  push:
+    branches: [ "dev" ] # Change this to the branch you want to listen to
+
+jobs:
+  publish-beta:
+    runs-on: ubuntu-latest
+
+    # Permission needed to delete/create releases
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Decode Google Services JSON
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > leanback-app/google-services.json
+
+      - name: Decode default keystore
+        run: |
+          mkdir -p security
+          echo "${{ secrets.DEFAULT_KEYSTORE_BASE64 }}" | base64 --decode > security/default_keystore
+
+      - name: Decode Secrets.kt
+        run: echo "${{ secrets.SECRETS_KT_BASE64 }}" | base64 --decode > core/src/main/kotlin/com/joshgm3z/triplerocktv/core/repository/retrofit/Secrets.kt
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Generate Tag Name
+        run: |
+          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')-dev" >> $GITHUB_ENV
+          echo "RELEASE_CODE=$(TZ='Europe/Stockholm' date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
+          elif [ "${{ github.event_name }}" == "push" ]; then
+            echo "TRIGGER_SOURCE=push to master" >> $GITHUB_ENV
+          else
+            echo "TRIGGER_SOURCE=manual trigger" >> $GITHUB_ENV
+          fi
+
+      - name: Build Online Release APK (:leanback-app)
+        run: ./gradlew leanback-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
+
+      - name: Clear Existing Release and Tag
+        if: github.event_name != 'pull_request'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_NAME: ${{ env.RELEASE_TAG }}
+        run: |
+          # Delete the release if it exists
+          gh release delete $TAG_NAME --yes || echo "No release found"
+          
+          # Delete the tag on the remote to avoid 'already exists' conflicts
+          git push --delete origin $TAG_NAME || echo "No tag found"
+
+
+      - name: Prepare APK for Release
+        run: |
+          mkdir -p release_artifacts
+          # Using a fixed filename for the reusable download link
+          cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-leanback-app-dev.apk
+
+      - name: Update Reusable Beta Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: latest-beta # This is the "Moving" tag
+          name: "dev-release"
+          prerelease: true # Marks it as a beta release
+          files: release_artifacts/3RockTV-leanback-app-dev.apk
+          body: |
+            ## Beta Channel
+            This release is automatically updated on every push to the beta branch.
+            **Built on:** ${{ github.event.head_commit.timestamp }}
+            **Commit:** ${{ github.sha }}
+          overwrite: true # Ensures the APK file is replaced
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
