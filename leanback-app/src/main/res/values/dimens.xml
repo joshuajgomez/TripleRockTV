@@ -16,8 +16,8 @@
     <dimen name="button_drawable_size">20dp</dimen>
     <dimen name="poster_width">150dp</dimen>
     <dimen name="poster_height">200dp</dimen>
-    <dimen name="series_selector_dialog_width">600dp</dimen>
-    <dimen name="series_selector_dialog_height">500dp</dimen>
+    <dimen name="episode_selector_dialog_width">600dp</dimen>
+    <dimen name="episode_selector_dialog_height">500dp</dimen>
     <dimen name="series_selector_horizontal_edge_padding">20dp</dimen>
     <dimen name="series_selector_vertical_edge_padding">20dp</dimen>
 </resources>
