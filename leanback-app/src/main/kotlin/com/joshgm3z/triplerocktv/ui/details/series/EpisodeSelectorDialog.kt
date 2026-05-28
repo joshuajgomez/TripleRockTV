@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -86,11 +87,15 @@ class EpisodeSelectorDialog : DialogFragment() {
 
     private fun updateUI(uiState: SeriesSelectorUiState) {
         seasonAdapter.selectedSeasonNumber = uiState.selectedSeasonNumber
-        seasonAdapter.seasons = uiState.seasons
+        if (seasonAdapter.seasons.isEmpty()) seasonAdapter.seasons = uiState.seasons
         episodeAdapter.episodes = uiState.episodes
+        binding.rvEpisodes.layoutAnimation = AnimationUtils.loadLayoutAnimation(
+            context,
+            R.anim.layout_fall_down
+        )
+        binding.rvEpisodes.scheduleLayoutAnimation()
         binding.rvEpisodes.post {
             binding.rvEpisodes.requestFocus()
         }
-
     }
 }
