@@ -36,7 +36,7 @@ class SeriesSelectorFragment : RowsSupportFragment() {
 
     private val viewModel: SeriesSelectorViewModel by viewModels()
 
-    private val args by navArgs<SeriesDetailsFragmentArgs>()
+    private val args by navArgs<SeriesSelectorFragmentArgs>()
 
     @Inject
     lateinit var glideUtil: GlideUtil
