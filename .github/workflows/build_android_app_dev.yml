@@ -58,35 +58,22 @@ jobs:
       - name: Build Dev Release APK (:leanback-app)
         run: ./gradlew leanback-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
-      - name: Clear Existing Release and Tag
-        if: github.event_name != 'pull_request'
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: ${{ env.RELEASE_TAG }}
-        run: |
-          # Delete the release if it exists
-          gh release delete $TAG_NAME --yes || echo "No release found"
-          
-          # Delete the tag on the remote to avoid 'already exists' conflicts
-          git push --delete origin $TAG_NAME || echo "No tag found"
-
-
       - name: Prepare APK for Release
         run: |
           mkdir -p release_artifacts
           # Using a fixed filename for the reusable download link
-          cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-leanback-app-dev.apk
+          cp leanback-app/build/outputs/apk/dev/release/*.apk release_artifacts/3RockTV-leanback-app-dev.apk
 
-      - name: Update Reusable Beta Release
+      - name: Update dev-release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: latest-beta # This is the "Moving" tag
+          tag_name: dev-release # This is the "Moving" tag
           name: "dev-release"
           prerelease: true # Marks it as a beta release
           files: release_artifacts/3RockTV-leanback-app-dev.apk
           body: |
-            ## Beta Channel
-            This release is automatically updated on every push to the beta branch.
+            ## dev release channel
+            This release is automatically updated on every push to the dev branch.
             **Built on:** ${{ github.event.head_commit.timestamp }}
             **Commit:** ${{ github.sha }}
           overwrite: true # Ensures the APK file is replaced
