@@ -20,4 +20,5 @@
     <dimen name="episode_selector_dialog_height">500dp</dimen>
     <dimen name="series_selector_horizontal_edge_padding">20dp</dimen>
     <dimen name="series_selector_vertical_edge_padding">20dp</dimen>
+    <dimen name="button_corner_radius">5dp</dimen>
 </resources>
