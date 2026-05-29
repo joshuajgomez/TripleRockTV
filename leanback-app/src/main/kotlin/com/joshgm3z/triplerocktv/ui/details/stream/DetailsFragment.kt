@@ -109,6 +109,7 @@ class DetailsFragment : Fragment() {
         binding.progressBar.progress = uiState.progressPercent ?: 0
         uiState.episodeLabel?.let {
             binding.btnResume.text = "Resume $it"
+            binding.btnPlay.text = "Play $it"
         }
         binding.tvGenre.text = uiState.subtitle
         binding.btnStartOver.setVisible(uiState.progressPercent != null)

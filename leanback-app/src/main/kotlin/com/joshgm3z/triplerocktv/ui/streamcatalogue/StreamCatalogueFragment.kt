@@ -15,6 +15,7 @@ import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.FragmentStreamCatalogueBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
@@ -126,8 +127,9 @@ class StreamCatalogueFragment : Fragment() {
                 streamType = item.streamType
             }
 
-            is SeriesStream -> StreamCatalogueFragmentDirections.toSeriesDetails().apply {
-                seriesId = item.seriesId
+            is SeriesStream -> StreamCatalogueFragmentDirections.toDetails().apply {
+                streamId = item.seriesId
+                streamType = StreamType.Series
             }
 
             else -> return@OnItemViewClickedListener
