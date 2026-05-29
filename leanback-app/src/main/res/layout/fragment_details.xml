@@ -49,11 +49,12 @@
 
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_genre"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:textSize="@dimen/text_size_small"
         app:color="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata_view"
         app:placeholderWidth="130dp"

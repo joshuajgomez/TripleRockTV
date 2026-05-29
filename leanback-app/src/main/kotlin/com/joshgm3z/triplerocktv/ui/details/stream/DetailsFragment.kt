@@ -12,6 +12,7 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
 import com.joshgm3z.triplerocktv.util.DimMode
@@ -38,6 +39,8 @@ class DetailsFragment : Fragment() {
     lateinit var firebaseLogger: FirebaseLogger
 
     private var backgroundImageUrl: String? = null
+
+    private var selectedEpisodeId = -1
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -72,6 +75,13 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
+        binding.btnMoreEpisodes.setOnClickListener {
+            DetailsFragmentDirections.toEpisodeSelector().apply {
+                seriesId = args.streamId
+                initialSelectedEpisodeId = selectedEpisodeId
+                findNavController().navigate(this)
+            }
+        }
         binding.btnAddMyList.setOnClickListener { viewModel.addToMyList() }
         binding.btnRemoveMyList.setOnClickListener { viewModel.removeFromMyList() }
     }
@@ -79,11 +89,51 @@ class DetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewModel.streamData.collectLatest {
-                it?.let { streamData ->
-                    updateDetails(streamData)
+            viewModel.uiState.collectLatest {
+                it?.let { uiState ->
+                    updateDetailsUiState(uiState)
                 }
             }
+        }
+    }
+
+    private fun updateDetailsUiState(uiState: DetailsUiState) {
+        uiState.episodeId?.let {
+            selectedEpisodeId = it
+        }
+        binding.tvTitle.text = uiState.title
+        binding.metadataView.rating = uiState.rating
+        binding.metadataView.subtitleDownloaded = !uiState.subtitle.isNullOrEmpty()
+
+        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
+        binding.progressBar.progress = uiState.progressPercent ?: 0
+        uiState.episodeLabel?.let {
+            binding.btnResume.text = "Resume $it"
+        }
+        binding.tvGenre.text = uiState.subtitle
+        binding.btnStartOver.setVisible(uiState.progressPercent != null)
+        binding.btnPlay.setVisible(uiState.progressPercent == null)
+
+        binding.flResumeContainer.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.progressBar.setVisible(hasFocus)
+            }
+
+        binding.btnRemoveMyList.setVisible(uiState.inMyList)
+        binding.btnAddMyList.setVisible(!uiState.inMyList)
+        binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
+
+        handleBlur(uiState.coverImage)
+        binding.tvDescription.text = uiState.description
+        binding.tvCast.text = uiState.cast
+        binding.tvDirector.text = uiState.director
+        binding.metadataView.duration = uiState.duration
+
+        // handle focus
+        if (uiState.progressPercent != null) {
+            binding.flResumeContainer.requestFocus()
+        } else {
+            binding.btnPlay.requestFocus()
         }
     }
 

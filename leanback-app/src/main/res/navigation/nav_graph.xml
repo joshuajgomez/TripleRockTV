@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/episodeSelectorFragment">
+    app:startDestination="@id/splashScreenFragment">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -159,15 +159,18 @@
         android:label="DetailsFragment">
         <argument
             android:name="streamId"
-            android:defaultValue="145682"
+            android:defaultValue="72"
             app:argType="integer" />
         <argument
             android:name="streamType"
-            android:defaultValue="VideoOnDemand"
+            android:defaultValue="Series"
             app:argType="com.joshgm3z.triplerocktv.core.repository.StreamType" />
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
+        <action
+            android:id="@+id/toEpisodeSelector"
+            app:destination="@id/episodeSelectorFragment" />
     </fragment>
 
     <fragment
