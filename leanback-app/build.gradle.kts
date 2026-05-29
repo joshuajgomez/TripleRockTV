@@ -25,7 +25,7 @@ android {
     signingConfigs {
         create("release") {
             storeFile = file("../security/default_keystore")
-            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            storePassword = System.getenv("KEYSTORE_PASSWORD") //
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
         }
@@ -73,8 +73,8 @@ android {
 
     androidComponents {
         beforeVariants { variantBuilder ->
-            if (variantBuilder.buildType == "release" &&
-                listOf("dev", "demo").contains(variantBuilder.flavorName)
+            if (variantBuilder.buildType == "release"
+                && variantBuilder.flavorName == "demo"
             ) variantBuilder.enable = false
         }
     }

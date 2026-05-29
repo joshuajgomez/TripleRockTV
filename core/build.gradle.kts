@@ -75,8 +75,8 @@ android {
 
     androidComponents {
         beforeVariants { variantBuilder ->
-            if (variantBuilder.buildType == "release" &&
-                listOf("dev", "demo").contains(variantBuilder.flavorName)
+            if (variantBuilder.buildType == "release"
+                && variantBuilder.flavorName == "demo"
             ) variantBuilder.enable = false
         }
     }
