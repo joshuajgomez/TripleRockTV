@@ -10,7 +10,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.repository.room.StreamData
-import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
@@ -93,50 +92,6 @@ class DetailsFragment : Fragment() {
         binding.flResumeContainer.setVisible(streamData.startedWatching)
         binding.btnStartOver.setVisible(streamData.startedWatching)
         binding.btnPlay.setVisible(!streamData.startedWatching)
-        if (streamData.startedWatching) {
-            binding.progressBar.progress = streamData.progressPercent()
-            binding.flResumeContainer.requestFocus()
-        } else {
-            binding.btnPlay.requestFocus()
-        }
-        binding.flResumeContainer.onFocusChangeListener =
-            View.OnFocusChangeListener { _, hasFocus ->
-                binding.progressBar.setVisible(hasFocus)
-            }
-        binding.btnRemoveMyList.setVisible(streamData.inMyList)
-        binding.btnAddMyList.setVisible(!streamData.inMyList)
-
-        binding.metadataView.rating = streamData.rating
-        binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
-
-        streamData.movieMetadata?.let { movieMetadata ->
-            handleBlur(movieMetadata.backPosterUrl)
-
-            if (!movieMetadata.description.isNullOrEmpty())
-                binding.tvDescription.text = movieMetadata.description
-            else binding.tvDescription.setVisible(false)
-
-            if (!movieMetadata.cast.isNullOrEmpty())
-                binding.tvCast.text = "Cast: " + movieMetadata.cast
-            else binding.tvCast.setVisible(false)
-
-            if (!movieMetadata.director.isNullOrEmpty())
-                binding.tvDirector.text = "Director: " + movieMetadata.director
-            else binding.tvDirector.setVisible(false)
-
-            binding.tvGenre.text = movieMetadata.genre
-            binding.tvGenre.setVisible(!movieMetadata.genre.isNullOrEmpty())
-
-            binding.metadataView.duration = movieMetadata.totalDurationMs.toTextTime()
-        }
-    }
-
-    private fun updateDetails(seriesStream: SeriesStream) {
-        binding.tvTitle.text = seriesStream.name
-        binding.flResumeContainer.setVisible(seriesStream.startedWatching)
-        binding.btnStartOver.setVisible(streamData.startedWatching)
-        binding.btnPlay.setVisible(!streamData.startedWatching)
-        binding.btnMoreEpisodes.setVisible(true)
         if (streamData.startedWatching) {
             binding.progressBar.progress = streamData.progressPercent()
             binding.flResumeContainer.requestFocus()
