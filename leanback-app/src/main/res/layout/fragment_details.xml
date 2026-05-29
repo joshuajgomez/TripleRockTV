@@ -172,6 +172,16 @@
             tools:visibility="visible" />
 
         <TextView
+            android:id="@+id/btn_more_episodes"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/outline_video_template_24"
+            android:text="More episodes"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
             android:id="@+id/btn_add_my_list"
             style="@style/ButtonStyle"
             android:layout_width="match_parent"
