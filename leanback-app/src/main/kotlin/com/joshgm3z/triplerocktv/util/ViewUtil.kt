@@ -7,4 +7,4 @@ fun View.setVisible(visible: Boolean?) {
     visibility = if (visible == true) View.VISIBLE else View.GONE
 }
 
-fun String.orIfDebug(secretText: String) = if (BuildConfig.DEBUG) secretText else this
+fun String.orIfDebug(secretText: String) = if (BuildConfig.FLAVOR != "online") secretText else this
