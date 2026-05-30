@@ -87,6 +87,7 @@ class EpisodeSelectorDialog : DialogFragment() {
 
     private fun updateUI(uiState: SeriesSelectorUiState) {
         seasonAdapter.selectedSeasonNumber = uiState.selectedSeasonNumber
+        episodeAdapter.initialSelectedEpisodeIndex = uiState.selectedEpisodeIndex
         if (seasonAdapter.seasons.isEmpty()) seasonAdapter.seasons = uiState.seasons
         episodeAdapter.episodes = uiState.episodes
         binding.rvEpisodes.layoutAnimation = AnimationUtils.loadLayoutAnimation(
@@ -94,8 +95,9 @@ class EpisodeSelectorDialog : DialogFragment() {
             R.anim.layout_fall_down
         )
         binding.rvEpisodes.scheduleLayoutAnimation()
-        binding.rvEpisodes.post {
-            binding.rvEpisodes.requestFocus()
-        }
+        if (uiState.selectedEpisodeIndex == null)
+            binding.rvEpisodes.post {
+                binding.rvEpisodes.requestFocus()
+            }
     }
 }
