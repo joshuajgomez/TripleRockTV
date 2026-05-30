@@ -65,6 +65,10 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
+        binding.flResumeContainer.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.progressBar.setVisible(hasFocus)
+            }
         binding.btnStartOver.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 streamType = args.streamType
@@ -115,35 +119,32 @@ class DetailsFragment : Fragment() {
         uiState.episodeId?.let {
             selectedEpisodeId = it
         }
-        binding.tvTitle.text = uiState.title
-        binding.metadataView.rating = uiState.rating
-        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
-
-        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
-        binding.progressBar.progress = uiState.progressPercent ?: 0
         uiState.episodeLabel?.let {
             binding.btnResume.text = "Resume $it"
             binding.btnPlay.text = "Play $it"
         }
-        binding.tvGenre.text = uiState.subtitle
-        binding.btnStartOver.setVisible(uiState.progressPercent != null)
-        binding.btnPlay.setVisible(uiState.progressPercent == null)
-
-        binding.flResumeContainer.onFocusChangeListener =
-            View.OnFocusChangeListener { _, hasFocus ->
-                binding.progressBar.setVisible(hasFocus)
-            }
-
-        binding.btnRemoveMyList.setVisible(uiState.inMyList)
-        binding.btnAddMyList.setVisible(!uiState.inMyList)
-        binding.metadataView.showMyList = uiState.inMyList
-        binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
-
         handleBlur(uiState.coverImage)
+        binding.progressBar.progress = uiState.progressPercent ?: 0
+
+        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
+        binding.metadataView.rating = uiState.rating
+        binding.metadataView.showMyList = uiState.inMyList
+        binding.metadataView.duration = uiState.duration
+
+        binding.tvTitle.text = uiState.title
+        binding.tvGenre.text = uiState.subtitle
         binding.tvDescription.text = uiState.description
         binding.tvCast.text = uiState.cast
         binding.tvDirector.text = uiState.director
-        binding.metadataView.duration = uiState.duration
+
+        // button visibility
+        if (!uiState.showButtons) return
+        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
+        binding.btnStartOver.setVisible(uiState.progressPercent != null)
+        binding.btnPlay.setVisible(uiState.progressPercent == null)
+        binding.btnRemoveMyList.setVisible(uiState.inMyList)
+        binding.btnAddMyList.setVisible(!uiState.inMyList)
+        binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
 
         // handle focus
         if (uiState.progressPercent != null) {
