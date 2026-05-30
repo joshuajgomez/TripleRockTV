@@ -78,10 +78,12 @@ constructor(
                 "Unable to sync content",
                 "Try again later"
             )
+
             errorMessage.isNotEmpty() -> onError(
                 "Unable to fully sync content",
                 "You can still use the app. But some content might not be available."
             )
+
             else -> onFetch(
                 LoadingState(
                     percent = 100,
@@ -129,7 +131,7 @@ constructor(
     suspend fun getSeriesDataAndUpdate(streamId: Int) {
         try {
             iptvService.getSeriesDetails(seriesId = streamId).let { it ->
-                val seasons = it.seasons.map { seasonData ->
+                val seasons = if (it.seasons.isNotEmpty()) it.seasons.map { seasonData ->
                     Season(
                         episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
                         number = seasonData.seasonNumber ?: -1,
@@ -138,7 +140,16 @@ constructor(
                         voteAverage = seasonData.voteAverage ?: 0f,
                         overview = seasonData.overview ?: "",
                     )
-                }
+                } else listOf(
+                    Season(
+                        episodes = it.episodes[1] ?: emptyList(),
+                        number = 1,
+                        name = "Season 1",
+                        coverImageUrl = "",
+                        voteAverage = 0f,
+                        overview = "",
+                    )
+                )
                 Logger.debug("seasons = [$seasons]")
                 val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
                 seriesStreamsDao.getBySeriesId(streamId).copy(seasons = filteredSeasons).let {
