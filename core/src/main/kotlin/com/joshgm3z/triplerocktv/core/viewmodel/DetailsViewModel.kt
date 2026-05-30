@@ -53,9 +53,6 @@ class DetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<DetailsUiState?>(null)
     val uiState = _uiState.asStateFlow()
 
-    private val _streamData = MutableStateFlow<StreamData?>(null)
-    val streamData = _streamData.asStateFlow()
-
     var isBlurSettingEnabled: Boolean = false
 
     private var streamId: Int? = null
@@ -150,17 +147,19 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    fun addToMyList() {
+    fun addToMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateMyList(streamId!!, true)
+            if (streamType == StreamType.Series) repository.updateMyListSeries(streamId!!, true)
+            else repository.updateMyList(streamId!!, true)
         }
     }
 
-    fun removeFromMyList() {
+    fun removeFromMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateMyList(streamId!!, false)
+            if (streamType == StreamType.Series) repository.updateMyListSeries(streamId!!, false)
+            else repository.updateMyList(streamId!!, true)
         }
     }
 
