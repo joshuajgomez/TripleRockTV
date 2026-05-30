@@ -114,7 +114,7 @@ class DetailsViewModel @Inject constructor(
                 _uiState.value = DetailsUiState(
                     streamType = StreamType.Series,
                     title = seriesStream.name,
-                    coverImage = seriesStream.coverImageUrl,
+                    coverImage = seriesStream.backdropUrl,
                 )
                 if (seriesStream.seasons.isNullOrEmpty())
                     searchSeriesMetadata(seriesStream)
@@ -138,8 +138,8 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun String?.withPrefix(text: String): String? {
-        if (this.isNullOrEmpty()) return null
+    private fun String?.withPrefix(text: String): String {
+        if (this.isNullOrEmpty()) return ""
         return "$text$this"
     }
 
