@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/sample_movie_name" />
 
-    <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+    <com.joshgm3z.triplerocktv.ui.common.MetadataView
         android:id="@+id/metadata_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,11 +49,11 @@
 
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_genre"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="@dimen/text_size_small"
         app:color="@color/color_primary"
+        app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata_view"
         app:placeholderWidth="130dp"
@@ -64,7 +64,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:alpha="0.8"
+        android:alpha="0.7"
         android:ellipsize="end"
         android:lines="6"
         android:maxEms="17"
@@ -80,7 +80,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:alpha="0.6"
+        android:alpha="0.4"
         android:lines="2"
         android:maxEms="17"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
@@ -93,7 +93,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:alpha="0.6"
+        android:alpha="0.4"
         android:maxEms="17"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
@@ -137,7 +137,7 @@
             <ProgressBar
                 android:id="@+id/progress_bar"
                 style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                android:layout_width="60dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center|end"
                 android:layout_marginEnd="20dp"
@@ -166,6 +166,16 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/baseline_replay_14"
             android:text="Start over"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/btn_more_episodes"
+            style="@style/ButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/outline_video_template_14"
+            android:text="More episodes"
             android:visibility="gone"
             tools:visibility="visible" />
 

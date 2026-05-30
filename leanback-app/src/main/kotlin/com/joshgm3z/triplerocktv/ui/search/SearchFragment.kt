@@ -53,9 +53,10 @@ class SearchFragment : Fragment() {
                 streamType = it.streamType
             }
 
-            is SeriesStream -> SearchFragmentDirections.toSeriesDetails().apply {
+            is SeriesStream -> SearchFragmentDirections.toDetails().apply {
                 text = it.name
-                seriesId = it.seriesId
+                streamId = it.seriesId
+                streamType = StreamType.Series
             }
 
             else -> return
