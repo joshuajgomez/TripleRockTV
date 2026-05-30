@@ -127,8 +127,9 @@ class BrowseFragment : BrowseSupportFragment() {
                     streamType = item.streamType
                 }
 
-                is SeriesStream -> BrowseFragmentDirections.toSeriesDetails().apply {
-                    seriesId = item.seriesId
+                is SeriesStream -> BrowseFragmentDirections.toDetails().apply {
+                    streamType = StreamType.Series
+                    streamId = item.seriesId
                 }
 
                 is StreamData -> BrowseFragmentDirections.toDetails().apply {
@@ -136,8 +137,9 @@ class BrowseFragment : BrowseSupportFragment() {
                     streamId = item.streamId
                 }
 
-                is Episode -> BrowseFragmentDirections.toSeriesDetails().apply {
-                    seriesId = episodeToSeriesMap[item.id]!!
+                is Episode -> BrowseFragmentDirections.toDetails().apply {
+                    streamType = StreamType.Series
+                    streamId = episodeToSeriesMap[item.id]!!
                 }
 
                 else -> return@OnItemViewClickedListener

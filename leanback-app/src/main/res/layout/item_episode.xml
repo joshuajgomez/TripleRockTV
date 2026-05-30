@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/focusable_border_bg"
+    android:paddingHorizontal="@dimen/series_selector_horizontal_edge_padding"
+    android:paddingVertical="10dp">
+
+    <ImageView
+        android:id="@+id/iv_episode_poster"
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/avatar_movie"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_episode_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:text="@string/sample_movie_name"
+        app:layout_constraintStart_toEndOf="@id/iv_episode_poster"
+        app:layout_constraintTop_toTopOf="@+id/iv_episode_poster" />
+
+    <com.joshgm3z.triplerocktv.ui.common.MetadataView
+        android:id="@+id/metadata_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@+id/tv_episode_title"
+        app:layout_constraintTop_toBottomOf="@+id/tv_episode_title" />
+
+    <TextView
+        android:id="@+id/tv_episode_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:alpha="0.6"
+        android:maxLines="3"
+        android:text="@string/sample_long_description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/tv_episode_title"
+        app:layout_constraintTop_toBottomOf="@+id/metadata_view" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

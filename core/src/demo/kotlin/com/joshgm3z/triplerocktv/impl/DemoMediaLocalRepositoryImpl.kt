@@ -67,9 +67,7 @@ constructor() : MediaLocalRepository {
     }
 
     override fun seriesStreamFlow(streamId: Int): Flow<SeriesStream> = flow {
-        DemoData.getSampleSeriesStreams().firstOrNull {
-            it.seriesId == streamId
-        }?.let {
+        DemoData.getSampleSeriesStreams().firstOrNull()?.let {
             emit(it)
         }
     }

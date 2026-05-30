@@ -21,6 +21,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+
+
 data class SeriesDetailsUiState(
     val episodeLabel: String,
     val episodeTitle: String,
