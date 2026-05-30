@@ -16,7 +16,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:src="@drawable/backdrop_office"
-        tools:visibility="gone" />
+        tools:visibility="visible" />
 
     <FrameLayout
         android:id="@+id/fl_sidebar"
@@ -52,7 +52,6 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:textSize="@dimen/text_size_small"
         app:color="@color/color_primary"
         app:layout_constraintEnd_toEndOf="@+id/tv_title"
         app:layout_constraintStart_toStartOf="@+id/tv_title"
