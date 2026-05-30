@@ -60,7 +60,7 @@ class EpisodeSelectorDialog : DialogFragment() {
                 this.seriesId = args.seriesId
                 this.streamId = it.id
                 this.streamType = StreamType.Series
-//                findNavController().navigate(this)
+                findNavController().navigate(this)
             }
         }
     }

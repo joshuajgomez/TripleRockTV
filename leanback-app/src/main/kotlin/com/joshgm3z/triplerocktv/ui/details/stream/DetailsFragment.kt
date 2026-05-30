@@ -9,8 +9,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
-import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
@@ -141,7 +139,6 @@ class DetailsFragment : Fragment() {
 
     private fun handleBlur(imageUrl: String?) {
         imageUrl ?: return
-        if (backgroundImageUrl == imageUrl) return
         backgroundImageUrl = imageUrl
         glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.None) { bitmap ->
             if (!isVisible) return@getBitmap
