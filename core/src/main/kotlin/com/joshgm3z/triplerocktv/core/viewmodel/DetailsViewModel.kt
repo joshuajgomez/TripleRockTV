@@ -95,7 +95,7 @@ class DetailsViewModel @Inject constructor(
                         showButtons = true,
                         duration = it.movieMetadata.totalDurationMs.toTextTime(),
                         subtitle = it.movieMetadata.genre,
-                        description = it.movieMetadata.description,
+                        description = it.movieMetadata.description.withPrefix(""),
                         cast = it.movieMetadata.cast.withPrefix("Cast: "),
                         director = it.movieMetadata.director.withPrefix("Director: "),
                         progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
