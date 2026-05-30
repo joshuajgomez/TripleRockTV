@@ -161,7 +161,7 @@ class DetailsViewModel @Inject constructor(
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
             if (streamType == StreamType.Series) repository.updateMyListSeries(streamId!!, false)
-            else repository.updateMyList(streamId!!, true)
+            else repository.updateMyList(streamId!!, false)
         }
     }
 
