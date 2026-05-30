@@ -138,49 +138,6 @@ class DetailsFragment : Fragment() {
         }
     }
 
-    private fun updateDetails(streamData: StreamData) {
-        binding.tvTitle.text = streamData.name
-        binding.flResumeContainer.setVisible(streamData.startedWatching)
-        binding.btnStartOver.setVisible(streamData.startedWatching)
-        binding.btnPlay.setVisible(!streamData.startedWatching)
-        if (streamData.startedWatching) {
-            binding.progressBar.progress = streamData.progressPercent()
-            binding.flResumeContainer.requestFocus()
-        } else {
-            binding.btnPlay.requestFocus()
-        }
-        binding.flResumeContainer.onFocusChangeListener =
-            View.OnFocusChangeListener { _, hasFocus ->
-                binding.progressBar.setVisible(hasFocus)
-            }
-        binding.btnRemoveMyList.setVisible(streamData.inMyList)
-        binding.btnAddMyList.setVisible(!streamData.inMyList)
-
-        binding.metadataView.rating = streamData.rating
-        binding.metadataView.subtitleDownloaded = !streamData.subtitleUrl.isNullOrEmpty()
-
-        streamData.movieMetadata?.let { movieMetadata ->
-            handleBlur(movieMetadata.backPosterUrl)
-
-            if (!movieMetadata.description.isNullOrEmpty())
-                binding.tvDescription.text = movieMetadata.description
-            else binding.tvDescription.setVisible(false)
-
-            if (!movieMetadata.cast.isNullOrEmpty())
-                binding.tvCast.text = "Cast: " + movieMetadata.cast
-            else binding.tvCast.setVisible(false)
-
-            if (!movieMetadata.director.isNullOrEmpty())
-                binding.tvDirector.text = "Director: " + movieMetadata.director
-            else binding.tvDirector.setVisible(false)
-
-            binding.tvGenre.text = movieMetadata.genre
-            binding.tvGenre.setVisible(!movieMetadata.genre.isNullOrEmpty())
-
-            binding.metadataView.duration = movieMetadata.totalDurationMs.toTextTime()
-        }
-    }
-
     private fun handleBlur(imageUrl: String?) {
         imageUrl ?: return
         if (backgroundImageUrl == imageUrl) return
@@ -189,5 +146,10 @@ class DetailsFragment : Fragment() {
             if (!isVisible) return@getBitmap
             binding.ivBackdrop.setImageBitmap(bitmap)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        handleBlur(backgroundImageUrl)
     }
 }
