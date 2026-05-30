@@ -80,9 +80,6 @@
         <action
             android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
-        <action
-            android:id="@+id/toSeriesDetails"
-            app:destination="@id/seriesDetailsFragment" />
     </fragment>
 
     <fragment
@@ -122,11 +119,6 @@
             app:destination="@id/detailsFragment"
             app:popUpTo="@id/searchFragment"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/toSeriesDetails"
-            app:destination="@id/seriesDetailsFragment"
-            app:popUpTo="@id/searchFragment"
-            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment
@@ -148,9 +140,6 @@
         <action
             android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
-        <action
-            android:id="@+id/toSeriesDetails"
-            app:destination="@id/seriesDetailsFragment" />
     </fragment>
 
     <fragment
@@ -171,41 +160,6 @@
         <action
             android:id="@+id/toEpisodeSelector"
             app:destination="@id/episodeSelectorFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/seriesDetailsFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.details.series.SeriesDetailsFragment"
-        android:label="SeriesDetailsFragment">
-        <argument
-            android:name="seriesId"
-            android:defaultValue="72"
-            app:argType="integer" />
-        <action
-            android:id="@+id/toPlayback"
-            app:destination="@id/playbackFragment" />
-        <action
-            android:id="@+id/toSeriesSelectorFragment"
-            app:destination="@id/seriesSelectorFragment" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/seriesSelectorFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.details.series.SeriesSelectorFragment"
-        android:label="SeriesSelectorFragment">
-        <argument
-            android:name="seriesId"
-            android:defaultValue="72"
-            app:argType="integer" />
-
-        <argument
-            android:name="initialSelectedEpisodeId"
-            android:defaultValue="18084"
-            app:argType="integer" />
-
-        <action
-            android:id="@+id/toPlayback"
-            app:destination="@id/playbackFragment" />
     </fragment>
 
     <dialog

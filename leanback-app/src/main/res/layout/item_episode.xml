@@ -26,7 +26,7 @@
         app:layout_constraintStart_toEndOf="@id/iv_episode_poster"
         app:layout_constraintTop_toTopOf="@+id/iv_episode_poster" />
 
-    <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+    <com.joshgm3z.triplerocktv.ui.common.MetadataView
         android:id="@+id/metadata_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

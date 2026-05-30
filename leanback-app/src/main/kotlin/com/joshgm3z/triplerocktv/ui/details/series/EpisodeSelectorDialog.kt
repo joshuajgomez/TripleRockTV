@@ -56,7 +56,7 @@ class EpisodeSelectorDialog : DialogFragment() {
         super.onCreate(savedInstanceState)
         episodeAdapter = EpisodeAdapter(glideUtil)
         episodeAdapter.onEpisodeClick = {
-            SeriesSelectorFragmentDirections.toPlayback().apply {
+            EpisodeSelectorDialogDirections.toPlayback().apply {
                 this.seriesId = args.seriesId
                 this.streamId = it.id
                 this.streamType = StreamType.Series

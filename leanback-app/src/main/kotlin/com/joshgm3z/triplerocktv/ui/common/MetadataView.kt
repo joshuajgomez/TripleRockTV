@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.details.series
+package com.joshgm3z.triplerocktv.ui.common
 
 import android.content.Context
 import android.util.AttributeSet
@@ -122,4 +122,3 @@ class MetadataView @JvmOverloads constructor(
         compoundDrawablePadding = 5
     }
 }
-

@@ -39,7 +39,7 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/sample_movie_name" />
 
-    <com.joshgm3z.triplerocktv.ui.details.series.MetadataView
+    <com.joshgm3z.triplerocktv.ui.common.MetadataView
         android:id="@+id/metadata_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
