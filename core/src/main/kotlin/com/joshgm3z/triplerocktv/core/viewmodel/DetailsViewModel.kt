@@ -128,7 +128,7 @@ class DetailsViewModel @Inject constructor(
                         subtitle = episodeToPlay.title,
                         episodeId = episodeToPlay.id,
                         rating = episodeToPlay.episodeInfo?.rating.parseToFloat(),
-                        description = episodeToPlay.episodeInfo?.plot,
+                        description = episodeToPlay.episodeInfo?.plot.withPrefix(""),
                         cast = seriesStream.cast.withPrefix("Cast: "),
                         director = seriesStream.director.withPrefix("Director: "),
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
