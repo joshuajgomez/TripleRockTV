@@ -54,7 +54,9 @@ class EpisodeAdapter
             episode.episodeInfo?.movie_image,
             binding.ivEpisodePoster,
         )
-        if (position == initialSelectedEpisodeIndex) binding.root.requestFocus()
+        if (position == initialSelectedEpisodeIndex) binding.root.post {
+            binding.root.requestFocus()
+        }
     }
 
     override fun getItemCount() = episodes.size
