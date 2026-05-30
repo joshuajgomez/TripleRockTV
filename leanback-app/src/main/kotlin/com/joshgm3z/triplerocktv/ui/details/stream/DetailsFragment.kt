@@ -122,6 +122,7 @@ class DetailsFragment : Fragment() {
 
         binding.btnRemoveMyList.setVisible(uiState.inMyList)
         binding.btnAddMyList.setVisible(!uiState.inMyList)
+        binding.metadataView.showMyList = uiState.inMyList
         binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
 
         handleBlur(uiState.coverImage)
