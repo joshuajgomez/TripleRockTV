@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
@@ -54,22 +55,37 @@ class DetailsFragment : Fragment() {
         binding.flResumeContainer.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 resume = true
-                streamId = args.streamId
                 streamType = args.streamType
+                if (args.streamType == StreamType.Series) {
+                    streamId = selectedEpisodeId
+                    seriesId = args.streamId
+                } else {
+                    streamId = args.streamId
+                }
                 findNavController().navigate(this)
             }
         }
         binding.btnStartOver.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
-                streamId = args.streamId
                 streamType = args.streamType
+                if (args.streamType == StreamType.Series) {
+                    streamId = selectedEpisodeId
+                    seriesId = args.streamId
+                } else {
+                    streamId = args.streamId
+                }
                 findNavController().navigate(this)
             }
         }
         binding.btnPlay.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
-                streamId = args.streamId
                 streamType = args.streamType
+                if (args.streamType == StreamType.Series) {
+                    streamId = selectedEpisodeId
+                    seriesId = args.streamId
+                } else {
+                    streamId = args.streamId
+                }
                 findNavController().navigate(this)
             }
         }
