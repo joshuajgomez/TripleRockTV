@@ -117,7 +117,7 @@ class DetailsFragment : Fragment() {
         }
         binding.tvTitle.text = uiState.title
         binding.metadataView.rating = uiState.rating
-        binding.metadataView.subtitleDownloaded = !uiState.subtitle.isNullOrEmpty()
+        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
 
         binding.flResumeContainer.setVisible(uiState.progressPercent != null)
         binding.progressBar.progress = uiState.progressPercent ?: 0

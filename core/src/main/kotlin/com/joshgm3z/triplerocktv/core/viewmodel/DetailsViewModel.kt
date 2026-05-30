@@ -39,6 +39,7 @@ data class DetailsUiState(
     val director: String? = null,
     val progressPercent: Int? = null,
     val showMoreEpisodesButton: Boolean = false,
+    val subtitleDownloaded: Boolean = false,
     val coverImage: String? = null,
 )
 
@@ -98,7 +99,8 @@ class DetailsViewModel @Inject constructor(
                         director = it.movieMetadata.director.withPrefix("Director: "),
                         progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
                         inMyList = it.inMyList,
-                        coverImage = it.movieMetadata.backPosterUrl
+                        coverImage = it.movieMetadata.backPosterUrl,
+                        subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
                     )
                 }
             }
