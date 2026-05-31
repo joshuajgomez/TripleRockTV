@@ -41,6 +41,7 @@ data class DetailsUiState(
     val showMoreEpisodesButton: Boolean = false,
     val subtitleDownloaded: Boolean = false,
     val coverImage: String? = null,
+    val showButtons: Boolean = false,
 )
 
 @HiltViewModel
@@ -88,13 +89,13 @@ class DetailsViewModel @Inject constructor(
                     title = it.name,
                     rating = it.rating,
                 )
-                if (it.movieMetadata?.description.isNullOrEmpty())
-                    searchMetadata(it)
+                if (it.movieMetadata == null) searchMetadata(it)
                 else _uiState.update { uiState ->
                     uiState?.copy(
+                        showButtons = true,
                         duration = it.movieMetadata.totalDurationMs.toTextTime(),
                         subtitle = it.movieMetadata.genre,
-                        description = it.movieMetadata.description,
+                        description = it.movieMetadata.description.withPrefix(""),
                         cast = it.movieMetadata.cast.withPrefix("Cast: "),
                         director = it.movieMetadata.director.withPrefix("Director: "),
                         progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
@@ -113,18 +114,21 @@ class DetailsViewModel @Inject constructor(
                 _uiState.value = DetailsUiState(
                     streamType = StreamType.Series,
                     title = seriesStream.name,
-                    coverImage = seriesStream.backdropUrl,
+                    coverImage = seriesStream.backdropUrl.ifNullOrEmpty(
+                        seriesStream.coverImageUrl
+                    ),
                 )
                 if (seriesStream.seasons.isNullOrEmpty())
                     searchSeriesMetadata(seriesStream)
                 else _uiState.update {
                     val episodeToPlay = seriesStream.seasons.getEpisodeToPlay()
                     it?.copy(
+                        showButtons = true,
                         episodeLabel = episodeToPlay.label(),
                         subtitle = episodeToPlay.title,
                         episodeId = episodeToPlay.id,
                         rating = episodeToPlay.episodeInfo?.rating.parseToFloat(),
-                        description = episodeToPlay.episodeInfo?.plot,
+                        description = episodeToPlay.episodeInfo?.plot.withPrefix(""),
                         cast = seriesStream.cast.withPrefix("Cast: "),
                         director = seriesStream.director.withPrefix("Director: "),
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
@@ -136,6 +140,9 @@ class DetailsViewModel @Inject constructor(
             }
         }
     }
+
+    private fun String?.ifNullOrEmpty(defaultValue: String?) =
+        if (isNullOrEmpty()) defaultValue else this
 
     private fun String?.withPrefix(text: String): String {
         if (this.isNullOrEmpty()) return ""

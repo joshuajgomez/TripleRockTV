@@ -22,7 +22,7 @@ data class SeriesSelectorUiState(
 )
 
 @HiltViewModel
-class SeriesSelectorViewModel
+class EpisodeSelectorViewModel
 @Inject constructor(
     savedStateHandle: SavedStateHandle,
     repository: MediaLocalRepository,
@@ -51,7 +51,7 @@ class SeriesSelectorViewModel
                         seasons = seasons,
                         selectedSeasonNumber = selectedSeasonNumber,
                         selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
-                        episodes = episodes
+                        episodes = episodes.replaceMissingPoster(seriesStream.coverImageUrl)
                     )
                 }
             }
@@ -73,5 +73,15 @@ class SeriesSelectorViewModel
             if (season.episodes.any { it.id == episodeId }) return season.number
         }
         return -1
+    }
+
+    fun List<Episode>.replaceMissingPoster(poster: String?): List<Episode> = map {
+        if (it.episodeInfo?.movie_image.isNullOrEmpty())
+            it.copy(
+                episodeInfo = it.episodeInfo?.copy(
+                    movie_image = poster
+                )
+            )
+        else it
     }
 }

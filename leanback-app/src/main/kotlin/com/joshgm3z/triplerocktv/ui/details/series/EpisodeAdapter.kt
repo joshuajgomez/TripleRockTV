@@ -16,6 +16,8 @@ class EpisodeAdapter
     private val glideUtil: GlideUtil
 ) : RecyclerView.Adapter<EpisodeViewHolder>() {
 
+    var initialSelectedEpisodeIndex: Int? = null
+
     var episodes: List<Episode> = emptyList()
         set(value) {
             field = value
@@ -52,6 +54,9 @@ class EpisodeAdapter
             episode.episodeInfo?.movie_image,
             binding.ivEpisodePoster,
         )
+        if (position == initialSelectedEpisodeIndex) binding.root.post {
+            binding.root.requestFocus()
+        }
     }
 
     override fun getItemCount() = episodes.size

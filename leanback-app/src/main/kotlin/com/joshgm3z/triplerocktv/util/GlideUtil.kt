@@ -137,7 +137,7 @@ fun String?.alternateUri(serverUrl: String): String? = when {
 
     else -> this
 }.apply {
-    Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
+//    Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
 
 enum class DimMode(val value: Int) {

@@ -57,6 +57,13 @@ class DelayedTextView @JvmOverloads constructor(
                     if (textSize == 0) return@let
                     binding.tvText.textSize = textSize.toFloat()
                 }
+                getInteger(
+                    R.styleable.DelayedTextView_android_maxLines,
+                    0
+                ).let { maxLines ->
+                    if (maxLines == 0) return@let
+                    binding.tvText.maxLines = maxLines
+                }
             }
         }
     }
