@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
+import com.joshgm3z.triplerocktv.ui.common.DelayedTextView
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -65,6 +67,10 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
+        binding.flResumeContainer.onFocusChangeListener =
+            View.OnFocusChangeListener { _, hasFocus ->
+                binding.progressBar.setVisible(hasFocus)
+            }
         binding.btnStartOver.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 streamType = args.streamType
@@ -115,35 +121,32 @@ class DetailsFragment : Fragment() {
         uiState.episodeId?.let {
             selectedEpisodeId = it
         }
-        binding.tvTitle.text = uiState.title
-        binding.metadataView.rating = uiState.rating
-        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
-
-        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
-        binding.progressBar.progress = uiState.progressPercent ?: 0
         uiState.episodeLabel?.let {
             binding.btnResume.text = "Resume $it"
             binding.btnPlay.text = "Play $it"
         }
-        binding.tvGenre.text = uiState.subtitle
+        handleBlur(uiState.coverImage)
+        binding.progressBar.progress = uiState.progressPercent ?: 0
+
+        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
+        binding.metadataView.rating = uiState.rating
+        binding.metadataView.showMyList = uiState.inMyList
+        binding.metadataView.duration = uiState.duration
+
+        binding.tvTitle.text = uiState.title
+        binding.tvGenre.text(uiState.subtitle)
+        binding.tvDescription.text(uiState.description)
+        binding.tvCast.text(uiState.cast)
+        binding.tvDirector.text(uiState.director)
+
+        // button visibility
+        if (!uiState.showButtons) return
+        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
         binding.btnStartOver.setVisible(uiState.progressPercent != null)
         binding.btnPlay.setVisible(uiState.progressPercent == null)
-
-        binding.flResumeContainer.onFocusChangeListener =
-            View.OnFocusChangeListener { _, hasFocus ->
-                binding.progressBar.setVisible(hasFocus)
-            }
-
         binding.btnRemoveMyList.setVisible(uiState.inMyList)
         binding.btnAddMyList.setVisible(!uiState.inMyList)
-        binding.metadataView.showMyList = uiState.inMyList
         binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
-
-        handleBlur(uiState.coverImage)
-        binding.tvDescription.text = uiState.description
-        binding.tvCast.text = uiState.cast
-        binding.tvDirector.text = uiState.director
-        binding.metadataView.duration = uiState.duration
 
         // handle focus
         if (uiState.progressPercent != null) {
@@ -151,6 +154,12 @@ class DetailsFragment : Fragment() {
         } else {
             binding.btnPlay.requestFocus()
         }
+    }
+
+    private fun DelayedTextView.text(value: String?) {
+        text = value
+        if (value == null) return
+        setVisible(!value.isEmpty())
     }
 
     private fun handleBlur(imageUrl: String?) {

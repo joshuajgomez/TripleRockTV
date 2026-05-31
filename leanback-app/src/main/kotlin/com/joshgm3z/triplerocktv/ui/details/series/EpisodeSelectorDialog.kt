@@ -14,7 +14,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorUiState
-import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.EpisodeSelectorViewModel
 import com.joshgm3z.triplerocktv.databinding.DialogEpisodeSelectorBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -26,7 +26,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class EpisodeSelectorDialog : DialogFragment() {
 
-    private val viewModel: SeriesSelectorViewModel by viewModels()
+    private val viewModel: EpisodeSelectorViewModel by viewModels()
 
     private lateinit var binding: DialogEpisodeSelectorBinding
 
@@ -87,6 +87,7 @@ class EpisodeSelectorDialog : DialogFragment() {
 
     private fun updateUI(uiState: SeriesSelectorUiState) {
         seasonAdapter.selectedSeasonNumber = uiState.selectedSeasonNumber
+        episodeAdapter.initialSelectedEpisodeIndex = uiState.selectedEpisodeIndex
         if (seasonAdapter.seasons.isEmpty()) seasonAdapter.seasons = uiState.seasons
         episodeAdapter.episodes = uiState.episodes
         binding.rvEpisodes.layoutAnimation = AnimationUtils.loadLayoutAnimation(
@@ -94,8 +95,9 @@ class EpisodeSelectorDialog : DialogFragment() {
             R.anim.layout_fall_down
         )
         binding.rvEpisodes.scheduleLayoutAnimation()
-        binding.rvEpisodes.post {
-            binding.rvEpisodes.requestFocus()
-        }
+        if (uiState.selectedEpisodeIndex == null)
+            binding.rvEpisodes.post {
+                binding.rvEpisodes.requestFocus()
+            }
     }
 }
