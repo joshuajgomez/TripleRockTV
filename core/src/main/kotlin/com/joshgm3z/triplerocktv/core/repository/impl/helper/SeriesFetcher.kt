@@ -140,16 +140,19 @@ constructor(
                         voteAverage = seasonData.voteAverage ?: 0f,
                         overview = seasonData.overview ?: "",
                     )
-                } else if (it.episodes.isNotEmpty()) listOf(
-                    Season(
-                        episodes = it.episodes[1] ?: emptyList(),
-                        number = 1,
-                        name = "Season 1",
-                        coverImageUrl = "",
-                        voteAverage = 0f,
-                        overview = "",
+                } else if (it.episodes.isNotEmpty()) {
+                    val episodeNumber = it.episodes.keys.first()
+                    listOf(
+                        Season(
+                            episodes = it.episodes[episodeNumber] ?: emptyList(),
+                            number = episodeNumber,
+                            name = "Season $episodeNumber",
+                            coverImageUrl = "",
+                            voteAverage = 0f,
+                            overview = "",
+                        )
                     )
-                ) else emptyList()
+                } else emptyList()
                 Logger.debug("seasons = [$seasons]")
                 val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
                 seriesStreamsDao.getBySeriesId(streamId).copy(seasons = filteredSeasons).let {

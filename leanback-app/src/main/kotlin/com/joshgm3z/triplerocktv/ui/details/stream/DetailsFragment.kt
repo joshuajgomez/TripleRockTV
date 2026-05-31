@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -14,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
+import com.joshgm3z.triplerocktv.ui.common.DelayedTextView
 import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -132,10 +134,10 @@ class DetailsFragment : Fragment() {
         binding.metadataView.duration = uiState.duration
 
         binding.tvTitle.text = uiState.title
-        binding.tvGenre.text = uiState.subtitle
-        binding.tvDescription.text = uiState.description
-        binding.tvCast.text = uiState.cast
-        binding.tvDirector.text = uiState.director
+        binding.tvGenre.text(uiState.subtitle)
+        binding.tvDescription.text(uiState.description)
+        binding.tvCast.text(uiState.cast)
+        binding.tvDirector.text(uiState.director)
 
         // button visibility
         if (!uiState.showButtons) return
@@ -152,6 +154,12 @@ class DetailsFragment : Fragment() {
         } else {
             binding.btnPlay.requestFocus()
         }
+    }
+
+    private fun DelayedTextView.text(value: String?) {
+        text = value
+        if (value == null) return
+        setVisible(!value.isEmpty())
     }
 
     private fun handleBlur(imageUrl: String?) {
