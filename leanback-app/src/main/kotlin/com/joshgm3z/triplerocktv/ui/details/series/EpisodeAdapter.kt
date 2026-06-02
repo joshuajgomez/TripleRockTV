@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
@@ -16,7 +17,7 @@ class EpisodeAdapter
     private val glideUtil: GlideUtil
 ) : RecyclerView.Adapter<EpisodeViewHolder>() {
 
-    var initialSelectedEpisodeIndex: Int? = null
+    var initialSelectedEpisodeNumber: Int? = null
 
     var episodes: List<Episode> = emptyList()
         set(value) {
@@ -53,8 +54,9 @@ class EpisodeAdapter
         glideUtil.loadImage(
             episode.episodeInfo?.movie_image,
             binding.ivEpisodePoster,
+            R.drawable.default_media_poster
         )
-        if (position == initialSelectedEpisodeIndex) binding.root.post {
+        if (episode.episode_num == initialSelectedEpisodeNumber) binding.root.post {
             binding.root.requestFocus()
         }
     }
