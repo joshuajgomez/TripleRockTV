@@ -168,12 +168,12 @@
         android:label="EpisodeSelectorDialog">
         <argument
             android:name="seriesId"
-            android:defaultValue="72"
+            android:defaultValue="237"
             app:argType="integer" />
 
         <argument
             android:name="initialSelectedEpisodeId"
-            android:defaultValue="18084"
+            android:defaultValue="309262"
             app:argType="integer" />
 
         <action

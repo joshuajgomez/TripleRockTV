@@ -141,8 +141,7 @@ constructor(
                         overview = seasonData.overview ?: "",
                     )
                 } else if (it.episodes.isNotEmpty()) {
-                    val episodeNumber = it.episodes.keys.first()
-                    listOf(
+                    it.episodes.keys.map { episodeNumber ->
                         Season(
                             episodes = it.episodes[episodeNumber] ?: emptyList(),
                             number = episodeNumber,
@@ -151,7 +150,7 @@ constructor(
                             voteAverage = 0f,
                             overview = "",
                         )
-                    )
+                    }
                 } else emptyList()
                 Logger.debug("seasons = [$seasons]")
                 val filteredSeasons = seasons.filter { it.episodes.isNotEmpty() }
