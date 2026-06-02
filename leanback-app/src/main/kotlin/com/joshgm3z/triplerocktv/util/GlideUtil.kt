@@ -46,9 +46,16 @@ class GlideUtil
         }
     }
 
-    fun loadImage(url: String?, imageView: ImageView) {
-        Glide.with(imageView.context)
+    fun loadImage(
+        url: String?,
+        imageView: ImageView,
+        error: Int? = null
+    ) {
+        url.isNullOrEmpty() && return
+        val builder = Glide.with(imageView.context)
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
+        error?.let { builder.error(it) }
+        builder
             .listener(glideErrorListener)
             .centerCrop()
             .transition(DrawableTransitionOptions.withCrossFade())
@@ -126,6 +133,8 @@ val invalidUrls = listOf(
     "http://webhop.live:8080",
     "http://wehop.live:8080",
     "http://starshare.live:8080",
+    "http://starshare.org:8080",
+    "http://starshare.one:8080",
 )
 
 fun String?.alternateUri(serverUrl: String): String? = when {
