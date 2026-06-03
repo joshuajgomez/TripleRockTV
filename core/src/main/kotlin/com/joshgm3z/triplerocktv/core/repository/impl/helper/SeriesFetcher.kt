@@ -55,7 +55,7 @@ constructor(
                 onFetch(
                     LoadingState(
                         percent = (index.toFloat() / total * 100).toInt(),
-                        status = LoadingStatus.Ongoing
+                        status = LoadingStatus.Ongoing,
                     )
                 )
                 delay(REQUEST_DELAY)

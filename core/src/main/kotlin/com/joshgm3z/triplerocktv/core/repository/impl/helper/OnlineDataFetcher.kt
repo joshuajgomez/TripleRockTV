@@ -49,7 +49,7 @@ constructor(
                 onFetch(
                     LoadingState(
                         percent = (index.toFloat() / categories.size * 100).toInt(),
-                        status = LoadingStatus.Ongoing
+                        status = LoadingStatus.Ongoing,
                     )
                 )
                 delay(REQUEST_DELAY)
@@ -65,7 +65,6 @@ constructor(
 
             categoryDataDao.replaceData(streamType, categoriesToStore)
             streamDataDao.replaceData(streamType, streamDataListToStore)
-
         }
         when {
             categoriesToStore.isEmpty() || streamDataListToStore.isEmpty() -> onError(

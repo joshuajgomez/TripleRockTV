@@ -97,6 +97,27 @@ class MediaOnlineRepositoryImpl
         }
     }
 
+    override suspend fun startUpdate(
+        streamType: StreamType,
+        onFetch: (LoadingState) -> Unit,
+        onError: (String, String) -> Unit
+    ) {
+        when (streamType) {
+            StreamType.VideoOnDemand -> onlineDataFetcher.fetchContent(
+                streamType = streamType,
+                onFetch = onFetch,
+                onError = onError,
+            )
+
+            StreamType.Series -> seriesFetcher.fetchContent(
+                onFetch = onFetch,
+                onError = onError
+            )
+
+            else -> return
+        }
+    }
+
     override suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
         if (iptvService == null) {
             fetchIptvService()
