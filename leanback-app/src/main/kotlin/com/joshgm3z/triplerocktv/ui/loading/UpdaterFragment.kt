@@ -66,6 +66,9 @@ class UpdaterFragment : Fragment() {
             viewModel.startUpdate(StreamType.Series)
         }
         setupBackstackListener()
+        binding.bvDownloadAll.post {
+            binding.bvDownloadAll.requestFocus()
+        }
     }
 
     private fun updateList(uiState: DownloaderUiState) {
