@@ -50,12 +50,14 @@ constructor(
             _uiState.update { currentState ->
                 val updatedMap = currentState.stateMap.toMutableMap()
                 currentState.stateMap.keys.forEach { type ->
-                    updatedMap[type] = DownloadedItemState(
+                    val lastContentUpdate = localDatastore.getLastContentUpdate(type)
+                    updatedMap[type] = if (lastContentUpdate == 0L)
+                        DownloadedItemState(status = "Tap update to fetch videos")
+                    else DownloadedItemState(
                         filesCount = "${localDatastore.getTotalCount(type)} videos",
-                        status = "Last updated ${
-                            localDatastore.getLastContentUpdate(type).relativeTime()
-                        }"
+                        status = "Last updated ${lastContentUpdate.relativeTime()}"
                     )
+
                 }
                 currentState.copy(
                     stateMap = updatedMap,
@@ -70,7 +72,7 @@ constructor(
             val updatedMap = currentState.stateMap.toMutableMap()
             streamTypes.forEach { type ->
                 updatedMap[type] = DownloadedItemState(
-                    status = "Queued",
+                    status = "Waiting update",
                     loadingStatus = LoadingStatus.Initial
                 )
             }
