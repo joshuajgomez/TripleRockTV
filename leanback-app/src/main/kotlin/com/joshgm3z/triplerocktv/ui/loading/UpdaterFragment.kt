@@ -47,9 +47,9 @@ class UpdaterFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 interceptBackPress = it.stateMap.any { (_, state) ->
-                    state?.status?.contains("Updating") ?: false
+                    state?.updating == true
                 }
-                when {
+                /*when {
                     it.error != null -> {
                         findNavController().navigate(
                             UpdaterFragmentDirections.toLoadingError(
@@ -64,7 +64,7 @@ class UpdaterFragment : Fragment() {
                         findNavController().navigate(UpdaterFragmentDirections.toSplash())
                         return@collectLatest
                     }
-                }
+                }*/
 
                 binding.bvDownloadAll.isEnabled = it.enableButtons
                 updateList(it)
@@ -99,6 +99,7 @@ class UpdaterFragment : Fragment() {
             state ?: return@forEach
 
             view.showLoading = state.updating
+            view.isSelected = state.updating
             view.subtitle = when {
                 state.filesCount == null -> state.status
                 else -> getString(
