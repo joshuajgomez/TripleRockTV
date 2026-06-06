@@ -77,7 +77,7 @@ class MediaOnlineRepositoryImpl
         }
         try {
             onlineDataFetcher.fetchContent(
-                streamType = StreamType.VideoOnDemand, onError = onError,
+                streamType = StreamType.VideoOnDemand,
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             /*onlineDataFetcher.fetchContent(
@@ -86,7 +86,6 @@ class MediaOnlineRepositoryImpl
             )*/
             seriesFetcher.fetchContent(
                 onFetch = { onFetch(StreamType.Series, it) },
-                onError = onError
             )
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
@@ -106,13 +105,9 @@ class MediaOnlineRepositoryImpl
             StreamType.VideoOnDemand -> onlineDataFetcher.fetchContent(
                 streamType = streamType,
                 onFetch = onFetch,
-                onError = onError,
             )
 
-            StreamType.Series -> seriesFetcher.fetchContent(
-                onFetch = onFetch,
-                onError = onError
-            )
+            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
 
             else -> return
         }
