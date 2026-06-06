@@ -91,7 +91,7 @@ class LoginFragment : GuidedStepSupportFragment() {
         showStatus("Signed in", icon = R.drawable.ic_check_circle_green)
         lifecycleScope.launch {
             delay(2000)
-            findNavController().navigate(LoginFragmentDirections.toMediaLoading())
+            findNavController().navigate(LoginFragmentDirections.toUpdater())
         }
     }
 

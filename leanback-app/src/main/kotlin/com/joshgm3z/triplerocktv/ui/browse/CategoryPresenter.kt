@@ -5,6 +5,7 @@ import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.databinding.ViewCategoryCardBinding
 import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.core.util.withComma
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
@@ -34,7 +35,7 @@ class CategoryPresenter
         }
         val binding = ViewCategoryCardBinding.bind(viewHolder.view)
         binding.tvTitle.text = title
-        binding.tvCount.text = "$count videos"
+        binding.tvCount.text = "${count.withComma()} videos"
         glideUtil.loadImage(streamIcon, binding.ivPoster)
     }
 

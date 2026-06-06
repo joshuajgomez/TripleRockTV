@@ -77,7 +77,7 @@ class MediaOnlineRepositoryImpl
         }
         try {
             onlineDataFetcher.fetchContent(
-                streamType = StreamType.VideoOnDemand, onError = onError,
+                streamType = StreamType.VideoOnDemand,
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
             /*onlineDataFetcher.fetchContent(
@@ -86,7 +86,6 @@ class MediaOnlineRepositoryImpl
             )*/
             seriesFetcher.fetchContent(
                 onFetch = { onFetch(StreamType.Series, it) },
-                onError = onError
             )
         } catch (e: Exception) {
             Logger.error(e.message ?: "Error fetching content")
@@ -94,6 +93,23 @@ class MediaOnlineRepositoryImpl
             e.printStackTrace()
         } finally {
             localDatastore.setLastContentUpdate(System.currentTimeMillis())
+        }
+    }
+
+    override suspend fun startUpdate(
+        streamType: StreamType,
+        onFetch: (LoadingState) -> Unit,
+        onError: (String, String) -> Unit
+    ) {
+        when (streamType) {
+            StreamType.VideoOnDemand -> onlineDataFetcher.fetchContent(
+                streamType = streamType,
+                onFetch = onFetch,
+            )
+
+            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
+
+            else -> return
         }
     }
 

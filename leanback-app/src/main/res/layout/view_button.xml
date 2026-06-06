@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:textAlignment="center"
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_view_background_filled"
+        android:clickable="true"
+        android:drawablePadding="5dp"
+        android:drawableTint="@color/button_fg_color_selector"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:focusedByDefault="true"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:text="Button"
+        android:textColor="@color/button_fg_color_selector"
+        android:textSize="15sp" />
+</merge>

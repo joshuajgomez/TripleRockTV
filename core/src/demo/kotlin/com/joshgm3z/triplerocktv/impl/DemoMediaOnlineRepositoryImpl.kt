@@ -24,6 +24,23 @@ constructor() : MediaOnlineRepository {
         }
     }
 
+    override suspend fun startUpdate(
+        streamType: StreamType,
+        onFetch: (LoadingState) -> Unit,
+        onError: (String, String) -> Unit
+    ) {
+        repeat(10) { i ->
+            onFetch(
+                LoadingState(
+                    i * 10,
+                    LoadingStatus.Ongoing,
+                )
+            )
+            delay(200)
+        }
+        onFetch(LoadingState(percent = 100, status = LoadingStatus.Complete))
+    }
+
     override suspend fun getMovieDataAndUpdate(
         streamId: Int,
         streamType: StreamType

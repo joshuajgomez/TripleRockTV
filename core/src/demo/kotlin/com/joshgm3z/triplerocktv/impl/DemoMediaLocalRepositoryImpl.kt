@@ -98,25 +98,29 @@ constructor() : MediaLocalRepository {
         streamId: Int,
         positionMs: Long,
         streamType: StreamType
-    ) {}
+    ) {
+    }
 
     override suspend fun updateLastPlayedTimestamp(
         streamId: Int,
         streamType: StreamType,
         timeStamp: Long
-    ) {}
+    ) {
+    }
 
     override suspend fun updateEpisodeLastPlayedTimestamp(
         episodeId: Int,
         seriesId: Int,
         timeStamp: Long
-    ) {}
+    ) {
+    }
 
     override suspend fun updateEpisodePlayedDuration(
         episodeId: Int,
         seriesId: Int,
         positionMs: Long
-    ) {}
+    ) {
+    }
 
     override suspend fun updateMyList(streamId: Int, add: Boolean) {}
 
@@ -128,6 +132,13 @@ constructor() : MediaLocalRepository {
         title: String,
         url: String?
     ) {
+    }
+
+    override suspend fun numberOfFiles(type: StreamType): Int {
+        return when (type) {
+            StreamType.VideoOnDemand -> 12000
+            else -> 3000
+        }
     }
 
 }

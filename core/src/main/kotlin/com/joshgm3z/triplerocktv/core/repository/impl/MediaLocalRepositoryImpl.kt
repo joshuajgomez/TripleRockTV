@@ -193,4 +193,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
             streamDataDao.updateSubtitleUrl(streamId, it)
         }
     }
+
+    override suspend fun numberOfFiles(type: StreamType): Int {
+        return when (type) {
+            StreamType.VideoOnDemand,
+            StreamType.LiveTV -> streamDataDao.getAll(type).size
+
+            StreamType.Series -> seriesStreamsDao.getAll().size
+        }
+    }
 }
