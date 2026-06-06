@@ -38,8 +38,8 @@
         android:layout_marginTop="5dp"
         android:alpha="0.6"
         android:focusable="false"
-        android:textColor="@color/color_card_content"
         android:focusableInTouchMode="false"
+        android:textColor="@color/color_card_content"
         app:layout_constraintStart_toStartOf="@id/tv_title"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
         tools:text="Last updated 2 days ago" />
@@ -68,9 +68,10 @@
         android:layout_width="match_parent"
         android:layout_height="5dp"
         android:layout_gravity="bottom"
+        android:layout_marginHorizontal="10dp"
         android:indeterminate="true"
         android:indeterminateTint="@color/color_primary"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
