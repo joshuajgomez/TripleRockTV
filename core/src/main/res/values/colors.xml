@@ -7,6 +7,7 @@
     <color name="color_card_background">#1D1D1D</color>
     <color name="color_card_background2">#282828</color>
     <color name="color_card_content">#DBDBDB</color>
+    <color name="color_card_sub_content">#505050</color>
     <color name="color_error">#E06260</color>
 
     <color name="color_logo_main">#fff</color>
