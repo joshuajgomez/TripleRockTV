@@ -17,4 +17,20 @@
         <attr name="placeholderWidth" format="dimension" />
         <attr name="placeholderHeight" format="dimension" />
     </declare-styleable>
+    <declare-styleable name="ButtonView">
+        <attr name="android:textSize" />
+        <attr name="android:text" />
+        <attr name="android:drawable" />
+        <attr name="type">
+            <enum name="filled" value="0" />
+            <enum name="transparent" value="1" />
+        </attr>
+    </declare-styleable>
+    <declare-styleable name="UpdateCategoryView">
+        <attr name="title" format="string" />
+        <attr name="subtitle" format="string" />
+        <attr name="status" format="string" />
+        <attr name="showUpdateButton" format="boolean" />
+        <attr name="showPlaceholder" format="boolean" />
+    </declare-styleable>
 </resources>

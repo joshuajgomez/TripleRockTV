@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">3RockTV</string>
     <string name="dot">\u0020 &#8226; \u0020</string>
+    <string name="dot_between_text">%1$s \u0020&#8226;\u0020 %2$s</string>
     <string name="subtitle_downloaded">&#8226; Subtitle downloaded</string>
     <string name="episode_title">Episode %1$d:\n%2$s</string>
     <string name="my_list">My list</string>

@@ -27,6 +27,12 @@ interface MediaOnlineRepository {
         onError: (String, String) -> Unit,
     )
 
+    suspend fun startUpdate(
+        streamType: StreamType,
+        onFetch: (LoadingState) -> Unit,
+        onError: (String, String) -> Unit,
+    )
+
     suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType)
 
     suspend fun getMovieMetadata(streamId: Int): MovieMetadata?

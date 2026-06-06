@@ -19,6 +19,9 @@ interface SeriesStreamsDao {
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
     fun getBySeriesId(seriesId: Int): SeriesStream
 
+    @Query("SELECT * FROM series_stream")
+    fun getAll(): List<SeriesStream>
+
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
     fun seriesStreamFlow(seriesId: Int): Flow<SeriesStream>
 
