@@ -96,7 +96,7 @@ constructor(
         }
     }
 
-    private suspend fun fetchSeriesCategories(): List<CategoryData> =
+    private suspend fun fetchSeriesCategories(): List<CategoryData> = try {
         iptvService.getSeriesCategories(username, password).map {
             CategoryData(
                 categoryId = it.categoryId,
@@ -107,6 +107,11 @@ constructor(
         }.apply {
             Logger.debug("fetchSeriesCategories: $this")
         }
+    } catch (e: Exception) {
+        Logger.error(e.message.toString())
+        e.printStackTrace()
+        emptyList()
+    }
 
     private suspend fun fetchSeries(category: CategoryData): List<SeriesStream> {
         val series = iptvService.getSeries(username, password, category.categoryId)

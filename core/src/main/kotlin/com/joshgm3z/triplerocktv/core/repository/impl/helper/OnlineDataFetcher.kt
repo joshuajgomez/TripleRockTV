@@ -90,10 +90,16 @@ constructor(
     }
 
     private suspend fun fetchCategories(streamType: StreamType): List<CategoryData> {
-        val categoryDataList = when (streamType) {
-            StreamType.VideoOnDemand -> iptvService.getVodCategories(username, password)
-            StreamType.LiveTV -> iptvService.getLiveCategories(username, password)
-            else -> return emptyList()
+        val categoryDataList = try {
+            when (streamType) {
+                StreamType.VideoOnDemand -> iptvService.getVodCategories(username, password)
+                StreamType.LiveTV -> iptvService.getLiveCategories(username, password)
+                else -> return emptyList()
+            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            e.printStackTrace()
+            emptyList()
         }
         return categoryDataList.map {
             CategoryData(
