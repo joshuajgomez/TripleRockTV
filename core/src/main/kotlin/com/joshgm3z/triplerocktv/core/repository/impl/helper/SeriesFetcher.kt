@@ -27,7 +27,6 @@ constructor(
     suspend fun fetchContent(
         limit: Int? = null,
         onFetch: (LoadingState) -> Unit,
-        onError: (String, String) -> Unit
     ) {
         Logger.entry()
         val categories = fetchSeriesCategories().let {
@@ -74,14 +73,18 @@ constructor(
         }
 
         when {
-            categoriesToStore.isEmpty() || seriesStreamListToStore.isEmpty() -> onError(
-                "Unable to sync content",
-                "Try again later"
+            categoriesToStore.isEmpty() || seriesStreamListToStore.isEmpty() -> onFetch(
+                LoadingState(
+                    status = LoadingStatus.Error,
+                    error = "Unable to update. Try again in a few min"
+                )
             )
 
-            errorMessage.isNotEmpty() -> onError(
-                "Unable to fully sync content",
-                "You can still use the app. But some content might not be available."
+            errorMessage.isNotEmpty() -> onFetch(
+                LoadingState(
+                    status = LoadingStatus.Error,
+                    error = "Unable to fully update. Try again in a few min"
+                )
             )
 
             else -> onFetch(

@@ -87,4 +87,12 @@ class UpdateCategoryView @JvmOverloads constructor(
         binding.root.isClickable = enabled
         binding.root.isFocusable = enabled
     }
+
+    var showErrorStatus: Boolean = false
+        set(value) {
+            val res = if (value) com.joshgm3z.triplerocktv.core.R.color.color_error
+            else com.joshgm3z.triplerocktv.core.R.color.color_card_content
+            val color = resources.getColor(res, null)
+            binding.tvSubtitle.setTextColor(color)
+        }
 }

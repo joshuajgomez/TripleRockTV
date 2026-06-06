@@ -10,14 +10,15 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.DownloaderUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.UpdaterViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentUpdaterBinding
 import com.joshgm3z.triplerocktv.ui.common.UpdateCategoryView
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -46,26 +47,9 @@ class UpdaterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                interceptBackPress = it.stateMap.any { (_, state) ->
-                    state?.updating == true
+                interceptBackPress = it.stateMap.values.any { state ->
+                    state?.loadingStatus == LoadingStatus.Ongoing
                 }
-                /*when {
-                    it.error != null -> {
-                        findNavController().navigate(
-                            UpdaterFragmentDirections.toLoadingError(
-                                it.error!!,
-                                it.errorSummary!!
-                            )
-                        )
-                        return@collectLatest
-                    }
-
-                    it.success -> {
-                        findNavController().navigate(UpdaterFragmentDirections.toSplash())
-                        return@collectLatest
-                    }
-                }*/
-
                 binding.bvDownloadAll.isEnabled = it.enableButtons
                 updateList(it)
             }
@@ -85,6 +69,7 @@ class UpdaterFragment : Fragment() {
     }
 
     private fun updateList(uiState: DownloaderUiState) {
+        Logger.debug("uiState = [${uiState}]")
         fun getView(streamType: StreamType): UpdateCategoryView = when (streamType) {
             StreamType.VideoOnDemand -> binding.ucvVod
             StreamType.Series -> binding.ucvSeries
@@ -98,8 +83,9 @@ class UpdaterFragment : Fragment() {
             view.showPlaceholder = state == null
             state ?: return@forEach
 
-            view.showLoading = state.updating
-            view.isSelected = state.updating
+            view.showLoading = state.loadingStatus == LoadingStatus.Ongoing
+            view.isSelected = state.loadingStatus == LoadingStatus.Ongoing
+            view.showErrorStatus = state.loadingStatus == LoadingStatus.Error
             view.subtitle = when {
                 state.filesCount == null -> state.status
                 else -> getString(

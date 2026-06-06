@@ -20,7 +20,7 @@ import javax.inject.Inject
 data class DownloadedItemState(
     val status: String,
     val filesCount: String? = null,
-    val updating: Boolean = false,
+    val loadingStatus: LoadingStatus? = null,
 )
 
 data class DownloaderUiState(
@@ -29,9 +29,6 @@ data class DownloaderUiState(
         StreamType.Series to null
     ),
     val enableButtons: Boolean = false,
-    val error: String? = null,
-    val errorSummary: String? = null,
-    val success: Boolean = false,
 )
 
 @HiltViewModel
@@ -72,7 +69,10 @@ constructor(
         _uiState.update { currentState ->
             val updatedMap = currentState.stateMap.toMutableMap()
             streamTypes.forEach { type ->
-                updatedMap[type] = DownloadedItemState(status = "Queued")
+                updatedMap[type] = DownloadedItemState(
+                    status = "Queued",
+                    loadingStatus = LoadingStatus.Initial
+                )
             }
             currentState.copy(
                 stateMap = updatedMap,
@@ -89,13 +89,8 @@ constructor(
         if (queue.isEmpty()) {
             viewModelScope.launch {
                 _uiState.update { currentState ->
-                    if (currentState.error == null) {
-                        localDatastore.setLastContentUpdate(System.currentTimeMillis())
-                    }
-                    currentState.copy(
-                        enableButtons = true,
-                        success = currentState.error == null
-                    )
+                    localDatastore.setLastContentUpdate(System.currentTimeMillis())
+                    currentState.copy(enableButtons = true)
                 }
             }
             return
@@ -122,9 +117,9 @@ constructor(
                                     LoadingStatus.Ongoing -> "Updating ${it.percent}%"
                                     LoadingStatus.Complete -> "Last updated just now"
                                     LoadingStatus.Initial -> "Initialising"
-                                    LoadingStatus.Error -> "Couldn't complete"
+                                    LoadingStatus.Error -> it.error ?: "Couldn't complete"
                                 },
-                                updating = it.status == LoadingStatus.Ongoing
+                                loadingStatus = it.status
                             )
                             currentState.copy(stateMap = updatedMap)
                         }
@@ -134,11 +129,7 @@ constructor(
                 },
                 onError = { error, summary ->
                     _uiState.update {
-                        it.copy(
-                            enableButtons = true,
-                            error = error,
-                            errorSummary = summary
-                        )
+                        it.copy(enableButtons = true)
                     }
                 },
             )
