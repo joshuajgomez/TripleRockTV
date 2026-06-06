@@ -91,7 +91,7 @@ class UpdateItemView @JvmOverloads constructor(
     var showErrorStatus: Boolean = false
         set(value) {
             val res = if (value) com.joshgm3z.triplerocktv.core.R.color.color_error
-            else R.color.color_card_content2
+            else com.joshgm3z.triplerocktv.core.R.color.color_card_sub_content
             val color = resources.getColor(res, null)
             binding.tvSubtitle.setTextColor(color)
         }
