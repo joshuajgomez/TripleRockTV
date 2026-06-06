@@ -6,15 +6,15 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewCategoryItemBinding
+import com.joshgm3z.triplerocktv.databinding.ViewUpdateItemBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 
-class UpdateCategoryView @JvmOverloads constructor(
+class UpdateItemView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr) {
-    private val binding = ViewCategoryItemBinding.inflate(
+    private val binding = ViewUpdateItemBinding.inflate(
         LayoutInflater.from(context),
         this,
         true,

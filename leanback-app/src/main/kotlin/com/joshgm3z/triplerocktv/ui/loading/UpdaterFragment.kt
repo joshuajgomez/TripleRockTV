@@ -16,7 +16,7 @@ import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.DownloaderUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.UpdaterViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentUpdaterBinding
-import com.joshgm3z.triplerocktv.ui.common.UpdateCategoryView
+import com.joshgm3z.triplerocktv.ui.common.UpdateItemView
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -73,7 +73,7 @@ class UpdaterFragment : Fragment() {
 
     private fun updateList(uiState: DownloaderUiState) {
         Logger.debug("uiState = [${uiState}]")
-        fun getView(streamType: StreamType): UpdateCategoryView = when (streamType) {
+        fun getView(streamType: StreamType): UpdateItemView = when (streamType) {
             StreamType.VideoOnDemand -> binding.ucvVod
             StreamType.Series -> binding.ucvSeries
             StreamType.LiveTV -> binding.ucvVod
@@ -93,7 +93,7 @@ class UpdaterFragment : Fragment() {
                 state.filesCount == null -> state.status
                 else -> getString(
                     R.string.dot_between_text,
-                    state.status, state.filesCount
+                    state.filesCount, state.status
                 )
             }
         }

@@ -19,7 +19,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <com.joshgm3z.triplerocktv.ui.common.UpdateCategoryView
+    <com.joshgm3z.triplerocktv.ui.common.UpdateItemView
         android:id="@+id/ucv_vod"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -33,7 +33,7 @@
         app:title="Video on demand"
         tools:visibility="visible" />
 
-    <com.joshgm3z.triplerocktv.ui.common.UpdateCategoryView
+    <com.joshgm3z.triplerocktv.ui.common.UpdateItemView
         android:id="@+id/ucv_series"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
