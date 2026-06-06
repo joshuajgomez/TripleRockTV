@@ -15,7 +15,7 @@
     </item>
     <item>
         <shape android:shape="rectangle">
-            <stroke android:width="0.3dp" android:color="?attr/colorCardContent" />
+            <stroke android:width="0.3dp" android:color="@color/color_card_content2" />
             <corners android:radius="5dp" />
         </shape>
     </item>
