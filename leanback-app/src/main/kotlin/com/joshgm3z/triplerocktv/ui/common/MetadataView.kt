@@ -93,9 +93,18 @@ class MetadataView @JvmOverloads constructor(
         tv.textSize = 12f
         tv.alpha = 0.8f
         tv.setTextColor(resources.getColor(com.joshgm3z.triplerocktv.core.R.color.color_card_content, context.theme))
+
+        tv.layoutParams = LayoutParams(
+            LayoutParams.WRAP_CONTENT,
+            25.dpToPx() // Custom extension or hardcoded px
+        )
+        tv.gravity = android.view.Gravity.CENTER_VERTICAL
+
         icon?.let { tv.setDrawable(it) }
         addView(tv)
     }
+
+    private fun Int.dpToPx(): Int = (this * context.resources.displayMetrics.density).toInt()
 
     private fun Any?.isNonZero(): Boolean = when (this) {
         is Int -> this > 0
