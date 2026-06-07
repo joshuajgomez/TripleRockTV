@@ -116,7 +116,7 @@ class StreamCatalogueFragment : Fragment() {
         )
         binding.metadataView.rating = seriesStream.rating.parseToFloat()
         binding.metadataView.genre = seriesStream.genre
-        binding.metadataView.seasonCount = seriesStream.seasons?.size
+        binding.metadataView.noOfSeasons = seriesStream.seasons?.size
         binding.metadataView.showMyList = seriesStream.inMyList
     }
 

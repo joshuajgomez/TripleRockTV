@@ -132,6 +132,7 @@ class DetailsFragment : Fragment() {
         binding.metadataView.rating = uiState.rating
         binding.metadataView.showMyList = uiState.inMyList
         binding.metadataView.duration = uiState.duration
+        binding.metadataView.noOfSeasons = uiState.noOfSeasons
 
         binding.tvTitle.text = uiState.title
         binding.tvGenre.text(uiState.subtitle)
