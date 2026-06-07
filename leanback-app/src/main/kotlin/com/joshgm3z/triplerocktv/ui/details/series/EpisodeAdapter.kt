@@ -44,7 +44,7 @@ class EpisodeAdapter
     ) {
         val binding = ItemEpisodeBinding.bind(holder.itemView)
         val episode = episodes[position]
-        binding.tvEpisodeTitle.text = "${episode.episode_num}. ${episode.title}"
+        binding.tvEpisodeTitle.text = episode.title
         binding.tvEpisodeDescription.text = episode.episodeInfo?.plot
         binding.root.setOnClickListener {
             onEpisodeClick(episode)

@@ -121,10 +121,10 @@ class DetailsFragment : Fragment() {
         uiState.episodeId?.let {
             selectedEpisodeId = it
         }
-        uiState.episodeLabel?.let {
+        /*uiState.episodeLabel?.let {
             binding.btnResume.text = "Resume $it"
             binding.btnPlay.text = "Play $it"
-        }
+        }*/
         handleBlur(uiState.coverImage)
         binding.progressBar.progress = uiState.progressPercent ?: 0
 

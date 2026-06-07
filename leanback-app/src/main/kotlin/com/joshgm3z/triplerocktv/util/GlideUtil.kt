@@ -49,12 +49,12 @@ class GlideUtil
     fun loadImage(
         url: String?,
         imageView: ImageView,
-        error: Int? = null
+        placeholder: Int? = null
     ) {
         url.isNullOrEmpty() && return
         val builder = Glide.with(imageView.context)
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
-        error?.let { builder.error(it) }
+        placeholder?.let { builder.placeholder(it) }
         builder
             .listener(glideErrorListener)
             .centerCrop()
