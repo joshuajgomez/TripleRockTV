@@ -71,7 +71,7 @@ class MetadataView @JvmOverloads constructor(
         isFirst = true
 
         addMetadata(genre)
-        addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star_scaled)
+        addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star)
         addMetadata(duration)
         addMetadata("My list", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
