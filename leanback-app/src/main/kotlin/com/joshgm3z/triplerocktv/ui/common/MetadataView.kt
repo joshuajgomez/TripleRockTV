@@ -46,7 +46,7 @@ class MetadataView @JvmOverloads constructor(
             updateMetadata()
         }
 
-    var seasonCount: Int? = null
+    var noOfSeasons: Int? = null
         set(value) {
             field = value
             updateMetadata()
@@ -75,7 +75,10 @@ class MetadataView @JvmOverloads constructor(
         addMetadata(duration)
         addMetadata("My list", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
-        addMetadata("$seasonCount seasons", seasonCount.isNonZero())
+        addMetadata(
+            if (noOfSeasons == 1) "1 season" else "$noOfSeasons seasons",
+            noOfSeasons.isNonZero()
+        )
         addMetadata("Subtitle downloaded", subtitleDownloaded)
     }
 
@@ -92,7 +95,12 @@ class MetadataView @JvmOverloads constructor(
         tv.text = text
         tv.textSize = 12f
         tv.alpha = 0.8f
-        tv.setTextColor(resources.getColor(com.joshgm3z.triplerocktv.core.R.color.color_card_content, context.theme))
+        tv.setTextColor(
+            resources.getColor(
+                com.joshgm3z.triplerocktv.core.R.color.color_card_content,
+                context.theme
+            )
+        )
 
         tv.layoutParams = LayoutParams(
             LayoutParams.WRAP_CONTENT,

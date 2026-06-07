@@ -32,6 +32,7 @@ data class DetailsUiState(
     val subtitle: String? = null,
     val episodeLabel: String? = null,
     val episodeId: Int? = null,
+    val noOfSeasons: Int? = null,
     val duration: String? = null,
     val inMyList: Boolean = false,
     val description: String? = null,
@@ -135,6 +136,7 @@ class DetailsViewModel @Inject constructor(
                         progressPercent = if (episodeToPlay.progressPercent() > 0) episodeToPlay.progressPercent() else null,
                         showMoreEpisodesButton = true,
                         inMyList = seriesStream.inMyList,
+                        noOfSeasons = seriesStream.seasons.size
                     )
                 }
             }
