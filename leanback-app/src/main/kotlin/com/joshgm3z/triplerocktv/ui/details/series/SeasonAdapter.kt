@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.databinding.ItemTextChipBinding
 
 class SeasonAdapter(
@@ -20,13 +21,15 @@ class SeasonAdapter(
     var selectedSeasonNumber: Int? = null
         set(value) {
             field?.let {
-                notifyItemChanged(it - 1)
+                notifyItemChanged(it.position())
+            }
+            value?.let {
+                notifyItemChanged(it.position())
             }
             field = value
-            value?.let {
-                notifyItemChanged(it - 1)
-            }
         }
+
+    private fun Int.position() = seasons.indexOfFirst { it.number == this }
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
