@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
@@ -29,12 +30,14 @@ data class DownloaderUiState(
         StreamType.Series to null
     ),
     val enableButtons: Boolean = false,
+    val overallUpdateStatus: LoadingStatus? = null,
 )
 
 @HiltViewModel
 class UpdaterViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val onlineRepository: MediaOnlineRepository,
     private val localRepository: MediaLocalRepository,
     private val localDatastore: LocalDatastore,
@@ -45,24 +48,30 @@ constructor(
 
     private val queue = ArrayDeque<StreamType>()
 
+    val autoUpdateAndExit = savedStateHandle.get<Boolean>("autoUpdateAndExit") ?: false
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            _uiState.update { currentState ->
-                val updatedMap = currentState.stateMap.toMutableMap()
-                currentState.stateMap.keys.forEach { type ->
-                    val lastContentUpdate = localDatastore.getLastContentUpdate(type)
-                    updatedMap[type] = if (lastContentUpdate == 0L)
-                        DownloadedItemState(status = "Tap update to fetch videos")
-                    else DownloadedItemState(
-                        filesCount = "${localDatastore.getTotalCount(type)} videos",
-                        status = "Last updated ${lastContentUpdate.relativeTime()}"
-                    )
+            if (autoUpdateAndExit) {
+                startUpdate(StreamType.VideoOnDemand, StreamType.Series)
+            } else {
+                _uiState.update { currentState ->
+                    val updatedMap = currentState.stateMap.toMutableMap()
+                    currentState.stateMap.keys.forEach { type ->
+                        val lastContentUpdate = localDatastore.getLastContentUpdate(type)
+                        updatedMap[type] = if (lastContentUpdate == 0L)
+                            DownloadedItemState(status = "Tap update to fetch videos")
+                        else DownloadedItemState(
+                            filesCount = "${localDatastore.getTotalCount(type)} videos",
+                            status = "Last updated ${lastContentUpdate.relativeTime()}"
+                        )
 
+                    }
+                    currentState.copy(
+                        stateMap = updatedMap,
+                        enableButtons = true
+                    )
                 }
-                currentState.copy(
-                    stateMap = updatedMap,
-                    enableButtons = true
-                )
             }
         }
     }
@@ -87,12 +96,25 @@ constructor(
         resumeQueue()
     }
 
+    private fun DownloaderUiState.getOverallUpdateStatus(): LoadingStatus {
+        return when {
+            stateMap.values.any {
+                it?.loadingStatus == LoadingStatus.Complete
+            } -> LoadingStatus.Complete
+
+            else -> LoadingStatus.Error
+        }
+    }
+
     private fun resumeQueue() {
         if (queue.isEmpty()) {
             viewModelScope.launch {
                 _uiState.update { currentState ->
                     localDatastore.setLastContentUpdate(System.currentTimeMillis())
-                    currentState.copy(enableButtons = true)
+                    currentState.copy(
+                        enableButtons = true,
+                        overallUpdateStatus = currentState.getOverallUpdateStatus()
+                    )
                 }
             }
             return

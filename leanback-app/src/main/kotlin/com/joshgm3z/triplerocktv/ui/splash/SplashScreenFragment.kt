@@ -59,9 +59,17 @@ class SplashScreenFragment : Fragment() {
             viewModel.navDirectionState.collectLatest {
                 when (it) {
                     DestinationState.Login -> SplashScreenFragmentDirections.toLogin()
-                    DestinationState.Loading -> SplashScreenFragmentDirections.toUpdater()
-                    is DestinationState.AccessDisabled -> SplashScreenFragmentDirections.toAccessDisabled(it.message)
-                    is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections.toAppUpdateInfo(it.message)
+                    DestinationState.Updater -> SplashScreenFragmentDirections.toUpdater()
+                        .apply { autoUpdateAndExit = true }
+
+                    is DestinationState.AccessDisabled -> SplashScreenFragmentDirections.toAccessDisabled(
+                        it.message
+                    )
+
+                    is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections.toAppUpdateInfo(
+                        it.message
+                    )
+
                     is DestinationState.Error -> SplashScreenFragmentDirections.toError(it.message)
                     is DestinationState.Home -> SplashScreenFragmentDirections.toHome()
                     else -> return@collectLatest

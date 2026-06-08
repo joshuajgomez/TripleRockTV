@@ -97,6 +97,10 @@
         android:id="@+id/updaterFragment"
         android:name="com.joshgm3z.triplerocktv.ui.loading.UpdaterFragment"
         android:label="UpdaterFragment">
+        <argument
+            android:name="autoUpdateAndExit"
+            android:defaultValue="false"
+            app:argType="boolean" />
         <action
             android:id="@+id/toSplash"
             app:destination="@id/splashScreenFragment"

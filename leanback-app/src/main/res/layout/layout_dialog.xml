@@ -30,24 +30,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
-    <TextView
-        android:id="@+id/btn_negative"
-        style="@style/ButtonStyle"
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_negative"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_view_background_transparent"
         android:text="Continue download"
         android:visibility="gone"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/btn_positive"
+        app:layout_constraintEnd_toStartOf="@+id/bv_positive"
         tools:visibility="visible" />
 
-    <TextView
-        android:id="@+id/btn_positive"
-        style="@style/ButtonStyle"
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:id="@+id/bv_positive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/button_view_background_transparent"
         android:text="Exit screen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />

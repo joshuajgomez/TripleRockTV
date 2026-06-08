@@ -41,7 +41,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:visibility="gone"
-        app:showPlaceholder="true"
+        app:showPlaceholder="false"
         app:status="Queued"
         app:subtitle="12,340 items"
         app:title="Series"

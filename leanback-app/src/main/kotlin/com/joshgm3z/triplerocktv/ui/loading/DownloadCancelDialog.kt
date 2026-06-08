@@ -32,12 +32,12 @@ class DownloadCancelDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnNegative.setVisible(true)
-        binding.btnPositive.setOnClickListener {
+        binding.bvNegative.setVisible(true)
+        binding.bvPositive.setOnClickListener {
             findNavController().navigate(DownloadCancelDialogDirections.toSplash())
         }
 
-        binding.btnNegative.setOnClickListener {
+        binding.bvNegative.setOnClickListener {
             findNavController().popBackStack()
         }
     }

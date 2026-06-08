@@ -10,7 +10,9 @@ import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -72,21 +74,29 @@ class HomeFragment : BrowseSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            viewModel.homeListState.collectLatest {
-                if (it.isEmpty()) return@collectLatest
+            viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.RESUMED) {
+                viewModel.homeListState.collectLatest {
+                    if (it.isEmpty()) return@collectLatest
 
-                progressBarManager.hide()
-                rowsAdapter.clear()
+                    progressBarManager.hide()
+                    rowsAdapter.clear()
 
-                val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
-                homeAdapter.addAll(0, it)
-                rowsAdapter.add(ListRow(homeAdapter))
+                    val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
+                    homeAdapter.addAll(0, it)
+                    rowsAdapter.add(ListRow(homeAdapter))
 
-                val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-                settingsAdapter.add(SettingItem("Update", R.drawable.icon_download, viewModel.lastUpdatedTime?:""))
-                settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
-                settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
-                rowsAdapter.add(ListRow(settingsAdapter))
+                    val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
+                    settingsAdapter.add(
+                        SettingItem(
+                            "Update",
+                            R.drawable.icon_download,
+                            viewModel.lastUpdatedTime ?: ""
+                        )
+                    )
+                    settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
+                    settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
+                    rowsAdapter.add(ListRow(settingsAdapter))
+                }
             }
         }
     }
@@ -94,5 +104,6 @@ class HomeFragment : BrowseSupportFragment() {
     override fun onResume() {
         super.onResume()
         firebaseLogger.logScreenView(ScreenName.Home)
+        viewModel.fetchHomeData()
     }
 }
