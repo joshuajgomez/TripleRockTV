@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -19,14 +20,18 @@ import com.joshgm3z.triplerocktv.databinding.FragmentUpdaterBinding
 import com.joshgm3z.triplerocktv.ui.common.UpdateItemView
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlin.getValue
 
 @AndroidEntryPoint
 class UpdaterFragment : Fragment() {
     private lateinit var binding: FragmentUpdaterBinding
 
     private val viewModel: UpdaterViewModel by viewModels()
+
+    private val args by navArgs<UpdaterFragmentArgs>()
 
     private var interceptBackPress = false
 
@@ -47,6 +52,22 @@ class UpdaterFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
+                binding.bvDownloadAll.setVisible(!args.autoUpdateAndExit)
+                if (args.autoUpdateAndExit && it.overallUpdateStatus != null) {
+                    when (it.overallUpdateStatus) {
+                        LoadingStatus.Complete -> {
+                            delay(2000)
+                            findNavController().navigate(
+                                UpdaterFragmentDirections.toSplash()
+                            )
+                        }
+
+                        else -> {
+                            binding.bvDownloadAll.setVisible(true)
+                            binding.bvDownloadAll.text = "Try update again"
+                        }
+                    }
+                }
                 interceptBackPress = it.stateMap.values.any { state ->
                     state?.loadingStatus == LoadingStatus.Ongoing
                 }
@@ -104,10 +125,9 @@ class UpdaterFragment : Fragment() {
             viewLifecycleOwner,
             object : OnBackPressedCallback(true) {
                 override fun handleOnBackPressed() {
-                    findNavController().navigate(
-                        if (interceptBackPress) UpdaterFragmentDirections.toDownloadCancelDialog()
-                        else UpdaterFragmentDirections.toSplash()
-                    )
+                    if (interceptBackPress) findNavController()
+                        .navigate(UpdaterFragmentDirections.toDownloadCancelDialog())
+                    else findNavController().popBackStack()
                 }
             }
         )

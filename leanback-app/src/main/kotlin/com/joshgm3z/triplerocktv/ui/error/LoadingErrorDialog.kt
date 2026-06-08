@@ -45,8 +45,8 @@ class LoadingErrorDialog : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.tvTitle.text = args.title
         binding.tvSubtitle.text = args.summary
-        binding.btnPositive.text = "Dismiss"
-        binding.btnPositive.setOnClickListener {
+        binding.bvPositive.text = "Dismiss"
+        binding.bvPositive.setOnClickListener {
             findNavController().navigate(LoadingErrorDialogDirections.toSplash())
         }
     }

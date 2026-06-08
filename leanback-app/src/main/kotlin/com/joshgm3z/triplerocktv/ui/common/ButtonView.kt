@@ -73,6 +73,12 @@ class ButtonView @JvmOverloads constructor(
         }
     }
 
+    var text: String
+        get() = binding.tvTitle.text.toString()
+        set(value) {
+            binding.tvTitle.text = value
+        }
+
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
         binding.tvTitle.isEnabled = enabled

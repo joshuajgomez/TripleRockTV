@@ -22,8 +22,8 @@ data class HomeItem(
 @HiltViewModel
 class HomeViewModel
 @Inject constructor(
-    repository: MediaLocalRepository,
-    localDatastore: LocalDatastore
+    private val repository: MediaLocalRepository,
+    private val localDatastore: LocalDatastore
 ) : ViewModel() {
 
     private val _homeListState = MutableStateFlow<List<HomeItem>>(emptyList())
@@ -32,6 +32,10 @@ class HomeViewModel
     var lastUpdatedTime: String? = null
 
     init {
+        fetchHomeData()
+    }
+
+    fun fetchHomeData() {
         viewModelScope.launch(Dispatchers.IO) {
             localDatastore.getUserInfo()?.let {
                 if (it.lastContentUpdate == "") return@let
