@@ -47,13 +47,13 @@ class UpdateItemView @JvmOverloads constructor(
             callOnClick()
         }
         binding.root.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            binding.tvUpdate.setVisible(hasFocus)
+            binding.bvUpdate.setVisible(hasFocus)
         }
     }
 
     private var showUpdateButton: Boolean = false
         set(value) {
-            binding.tvUpdate.setVisible(value)
+            binding.bvUpdate.setVisible(value)
         }
 
     var showPlaceholder: Boolean = false

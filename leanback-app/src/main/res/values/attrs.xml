@@ -24,6 +24,7 @@
         <attr name="type">
             <enum name="filled" value="0" />
             <enum name="transparent" value="1" />
+            <enum name="active" value="2" />
         </attr>
     </declare-styleable>
     <declare-styleable name="UpdateCategoryView">
