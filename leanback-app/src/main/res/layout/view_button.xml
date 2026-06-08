@@ -6,7 +6,6 @@
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
-        android:textAlignment="center"
         android:id="@+id/tv_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,6 +19,8 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="10dp"
         android:text="Button"
+        android:textAlignment="center"
         android:textColor="@color/button_fg_color_selector"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:textStyle="bold" />
 </merge>

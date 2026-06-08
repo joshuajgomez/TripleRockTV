@@ -52,9 +52,18 @@ class ButtonView @JvmOverloads constructor(
                 ).let { type ->
                     binding.tvTitle.background = when (type) {
                         0 -> R.drawable.button_view_background_filled
-                        else -> R.drawable.button_view_background_transparent
+                        1 -> R.drawable.button_view_background_transparent
+                        else -> R.drawable.button_view_background_active
                     }.let {
                         AppCompatResources.getDrawable(context, it)
+                    }
+                    when (type) {
+                        2 -> com.joshgm3z.triplerocktv.core.R.color.color_background
+                        else -> R.color.button_fg_color_selector
+                    }.let { colorRes ->
+                        binding.tvTitle.setTextColor(
+                            AppCompatResources.getColorStateList(context, colorRes)
+                        )
                     }
                 }
             }
