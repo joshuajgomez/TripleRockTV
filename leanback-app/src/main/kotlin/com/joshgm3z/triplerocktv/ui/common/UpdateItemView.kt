@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import androidx.core.content.withStyledAttributes
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewUpdateItemBinding
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
 import com.joshgm3z.triplerocktv.util.setVisible
 
 class UpdateItemView @JvmOverloads constructor(
@@ -90,9 +91,8 @@ class UpdateItemView @JvmOverloads constructor(
 
     var showErrorStatus: Boolean = false
         set(value) {
-            val res = if (value) com.joshgm3z.triplerocktv.core.R.color.color_error
-            else com.joshgm3z.triplerocktv.core.R.color.color_card_sub_content
-            val color = resources.getColor(res, null)
-            binding.tvSubtitle.setTextColor(color)
+            val res = if (value) R.attr.colorError
+            else R.attr.colorSubOnBackground
+            binding.tvSubtitle.setTextColor(context.getColorFromAttr(res))
         }
 }

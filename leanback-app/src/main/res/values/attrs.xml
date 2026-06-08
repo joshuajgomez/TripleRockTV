@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <attr name="colorPrimary" format="color" />
-    <attr name="colorSecondary" format="color" />
+    <attr name="colorOnPrimary" format="color" />
     <attr name="colorBackground" format="color" />
+    <attr name="colorOnBackground" format="color" />
+    <attr name="colorSubOnBackground" format="color" />
     <attr name="colorCardBackground" format="color" />
-    <attr name="colorCardContent" format="color" />
+    <attr name="colorSubCardBackground" format="color" />
+    <attr name="colorError" format="color" />
 
     <declare-styleable name="PlaceholderView">
         <attr name="placeholderTint" format="color" />

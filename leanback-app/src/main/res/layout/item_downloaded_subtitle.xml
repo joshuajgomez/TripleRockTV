@@ -30,7 +30,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="@color/color_card_content"
+        android:textColor="?attr/colorOnBackground"
         app:layout_constraintStart_toEndOf="@id/iv_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/subtitle_file_name" />

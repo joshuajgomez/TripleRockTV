@@ -2,11 +2,15 @@
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
         <item name="playbackProgressPrimaryColor">@color/color_primary</item>
-        <item name="colorBackground">@color/color_background</item>
+
         <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorSecondary">@color/color_secondary</item>
+        <item name="colorOnPrimary">@color/color_on_primary</item>
+        <item name="colorBackground">@color/color_background</item>
+        <item name="colorOnBackground">@color/color_on_background</item>
+        <item name="colorSubOnBackground">@color/color_sub_on_background</item>
         <item name="colorCardBackground">@color/color_card_background</item>
-        <item name="colorCardContent">@color/color_card_content</item>
+        <item name="colorSubCardBackground">@color/color_card_background</item>
+        <item name="colorError">@color/color_error</item>
     </style>
 
     <style name="KeyTextStyle">
@@ -14,7 +18,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:padding">5dp</item>
-        <item name="android:textColor">@color/card_fg_color_selector2</item>
+        <item name="android:textColor">@color/card_sub_fg_color_selector</item>
         <item name="android:background">@color/card_bg_color_selector</item>
         <item name="android:gravity">center</item>
         <item name="android:textSize">18sp</item>

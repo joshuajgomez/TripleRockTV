@@ -5,7 +5,7 @@
     android:viewportHeight="160">
 
     <path
-        android:fillColor="@color/color_card_content"
+        android:fillColor="?attr/colorOnBackground"
         android:fillAlpha="0.05"
         android:pathData="M10,0 L110,0 A10,10 0 0 1 120,10 L120,150 A10,10 0 0 1 110,160 L10,160 A10,10 0 0 1 0,150 L0,10 A10,10 0 0 1 10,0 Z" />
 

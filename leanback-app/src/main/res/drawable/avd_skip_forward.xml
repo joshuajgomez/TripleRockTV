@@ -12,7 +12,7 @@
                 <path
                     android:pathData="M2,4 l6,8l-6,8 M10,4l6,8l-6,8"
                     android:strokeWidth="2.5"
-                    android:strokeColor="@color/color_card_content"
+                    android:strokeColor="?attr/colorOnBackground"
                     android:strokeLineCap="round"
                     android:strokeLineJoin="round" />
             </group>

@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:paddingHorizontal="5dp"
-            android:textColor="@color/color_card_content"
+            android:textColor="?attr/colorOnBackground"
             tools:text="Korean" />
 
         <LinearLayout
@@ -64,7 +64,7 @@
                 android:duplicateParentState="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="@color/color_card_content2"
+                android:textColor="?attr/colorSubOnBackground"
                 android:textSize="@dimen/metadata_text_size"
                 tools:text="@string/subtitle_file_name" />
         </LinearLayout>

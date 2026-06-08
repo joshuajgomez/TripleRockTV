@@ -8,15 +8,15 @@
             android:viewportHeight="24">
 
             <path
-                android:fillColor="@color/color_icon_bg"
+                android:fillColor="?attr/colorSubOnBackground"
                 android:pathData="M7,4 h13 c1.1,0 2,0.9 2,2 v10 c0,1.1 -0.9,2 -2,2 h-13 c-1.1,0 -2,-0.9 -2,-2 v-10 c0,-1.1 0.9,-2 2,-2 Z" />
 
             <group android:name="front_card">
                 <path
-                    android:fillColor="@color/color_icon_main"
+                    android:fillColor="?attr/colorSubOnBackground"
                     android:pathData="M3,7 h13 c1.1,0 2,0.9 2,2 v10 c0,1.1 -0.9,2 -2,2 h-13 c-1.1,0 -2,-0.9 -2,-2 v-10 c0,-1.1 0.9,-2 2,-2 Z" />
                 <path
-                    android:fillColor="@color/color_icon_accent"
+                    android:fillColor="?attr/colorPrimary"
                     android:pathData="M8.5,11 l4,2.5 l-4,2.5 v-5 Z" />
             </group>
         </vector>

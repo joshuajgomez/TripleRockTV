@@ -4,6 +4,8 @@ import android.content.Context
 import android.util.TypedValue
 import androidx.annotation.AttrRes
 import androidx.annotation.ColorInt
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.ContextCompat
 import com.joshgm3z.triplerocktv.R
 
 @ColorInt
@@ -16,5 +18,5 @@ fun Context.getColorFromAttr(
 ): Int {
     val typedValue = TypedValue()
     theme.resolveAttribute(attrColor, typedValue, true)
-    return typedValue.data
+    return ContextCompat.getColor(this, typedValue.resourceId)
 }

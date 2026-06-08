@@ -95,12 +95,7 @@ class MetadataView @JvmOverloads constructor(
         tv.text = text
         tv.textSize = 12f
         tv.alpha = 0.8f
-        tv.setTextColor(
-            resources.getColor(
-                com.joshgm3z.triplerocktv.core.R.color.color_card_content,
-                context.theme
-            )
-        )
+        tv.setTextColor(context.getColorFromAttr(R.attr.colorOnBackground))
 
         tv.layoutParams = LayoutParams(
             LayoutParams.WRAP_CONTENT,

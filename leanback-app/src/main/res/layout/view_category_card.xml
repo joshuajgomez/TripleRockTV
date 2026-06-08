@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:maxLines="1"
-            android:textColor="@color/card_fg_color_selector2"
+            android:textColor="@color/card_sub_fg_color_selector"
             tools:text="5 videos" />
 
     </LinearLayout>
