@@ -10,6 +10,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
 import com.joshgm3z.triplerocktv.databinding.ItemEpisodeBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
+import com.joshgm3z.triplerocktv.util.setVisible
 import javax.inject.Inject
 
 class EpisodeAdapter
@@ -51,6 +52,12 @@ class EpisodeAdapter
         }
         binding.metadataView.duration = episode.totalDurationMs().toTextTime()
         binding.metadataView.rating = episode.episodeInfo?.rating.parseToFloat()
+
+        val progressPercent = episode.progressPercent()
+        binding.pbEpisodeProgress.progress = progressPercent
+        binding.pbEpisodeProgress.setVisible(progressPercent > 0)
+        if (progressPercent > 0) binding.metadataView.timeLeft = episode.timeRemainingText()
+
         glideUtil.loadImage(
             episode.episodeInfo?.movie_image,
             binding.ivEpisodePoster,
