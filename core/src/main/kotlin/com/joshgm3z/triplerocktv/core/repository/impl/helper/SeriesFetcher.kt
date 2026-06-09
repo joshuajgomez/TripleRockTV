@@ -1,8 +1,10 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
+import androidx.room.util.copy
 import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.core.repository.impl.REQUEST_DELAY
@@ -13,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.parseEpisodeNumber
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -149,11 +152,12 @@ constructor(
                         overview = seasonData.overview ?: "",
                     )
                 } else if (it.episodes.isNotEmpty()) {
-                    it.episodes.keys.map { episodeNumber ->
+                    it.episodes.keys.map { seasonNumber ->
                         Season(
-                            episodes = it.episodes[episodeNumber] ?: emptyList(),
-                            number = episodeNumber,
-                            name = "Season $episodeNumber",
+                            episodes = it.episodes[seasonNumber]?.fixEpisodeNumbers()
+                                ?: emptyList(),
+                            number = seasonNumber,
+                            name = "Season $seasonNumber",
                             coverImageUrl = "",
                             voteAverage = 0f,
                             overview = "",
@@ -170,5 +174,13 @@ constructor(
             Logger.error(e.message.toString())
             e.printStackTrace()
         }
+    }
+}
+
+private fun List<Episode>.fixEpisodeNumbers(): List<Episode> {
+    return this.map { episode ->
+        episode.copy(
+            episode_num = episode.title.parseEpisodeNumber(episode.episode_num)
+        )
     }
 }
