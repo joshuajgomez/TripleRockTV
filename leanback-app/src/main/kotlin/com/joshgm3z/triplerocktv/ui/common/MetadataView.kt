@@ -58,6 +58,12 @@ class MetadataView @JvmOverloads constructor(
             updateMetadata()
         }
 
+    var timeLeft: String? = null
+        set(value) {
+            field = value
+            updateMetadata()
+        }
+
     init {
         if (isInEditMode) {
             rating = 3.5f
@@ -80,6 +86,7 @@ class MetadataView @JvmOverloads constructor(
             noOfSeasons.isNonZero()
         )
         addMetadata("Subtitle downloaded", subtitleDownloaded)
+        addMetadata(timeLeft, timeLeft != null)
     }
 
     private fun addMetadata(
