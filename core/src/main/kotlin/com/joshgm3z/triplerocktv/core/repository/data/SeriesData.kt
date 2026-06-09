@@ -86,7 +86,7 @@ data class Episode(
 
     fun timeRemainingText(): String = when {
         totalDurationMs() == 0L -> ""
-        else -> timeRemaining().toTextTime().let { "$it remaining" }
+        else -> timeRemaining().toTextTime().let { "$it left" }
     }
 
     val startedWatching: Boolean
