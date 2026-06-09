@@ -68,6 +68,9 @@ class EpisodeAdapter
         if (episode.episode_num == initialSelectedEpisodeNumber) binding.root.post {
             binding.root.requestFocus()
         }
+        binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            binding.ivPlayIcon.setVisible(hasFocus)
+        }
     }
 
     override fun getItemCount() = episodes.size

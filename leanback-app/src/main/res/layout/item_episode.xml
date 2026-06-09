@@ -13,7 +13,7 @@
         android:layout_width="70dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/default_media_poster"
+        android:src="@drawable/avatar_movie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -33,6 +33,18 @@
         app:layout_constraintStart_toStartOf="@+id/iv_episode_poster"
         tools:progress="50"
         tools:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/iv_play_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/circle_play_icon"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/iv_episode_poster"
+        app:layout_constraintEnd_toEndOf="@+id/iv_episode_poster"
+        app:layout_constraintStart_toStartOf="@+id/iv_episode_poster"
+        app:layout_constraintTop_toTopOf="@+id/iv_episode_poster" />
 
     <TextView
         android:id="@+id/tv_episode_title"
