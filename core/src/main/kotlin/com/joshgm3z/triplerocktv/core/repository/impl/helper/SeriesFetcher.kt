@@ -180,7 +180,8 @@ constructor(
 private fun List<Episode>.fixEpisodeNumbers(): List<Episode> {
     return this.map { episode ->
         episode.copy(
-            episode_num = episode.title.parseEpisodeNumber(episode.episode_num)
+            episode_num = episode.title.parseEpisodeNumber(episode.episode_num),
+            title = episode.title.trim().removeSuffix("-").trim()
         )
     }
 }
