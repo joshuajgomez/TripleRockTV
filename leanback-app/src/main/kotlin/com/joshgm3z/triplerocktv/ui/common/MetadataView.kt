@@ -64,6 +64,12 @@ class MetadataView @JvmOverloads constructor(
             updateMetadata()
         }
 
+    var episodeLabel: String? = null
+        set(value) {
+            field = value
+            updateMetadata()
+        }
+
     init {
         if (isInEditMode) {
             rating = 3.5f
@@ -78,6 +84,7 @@ class MetadataView @JvmOverloads constructor(
 
         addMetadata(genre)
         addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star)
+        addMetadata(episodeLabel, episodeLabel != null)
         addMetadata(duration)
         addMetadata("My list", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())

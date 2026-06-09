@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
+import com.joshgm3z.triplerocktv.core.util.asTwoDigit
 import com.joshgm3z.triplerocktv.databinding.ItemEpisodeBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -57,6 +58,7 @@ class EpisodeAdapter
         binding.pbEpisodeProgress.progress = progressPercent
         binding.pbEpisodeProgress.setVisible(progressPercent > 0)
         if (progressPercent > 0) binding.metadataView.timeLeft = episode.timeRemainingText()
+        binding.metadataView.episodeLabel = "S${episode.season.asTwoDigit()}E${episode.episode_num}"
 
         glideUtil.loadImage(
             episode.episodeInfo?.movie_image,
