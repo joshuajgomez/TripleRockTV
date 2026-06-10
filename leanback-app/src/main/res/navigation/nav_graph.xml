@@ -59,6 +59,9 @@
         <action
             android:id="@+id/toBrowse"
             app:destination="@id/browseFragment" />
+        <action
+            android:id="@+id/toSelfUpdateDialog"
+            app:destination="@id/selfUpdateDialog" />
     </fragment>
 
     <fragment
@@ -299,5 +302,10 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </dialog>
+
+    <dialog
+        android:id="@+id/selfUpdateDialog"
+        android:name="com.joshgm3z.triplerocktv.ui.selfupdate.SelfUpdateDialog"
+        android:label="SelfUpdateDialog" />
 
 </navigation>

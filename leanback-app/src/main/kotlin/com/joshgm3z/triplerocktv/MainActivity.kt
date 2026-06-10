@@ -2,14 +2,10 @@ package com.joshgm3z.triplerocktv
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
-import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.getQrCode
 import com.joshgm3z.triplerocktv.core.viewmodel.OnlineTyperViewModel
 import com.joshgm3z.triplerocktv.databinding.ActivityMainBinding
 import com.joshgm3z.triplerocktv.util.setVisible

@@ -14,20 +14,32 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
+import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
+import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
+import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeItem
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BrowseSupportFragment() {
     private val viewModel: HomeViewModel by viewModels()
+
+    @Inject
+    lateinit var fileDownloader: FileDownloader
+
+    @Inject
+    lateinit var apkInstaller: ApkInstaller
 
     private val rowsAdapter: ArrayObjectAdapter = ArrayObjectAdapter(
         ListRowPresenter(
@@ -55,6 +67,8 @@ class HomeFragment : BrowseSupportFragment() {
             is SettingItem -> when (item.title) {
                 "Sign out" -> HomeFragmentDirections.toConfirmSignOutDialog()
                 "Settings" -> HomeFragmentDirections.toSettings()
+                "App update" -> HomeFragmentDirections.toSelfUpdateDialog()
+
                 else -> HomeFragmentDirections.toUpdater()
             }
 
@@ -91,6 +105,12 @@ class HomeFragment : BrowseSupportFragment() {
                             "Update",
                             R.drawable.icon_download,
                             viewModel.lastUpdatedTime ?: ""
+                        )
+                    )
+                    settingsAdapter.add(
+                        SettingItem(
+                            "App update",
+                            R.drawable.outline_deployed_code_update_24
                         )
                     )
                     settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
