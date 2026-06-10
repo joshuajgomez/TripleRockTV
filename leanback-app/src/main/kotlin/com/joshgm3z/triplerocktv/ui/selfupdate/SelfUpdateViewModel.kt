@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -63,6 +64,7 @@ class SelfUpdateViewModel
         }
 
         viewModelScope.launch(Dispatchers.IO) {
+            delay(2000)
             val releaseName = fileDownloader.getLatestApkReleaseName(apkTagUrl)
             Logger.debug("releaseName = [$releaseName]")
             _uiState.update {
