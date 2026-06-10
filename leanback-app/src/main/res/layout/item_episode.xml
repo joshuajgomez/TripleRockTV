@@ -13,7 +13,7 @@
         android:layout_width="70dp"
         android:layout_height="100dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/avatar_movie"
+        android:src="@drawable/default_media_poster"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
