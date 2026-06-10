@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="online_typer_app_url">https://rocktv-b1cf5.web.app</string>
+    <string name="self_update_dev_app_url">https://github.com/joshuajgomez/TripleRockTV/releases/download/dev-release/3RockTV-leanback-app-dev.apk</string>
+    <string name="self_update_app_url">https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-leanback-app.apk</string>
 </resources>

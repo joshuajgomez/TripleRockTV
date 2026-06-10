@@ -49,8 +49,8 @@ jobs:
 
       - name: Generate Tag Name
         run: |
-          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')" >> $GITHUB_ENV
-          echo "RELEASE_CODE=$(TZ='Europe/Stockholm' date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')-run${{ github.run_number }}" >> $GITHUB_ENV
+          echo "RELEASE_CODE=${{ github.run_number }}" >> $GITHUB_ENV
           echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
