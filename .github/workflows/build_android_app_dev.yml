@@ -43,8 +43,8 @@ jobs:
 
       - name: Generate Tag Name
         run: |
-          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')-dev" >> $GITHUB_ENV
-          echo "RELEASE_CODE=$(TZ='Europe/Stockholm' date +'%Y%m%d')" >> $GITHUB_ENV
+          echo "RELEASE_TAG=v$(TZ='Europe/Stockholm' date +'%Y.%m.%d')-dev-run${{ github.run_number }}" >> $GITHUB_ENV
+          echo "RELEASE_CODE=${{ github.run_number }}" >> $GITHUB_ENV
           echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
           if [ "${{ github.event_name }}" == "pull_request" ]; then
             echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
@@ -67,7 +67,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: dev-release # This is the "Moving" tag
-          name: "dev-release"
+          name: "${{ env.RELEASE_TAG }}"
           prerelease: true # Marks it as a beta release
           files: release_artifacts/3RockTV-leanback-app-dev.apk
           body: |
