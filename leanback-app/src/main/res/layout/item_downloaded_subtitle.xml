@@ -10,8 +10,7 @@
     android:focusableInTouchMode="true"
     android:orientation="horizontal"
     android:paddingHorizontal="18dp"
-    android:paddingTop="3dp"
-    android:paddingBottom="7dp">
+    android:paddingVertical="11dp">
 
     <ImageView
         android:id="@+id/iv_icon"
@@ -39,7 +38,7 @@
         android:id="@+id/tv_language"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="6dp"
         android:background="@drawable/language_chip"
         android:textColor="?attr/colorPrimary"
         android:textSize="@dimen/metadata_text_size"

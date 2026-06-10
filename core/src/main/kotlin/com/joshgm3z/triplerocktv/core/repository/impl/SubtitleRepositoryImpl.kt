@@ -59,7 +59,7 @@ constructor(
                 } ?: emptyList()
             }
             return list
-        } catch (e: HttpException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return emptyList()

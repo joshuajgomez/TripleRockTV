@@ -47,6 +47,12 @@ class ButtonView @JvmOverloads constructor(
                     )
                 }
                 getInt(
+                    R.styleable.ButtonView_android_textAlignment,
+                    TEXT_ALIGNMENT_CENTER
+                ).let { alignment ->
+                    binding.tvTitle.textAlignment = alignment
+                }
+                getInt(
                     R.styleable.ButtonView_type,
                     0
                 ).let { type ->

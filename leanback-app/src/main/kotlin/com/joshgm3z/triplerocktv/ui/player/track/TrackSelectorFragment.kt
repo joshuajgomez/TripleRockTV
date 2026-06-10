@@ -75,7 +75,7 @@ class TrackSelectorFragment : DialogFragment(),
                 }
 
                 binding.loadingOverlay.setVisible(it.isLoading)
-                binding.tvFindMoreButton.setVisible(it.listState is ListState.SubtitleTracks)
+                binding.bvFindMoreButton.setVisible(it.listState is ListState.SubtitleTracks)
                 binding.tvStatus.text = it.statusText
                 binding.tvStatus.setVisible(it.statusText.isNotEmpty())
 
@@ -99,7 +99,7 @@ class TrackSelectorFragment : DialogFragment(),
                 }
             }
         }
-        binding.tvFindMoreButton.setOnClickListener {
+        binding.bvFindMoreButton.setOnClickListener {
             viewModel.onFindMoreClicked(args.title)
         }
     }
