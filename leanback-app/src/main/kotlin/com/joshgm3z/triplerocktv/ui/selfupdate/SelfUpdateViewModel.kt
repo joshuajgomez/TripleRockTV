@@ -60,7 +60,10 @@ class SelfUpdateViewModel
 
     private fun checkUpdates() {
         _uiState.update {
-            it.copy(title = "Checking app updates")
+            it.copy(
+                title = "Checking app updates",
+                enableButtons = false
+            )
         }
 
         viewModelScope.launch(Dispatchers.IO) {
