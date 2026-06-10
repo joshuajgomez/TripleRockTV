@@ -21,6 +21,7 @@
         <attr name="android:textSize" />
         <attr name="android:text" />
         <attr name="android:drawable" />
+        <attr name="android:textAlignment" />
         <attr name="type">
             <enum name="filled" value="0" />
             <enum name="transparent" value="1" />

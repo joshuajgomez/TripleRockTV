@@ -13,60 +13,66 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="10dp"
         android:paddingHorizontal="15dp"
-        android:paddingVertical="10dp"
+        android:paddingVertical="20dp"
         android:text="Select a subtitle"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title">
-
-        <TextView
-            android:id="@+id/tv_status"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:text="No subtitles found online"
-            android:textAlignment="center"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_track_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_track_info" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rv_online_subtitle_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/tv_title"
-            tools:itemCount="2"
-            tools:listitem="@layout/item_downloaded_subtitle" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/tv_find_more_button"
-        style="@style/ButtonStyle"
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier_title_bottom"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:drawableStart="@drawable/ic_search"
+        app:barrierDirection="bottom"
+        app:constraint_referenced_ids="tv_title,tv_status" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="No subtitles found online"
+        android:textAlignment="center"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_track_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_title_bottom"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_track_info" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_online_subtitle_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/barrier_title_bottom"
+        tools:itemCount="2"
+        tools:listitem="@layout/item_downloaded_subtitle" />
+
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_find_more_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="@string/opensubtitles_com"
-        android:textAllCaps="false"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tv_title" />
+        app:layout_constraintTop_toTopOf="@+id/tv_title"
+        app:type="filled" />
 
     <com.joshgm3z.triplerocktv.ui.common.LoadingOverlay
         android:id="@+id/loading_overlay"

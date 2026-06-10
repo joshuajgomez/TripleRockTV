@@ -33,6 +33,9 @@ class DownloadCancelDialog : DialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.bvNegative.setVisible(true)
+        binding.bvPositive.text = "Exit screen"
+        binding.bvNegative.text = "Continue download"
+
         binding.bvPositive.setOnClickListener {
             findNavController().navigate(DownloadCancelDialogDirections.toSplash())
         }
