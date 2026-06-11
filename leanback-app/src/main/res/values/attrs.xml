@@ -1,10 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="colorPrimary" format="color" />
-    <attr name="colorSecondary" format="color" />
+
     <attr name="colorBackground" format="color" />
-    <attr name="colorCardBackground" format="color" />
-    <attr name="colorCardContent" format="color" />
+    <attr name="colorSurfacePrimary" format="color" />
+    <attr name="colorSurfaceLow" format="color" />
+    <attr name="colorSurfaceMid" format="color" />
+    <attr name="colorSurfaceHigh" format="color" />
+    <attr name="colorForegroundPrimary" format="color" />
+    <attr name="colorForegroundHigh" format="color" />
+    <attr name="colorForegroundMid" format="color" />
+    <attr name="colorForegroundLow" format="color" />
+    <attr name="colorForegroundFault" format="color" />
+    <attr name="colorOverlayDark" format="color" />
+    <attr name="colorOverlayLight" format="color" />
 
     <declare-styleable name="PlaceholderView">
         <attr name="placeholderTint" format="color" />

@@ -3,19 +3,19 @@
     <!-- State when the view is focused -->
     <item android:state_focused="true">
         <shape android:shape="rectangle">
-            <stroke android:width="0.3dp" android:color="?attr/colorPrimary" />
+            <stroke android:width="@dimen/stroke_width" android:color="?attr/colorForegroundPrimary" />
             <corners android:radius="5dp" />
         </shape>
     </item>
     <item android:state_selected="true">
         <shape android:shape="rectangle">
-            <stroke android:width="0.3dp" android:color="?attr/colorPrimary" />
+            <stroke android:width="@dimen/stroke_width" android:color="?attr/colorForegroundPrimary" />
             <corners android:radius="5dp" />
         </shape>
     </item>
     <item>
         <shape android:shape="rectangle">
-            <stroke android:width="0.3dp" android:color="@color/color_card_sub_content" />
+            <stroke android:width="@dimen/stroke_width" android:color="?attr/colorForegroundLow" />
             <corners android:radius="5dp" />
         </shape>
     </item>

@@ -1,12 +1,20 @@
 <resources>
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
-        <item name="playbackProgressPrimaryColor">@color/color_primary</item>
+        <item name="playbackProgressPrimaryColor">@color/color_foreground_primary</item>
+
         <item name="colorBackground">@color/color_background</item>
-        <item name="colorPrimary">@color/color_primary</item>
-        <item name="colorSecondary">@color/color_secondary</item>
-        <item name="colorCardBackground">@color/color_card_background</item>
-        <item name="colorCardContent">@color/color_card_content</item>
+        <item name="colorSurfacePrimary">@color/color_surface_primary</item>
+        <item name="colorSurfaceLow">@color/color_surface_low</item>
+        <item name="colorSurfaceMid">@color/color_surface_mid</item>
+        <item name="colorSurfaceHigh">@color/color_surface_high</item>
+        <item name="colorForegroundPrimary">@color/color_foreground_primary</item>
+        <item name="colorForegroundHigh">@color/color_foreground_high</item>
+        <item name="colorForegroundMid">@color/color_foreground_mid</item>
+        <item name="colorForegroundLow">@color/color_foreground_low</item>
+        <item name="colorForegroundFault">@color/color_foreground_fault</item>
+        <item name="colorOverlayDark">@color/color_overlay_dark</item>
+        <item name="colorOverlayLight">@color/color_overlay_light</item>
     </style>
 
     <style name="KeyTextStyle">

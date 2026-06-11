@@ -2,7 +2,7 @@
 
     <gradient
         android:angle="90"
-        android:centerColor="#CC181818"
+        android:centerColor="?attr/colorOverlayDark"
         android:endColor="@android:color/transparent"
         android:startColor="#000000" />
 </shape>

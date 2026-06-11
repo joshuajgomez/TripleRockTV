@@ -109,12 +109,7 @@ class MetadataView @JvmOverloads constructor(
         tv.text = text
         tv.textSize = 12f
         tv.alpha = 0.8f
-        tv.setTextColor(
-            resources.getColor(
-                com.joshgm3z.triplerocktv.core.R.color.color_card_content,
-                context.theme
-            )
-        )
+        tv.setTextColor(context.getColorFromAttr(R.attr.colorForegroundMid))
 
         tv.layoutParams = LayoutParams(
             LayoutParams.WRAP_CONTENT,
@@ -138,7 +133,7 @@ class MetadataView @JvmOverloads constructor(
     private fun addDot() {
         TextView(context).let {
             it.text = context.getString(R.string.dot)
-            it.setTextColor(context.getColorFromAttr(R.attr.colorPrimary))
+            it.setTextColor(context.getColorFromAttr(R.attr.colorForegroundPrimary))
             addView(it)
         }
     }
