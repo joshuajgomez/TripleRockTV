@@ -4,7 +4,7 @@
     android:layout_width="@dimen/poster_width"
     android:layout_height="@dimen/poster_height"
     android:layout_margin="2dp"
-    android:background="?attr/colorBackground"
+    android:background="?attr/colorSurfaceLow"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/focusable_border_fg">
@@ -39,7 +39,7 @@
             android:maxLines="3"
             android:paddingTop="45dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorForegroundHigh"
             tools:text="Some movie with long name(2025) " />
 
         <TextView
@@ -48,6 +48,7 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_star"
             android:drawablePadding="2dp"
+            android:textColor="?attr/colorForegroundMid"
             android:textSize="12sp"
             tools:text="3.5" />
     </LinearLayout>

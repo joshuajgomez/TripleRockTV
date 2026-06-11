@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/popup_width"
     android:layout_height="@dimen/popup_height"
-    android:background="@color/color_card_background"
+    android:background="?attr/colorSurfaceLow"
     android:paddingHorizontal="50dp"
     android:paddingVertical="30dp">
 
