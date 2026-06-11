@@ -1,15 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="color_background">#000</color>
+
     <color name="color_surface_primary">#30311B00</color>
-    <color name="color_surface_low">#101010</color>
-    <color name="color_surface_mid">#1B1B1B</color>
-    <color name="color_surface_high">#333333</color>
-    <color name="color_foreground_primary">#FB8C00</color>
-    <color name="color_foreground_high">#EEEEEE</color>
-    <color name="color_foreground_mid">#9C9C9C</color>
-    <color name="color_foreground_low">#515151</color>
-    <color name="color_foreground_fault">#E06260</color>
+
+    <color name="color_surface_low">#121212</color>
+    <color name="color_surface_mid">#1C1C1C</color>
+    <color name="color_surface_high">#262626</color>
+
+    <color name="color_foreground_primary">#A36600</color>
+
+    <color name="color_foreground_high">#F5F5F0</color>
+    <color name="color_foreground_mid">#BDBDB3</color>
+    <color name="color_foreground_low">#8A8A80</color>
+
+    <color name="color_foreground_fault">#EF5350</color>
+
     <color name="color_overlay_dark">#80000000</color>
     <color name="color_overlay_light">#80ffffff</color>
 </resources>
