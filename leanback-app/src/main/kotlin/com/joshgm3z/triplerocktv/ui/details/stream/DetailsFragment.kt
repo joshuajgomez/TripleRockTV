@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -54,7 +54,7 @@ class DetailsFragment : Fragment() {
     }
 
     private fun setupClickListeners() {
-        binding.flResumeContainer.setOnClickListener {
+        binding.bvResume.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 resume = true
                 streamType = args.streamType
@@ -67,11 +67,10 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.flResumeContainer.onFocusChangeListener =
-            View.OnFocusChangeListener { _, hasFocus ->
-                binding.progressBar.setVisible(hasFocus)
-            }
-        binding.btnStartOver.setOnClickListener {
+        binding.bvResume.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            binding.progressBar.setVisible(hasFocus)
+        }
+        binding.bvStartOver.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 streamType = args.streamType
                 if (args.streamType == StreamType.Series) {
@@ -83,7 +82,7 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.btnPlay.setOnClickListener {
+        binding.bvPlay.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 streamType = args.streamType
                 if (args.streamType == StreamType.Series) {
@@ -95,15 +94,15 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.btnMoreEpisodes.setOnClickListener {
+        binding.bvMoreEpisodes.setOnClickListener {
             DetailsFragmentDirections.toEpisodeSelector().apply {
                 seriesId = args.streamId
                 initialSelectedEpisodeId = selectedEpisodeId
                 findNavController().navigate(this)
             }
         }
-        binding.btnAddMyList.setOnClickListener { viewModel.addToMyList(args.streamType) }
-        binding.btnRemoveMyList.setOnClickListener { viewModel.removeFromMyList(args.streamType) }
+        binding.bvAddMyList.setOnClickListener { viewModel.addToMyList(args.streamType) }
+        binding.bvRemoveMyList.setOnClickListener { viewModel.removeFromMyList(args.streamType) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -122,8 +121,8 @@ class DetailsFragment : Fragment() {
             selectedEpisodeId = it
         }
         uiState.episodeLabel?.let {
-            binding.btnResume.text = "Resume $it"
-            binding.btnPlay.text = "Play $it"
+            binding.bvResume.text = "Resume $it"
+            binding.bvPlay.text = "Play $it"
         }
         handleBlur(uiState.coverImage)
         binding.progressBar.progress = uiState.progressPercent ?: 0
@@ -142,18 +141,19 @@ class DetailsFragment : Fragment() {
 
         // button visibility
         if (!uiState.showButtons) return
-        binding.flResumeContainer.setVisible(uiState.progressPercent != null)
-        binding.btnStartOver.setVisible(uiState.progressPercent != null)
-        binding.btnPlay.setVisible(uiState.progressPercent == null)
-        binding.btnRemoveMyList.setVisible(uiState.inMyList)
-        binding.btnAddMyList.setVisible(!uiState.inMyList)
-        binding.btnMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
+        binding.bvResume.setVisible(uiState.progressPercent != null)
+        binding.progressBar.setVisible(uiState.progressPercent != null)
+        binding.bvStartOver.setVisible(uiState.progressPercent != null)
+        binding.bvPlay.setVisible(uiState.progressPercent == null)
+        binding.bvRemoveMyList.setVisible(uiState.inMyList)
+        binding.bvAddMyList.setVisible(!uiState.inMyList)
+        binding.bvMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
 
         // handle focus
         if (uiState.progressPercent != null) {
-            binding.flResumeContainer.requestFocus()
+            binding.bvResume.requestFocus()
         } else {
-            binding.btnPlay.requestFocus()
+            binding.bvPlay.requestFocus()
         }
     }
 

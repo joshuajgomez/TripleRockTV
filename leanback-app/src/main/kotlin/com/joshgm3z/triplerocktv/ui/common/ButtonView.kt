@@ -74,9 +74,6 @@ class ButtonView @JvmOverloads constructor(
                 }
             }
         }
-        binding.tvTitle.setOnClickListener {
-            callOnClick()
-        }
     }
 
     var text: String

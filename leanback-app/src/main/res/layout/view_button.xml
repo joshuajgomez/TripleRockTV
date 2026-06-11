@@ -3,6 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clickable="true"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     tools:parentTag="android.widget.LinearLayout">
 
     <TextView
@@ -10,12 +13,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/button_view_background_filled"
-        android:clickable="true"
-        android:drawablePadding="5dp"
+        android:clickable="false"
+        android:drawablePadding="10dp"
         android:drawableTint="@color/button_fg_color_selector"
-        android:focusable="true"
-        android:focusableInTouchMode="true"
-        android:focusedByDefault="true"
+        android:duplicateParentState="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:paddingHorizontal="20dp"
         android:paddingVertical="15dp"
         android:text="Button"
