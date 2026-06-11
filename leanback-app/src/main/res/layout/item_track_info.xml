@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:duplicateParentState="true"
             android:paddingHorizontal="5dp"
-            android:textColor="?attr/colorForegroundMid"
+            android:textColor="?attr/colorForegroundHigh"
             tools:text="Korean" />
 
         <LinearLayout
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="3dp"
                 android:src="@drawable/outline_captive_portal_24"
-                android:tint="?attr/colorForegroundLow"
+                android:tint="?attr/colorForegroundMid"
                 android:visibility="gone"
                 tools:visibility="visible" />
 
@@ -66,7 +66,7 @@
                 android:duplicateParentState="true"
                 android:ellipsize="end"
                 android:maxLines="1"
-                android:textColor="?attr/colorForegroundLow"
+                android:textColor="?attr/colorForegroundMid"
                 android:textSize="@dimen/metadata_text_size"
                 tools:text="@string/subtitle_file_name" />
         </LinearLayout>

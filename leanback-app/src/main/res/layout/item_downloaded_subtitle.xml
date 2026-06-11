@@ -29,7 +29,7 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
-        android:textColor="?attr/colorForegroundMid"
+        android:textColor="?attr/colorForegroundHigh"
         app:layout_constraintStart_toEndOf="@id/iv_icon"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="@string/subtitle_file_name" />
