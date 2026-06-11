@@ -1,7 +1,7 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="20dp"
     android:height="20dp"
-    android:tint="@color/card_fg_color_selector2"
+    android:tint="@color/color_foreground_mid_selector"
     android:viewportWidth="960"
     android:viewportHeight="960">
 

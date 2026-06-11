@@ -18,7 +18,12 @@ class SimpleTextPresenter(
             isFocusableInTouchMode = true
             // Basic styling - adjust as needed
             setPadding(24, 16, 24, 16)
-            setTextColor(ContextCompat.getColorStateList(context, R.color.card_fg_color_selector))
+            setTextColor(
+                ContextCompat.getColorStateList(
+                    context,
+                    R.color.color_foreground_high_selector
+                )
+            )
             setBackgroundResource(R.drawable.textview_bg_selector)
             iconRes?.let {
                 setCompoundDrawablesWithIntrinsicBounds(
@@ -30,7 +35,7 @@ class SimpleTextPresenter(
                 compoundDrawablePadding = 5
                 compoundDrawableTintList = ContextCompat.getColorStateList(
                     context,
-                    R.color.card_fg_color_selector
+                    R.color.color_foreground_high_selector
                 )
             }
         }

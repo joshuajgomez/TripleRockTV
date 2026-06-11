@@ -2,7 +2,7 @@
     android:width="24dp"
     android:height="24dp"
     android:autoMirrored="true"
-    android:tint="@color/card_fg_color_selector2"
+    android:tint="@color/color_foreground_mid_selector"
     android:viewportWidth="24"
     android:viewportHeight="24">
 
