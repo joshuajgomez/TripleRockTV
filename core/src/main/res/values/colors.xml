@@ -2,8 +2,8 @@
 <resources>
     <color name="color_background">#000</color>
     <color name="color_surface_primary">#30311B00</color>
-    <color name="color_surface_low">#1D1D1D</color>
-    <color name="color_surface_mid">#282828</color>
+    <color name="color_surface_low">#101010</color>
+    <color name="color_surface_mid">#1B1B1B</color>
     <color name="color_surface_high">#333333</color>
     <color name="color_foreground_primary">#FB8C00</color>
     <color name="color_foreground_high">#EEEEEE</color>
