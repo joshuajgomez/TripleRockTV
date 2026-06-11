@@ -76,6 +76,7 @@ class EpisodeSelectorDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         binding.rvSeasonChips.adapter = seasonAdapter
         binding.rvEpisodes.adapter = episodeAdapter
         lifecycleScope.launch {
