@@ -19,4 +19,5 @@
     <dimen name="series_selector_horizontal_edge_padding">20dp</dimen>
     <dimen name="series_selector_vertical_edge_padding">20dp</dimen>
     <dimen name="button_corner_radius">5dp</dimen>
+    <dimen name="stroke_width">0.3dp</dimen>
 </resources>

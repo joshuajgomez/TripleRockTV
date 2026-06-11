@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/container_width"
     android:layout_height="@dimen/container_height"
-    android:background="@color/color_card_background">
+    android:background="?attr/colorSurfaceLow">
 
     <TextView
         android:id="@+id/tv_title"
@@ -15,7 +15,8 @@
         android:paddingHorizontal="15dp"
         android:paddingVertical="20dp"
         android:text="Select a subtitle"
-        android:textSize="20sp"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textSize="@dimen/text_size_medium"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,6 +36,7 @@
         android:text="No subtitles found online"
         android:textAlignment="center"
         android:visibility="gone"
+        android:textColor="?attr/colorForegroundMid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_title"
@@ -67,6 +69,7 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="25dp"
         android:text="@string/opensubtitles_com"
+        android:drawable="@drawable/ic_search"
         app:layout_constraintBottom_toBottomOf="@+id/tv_title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/tv_title"

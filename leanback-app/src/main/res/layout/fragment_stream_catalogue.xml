@@ -17,7 +17,7 @@
         android:id="@+id/ll_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#A0000000"
+        android:background="?attr/colorOverlayDark"
         android:orientation="horizontal" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -31,7 +31,7 @@
             android:layout_marginStart="90dp"
             android:layout_marginTop="30dp"
             android:maxEms="25"
-            android:textColor="?attr/colorCardContent"
+            android:textColor="?attr/colorForegroundHigh"
             android:textSize="25sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,6 +54,7 @@
             android:maxEms="40"
             android:maxLines="5"
             android:textSize="12sp"
+            android:textColor="?attr/colorForegroundMid"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
             app:layout_constraintTop_toBottomOf="@+id/metadata_view"
             tools:text="@string/sample_long_description" />

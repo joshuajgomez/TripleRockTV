@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="130dp"
-    android:background="?attr/colorBackground"
+    android:background="?attr/colorSurfaceLow"
     android:clickable="true"
     android:focusable="true"
     android:foreground="@drawable/focusable_border_fg">
@@ -38,6 +38,7 @@
             android:background="@drawable/resume_chip"
             android:paddingHorizontal="4dp"
             android:text="RESUME"
+            android:textColor="?attr/colorForegroundMid"
             android:textSize="10sp" />
 
         <TextView
@@ -47,7 +48,7 @@
             android:maxLines="3"
             android:paddingHorizontal="8dp"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/white"
+            android:textColor="?attr/colorForegroundHigh"
             tools:text="Some movie (2025)" />
 
 
@@ -59,7 +60,7 @@
             android:layout_gravity="bottom"
             android:layout_marginHorizontal="8dp"
             android:layout_marginVertical="5dp"
-            android:progressTint="?attr/colorPrimary"
+            android:progressTint="?attr/colorForegroundPrimary"
             android:visibility="gone"
             tools:progress="30"
             tools:visibility="visible" />

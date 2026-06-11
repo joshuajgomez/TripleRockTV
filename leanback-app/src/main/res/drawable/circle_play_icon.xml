@@ -3,8 +3,7 @@
     <!-- Dark Transparent Circle Background -->
     <item>
         <shape android:shape="oval">
-            <!-- #80000000 is 50% transparent black -->
-            <solid android:color="#90000000" />
+            <solid android:color="?attr/colorOverlayDark" />
             <size
                 android:width="48dp"
                 android:height="48dp" />
@@ -21,7 +20,7 @@
             android:viewportWidth="24"
             android:viewportHeight="24">
             <path
-                android:fillColor="?attr/colorPrimary"
+                android:fillColor="?attr/colorForegroundPrimary"
                 android:pathData="M8,5v14l11,-7z" />
         </vector>
     </item>

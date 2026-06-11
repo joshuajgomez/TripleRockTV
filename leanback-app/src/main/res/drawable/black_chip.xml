@@ -3,7 +3,7 @@
     <!-- The background color (e.g., a semi-transparent dark grey or red) -->
     <solid
         android:alpha="0.4"
-        android:color="#000" />
+        android:color="?attr/colorSurfaceLow" />
 
     <!-- The corner radius -->
     <corners android:radius="4dp" />

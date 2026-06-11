@@ -3,7 +3,7 @@
     android:id="@+id/ll_dark_overlay"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_transparent_color"
+    android:background="?attr/colorOverlayDark"
     android:orientation="horizontal">
 
     <ProgressBar
@@ -12,5 +12,5 @@
         android:layout_height="5dp"
         android:layout_gravity="bottom"
         android:indeterminate="true"
-        android:indeterminateTint="@color/color_primary" />
+        android:indeterminateTint="?attr/colorForegroundPrimary" />
 </LinearLayout>

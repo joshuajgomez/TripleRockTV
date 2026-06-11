@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/color_background"
+    android:background="?attr/colorBackground"
     android:padding="@dimen/screen_edge_padding">
 
     <com.joshgm3z.triplerocktv.ui.search.KeyboardView
@@ -37,13 +37,13 @@
         android:clickable="false"
         android:drawableStart="@drawable/ic_search"
         android:drawablePadding="5sp"
-        android:drawableTint="@color/color_primary"
+        android:drawableTint="?attr/colorForegroundPrimary"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:hint="Search movies and tv shows"
         android:padding="10dp"
-        android:textColor="#fff"
-        android:textColorHint="#90ffffff"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textColorHint="?attr/colorForegroundLow"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -59,6 +59,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="No results found"
+        android:textColor="?attr/colorForegroundMid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_input"
         app:layout_constraintTop_toBottomOf="@+id/et_input" />
@@ -71,7 +72,7 @@
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="Popular searches"
-        android:textColor="@color/color_card_content"
+        android:textColor="?attr/colorForegroundMid"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_input"
