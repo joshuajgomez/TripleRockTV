@@ -32,6 +32,7 @@ class DownloadCancelDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         binding.bvNegative.setVisible(true)
         binding.bvPositive.text = "Exit screen"
         binding.bvNegative.text = "Continue download"

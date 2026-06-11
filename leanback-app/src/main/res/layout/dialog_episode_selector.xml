@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/episode_selector_dialog_width"
     android:layout_height="@dimen/episode_selector_dialog_height"
-    android:background="?attr/colorSurfaceLow">
+    android:background="@drawable/dialog_background">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_season_chips"
