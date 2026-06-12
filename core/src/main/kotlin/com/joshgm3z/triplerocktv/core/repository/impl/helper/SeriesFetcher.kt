@@ -86,7 +86,7 @@ constructor(
             errorMessage.isNotEmpty() -> onFetch(
                 LoadingState(
                     status = LoadingStatus.Error,
-                    error = "Unable to fully update. Try again in a few min"
+                    error = "Partially updated. Try again to get full content."
                 )
             )
 
