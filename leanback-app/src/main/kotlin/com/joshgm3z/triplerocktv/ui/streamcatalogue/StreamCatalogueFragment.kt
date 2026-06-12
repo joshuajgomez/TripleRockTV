@@ -110,10 +110,10 @@ class StreamCatalogueFragment : Fragment() {
     private fun updateSeriesStream(seriesStream: SeriesStream) {
         binding.tvTitle.text = seriesStream.name
         binding.tvDescription.text = seriesStream.plot
-        glideUtil.loadImage(
+        /*glideUtil.loadImage(
             seriesStream.backdropUrl,
             binding.ivBackdrop
-        )
+        )*/
         binding.metadataView.rating = seriesStream.rating.parseToFloat()
         binding.metadataView.genre = seriesStream.genre
         binding.metadataView.noOfSeasons = seriesStream.seasons?.size
