@@ -65,7 +65,7 @@ class ButtonView @JvmOverloads constructor(
                     }
                     when (type) {
                         2 -> com.joshgm3z.triplerocktv.core.R.color.color_background
-                        else -> R.color.color_foreground_primary_selector
+                        else -> com.joshgm3z.triplerocktv.core.R.color.color_foreground_primary_selector
                     }.let { colorRes ->
                         binding.tvTitle.setTextColor(
                             AppCompatResources.getColorStateList(context, colorRes)
