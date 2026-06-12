@@ -21,7 +21,7 @@ class SimpleTextPresenter(
             setTextColor(
                 ContextCompat.getColorStateList(
                     context,
-                    R.color.color_foreground_high_selector
+                    com.joshgm3z.triplerocktv.core.R.color.color_foreground_high_selector
                 )
             )
             setBackgroundResource(R.drawable.textview_bg_selector)
@@ -35,7 +35,7 @@ class SimpleTextPresenter(
                 compoundDrawablePadding = 5
                 compoundDrawableTintList = ContextCompat.getColorStateList(
                     context,
-                    R.color.color_foreground_high_selector
+                    com.joshgm3z.triplerocktv.core.R.color.color_foreground_high_selector
                 )
             }
         }
