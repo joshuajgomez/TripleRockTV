@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.core.repository.room
+package com.joshgm3z.triplerocktv.core.repository.room.category
 
 import androidx.room.Entity
 import com.joshgm3z.triplerocktv.core.repository.StreamType

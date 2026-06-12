@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.repository.room.series
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 
@@ -20,13 +21,15 @@ data class SeriesStream(
     val lastModified: String?,
     val rating: String?,
     val categoryId: Int,
-    val lastPlayed: Long = 0,
-    val lastPlayedEpisodeId: Int = 0,
 
     val seasons: List<Season>? = null,
-    val inMyList: Boolean = false,
-    val timeAddedToList: Long = 0L,
-)
+) {
+    @Ignore
+    var lastPlayedEpisodeId: Int? = null
+
+    @Ignore
+    var inMyList: Boolean = false
+}
 
 data class Season(
     val episodes: List<Episode>,

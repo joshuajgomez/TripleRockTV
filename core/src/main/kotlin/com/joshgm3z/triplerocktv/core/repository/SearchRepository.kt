@@ -1,6 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository
 
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 
 const val SEARCH_LIMIT = 10

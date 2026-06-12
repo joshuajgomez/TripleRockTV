@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.room
 
+import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 

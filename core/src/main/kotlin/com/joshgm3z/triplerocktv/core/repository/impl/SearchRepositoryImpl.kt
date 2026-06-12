@@ -4,8 +4,8 @@ import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.SearchHint
 import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger

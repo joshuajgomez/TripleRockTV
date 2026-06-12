@@ -9,10 +9,10 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
+import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -83,7 +83,7 @@ class DetailsViewModel @Inject constructor(
         streamId: Int,
         streamType: StreamType
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.streamDataFlow(streamId, streamType).collectLatest {
                 _uiState.value = DetailsUiState(
                     streamType = streamType,
@@ -161,23 +161,23 @@ class DetailsViewModel @Inject constructor(
     fun addToMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyListSeries(streamId!!, true)
-            else repository.updateMyList(streamId!!, true)
+            if (streamType == StreamType.Series) repository.updateMyList(streamId!!, StreamType.Series, true)
+            else repository.updateMyList(streamId!!, StreamType.Series,true)
         }
     }
 
     fun removeFromMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyListSeries(streamId!!, false)
-            else repository.updateMyList(streamId!!, false)
+            if (streamType == StreamType.Series) repository.updateMyList(streamId!!,StreamType.Series, false)
+            else repository.updateMyList(streamId!!,StreamType.Series, false)
         }
     }
 
     private fun List<Season>.getEpisodeToPlay(): Episode {
         val allEpisodes = mutableListOf<Episode>()
         forEach { season -> allEpisodes.addAll(season.episodes) }
-        allEpisodes.sortByDescending { it.lastPlayed }
+        allEpisodes.sortByDescending { it.recentlyPlayed?.added }
         return allEpisodes.first()
     }
 

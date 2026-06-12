@@ -1,8 +1,8 @@
 package com.joshgm3z.triplerocktv.core.repository
 
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import kotlinx.coroutines.flow.Flow
@@ -24,9 +24,9 @@ interface MediaLocalRepository {
 
     suspend fun fetchEpisode(episodeId: Int, seriesId: Int): Episode?
 
-    fun streamDataFlow(streamId: Int, streamType: StreamType): Flow<StreamData>
+    suspend fun streamDataFlow(streamId: Int, streamType: StreamType): Flow<StreamData>
 
-    fun seriesStreamFlow(streamId: Int): Flow<SeriesStream>
+    fun seriesStreamFlow(seriesId: Int): Flow<SeriesStream>
 
     suspend fun isContentEmpty(): Boolean
 
@@ -40,25 +40,19 @@ interface MediaLocalRepository {
 
     suspend fun fetchMyListSeries(): List<SeriesStream>
 
-    suspend fun updatePlayedDuration(streamId: Int, positionMs: Long, streamType: StreamType)
+    suspend fun updatePlayedDuration(
+        streamId: Int,
+        positionMs: Long,
+        streamType: StreamType,
+        seriesId: Int? = null,
+        timeStamp: Long = System.currentTimeMillis()
+    )
 
-    suspend fun updateLastPlayedTimestamp(
+    suspend fun updateMyList(
         streamId: Int,
         streamType: StreamType,
-        timeStamp: Long = System.currentTimeMillis()
+        add: Boolean
     )
-
-    suspend fun updateEpisodeLastPlayedTimestamp(
-        episodeId: Int,
-        seriesId: Int,
-        timeStamp: Long = System.currentTimeMillis()
-    )
-
-    suspend fun updateEpisodePlayedDuration(episodeId: Int, seriesId: Int, positionMs: Long)
-
-    suspend fun updateMyList(streamId: Int, add: Boolean)
-
-    suspend fun updateMyListSeries(seriesId: Int, add: Boolean)
 
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
 

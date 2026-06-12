@@ -3,18 +3,24 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.MIN_DURATION_LEFT
-import com.joshgm3z.triplerocktv.core.repository.room.MIN_PLAYBACK_DURATION
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_DURATION_LEFT
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATION
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
+import com.joshgm3z.triplerocktv.core.repository.room.favorite.Favorite
+import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
+import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
+import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 import kotlin.collections.filter
 
@@ -23,6 +29,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val seriesStreamsDao: SeriesStreamsDao,
     private val streamDataDao: StreamDataDao,
     private val categoryDataDao: CategoryDataDao,
+    private val favoriteDao: FavoriteDao,
+    private val recentlyPlayedDao: RecentlyPlayedDao,
 ) : MediaLocalRepository {
 
     override suspend fun fetchCategories(
@@ -52,7 +60,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStream(
         streamId: Int,
         streamType: StreamType,
-    ): StreamData = streamDataDao.getByStreamId(streamId)
+    ): StreamData = streamDataDao.getByStreamId(streamId).apply {
+        inMyList = favoriteDao.isFavorite(streamId).first()
+        recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+    }
 
     override suspend fun fetchEpisode(
         episodeId: Int,
@@ -61,42 +72,77 @@ class MediaLocalRepositoryImpl @Inject constructor(
         val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
         seriesStream.seasons?.forEach { season ->
             season.episodes.forEach { episode ->
-                if (episode.id == episodeId) return episode
+                if (episode.id == episodeId) return episode.apply {
+                    recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episodeId).first()
+                }
             }
         }
         throw Exception("Episode $episodeId for series $seriesId not found")
     }
 
-    override fun streamDataFlow(
+    override suspend fun streamDataFlow(
         streamId: Int,
         streamType: StreamType,
     ): Flow<StreamData> = when (streamType) {
-        StreamType.VideoOnDemand -> streamDataDao.streamDataFlow(streamId)
+        StreamType.VideoOnDemand -> combine(
+            streamDataDao.streamDataFlow(streamId),
+            recentlyPlayedDao.getRecentlyPlayedById(streamId),
+            favoriteDao.isFavorite(streamId)
+        ) { streamData, recentPlayed, isFavorite ->
+            Logger.debug("combine: recentPlayed = [${recentPlayed}], isFavorite = [${isFavorite}]")
+            streamData.apply {
+                recentlyPlayed = recentPlayed
+                inMyList = isFavorite
+            }
+        }
+
         else -> streamDataDao.streamDataFlow(streamId)
     }
 
-    override fun seriesStreamFlow(streamId: Int): Flow<SeriesStream> =
-        seriesStreamsDao.seriesStreamFlow(streamId)
+    override fun seriesStreamFlow(seriesId: Int): Flow<SeriesStream> = combine(
+        seriesStreamsDao.seriesStreamFlow(seriesId),
+        recentlyPlayedDao.getRecentlyPlayedBySeriesId(seriesId),
+        favoriteDao.isFavorite(seriesId)
+    ) { seriesStream, recentPlayed, isFavorite ->
+        seriesStream.apply {
+            inMyList = isFavorite
+            recentPlayed?.let { lastPlayedEpisodeId = it.id }
+            seasons?.forEach { season ->
+                season.episodes.forEach { episode ->
+                    episode.recentlyPlayed = recentlyPlayedDao
+                        .getRecentlyPlayedById(episode.id)
+                        .first()
+                }
+            }
+        }
+    }
 
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
-        return streamDataDao.getLastPlayed10(streamType)
+        return recentlyPlayedDao.getRecentlyPlayedOfType(streamType).map {
+            streamDataDao.getByStreamId(it.id)
+        }
     }
 
     override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
-        val recentSeries = seriesStreamsDao.getLastPlayed10().filter { it.timeLeftInLastEpisode() }
-        return recentSeries.sortedByDescending { it.lastPlayed }
+        val recentSeries = recentlyPlayedDao
+            .getRecentlyPlayedByType(StreamType.Series)
+            .map { recentlyPlayed ->
+                seriesStreamsDao.getBySeriesId(recentlyPlayed.seriesId!!).apply {
+                    lastPlayedEpisodeId = recentlyPlayed.id
+                }
+            }
+        val recentSeriesFiltered = recentSeries.filter { it.timeLeftInLastEpisode() }
+        return recentSeriesFiltered
     }
 
-    private fun SeriesStream.timeLeftInLastEpisode(): Boolean {
+    private suspend fun SeriesStream.timeLeftInLastEpisode(): Boolean {
         seasons?.forEach { season ->
             season.episodes.forEach { episode ->
-                if (episode.id == lastPlayedEpisodeId
-                    && episode.timeRemaining() > MIN_DURATION_LEFT
-                    && episode.playedDuration > MIN_PLAYBACK_DURATION
-                ) {
+                episode.recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episode.id).first()
+                if (episode.id == lastPlayedEpisodeId && episode.startedWatching) {
                     return true
                 }
             }
@@ -105,7 +151,9 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
-        return streamDataDao.getMyList5(streamType)
+        return favoriteDao.getFavoritesOfType(streamType).map {
+            streamDataDao.getByStreamId(it.id)
+        }
     }
 
     override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
@@ -114,45 +162,25 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchMyListSeries(): List<SeriesStream> {
-        return seriesStreamsDao.getMyList10()
+        return favoriteDao.getFavoritesOfType(StreamType.Series).map {
+            seriesStreamsDao.getBySeriesId(it.id)
+        }
     }
 
     override suspend fun updatePlayedDuration(
         streamId: Int,
         positionMs: Long,
-        streamType: StreamType
-    ) = when (streamType) {
-        StreamType.VideoOnDemand -> streamDataDao.updatePlayedDuration(streamId, positionMs)
-        else -> {}
-    }
-
-    override suspend fun updateEpisodePlayedDuration(
-        seriesId: Int,
-        episodeId: Int,
-        positionMs: Long,
-    ) = updateEpisode(seriesId, episodeId) { it.copy(playedDuration = positionMs) }
-
-    override suspend fun updateLastPlayedTimestamp(
-        streamId: Int,
         streamType: StreamType,
+        seriesId: Int?,
         timeStamp: Long
-    ) {
-        streamDataDao.updateLastPlayedTimestamp(streamId, timeStamp)
-    }
-
-    override suspend fun updateEpisodeLastPlayedTimestamp(
-        episodeId: Int,
-        seriesId: Int,
-        timeStamp: Long
-    ) = updateEpisode(
-        episodeId = episodeId, seriesId = seriesId,
-        doUpdate = { it.copy(lastPlayed = timeStamp) },
-        doUpdateSeries = {
-            it.copy(
-                lastPlayed = timeStamp,
-                lastPlayedEpisodeId = episodeId
-            )
-        },
+    ) = recentlyPlayedDao.insert(
+        RecentlyPlayed(
+            id = streamId,
+            seriesId = seriesId,
+            playedDuration = positionMs,
+            streamType = streamType,
+            added = timeStamp,
+        )
     )
 
     private suspend fun updateEpisode(
@@ -174,13 +202,18 @@ class MediaLocalRepositoryImpl @Inject constructor(
         seriesStreamsDao.update(doUpdateSeries(updatedSeriesStream))
     }
 
-    override suspend fun updateMyList(streamId: Int, add: Boolean) {
-        streamDataDao.updateMyList(streamId, add)
-    }
-
-    override suspend fun updateMyListSeries(seriesId: Int, add: Boolean) {
-        seriesStreamsDao.updateMyList(seriesId, add)
-    }
+    override suspend fun updateMyList(
+        streamId: Int,
+        streamType: StreamType,
+        add: Boolean
+    ) = if (add) favoriteDao.insert(
+        Favorite(
+            streamId,
+            streamType,
+            System.currentTimeMillis()
+        )
+    )
+    else favoriteDao.delete(streamId)
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,

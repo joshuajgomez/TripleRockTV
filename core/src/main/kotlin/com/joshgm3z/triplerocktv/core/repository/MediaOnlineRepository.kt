@@ -1,6 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository
 
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 
 enum class StreamType {
     VideoOnDemand,

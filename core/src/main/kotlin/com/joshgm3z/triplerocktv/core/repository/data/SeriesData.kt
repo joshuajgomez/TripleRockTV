@@ -1,9 +1,11 @@
 package com.joshgm3z.triplerocktv.core.repository.data
 
+import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
-import com.joshgm3z.triplerocktv.core.repository.room.MIN_DURATION_LEFT
-import com.joshgm3z.triplerocktv.core.repository.room.MIN_PLAYBACK_DURATION
-import com.joshgm3z.triplerocktv.core.repository.room.toTextTime
+import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_DURATION_LEFT
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATION
+import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
 data class IptvSeries(
@@ -66,22 +68,25 @@ data class Episode(
     val added: String,
     @SerializedName("info")
     val episodeInfo: EpisodeInfo?,
-    val lastPlayed: Long = 0,
-    val playedDuration: Long = 0,
 ) {
+    @Ignore
+    var recentlyPlayed: RecentlyPlayed? = null
+
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/series/${userInfo.username}/${userInfo.password}/$id.$container_extension"
 
     fun totalDurationMs(): Long = episodeInfo?.duration_secs?.times(1000L) ?: 0L
 
     fun progressPercent(): Int = when {
+        recentlyPlayed == null -> 0
         totalDurationMs() == 0L -> 0
-        else -> ((playedDuration.toDouble() / totalDurationMs()) * 100).toInt()
+        else -> ((recentlyPlayed!!.playedDuration.toDouble() / totalDurationMs()) * 100).toInt()
     }
 
     fun timeRemaining(): Long = when {
+        recentlyPlayed == null -> 0
         totalDurationMs() == 0L -> 0L
-        else -> (totalDurationMs() - playedDuration)
+        else -> (totalDurationMs() - recentlyPlayed!!.playedDuration)
     }
 
     fun timeRemainingText(): String = when {
@@ -90,7 +95,8 @@ data class Episode(
     }
 
     val startedWatching: Boolean
-        get() = playedDuration > MIN_PLAYBACK_DURATION
+        get() = recentlyPlayed != null
+                && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
                 && totalDurationMs() != 0L
                 && timeRemaining() > MIN_DURATION_LEFT
 }

@@ -18,8 +18,8 @@ import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
@@ -194,8 +194,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
         if (uiState.recentPlayedEpisodes.isNotEmpty()) {
             val episodes = uiState.recentPlayedEpisodes.map {
-                episodeToSeriesMap[it.lastPlayedEpisodeId] = it.seriesId
-                it.seasons?.findEpisode(it.lastPlayedEpisodeId)
+                episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
+                it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
             }
             val header = HeaderItem(0, "Recently played")
             val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
