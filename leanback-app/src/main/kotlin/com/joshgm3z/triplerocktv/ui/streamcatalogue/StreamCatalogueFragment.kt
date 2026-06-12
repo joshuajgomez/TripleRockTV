@@ -100,10 +100,10 @@ class StreamCatalogueFragment : Fragment() {
             binding.metadataView.genre = updatedMovieMetadata.genre
             binding.metadataView.rating = streamData.rating
             binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
-            glideUtil.loadImage(
+            /*glideUtil.loadImage(
                 updatedMovieMetadata.backPosterUrl,
                 binding.ivBackdrop
-            )
+            )*/
         }
     }
 
