@@ -41,7 +41,6 @@ class PlaybackViewModel @Inject constructor(
             this@PlaybackViewModel.streamId = streamId
             when (streamType) {
                 StreamType.VideoOnDemand -> _playbackUiState.update {
-                    repository.updateLastPlayedTimestamp(streamId, StreamType.VideoOnDemand)
                     val result = repository.fetchStream(streamId, streamType)
                     PlaybackUiState(
                         playbackItem = result,
@@ -50,8 +49,7 @@ class PlaybackViewModel @Inject constructor(
                 }
 
                 StreamType.Series -> _playbackUiState.update {
-                    repository.updateEpisodeLastPlayedTimestamp(streamId, seriesId!!)
-                    val episode = repository.fetchEpisode(streamId, seriesId)
+                    val episode = repository.fetchEpisode(streamId, seriesId!!)
                     PlaybackUiState(
                         playbackItem = episode!!,
                         videoUrl = episode.videoUrl(userInfo),
@@ -69,15 +67,16 @@ class PlaybackViewModel @Inject constructor(
             viewModelScope.launch(Dispatchers.IO) {
                 when (streamType) {
                     StreamType.VideoOnDemand -> repository.updatePlayedDuration(
-                        it,
-                        positionMs,
-                        streamType!!
+                        streamId = it,
+                        positionMs = positionMs,
+                        streamType = streamType!!
                     )
 
-                    StreamType.Series -> repository.updateEpisodePlayedDuration(
-                        it,
-                        seriesId!!,
-                        positionMs
+                    StreamType.Series -> repository.updatePlayedDuration(
+                        streamId = it,
+                        seriesId = seriesId!!,
+                        positionMs = positionMs,
+                        streamType = streamType!!,
                     )
 
                     else -> return@launch

@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

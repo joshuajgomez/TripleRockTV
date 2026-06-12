@@ -11,9 +11,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter

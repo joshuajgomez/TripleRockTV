@@ -7,11 +7,11 @@ import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.core.repository.impl.REQUEST_DELAY
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.delay
 import javax.inject.Inject

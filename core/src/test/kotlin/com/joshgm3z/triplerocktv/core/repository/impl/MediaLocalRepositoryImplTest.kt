@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao

@@ -5,7 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil

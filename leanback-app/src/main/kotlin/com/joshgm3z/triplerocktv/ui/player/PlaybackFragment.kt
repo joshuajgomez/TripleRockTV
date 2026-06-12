@@ -35,7 +35,7 @@ import androidx.fragment.app.Fragment
 import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.LoadTrack
@@ -369,7 +369,9 @@ class PlaybackFragment : Fragment() {
         player.setMediaItem(mediaItem)
         player.prepare()
         if (args.resume && streamData.startedWatching) {
-            player.seekTo(streamData.playedDuration)
+            streamData.recentlyPlayed?.playedDuration?.let {
+                player.seekTo(it)
+            }
         }
     }
 
@@ -384,7 +386,9 @@ class PlaybackFragment : Fragment() {
         player.setMediaItem(mediaItem)
         player.prepare()
         if (args.resume && episode.startedWatching) {
-            player.seekTo(episode.playedDuration)
+            episode.recentlyPlayed?.playedDuration?.let {
+                player.seekTo(it)
+            }
         }
     }
 

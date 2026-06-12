@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.databinding.ViewCategoryCardBinding
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.util.withComma
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject

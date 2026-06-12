@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.data.EpisodeInfo
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 

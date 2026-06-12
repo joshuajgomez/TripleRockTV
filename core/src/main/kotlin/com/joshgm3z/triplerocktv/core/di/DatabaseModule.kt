@@ -3,10 +3,12 @@ package com.joshgm3z.triplerocktv.core.di
 import android.content.Context
 import androidx.room.Room
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
-import com.joshgm3z.triplerocktv.core.repository.room.StreamDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
+import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
+import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import dagger.Module
 import dagger.Provides
@@ -54,5 +56,15 @@ class DatabaseModule {
     @Provides
     fun provideEpgListingDao(appDatabase: AppDatabase): EpgListingDao {
         return appDatabase.epgListingDao()
+    }
+
+    @Provides
+    fun provideFavoriteDao(appDatabase: AppDatabase): FavoriteDao {
+        return appDatabase.favoriteDao()
+    }
+
+    @Provides
+    fun provideRecentlyPlayedDao(appDatabase: AppDatabase): RecentlyPlayedDao {
+        return appDatabase.recentlyPlayedDao()
     }
 }

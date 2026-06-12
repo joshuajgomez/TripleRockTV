@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
-import androidx.room.util.copy
 import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -9,8 +8,8 @@ import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.username
 import com.joshgm3z.triplerocktv.core.repository.impl.REQUEST_DELAY
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryDataDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao

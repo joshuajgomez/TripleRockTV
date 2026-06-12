@@ -7,7 +7,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.EPGFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch

@@ -1,9 +1,11 @@
-package com.joshgm3z.triplerocktv.core.repository.room
+package com.joshgm3z.triplerocktv.core.repository.room.stream
 
 import androidx.room.Embedded
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
 /**
@@ -26,17 +28,20 @@ data class StreamData(
     val epgChannelId: String? = null,
 
     val streamType: StreamType,
-    val inMyList: Boolean = false,
     val timeAddedToList: Long = 0,
     val subtitleUrl: String? = null,
     val subtitleTitle: String? = null,
     val subtitleLanguage: String? = null,
-    val lastPlayed: Long = 0,
-    val playedDuration: Long = 0,
 
     @Embedded
     val movieMetadata: MovieMetadata? = null
 ) {
+    @Ignore
+    var recentlyPlayed: RecentlyPlayed? = null
+
+    @Ignore
+    var inMyList: Boolean = false
+
     companion object {
         fun sample(): StreamData = StreamData(
             streamId = 20642,
@@ -46,7 +51,6 @@ data class StreamData(
             streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/lNVHB85FUDZqLzvug3k6FA07RIr.jpg",
             categoryId = 122,
             added = "1609012046",
-            lastPlayed = System.currentTimeMillis(),
             streamType = StreamType.VideoOnDemand,
             rating = 1.5f,
             extension = "mp4"
@@ -57,13 +61,16 @@ data class StreamData(
         "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
     fun progressPercent(): Int = when {
+        recentlyPlayed == null -> 0
         (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0
-        else -> ((playedDuration.toDouble() / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
+        else -> ((recentlyPlayed!!.playedDuration.toDouble()
+                / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
     }
 
     fun timeRemaining(): Long = when {
+        recentlyPlayed == null -> 0L
         (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0L
-        else -> ((movieMetadata?.totalDurationMs ?: 0L) - playedDuration)
+        else -> ((movieMetadata?.totalDurationMs ?: 0L) - recentlyPlayed!!.playedDuration)
     }
 
     fun timeRemainingText(): String = when {
@@ -72,7 +79,8 @@ data class StreamData(
     }
 
     val startedWatching: Boolean
-        get() = playedDuration > MIN_PLAYBACK_DURATION
+        get() = recentlyPlayed != null
+                && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
                 && movieMetadata?.totalDurationMs != 0L
                 && timeRemaining() > MIN_DURATION_LEFT
 }
