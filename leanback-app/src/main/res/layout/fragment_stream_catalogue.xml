@@ -52,7 +52,7 @@
             android:layout_marginTop="5dp"
             android:ellipsize="end"
             android:maxEms="40"
-            android:maxLines="5"
+            android:maxLines="3"
             android:textSize="12sp"
             android:textColor="?attr/colorForegroundMid"
             app:layout_constraintStart_toStartOf="@+id/tv_title"
