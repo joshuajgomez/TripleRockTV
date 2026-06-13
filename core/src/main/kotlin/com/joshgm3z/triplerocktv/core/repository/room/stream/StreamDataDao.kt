@@ -28,6 +28,9 @@ interface StreamDataDao {
     @Query("SELECT * FROM stream_data WHERE name LIKE '%' || :streamName || '%' LIMIT :limit")
     fun searchByName(streamName: String, limit: Int = SEARCH_LIMIT): List<StreamData>
 
+    @Query("SELECT * FROM stream_data WHERE soundEncodedName LIKE '%' || :soundexEncodedInput || '%' LIMIT :limit")
+    fun searchBySoundexName(soundexEncodedInput: String, limit: Int = SEARCH_LIMIT): List<StreamData>
+
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun getByStreamId(streamId: Int): StreamData
 

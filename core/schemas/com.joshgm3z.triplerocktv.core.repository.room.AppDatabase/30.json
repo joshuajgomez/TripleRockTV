@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 30,
-    "identityHash": "4042d3ae2b4c623c119c203b4be8ad47",
+    "identityHash": "dcb42a3df9bb9394eb27c71e55b659fe",
     "entities": [
       {
         "tableName": "stream_data",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `epgChannelId` TEXT, `streamType` TEXT NOT NULL, `timeAddedToList` INTEGER NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `description` TEXT, `backPosterUrl` TEXT, `totalDurationMs` INTEGER, `cast` TEXT, `director` TEXT, `actors` TEXT, `genre` TEXT, PRIMARY KEY(`streamId`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`streamId` INTEGER NOT NULL, `num` INTEGER NOT NULL, `name` TEXT NOT NULL, `soundEncodedName` TEXT, `streamTypeText` TEXT NOT NULL, `streamIcon` TEXT, `categoryId` INTEGER NOT NULL, `added` TEXT NOT NULL, `rating` REAL NOT NULL, `extension` TEXT NOT NULL, `epgChannelId` TEXT, `streamType` TEXT NOT NULL, `timeAddedToList` INTEGER NOT NULL, `subtitleUrl` TEXT, `subtitleTitle` TEXT, `subtitleLanguage` TEXT, `description` TEXT, `backPosterUrl` TEXT, `totalDurationMs` INTEGER, `cast` TEXT, `director` TEXT, `actors` TEXT, `genre` TEXT, PRIMARY KEY(`streamId`))",
         "fields": [
           {
             "fieldPath": "streamId",
@@ -25,6 +25,11 @@
             "columnName": "name",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "soundEncodedName",
+            "columnName": "soundEncodedName",
+            "affinity": "TEXT"
           },
           {
             "fieldPath": "streamTypeText",
@@ -442,7 +447,7 @@
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '4042d3ae2b4c623c119c203b4be8ad47')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dcb42a3df9bb9394eb27c71e55b659fe')"
     ]
   }
 }

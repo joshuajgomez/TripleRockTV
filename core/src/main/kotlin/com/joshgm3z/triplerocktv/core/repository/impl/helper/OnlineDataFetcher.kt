@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.encodeWithSound
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 
@@ -134,6 +135,7 @@ constructor(
             StreamData(
                 num = it.num,
                 name = it.name,
+                soundEncodedName = it.name.encodeWithSound(),
                 streamTypeText = it.streamType,
                 streamId = it.streamId,
                 streamIcon = it.streamIcon,

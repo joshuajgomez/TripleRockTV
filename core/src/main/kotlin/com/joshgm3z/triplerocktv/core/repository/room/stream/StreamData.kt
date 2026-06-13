@@ -19,6 +19,7 @@ data class StreamData(
     @PrimaryKey val streamId: Int,
     val num: Int,
     val name: String,
+    val soundEncodedName: String? = null,
     val streamTypeText: String,
     val streamIcon: String?,
     val categoryId: Int,
