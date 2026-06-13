@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.encodeWithSound
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
@@ -20,7 +21,7 @@ class SearchRepositoryImpl @Inject constructor(
         name: String,
         streamType: StreamType
     ): List<StreamData> = when (streamType) {
-        StreamType.VideoOnDemand -> streamDataDao.searchByName(name)
+        StreamType.VideoOnDemand -> streamDataDao.searchBySoundexName(name.encodeWithSound())
         else -> emptyList()
     }.apply {
         Logger.info("searchStreamByName($name, $streamType): $this")
