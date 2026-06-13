@@ -127,23 +127,30 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
-        val recentSeries = recentlyPlayedDao
+        return recentlyPlayedDao
             .getRecentlyPlayedByType(StreamType.Series)
-            .map { recentlyPlayed ->
-                seriesStreamsDao.getBySeriesId(recentlyPlayed.seriesId!!).apply {
-                    lastPlayedEpisodeId = recentlyPlayed.id
-                }
+            .mapNotNull { recentlyPlayed ->
+                // 1. Fetch the series
+                val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
+                val series = seriesStreamsDao.getBySeriesId(seriesId)
+
+                // 2. Attach the specific recently played data to the correct episode
+                // instead of iterating and querying for every single episode.
+                series.lastPlayedEpisodeId = recentlyPlayed.id
+
+                // 3. Only return the series if it passes the "started watching" check
+                if (series.hasStartedLastEpisode(recentlyPlayed)) series else null
             }
-        val recentSeriesFiltered = recentSeries.filter { it.timeLeftInLastEpisode() }
-        return recentSeriesFiltered
     }
 
-    private suspend fun SeriesStream.timeLeftInLastEpisode(): Boolean {
+    private fun SeriesStream.hasStartedLastEpisode(recent: RecentlyPlayed): Boolean {
+        // We already have the 'recent' object from the map loop,
+        // so we don't need to query the DB again here.
         seasons?.forEach { season ->
             season.episodes.forEach { episode ->
-                episode.recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episode.id).first()
-                if (episode.id == lastPlayedEpisodeId && episode.startedWatching) {
-                    return true
+                if (episode.id == lastPlayedEpisodeId) {
+                    episode.recentlyPlayed = recent
+                    return episode.startedWatching // Uses the logic defined in Episode class
                 }
             }
         }
