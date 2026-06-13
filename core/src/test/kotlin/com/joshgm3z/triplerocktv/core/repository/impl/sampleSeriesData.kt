@@ -28,8 +28,6 @@ fun sampleSeriesData() = SeriesStream(
                         rating = "8.0",
                         season = "1"
                     ),
-                    lastPlayed = 10000,
-                    playedDuration = 280000
                 )
             ),
             number = 1,
@@ -56,8 +54,6 @@ fun sampleSeriesData() = SeriesStream(
                         rating = "8.5",
                         season = "2"
                     ),
-                    lastPlayed = 0,
-                    playedDuration = 0
                 )
             ),
             number = 2,
@@ -75,13 +71,11 @@ fun sampleSeriesData() = SeriesStream(
     director = null,
     genre = null,
     lastModified = null,
-    lastPlayed = 10000,
     name = "Sample Series",
     num = 1,
     plot = null,
     rating = null,
     releaseDate = null,
-    lastPlayedEpisodeId = 1,
 )
 
 fun sampleStreamData() = listOf(
@@ -93,12 +87,9 @@ fun sampleStreamData() = listOf(
         streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
         categoryId = 1,
         added = "1625012046",
-        playedDuration = 42800,
-        lastPlayed = 1000,
         streamType = StreamType.VideoOnDemand,
         rating = 8.3f,
         extension = "mp4",
-        inMyList = true,
         movieMetadata = MovieMetadata(
             totalDurationMs = 4280000L,
             description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
@@ -112,12 +103,9 @@ fun sampleStreamData() = listOf(
         streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
         categoryId = 1,
         added = "1625012046",
-        playedDuration = 42800,
-        lastPlayed = 242,
         streamType = StreamType.VideoOnDemand,
         rating = 8.3f,
         extension = "mp4",
-        inMyList = true,
         movieMetadata = MovieMetadata(
             totalDurationMs = 4280000L,
             description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
