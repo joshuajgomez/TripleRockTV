@@ -126,12 +126,6 @@ constructor(
                 type,
                 onFetch = {
                     viewModelScope.launch(Dispatchers.IO) {
-                        // store last update time and count
-                        if (it.status == LoadingStatus.Complete) localDatastore.setLastContentUpdate(
-                            type, System.currentTimeMillis(),
-                            localRepository.numberOfFiles(type).withComma()
-                        )
-
                         _uiState.update { currentState ->
                             val updatedMap = currentState.stateMap.toMutableMap()
                             updatedMap[type] = DownloadedItemState(
@@ -147,8 +141,13 @@ constructor(
                             )
                             currentState.copy(stateMap = updatedMap)
                         }
-                        if (it.status == LoadingStatus.Complete || it.status == LoadingStatus.Error)
+                        if (it.status == LoadingStatus.Complete || it.status == LoadingStatus.Error) {
+                            localDatastore.setLastContentUpdate(
+                                type, System.currentTimeMillis(),
+                                localRepository.numberOfFiles(type).withComma()
+                            )
                             resumeQueue()
+                        }
                     }
                 },
                 onError = { error, summary ->
