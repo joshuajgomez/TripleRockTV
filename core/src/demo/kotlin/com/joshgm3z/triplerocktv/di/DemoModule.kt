@@ -10,10 +10,13 @@ import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.OnlineTyperRepository
+import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.OnlineTyperRepositoryImpl
+import com.joshgm3z.triplerocktv.core.repository.impl.RecentsRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoAccessControlRepositoryImpl
+import com.joshgm3z.triplerocktv.impl.DemoRecentsRepositoryImpl
 import com.joshgm3z.triplerocktv.impl.DemoTyperRepositoryImpl
 import dagger.Binds
 import dagger.Module
@@ -57,4 +60,9 @@ abstract class DemoBindingModule {
     abstract fun bindOnlineTyperRepository(
         repo: DemoTyperRepositoryImpl
     ): OnlineTyperRepository
+
+    @Binds
+    abstract fun bindRecentsRepository(
+        repo: DemoRecentsRepositoryImpl
+    ): RecentsRepository
 }

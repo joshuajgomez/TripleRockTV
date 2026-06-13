@@ -4,10 +4,10 @@ import com.joshgm3z.triplerocktv.DemoData
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.CategoryData
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -55,7 +55,7 @@ constructor() : MediaLocalRepository {
     ): Episode = DemoData.getSampleSeriesStreams()
         .first { it.seriesId == seriesId }.seasons?.first()?.episodes!!.first()
 
-    override fun streamDataFlow(
+    override suspend fun streamDataFlow(
         streamId: Int,
         streamType: StreamType
     ): Flow<StreamData> = flow {
@@ -74,14 +74,6 @@ constructor() : MediaLocalRepository {
 
     override suspend fun isContentEmpty(): Boolean = false
 
-    override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
-        return DemoData.sampleVodStreams
-    }
-
-    override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
-        return DemoData.getSampleSeriesStreams()
-    }
-
     override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
         return DemoData.sampleVodStreams.filter { it.inMyList }
     }
@@ -94,37 +86,7 @@ constructor() : MediaLocalRepository {
         return DemoData.getSampleSeriesStreams()
     }
 
-    override suspend fun updatePlayedDuration(
-        streamId: Int,
-        positionMs: Long,
-        streamType: StreamType
-    ) {
-    }
-
-    override suspend fun updateLastPlayedTimestamp(
-        streamId: Int,
-        streamType: StreamType,
-        timeStamp: Long
-    ) {
-    }
-
-    override suspend fun updateEpisodeLastPlayedTimestamp(
-        episodeId: Int,
-        seriesId: Int,
-        timeStamp: Long
-    ) {
-    }
-
-    override suspend fun updateEpisodePlayedDuration(
-        episodeId: Int,
-        seriesId: Int,
-        positionMs: Long
-    ) {
-    }
-
-    override suspend fun updateMyList(streamId: Int, add: Boolean) {}
-
-    override suspend fun updateMyListSeries(seriesId: Int, add: Boolean) {}
+    override suspend fun updateMyList(streamId: Int, streamType: StreamType, add: Boolean) {}
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,

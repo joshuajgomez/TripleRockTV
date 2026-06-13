@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -38,6 +39,7 @@ sealed class BrowseUiState {
 class BrowseViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
+    private val recentsRepository: RecentsRepository,
 ) : ViewModel() {
 
     private val streamType = savedStateHandle.get<StreamType>("streamType")
@@ -55,13 +57,13 @@ class BrowseViewModel @Inject constructor(
 
     private suspend fun getSeriesStreamState() = BrowseUiState.SeriesStreamState(
         myList = repository.fetchMyListSeries(),
-        recentPlayedEpisodes = repository.fetchRecentlyPlayedSeries(),
+        recentPlayedEpisodes = recentsRepository.fetchRecentlyPlayedSeries(),
         seriesCategories = repository.fetchCategories(StreamType.Series),
     )
 
     private suspend fun getVideoOnDemandState() = BrowseUiState.StreamDataState(
         myList = repository.fetchMyList(StreamType.VideoOnDemand),
-        recentPlayed = repository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
+        recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
         newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
         categoryMap = mapOf(
             "All movies" to repository.fetchCategories(StreamType.VideoOnDemand),
@@ -86,7 +88,7 @@ class BrowseViewModel @Inject constructor(
 
     private suspend fun getLiveTvState() = BrowseUiState.StreamDataState(
         myList = repository.fetchMyList(StreamType.LiveTV),
-        recentPlayed = repository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
+        recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
         newlyAdded = repository.fetchNewlyAdded(StreamType.LiveTV),
         categoryMap = mapOf(
             "Live TV" to repository.fetchCategories(StreamType.LiveTV)

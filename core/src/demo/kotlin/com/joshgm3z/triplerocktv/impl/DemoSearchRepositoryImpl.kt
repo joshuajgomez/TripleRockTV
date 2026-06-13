@@ -3,8 +3,8 @@ package com.joshgm3z.triplerocktv.impl
 import com.joshgm3z.triplerocktv.DemoData
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.room.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import javax.inject.Inject
 
 class DemoSearchRepositoryImpl

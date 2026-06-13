@@ -93,16 +93,5 @@ class MediaLocalRepositoryImplTest {
         }
     }
 
-    @Test
-    fun `Verify fetchRecentlyPlayed returns movies and series`() = runTest {
-//        coEvery { streamDataDao.getLastPlayed10(any()) } returns sampleStreamData()
-//        coEvery { seriesStreamsDao.getLastPlayed10() } returns listOf(sampleSeriesData())
-
-        repository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand).let { it ->
-            it.forEach {
-                println("${it.name} last played ${it.recentlyPlayed}")
-            }
-        }
-    }
 
 }

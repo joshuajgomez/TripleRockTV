@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.OnlineTyperRepository
+import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.AccessControlRepositoryImpl
@@ -12,6 +13,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.LoginRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaLocalRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.OnlineTyperRepositoryImpl
+import com.joshgm3z.triplerocktv.core.repository.impl.RecentsRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.SearchRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.SubtitleRepositoryImpl
 import dagger.Binds
@@ -56,4 +58,9 @@ abstract class OnlineBindingModule {
     abstract fun bindOnlineTyperRepository(
         repo: OnlineTyperRepositoryImpl
     ): OnlineTyperRepository
+
+    @Binds
+    abstract fun bindRecentsRepository(
+        repo: RecentsRepositoryImpl
+    ): RecentsRepository
 }

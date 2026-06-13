@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.core.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.Logger
@@ -22,6 +23,7 @@ data class PlaybackUiState(
 @HiltViewModel
 class PlaybackViewModel @Inject constructor(
     private val repository: MediaLocalRepository,
+    private val recentsRepository: RecentsRepository,
     private val localDataStore: LocalDatastore,
 ) : ViewModel() {
 
@@ -66,13 +68,13 @@ class PlaybackViewModel @Inject constructor(
         streamId?.let {
             viewModelScope.launch(Dispatchers.IO) {
                 when (streamType) {
-                    StreamType.VideoOnDemand -> repository.updatePlayedDuration(
+                    StreamType.VideoOnDemand -> recentsRepository.updatePlayedDuration(
                         streamId = it,
                         positionMs = positionMs,
                         streamType = streamType!!
                     )
 
-                    StreamType.Series -> repository.updatePlayedDuration(
+                    StreamType.Series -> recentsRepository.updatePlayedDuration(
                         streamId = it,
                         seriesId = seriesId!!,
                         positionMs = positionMs,
