@@ -4,7 +4,7 @@ import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.room.MovieMetadata
+import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 

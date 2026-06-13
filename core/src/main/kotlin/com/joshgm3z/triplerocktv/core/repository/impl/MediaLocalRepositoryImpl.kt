@@ -13,7 +13,6 @@ import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.favorite.Favorite
 import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
-import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
@@ -22,7 +21,10 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-import kotlin.collections.filter
+
+class MissingSeasonsException(
+    message: String = "Missing seasons. Cannot fetch last played episode"
+) : Exception(message)
 
 class MediaLocalRepositoryImpl @Inject constructor(
     private val epgListingDao: EpgListingDao,
@@ -120,43 +122,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
-    override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
-        return recentlyPlayedDao.getRecentlyPlayedOfType(streamType).map {
-            streamDataDao.getByStreamId(it.id)
-        }
-    }
-
-    override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
-        return recentlyPlayedDao
-            .getRecentlyPlayedByType(StreamType.Series)
-            .mapNotNull { recentlyPlayed ->
-                // 1. Fetch the series
-                val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
-                val series = seriesStreamsDao.getBySeriesId(seriesId)
-
-                // 2. Attach the specific recently played data to the correct episode
-                // instead of iterating and querying for every single episode.
-                series.lastPlayedEpisodeId = recentlyPlayed.id
-
-                // 3. Only return the series if it passes the "started watching" check
-                if (series.hasStartedLastEpisode(recentlyPlayed)) series else null
-            }
-    }
-
-    private fun SeriesStream.hasStartedLastEpisode(recent: RecentlyPlayed): Boolean {
-        // We already have the 'recent' object from the map loop,
-        // so we don't need to query the DB again here.
-        seasons?.forEach { season ->
-            season.episodes.forEach { episode ->
-                if (episode.id == lastPlayedEpisodeId) {
-                    episode.recentlyPlayed = recent
-                    return episode.startedWatching // Uses the logic defined in Episode class
-                }
-            }
-        }
-        return false
-    }
-
     override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
         return favoriteDao.getFavoritesOfType(streamType).map {
             streamDataDao.getByStreamId(it.id)
@@ -172,41 +137,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
         return favoriteDao.getFavoritesOfType(StreamType.Series).map {
             seriesStreamsDao.getBySeriesId(it.id)
         }
-    }
-
-    override suspend fun updatePlayedDuration(
-        streamId: Int,
-        positionMs: Long,
-        streamType: StreamType,
-        seriesId: Int?,
-        timeStamp: Long
-    ) = recentlyPlayedDao.insert(
-        RecentlyPlayed(
-            id = streamId,
-            seriesId = seriesId,
-            playedDuration = positionMs,
-            streamType = streamType,
-            added = timeStamp,
-        )
-    )
-
-    private suspend fun updateEpisode(
-        episodeId: Int,
-        seriesId: Int,
-        doUpdateSeries: (SeriesStream) -> SeriesStream = { it },
-        doUpdate: (Episode) -> Episode,
-    ) {
-        Logger.debug("episodeId = [${episodeId}], seriesId = [${seriesId}]")
-        val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
-        val updatedSeasons = seriesStream.seasons?.map { season ->
-            val updatedEpisodes = season.episodes.map { episode ->
-                if (episode.id == episodeId) doUpdate(episode)
-                else episode
-            }
-            season.copy(episodes = updatedEpisodes)
-        }
-        val updatedSeriesStream = seriesStream.copy(seasons = updatedSeasons)
-        seriesStreamsDao.update(doUpdateSeries(updatedSeriesStream))
     }
 
     override suspend fun updateMyList(
