@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/splashScreenFragment">
+    app:startDestination="@id/liveTvGuide">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -307,5 +307,10 @@
         android:id="@+id/selfUpdateDialog"
         android:name="com.joshgm3z.triplerocktv.ui.selfupdate.SelfUpdateDialog"
         android:label="SelfUpdateDialog" />
+
+    <fragment
+        android:id="@+id/liveTvGuide"
+        android:name="com.joshgm3z.triplerocktv.ui.livetv.LiveTvFragment"
+        android:label="LiveTvFragment" />
 
 </navigation>

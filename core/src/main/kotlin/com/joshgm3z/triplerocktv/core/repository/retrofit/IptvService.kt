@@ -7,8 +7,11 @@ import com.joshgm3z.triplerocktv.core.repository.data.IptvStream
 import com.joshgm3z.triplerocktv.core.repository.data.SeriesDetailResponse
 import com.joshgm3z.triplerocktv.core.repository.data.VodInfoResponse
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl
+import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
+import retrofit2.http.Streaming
 
 interface IptvService {
 
@@ -72,6 +75,13 @@ interface IptvService {
         @Query("stream_id") streamId: Int,
         @Query("action") action: String = "get_short_epg"
     ): IptvEpgResponse
+
+    @Streaming
+    @GET("xmltv.php")
+    suspend fun getXmltv(
+        @Query("username") username: String,
+        @Query("password") password: String,
+    ): Response<ResponseBody>
 
     @GET("player_api.php")
     suspend fun getVodInfo(
