@@ -103,10 +103,13 @@ class SelfUpdateViewModel
                 Logger.debug("Download state: $it")
                 _uiState.update { uiState ->
                     when (it) {
-                        DownloadState.Completed -> uiState.copy(
-                            title = "Installing",
-                            subtitle = "Please grant permissions, when asked",
-                        )
+                        DownloadState.Completed -> {
+                            informInstallErrorAfterDelay()
+                            uiState.copy(
+                                title = "Installing",
+                                subtitle = "Please grant permissions, when asked",
+                            )
+                        }
 
                         DownloadState.Error -> uiState.copy(
                             title = "Error downloading update",
@@ -121,5 +124,19 @@ class SelfUpdateViewModel
             },
             onDownloadComplete = { apkInstaller.installApk(it) }
         )
+    }
+
+    private fun informInstallErrorAfterDelay() {
+        viewModelScope.launch {
+            delay(3000)
+            _uiState.update {
+                it.copy(
+                    title = "Install failed",
+                    subtitle = "Couldn't complete installation. Please try update again",
+                    enableButtons = true,
+                    buttonText = "Try again"
+                )
+            }
+        }
     }
 }
