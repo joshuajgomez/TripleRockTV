@@ -62,6 +62,9 @@
         <action
             android:id="@+id/toSelfUpdateDialog"
             app:destination="@id/selfUpdateDialog" />
+        <action
+            android:id="@+id/toLiveTvGuide"
+            app:destination="@id/liveTvGuide" />
     </fragment>
 
     <fragment
@@ -83,6 +86,9 @@
         <action
             android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
     </fragment>
 
     <fragment
@@ -307,5 +313,14 @@
         android:id="@+id/selfUpdateDialog"
         android:name="com.joshgm3z.triplerocktv.ui.selfupdate.SelfUpdateDialog"
         android:label="SelfUpdateDialog" />
+
+    <fragment
+        android:id="@+id/liveTvGuide"
+        android:name="com.joshgm3z.triplerocktv.ui.livetv.LiveTvFragment"
+        android:label="LiveTvFragment">
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
+    </fragment>
 
 </navigation>

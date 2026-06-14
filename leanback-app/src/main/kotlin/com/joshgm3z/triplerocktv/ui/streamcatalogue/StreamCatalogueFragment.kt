@@ -20,9 +20,9 @@ import com.joshgm3z.triplerocktv.databinding.FragmentStreamCatalogueBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.core.viewmodel.StreamViewModel
 import dagger.hilt.android.AndroidEntryPoint

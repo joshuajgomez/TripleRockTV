@@ -7,8 +7,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
-import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import com.joshgm3z.triplerocktv.core.util.asTwoDigit
+import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.databinding.ItemEpisodeBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible

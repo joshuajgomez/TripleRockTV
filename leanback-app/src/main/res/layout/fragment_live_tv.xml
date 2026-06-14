@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground">
+
+    <ImageView
+        android:id="@+id/iv_poster"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/category_view_background"
+        android:clipToOutline="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:scaleType="centerCrop"
+        android:src="@drawable/default_program_poster"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_now_playing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:text="Now playing"
+        android:textColor="?attr/colorForegroundPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@+id/iv_poster"
+        app:layout_constraintTop_toTopOf="@+id/iv_poster"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_program_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="25dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="?attr/colorForegroundMid"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/iv_poster"
+        tools:text="8:00 PM to 9:00 PM" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textSize="@dimen/text_size_medium"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="@+id/tv_now_playing"
+        app:layout_constraintTop_toBottomOf="@+id/tv_now_playing"
+        tools:text="@string/sample_movie_name" />
+
+    <TextView
+        android:id="@+id/tv_description"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="25dp"
+        android:ellipsize="end"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:maxLines="5"
+        android:textColor="?attr/colorForegroundMid"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_poster"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:text="@string/sample_long_description" />
+
+    <TextView
+        android:id="@+id/tv_current_date"
+        android:layout_width="237dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="25dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_poster"
+        tools:text="Playing now" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_time_list"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:orientation="horizontal"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/tv_current_date"
+        app:layout_constraintTop_toTopOf="@id/tv_current_date"
+        tools:itemCount="10"
+        tools:listitem="@layout/item_time" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_channels"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="20dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_time_list"
+        tools:listitem="@layout/item_channel" />
+
+    <com.joshgm3z.triplerocktv.ui.common.TimeMarkerView
+        android:id="@+id/time_marker_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="1.2dp"
+        android:layout_marginTop="2dp"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="@id/rv_time_list"
+        app:layout_constraintTop_toBottomOf="@+id/rv_time_list"
+        tools:minutesOffset="45"
+        tools:time="11:00"
+        tools:visibility="visible" />
+
+    <include
+        android:id="@+id/placeholder"
+        layout="@layout/layout_livetv_placeholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:visibility="visible"
+        tools:visibility="gone" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

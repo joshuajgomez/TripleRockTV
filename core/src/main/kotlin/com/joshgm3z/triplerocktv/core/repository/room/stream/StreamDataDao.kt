@@ -48,6 +48,9 @@ interface StreamDataDao {
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun streamDataFlow(streamId: Int): Flow<StreamData>
 
+    @Query("SELECT * FROM stream_data WHERE epgChannelId = :epgChannelId")
+    fun fetchLiveStreamByEpgChannelId(epgChannelId: String): StreamData
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(streams: List<StreamData>)
 

@@ -53,7 +53,7 @@ class MediaOnlineRepositoryImpl
         assert(iptvService != null)
     }
 
-    fun getIptvService(serverUrl: String): IptvService {
+    private fun getIptvService(serverUrl: String): IptvService {
         val okHttpClient = OkHttpClient.Builder()
             .connectTimeout(30, TimeUnit.SECONDS)
             .readTimeout(30, TimeUnit.SECONDS)
@@ -67,35 +67,6 @@ class MediaOnlineRepositoryImpl
         return retrofit.create(IptvService::class.java)
     }
 
-    override suspend fun fetchContent(
-        onFetch: (StreamType, LoadingState) -> Unit,
-        onError: (String, String) -> Unit
-    ) {
-        Logger.entry()
-        if (iptvService == null) {
-            fetchIptvService()
-        }
-        try {
-            onlineDataFetcher.fetchContent(
-                streamType = StreamType.VideoOnDemand,
-                onFetch = { onFetch(StreamType.VideoOnDemand, it) },
-            )
-            /*onlineDataFetcher.fetchContent(
-                streamType = StreamType.LiveTV, onError = onError,
-                onFetch = { onFetch(StreamType.LiveTV, it) },
-            )*/
-            seriesFetcher.fetchContent(
-                onFetch = { onFetch(StreamType.Series, it) },
-            )
-        } catch (e: Exception) {
-            Logger.error(e.message ?: "Error fetching content")
-            onError("Unable to fetch categories.", e.message ?: "")
-            e.printStackTrace()
-        } finally {
-            localDatastore.setLastContentUpdate(System.currentTimeMillis())
-        }
-    }
-
     override suspend fun startUpdate(
         streamType: StreamType,
         onFetch: (LoadingState) -> Unit,
@@ -107,9 +78,12 @@ class MediaOnlineRepositoryImpl
                 onFetch = onFetch,
             )
 
-            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
+            StreamType.LiveTV -> onlineDataFetcher.fetchContent(
+                streamType = streamType,
+                onFetch = onFetch,
+            )
 
-            else -> return
+            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
         }
     }
 
