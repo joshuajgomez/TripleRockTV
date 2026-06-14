@@ -80,10 +80,10 @@ class MediaOnlineRepositoryImpl
                 streamType = StreamType.VideoOnDemand,
                 onFetch = { onFetch(StreamType.VideoOnDemand, it) },
             )
-            /*onlineDataFetcher.fetchContent(
-                streamType = StreamType.LiveTV, onError = onError,
+            onlineDataFetcher.fetchContent(
+                streamType = StreamType.LiveTV,
                 onFetch = { onFetch(StreamType.LiveTV, it) },
-            )*/
+            )
             seriesFetcher.fetchContent(
                 onFetch = { onFetch(StreamType.Series, it) },
             )
@@ -107,9 +107,12 @@ class MediaOnlineRepositoryImpl
                 onFetch = onFetch,
             )
 
-            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
+            StreamType.LiveTV -> onlineDataFetcher.fetchContent(
+                streamType = streamType,
+                onFetch = onFetch,
+            )
 
-            else -> return
+            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
         }
     }
 

@@ -27,7 +27,8 @@ data class DownloadedItemState(
 data class DownloaderUiState(
     val stateMap: Map<StreamType, DownloadedItemState?> = mapOf(
         StreamType.VideoOnDemand to null,
-        StreamType.Series to null
+        StreamType.Series to null,
+        StreamType.LiveTV to null,
     ),
     val enableButtons: Boolean = false,
     val overallUpdateStatus: LoadingStatus? = null,
@@ -53,18 +54,20 @@ constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             if (autoUpdateAndExit) {
-                startUpdate(StreamType.VideoOnDemand, StreamType.Series)
+                startUpdate(*_uiState.value.stateMap.keys.toTypedArray())
             } else {
                 _uiState.update { currentState ->
                     val updatedMap = currentState.stateMap.toMutableMap()
                     currentState.stateMap.keys.forEach { type ->
+                        val countText = localDatastore.getTotalCount(type)
                         val lastContentUpdate = localDatastore.getLastContentUpdate(type)
-                        updatedMap[type] = if (lastContentUpdate == 0L)
-                            DownloadedItemState(status = "Tap update to fetch videos")
-                        else DownloadedItemState(
-                            filesCount = "${localDatastore.getTotalCount(type)} videos",
-                            status = "Last updated ${lastContentUpdate.relativeTime()}"
-                        )
+                        updatedMap[type] =
+                            if (lastContentUpdate == 0L || countText.isEmpty() || countText == "0")
+                                DownloadedItemState(status = "Tap update to fetch videos")
+                            else DownloadedItemState(
+                                filesCount = "$countText videos",
+                                status = "Last updated ${lastContentUpdate.relativeTime()}"
+                            )
 
                     }
                     currentState.copy(
