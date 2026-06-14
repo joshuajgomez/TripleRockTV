@@ -36,6 +36,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.collections.component1
+import kotlin.collections.component2
 
 @AndroidEntryPoint
 class BrowseFragment : BrowseSupportFragment() {
@@ -83,7 +85,8 @@ class BrowseFragment : BrowseSupportFragment() {
                 if (it !is BrowseUiState.Loading) progressBarManager.hide()
                 when (it) {
                     is BrowseUiState.Loading -> progressBarManager.show()
-                    is BrowseUiState.StreamDataState -> showStreamDataState(it)
+                    is BrowseUiState.VideoOnDemandState -> showVoDState(it)
+                    is BrowseUiState.LiveTState -> showLiveTvState(it)
                     is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
                     is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
                 }
@@ -132,9 +135,18 @@ class BrowseFragment : BrowseSupportFragment() {
                     streamId = item.seriesId
                 }
 
-                is StreamData -> BrowseFragmentDirections.toDetails().apply {
-                    streamType = item.streamType
-                    streamId = item.streamId
+                is StreamData -> when (item.streamType) {
+                    StreamType.VideoOnDemand -> BrowseFragmentDirections.toDetails().apply {
+                        streamType = item.streamType
+                        streamId = item.streamId
+                    }
+
+                    else -> {
+                        BrowseFragmentDirections.toPlayback().apply {
+                            streamType = item.streamType
+                            streamId = item.streamId
+                        }
+                    }
                 }
 
                 is Episode -> BrowseFragmentDirections.toDetails().apply {
@@ -147,7 +159,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
     }
 
-    private fun showStreamDataState(uiState: BrowseUiState.StreamDataState) {
+    private fun showVoDState(uiState: BrowseUiState.VideoOnDemandState) {
         rowsAdapter.clear()
 
         if (uiState.recentPlayed.isNotEmpty()) {
@@ -186,6 +198,39 @@ class BrowseFragment : BrowseSupportFragment() {
         var counter = 1L
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
+        }
+    }
+
+    private fun showLiveTvState(uiState: BrowseUiState.LiveTState) {
+        rowsAdapter.clear()
+
+        if (uiState.recentPlayed.isNotEmpty()) {
+            val header = HeaderItem(0, "Recently played")
+            val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
+            listRowAdapter.addAll(0, uiState.recentPlayed)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+
+        if (uiState.myList.isNotEmpty()) {
+            val header = HeaderItem(0, "My list")
+            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+            listRowAdapter.addAll(0, uiState.myList)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+
+        fun addRow(
+            id: Long,
+            header: String,
+            list: List<StreamData>
+        ) {
+            if (list.isEmpty()) return
+            val header = HeaderItem(id, header)
+            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+            listRowAdapter.addAll(0, list)
+            rowsAdapter.add(ListRow(header, listRowAdapter))
+        }
+        uiState.liveTvMap.forEach { (category, streams) ->
+            addRow(category.categoryId.toLong(), category.categoryName, streams)
         }
     }
 

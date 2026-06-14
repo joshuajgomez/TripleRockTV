@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv
 
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
+import com.joshgm3z.triplerocktv.core.repository.LiveTvRepository
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
@@ -9,6 +10,7 @@ import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.AccessControlRepositoryImpl
+import com.joshgm3z.triplerocktv.core.repository.impl.LiveTvRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.LoginRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaLocalRepositoryImpl
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl
@@ -63,4 +65,9 @@ abstract class OnlineBindingModule {
     abstract fun bindRecentsRepository(
         repo: RecentsRepositoryImpl
     ): RecentsRepository
+
+    @Binds
+    abstract fun bindLiveTvRepository(
+        repo: LiveTvRepositoryImpl
+    ): LiveTvRepository
 }

@@ -65,6 +65,12 @@ class HomeViewModel
                         R.drawable.livetv_avd
                     )
                 )
+                /*if (it.isNotEmpty()) categories.add(
+                    HomeItem(
+                        "EPG",
+                        R.drawable.livetv_avd
+                    )
+                )*/
             }
 
             _homeListState.value = categories

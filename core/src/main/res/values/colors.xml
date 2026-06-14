@@ -2,13 +2,13 @@
 <resources>
     <color name="color_background">#000</color>
 
-    <color name="color_surface_primary">#30311B00</color>
+    <color name="color_surface_primary">#1D1000</color>
 
     <color name="color_surface_low">#121212</color>
     <color name="color_surface_mid">#1C1C1C</color>
     <color name="color_surface_high">#262626</color>
 
-    <color name="color_foreground_primary">#A36600</color>
+    <color name="color_foreground_primary">#B66500</color>
 
     <color name="color_foreground_high">#F5F5F0</color>
     <color name="color_foreground_mid">#4D4D49</color>

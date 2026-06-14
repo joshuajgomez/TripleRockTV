@@ -20,4 +20,6 @@
     <dimen name="series_selector_vertical_edge_padding">20dp</dimen>
     <dimen name="button_corner_radius">5dp</dimen>
     <dimen name="stroke_width">0.3dp</dimen>
+    <dimen name="WIDTH_30_MIN">100dp</dimen>
+    <dimen name="program_gap">1dp</dimen>
 </resources>

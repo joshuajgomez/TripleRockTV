@@ -43,4 +43,8 @@
         <attr name="showUpdateButton" format="boolean" />
         <attr name="showPlaceholder" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="TimeMarkerView">
+        <attr name="time" format="string" />
+        <attr name="minutesOffset" format="integer" />
+    </declare-styleable>
 </resources>

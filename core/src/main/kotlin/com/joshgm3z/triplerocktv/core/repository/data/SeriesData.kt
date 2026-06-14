@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
 import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_DURATION_LEFT
 import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATION
-import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
+import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
 data class IptvSeries(

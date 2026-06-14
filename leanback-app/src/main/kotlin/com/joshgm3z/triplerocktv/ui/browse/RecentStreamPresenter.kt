@@ -35,7 +35,7 @@ class RecentStreamPresenter
             else -> "Unknown"
         }
         val imageUri = when (item) {
-            is StreamData -> item.streamIcon
+            is StreamData -> item.movieMetadata?.backPosterUrl ?: item.streamIcon
             is Episode -> item.episodeInfo?.movie_image
             else -> "Unknown"
         }

@@ -77,7 +77,7 @@ class UpdaterFragment : Fragment() {
         }
         binding.bvDownloadAll.setOnClickListener {
             viewModel.startUpdate(
-                StreamType.VideoOnDemand, StreamType.Series
+                StreamType.VideoOnDemand, StreamType.Series, StreamType.LiveTV
             )
         }
         binding.ucvVod.setOnClickListener {
@@ -85,6 +85,9 @@ class UpdaterFragment : Fragment() {
         }
         binding.ucvSeries.setOnClickListener {
             viewModel.startUpdate(StreamType.Series)
+        }
+        binding.ucvLivetv.setOnClickListener {
+            viewModel.startUpdate(StreamType.LiveTV)
         }
         setupBackstackListener()
         binding.bvDownloadAll.post {
@@ -97,7 +100,7 @@ class UpdaterFragment : Fragment() {
         fun getView(streamType: StreamType): UpdateItemView = when (streamType) {
             StreamType.VideoOnDemand -> binding.ucvVod
             StreamType.Series -> binding.ucvSeries
-            StreamType.LiveTV -> binding.ucvVod
+            StreamType.LiveTV -> binding.ucvLivetv
         }
 
         uiState.stateMap.forEach { (streamType, state) ->

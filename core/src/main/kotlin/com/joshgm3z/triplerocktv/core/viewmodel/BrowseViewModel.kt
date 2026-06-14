@@ -21,17 +21,22 @@ sealed class BrowseUiState {
     data object Loading : BrowseUiState()
     data class Error(val message: String) : BrowseUiState()
 
-    data class StreamDataState(
+    data class VideoOnDemandState(
         val myList: List<StreamData> = emptyList(),
         val recentPlayed: List<StreamData> = emptyList(),
         val newlyAdded: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
     ) : BrowseUiState()
 
+    data class LiveTState(
+        val recentPlayed: List<StreamData> = emptyList(),
+        val myList: List<StreamData> = emptyList(),
+        val liveTvMap: Map<CategoryData, List<StreamData>> = emptyMap(),
+    ) : BrowseUiState()
+
     data class SeriesStreamState(
         val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
         val myList: List<SeriesStream> = emptyList(),
-        val seriesCategories: List<CategoryData> = emptyList(),
         val seriesMap: Map<CategoryData, List<SeriesStream>> = emptyMap(),
     ) : BrowseUiState()
 }
@@ -59,7 +64,6 @@ class BrowseViewModel @Inject constructor(
     private suspend fun getSeriesStreamState() = BrowseUiState.SeriesStreamState(
         myList = repository.fetchMyListSeries(),
         recentPlayedEpisodes = recentsRepository.fetchRecentlyPlayedSeries(),
-        seriesCategories = repository.fetchCategories(StreamType.Series),
         seriesMap = repository.fetchCategories(StreamType.Series).associateWith { category ->
             repository.fetchStreamsOfCategory(
                 category.categoryId,
@@ -68,7 +72,7 @@ class BrowseViewModel @Inject constructor(
         },
     )
 
-    private suspend fun getVideoOnDemandState() = BrowseUiState.StreamDataState(
+    private suspend fun getVideoOnDemandState() = BrowseUiState.VideoOnDemandState(
         myList = repository.fetchMyList(StreamType.VideoOnDemand),
         recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
         newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
@@ -93,13 +97,15 @@ class BrowseViewModel @Inject constructor(
         )
     )
 
-    private suspend fun getLiveTvState() = BrowseUiState.StreamDataState(
-        myList = repository.fetchMyList(StreamType.LiveTV),
+    private suspend fun getLiveTvState() = BrowseUiState.LiveTState(
         recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
-        newlyAdded = repository.fetchNewlyAdded(StreamType.LiveTV),
-        categoryMap = mapOf(
-            "Live TV" to repository.fetchCategories(StreamType.LiveTV)
-        )
+        myList = repository.fetchMyList(StreamType.LiveTV),
+        liveTvMap = repository.fetchCategories(StreamType.LiveTV).associateWith { category ->
+            repository.fetchStreamsOfCategory(
+                category.categoryId,
+                StreamType.LiveTV
+            ) as List<StreamData>
+        },
     )
 
     fun onViewResume() {

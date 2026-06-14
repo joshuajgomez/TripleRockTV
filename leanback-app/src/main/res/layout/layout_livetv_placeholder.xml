@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="25dp">
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_poster"
+        android:layout_width="300dp"
+        android:layout_height="150dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_now_playing"
+        android:layout_width="150dp"
+        android:layout_height="25dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintStart_toEndOf="@+id/ph_poster"
+        app:layout_constraintTop_toTopOf="parent"
+        app:placeholderTint="?attr/colorForegroundPrimary" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_program_time"
+        android:layout_width="130dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_title"
+        android:layout_width="300dp"
+        android:layout_height="25dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintStart_toStartOf="@+id/ph_now_playing"
+        app:layout_constraintTop_toBottomOf="@id/ph_now_playing" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_desc"
+        android:layout_width="700dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintStart_toStartOf="@+id/ph_title"
+        app:layout_constraintTop_toBottomOf="@+id/ph_title" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_current_time"
+        android:layout_width="150dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="25dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ph_poster" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/ph_flow_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        app:constraint_referenced_ids="ph_time_frame1,ph_time_frame2,ph_time_frame3,ph_time_frame4"
+        app:flow_horizontalGap="40dp"
+        app:layout_constraintStart_toEndOf="@+id/ph_current_time"
+        app:layout_constraintTop_toTopOf="@id/ph_current_time" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_time_frame1"
+        android:layout_width="60dp"
+        android:layout_height="20dp" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_time_frame2"
+        android:layout_width="60dp"
+        android:layout_height="20dp" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_time_frame3"
+        android:layout_width="60dp"
+        android:layout_height="20dp" />
+
+    <com.joshgm3z.triplerocktv.ui.common.PlaceholderView
+        android:id="@+id/ph_time_frame4"
+        android:layout_width="60dp"
+        android:layout_height="20dp" />
+
+    <androidx.constraintlayout.helper.widget.Flow
+        android:id="@+id/ph_flow_channels"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:orientation="vertical"
+        app:constraint_referenced_ids="ph_channel1,ph_channel2,ph_channel3,ph_channel4,ph_channel5"
+        app:flow_verticalGap="7dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/ph_current_time" />
+
+    <include
+        android:id="@+id/ph_channel1"
+        layout="@layout/layout_channel_placeholder" />
+
+    <include
+        android:id="@+id/ph_channel2"
+        layout="@layout/layout_channel_placeholder" />
+
+    <include
+        android:id="@+id/ph_channel3"
+        layout="@layout/layout_channel_placeholder" />
+
+    <include
+        android:id="@+id/ph_channel4"
+        layout="@layout/layout_channel_placeholder" />
+    <include
+        android:id="@+id/ph_channel5"
+        layout="@layout/layout_channel_placeholder" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

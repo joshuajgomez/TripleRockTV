@@ -1,0 +1,41 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="300dp"
+    android:height="150dp"
+    android:viewportWidth="300"
+    android:viewportHeight="150">
+
+    <!-- TV Frame (Centered at X=150, Y=75) -->
+    <path
+        android:fillAlpha="0.9"
+        android:fillColor="?attr/colorForegroundPrimary"
+        android:pathData="M120,52
+                          L180,52
+                          A5,5 0 0 1 185,57
+                          L185,92
+                          A5,5 0 0 1 180,97
+                          L120,97
+                          A5,5 0 0 1 115,92
+                          L115,57
+                          A5,5 0 0 1 120,52 Z
+                          M120,57 L120,92 L180,92 L180,57 Z" />
+
+    <!-- TV Stand (Centered) -->
+    <path
+        android:fillAlpha="0.9"
+        android:fillColor="?attr/colorForegroundPrimary"
+        android:pathData="M140,97 L160,97 L165,105 L135,105 Z" />
+
+    <!-- Antennae (Centered) -->
+    <path
+        android:pathData="M135,37 L150,52 M165,37 L150,52"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.9"
+        android:strokeColor="?attr/colorForegroundPrimary"
+        android:strokeLineCap="round" />
+
+    <!-- Live Indicator (Centered relative to the new TV screen position) -->
+    <path
+        android:fillColor="?attr/colorError"
+        android:pathData="M130,74.5 A2.5,2.5 0 1 1 125,74.5 A2.5,2.5 0 1 1 130,74.5" />
+
+</vector>

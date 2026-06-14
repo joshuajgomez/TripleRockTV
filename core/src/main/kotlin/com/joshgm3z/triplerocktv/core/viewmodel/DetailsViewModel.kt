@@ -12,8 +12,8 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
-import com.joshgm3z.triplerocktv.core.repository.room.stream.toTextTime
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.toTextTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

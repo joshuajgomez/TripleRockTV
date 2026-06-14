@@ -14,21 +14,17 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
-import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
 import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
-import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeItem
 import com.joshgm3z.triplerocktv.core.viewmodel.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.io.File
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -76,6 +72,7 @@ class HomeFragment : BrowseSupportFragment() {
                 "Video on demand" -> HomeFragmentDirections.toBrowse(StreamType.VideoOnDemand)
                 "Series" -> HomeFragmentDirections.toBrowse(StreamType.Series)
                 "Live TV" -> HomeFragmentDirections.toBrowse(StreamType.LiveTV)
+                "EPG" -> HomeFragmentDirections.toLiveTvGuide()
                 else -> return@OnItemViewClickedListener
             }
 

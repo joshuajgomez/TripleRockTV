@@ -50,6 +50,14 @@ class PlaybackViewModel @Inject constructor(
                     )
                 }
 
+                StreamType.LiveTV -> _playbackUiState.update {
+                    val result = repository.fetchStream(streamId, streamType)
+                    PlaybackUiState(
+                        playbackItem = result,
+                        videoUrl = result.videoUrl(userInfo),
+                    )
+                }
+
                 StreamType.Series -> _playbackUiState.update {
                     val episode = repository.fetchEpisode(streamId, seriesId!!)
                     PlaybackUiState(
