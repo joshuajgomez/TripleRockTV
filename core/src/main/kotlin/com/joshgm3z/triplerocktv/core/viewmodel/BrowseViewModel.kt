@@ -32,6 +32,7 @@ sealed class BrowseUiState {
         val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
         val myList: List<SeriesStream> = emptyList(),
         val seriesCategories: List<CategoryData> = emptyList(),
+        val seriesMap: Map<CategoryData, List<SeriesStream>> = emptyMap(),
     ) : BrowseUiState()
 }
 
@@ -59,6 +60,12 @@ class BrowseViewModel @Inject constructor(
         myList = repository.fetchMyListSeries(),
         recentPlayedEpisodes = recentsRepository.fetchRecentlyPlayedSeries(),
         seriesCategories = repository.fetchCategories(StreamType.Series),
+        seriesMap = repository.fetchCategories(StreamType.Series).associateWith { category ->
+            repository.fetchStreamsOfCategory(
+                category.categoryId,
+                StreamType.Series
+            ) as List<SeriesStream>
+        },
     )
 
     private suspend fun getVideoOnDemandState() = BrowseUiState.StreamDataState(

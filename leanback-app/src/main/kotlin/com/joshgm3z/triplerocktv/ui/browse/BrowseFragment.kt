@@ -213,15 +213,17 @@ class BrowseFragment : BrowseSupportFragment() {
         fun addRow(
             id: Long,
             header: String,
-            list: List<CategoryData>
+            list: List<SeriesStream>
         ) {
             if (list.isEmpty()) return
             val header = HeaderItem(id, header)
-            val listRowAdapter = ArrayObjectAdapter(categoryPresenter)
+            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
             listRowAdapter.addAll(0, list)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
-        addRow(0L, "All series", uiState.seriesCategories)
+        uiState.seriesMap.forEach { (category, series) ->
+            addRow(category.categoryId.toLong(), category.categoryName, series)
+        }
     }
 
     private fun List<Season>.findEpisode(episodeId: Int): Episode {
