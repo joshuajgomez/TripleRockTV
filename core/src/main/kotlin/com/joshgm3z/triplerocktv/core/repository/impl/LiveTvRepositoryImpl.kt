@@ -21,11 +21,17 @@ class LiveTvRepositoryImpl
                 iptvService.username,
                 iptvService.password
             )
+            Logger.debug("response = [$response]")
             if (response.isSuccessful) {
                 val responseBody = response.body() ?: return@launch
                 val programs = XmlTvParser.parse(responseBody.byteStream())
 
-                Logger.debug("programs = [$programs]")
+                Logger.debug("programs.size = [${programs.size}]")
+                programs.forEach {
+                    if (it.id != null) {
+                        Logger.debug("program = [${it}]")
+                    }
+                }
             }
         }
         Logger.debug("exit")

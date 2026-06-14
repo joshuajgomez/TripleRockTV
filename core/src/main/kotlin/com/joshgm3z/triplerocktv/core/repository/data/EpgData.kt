@@ -8,9 +8,10 @@ data class IptvEpgResponse(
 )
 
 data class XmlTvProgram(
-    val start: String?,
-    val stop: String?,
-    val channelId: String?,
-    val title: String?,
-    val desc: String?
+    var start: String? = null,
+    var stop: String? = null,
+    var id: String? = null,
+    var title: String? = null,
+    var description: String? = null,
+    var icon: String? = null,
 )

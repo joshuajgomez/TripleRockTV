@@ -6,6 +6,7 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
+import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
 /**
@@ -73,26 +74,11 @@ data class StreamData(
         else -> ((movieMetadata?.totalDurationMs ?: 0L) - recentlyPlayed!!.playedDuration)
     }
 
-    fun timeRemainingText(): String = when {
-        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> ""
-        else -> timeRemaining().toTextTime().let { "$it remaining" }
-    }
-
     val startedWatching: Boolean
         get() = recentlyPlayed != null
                 && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
                 && movieMetadata?.totalDurationMs != 0L
                 && timeRemaining() > MIN_DURATION_LEFT
-}
-
-fun Long.toTextTime(): String {
-    val totalSeconds = this / 1000
-    val hours = totalSeconds / 3600
-    val minutes = (totalSeconds % 3600) / 60
-    return buildString {
-        if (hours > 0) append("${hours}h ")
-        if (minutes > 0 || hours > 0) append("${minutes}m")
-    }.trim()
 }
 
 data class MovieMetadata(

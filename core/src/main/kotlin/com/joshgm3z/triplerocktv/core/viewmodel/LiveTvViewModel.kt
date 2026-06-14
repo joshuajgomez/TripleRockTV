@@ -13,6 +13,9 @@ class LiveTvViewModel
 ) : ViewModel() {
 
     init {
+    }
+
+    fun fetchGuide(){
         Logger.debug("entry")
         repository.fetchLiveTvGuide()
     }

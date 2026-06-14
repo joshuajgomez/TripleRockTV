@@ -13,25 +13,23 @@ import javax.inject.Inject
 
 class IptvServiceProvider
 @Inject constructor(
-    scope: CoroutineScope,
     private val localDatastore: LocalDatastore,
 ) {
     private var iptvService: IptvService? = null
     var username: String = ""
     var password: String = ""
 
-    init {
+    suspend fun get(): IptvService? {
         Logger.debug("entry")
-        scope.launch {
+        if (iptvService == null) {
             localDatastore.getUserInfo()?.let {
                 iptvService = getIptvService(it.webUrl)
                 username = it.username
                 password = it.password
             }
         }
+        return iptvService
     }
-
-    fun get() = iptvService
 
     private fun getIptvService(serverUrl: String): IptvService {
         Logger.debug("serverUrl = [${serverUrl}]")

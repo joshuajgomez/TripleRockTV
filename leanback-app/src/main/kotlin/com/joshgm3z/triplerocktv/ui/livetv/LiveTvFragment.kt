@@ -6,10 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvBinding
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class LiveTvFragment : Fragment() {
@@ -23,12 +25,14 @@ class LiveTvFragment : Fragment() {
     ): View {
         Logger.debug("entry")
         binding = FragmentLiveTvBinding.inflate(inflater, container, false)
-        viewModel
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        lifecycleScope.launch {
+            viewModel.fetchGuide()
+        }
         Logger.debug("entry")
     }
 }
