@@ -20,7 +20,7 @@ class SearchRepositoryImpl @Inject constructor(
         name: String,
         streamType: StreamType
     ): List<StreamData> = when (streamType) {
-        StreamType.VideoOnDemand -> streamDataDao.searchByName(name)
+        StreamType.VideoOnDemand, StreamType.LiveTV -> streamDataDao.searchByName(name)
         else -> emptyList()
     }.apply {
         Logger.info("searchStreamByName($name, $streamType): $this")

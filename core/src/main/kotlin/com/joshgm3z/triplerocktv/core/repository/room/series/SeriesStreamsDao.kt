@@ -12,7 +12,21 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeriesStreamsDao {
 
-    @Query("SELECT * FROM series_stream WHERE name LIKE '%' || :streamName || '%' LIMIT :limit")
+    @Query("""
+    SELECT * FROM stream_data 
+    WHERE name LIKE '%' || :streamName || '%' 
+    ORDER BY 
+        CASE 
+            -- Highest priority: Exact match
+            WHEN name = :streamName THEN 1
+            -- Second priority: Starts with the word
+            WHEN name LIKE :streamName || '%' THEN 2
+            -- Lowest priority: Contains the word anywhere else
+            ELSE 3 
+        END, 
+        name ASC 
+    LIMIT :limit
+""")
     fun searchStreams(streamName: String, limit: Int = SEARCH_LIMIT): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
