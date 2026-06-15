@@ -46,7 +46,7 @@ class SelfUpdateDialog : DialogFragment() {
             viewModel.uiState.collect {
                 binding.tvTitle.text = it.title
                 binding.tvSubtitle.text = it.subtitle
-                binding.bvPositive.text = it.buttonText
+                binding.bvPositive.text = it.buttonAction.text
                 binding.bvPositive.isEnabled = it.enableButtons
                 binding.bvNegative.isEnabled = it.enableButtons
             }

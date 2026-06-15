@@ -14,13 +14,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.io.File
 import javax.inject.Inject
 
 data class SelfUpdateUiState(
     val title: String = "",
     val subtitle: String? = null,
     val enableButtons: Boolean = false,
-    val buttonText: String = "Update",
+    val buttonAction: ButtonAction = ButtonAction.UpdateNow,
 )
 
 private val devAppUrl =
@@ -32,6 +33,13 @@ private val onlineAppUrl =
     "https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-leanback-app.apk"
 private val onlineAppTagUrl =
     "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/latest"
+
+enum class ButtonAction(val text: String) {
+    UpdateNow("Update now"),
+    CheckAgain("Check again"),
+    Install("Install"),
+    TryAgain("Try again")
+}
 
 @HiltViewModel
 class SelfUpdateViewModel
@@ -46,15 +54,17 @@ class SelfUpdateViewModel
     private val apkUrl = if (BuildConfig.FLAVOR == "online") onlineAppUrl else devAppUrl
     private val apkTagUrl = if (BuildConfig.FLAVOR == "online") onlineAppTagUrl else devAppTagUrl
 
+    private var downloadedFile: File? = null
+
     init {
         checkUpdates()
     }
 
     fun onButtonClick() {
-        if (_uiState.value.buttonText == "Update now") {
-            downloadUpdate()
-        } else if (_uiState.value.buttonText == "Check again") {
-            checkUpdates()
+        when (_uiState.value.buttonAction) {
+            ButtonAction.CheckAgain -> checkUpdates()
+            ButtonAction.Install -> downloadedFile?.let { apkInstaller.installApk(it) }
+            else -> downloadUpdate()
         }
     }
 
@@ -76,13 +86,13 @@ class SelfUpdateViewModel
                         title = "Update available",
                         subtitle = "New version  $releaseName is available for download",
                         enableButtons = true,
-                        buttonText = "Update now"
+                        buttonAction = ButtonAction.UpdateNow
                     )
                 } else {
                     it.copy(
                         title = "App is up to date",
                         enableButtons = true,
-                        buttonText = "Check again"
+                        buttonAction = ButtonAction.CheckAgain
                     )
                 }
             }
@@ -90,6 +100,7 @@ class SelfUpdateViewModel
     }
 
     private fun downloadUpdate() {
+        downloadedFile = null
         _uiState.update {
             it.copy(
                 title = "Downloading update",
@@ -115,14 +126,17 @@ class SelfUpdateViewModel
                             title = "Error downloading update",
                             subtitle = "Cannot download update right now. Try again later",
                             enableButtons = true,
-                            buttonText = "Try again"
+                            buttonAction = ButtonAction.TryAgain
                         )
 
                         else -> uiState
                     }
                 }
             },
-            onDownloadComplete = { apkInstaller.installApk(it) }
+            onDownloadComplete = {
+                downloadedFile = it
+                apkInstaller.installApk(it)
+            }
         )
     }
 
@@ -131,10 +145,10 @@ class SelfUpdateViewModel
             delay(3000)
             _uiState.update {
                 it.copy(
-                    title = "Install failed",
-                    subtitle = "Couldn't complete installation. Please try update again",
+                    title = "Update file downloaded",
+                    subtitle = "Tap install to complete update",
                     enableButtons = true,
-                    buttonText = "Try again"
+                    buttonAction = ButtonAction.Install
                 )
             }
         }
