@@ -49,6 +49,10 @@ class SelfUpdateDialog : DialogFragment() {
                 binding.bvPositive.text = it.buttonAction.text
                 binding.bvPositive.isEnabled = it.enableButtons
                 binding.bvNegative.isEnabled = it.enableButtons
+
+                binding.bvPositive.setVisible(it.enableButtons)
+                binding.bvNegative.setVisible(it.enableButtons)
+                binding.progressBar.setVisible(!it.enableButtons)
             }
         }
 
