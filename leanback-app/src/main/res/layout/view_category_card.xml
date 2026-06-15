@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
     android:layout_height="140dp"
-    android:background="@color/color_surface_low_selector"
+    android:background="@drawable/category_view_background"
+    android:clipToOutline="true"
     android:focusable="true"
     android:focusableInTouchMode="true"
     android:orientation="vertical">
@@ -29,6 +30,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
+            android:src="@drawable/avatar_movie"
             android:visibility="visible" />
 
     </FrameLayout>
