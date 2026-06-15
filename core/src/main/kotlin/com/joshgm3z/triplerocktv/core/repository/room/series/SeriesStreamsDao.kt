@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface SeriesStreamsDao {
 
     @Query("""
-    SELECT * FROM stream_data 
+    SELECT * FROM series_stream 
     WHERE name LIKE '%' || :streamName || '%' 
     ORDER BY 
         CASE 
