@@ -53,6 +53,12 @@ class SelfUpdateDialog : DialogFragment() {
                 binding.bvPositive.setVisible(it.enableButtons)
                 binding.bvNegative.setVisible(it.enableButtons)
                 binding.progressBar.setVisible(!it.enableButtons)
+
+                if (it.enableButtons) {
+                    binding.bvPositive.post {
+                        binding.bvPositive.requestFocus()
+                    }
+                }
             }
         }
 
