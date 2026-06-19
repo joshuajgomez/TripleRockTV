@@ -25,6 +25,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDemoBuild
 import dagger.hilt.android.qualifiers.ApplicationContext
 import jp.wasabeef.glide.transformations.BlurTransformation
 import kotlinx.coroutines.CoroutineScope
@@ -96,8 +97,8 @@ class GlideUtil
     }
 
     private fun String?.orSampleIfDemo(): Any? {
-        return when (BuildConfig.FLAVOR) {
-            "demo" -> AppCompatResources.getDrawable(context, R.drawable.avatar_movie)?.toBitmap()
+        return when {
+            isDemoBuild -> AppCompatResources.getDrawable(context, R.drawable.avatar_movie)?.toBitmap()
             else -> this
         }
     }

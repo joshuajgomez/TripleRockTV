@@ -6,6 +6,7 @@ import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import com.joshgm3z.triplerocktv.core.viewmodel.OnlineTyperViewModel
 import com.joshgm3z.triplerocktv.databinding.ActivityMainBinding
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -25,7 +26,7 @@ class MainActivity : FragmentActivity() {
         setContentView(binding.root)
 
         binding.tvDemoMarker.apply {
-            if (listOf("demo", "dev").contains(BuildConfig.FLAVOR)) {
+            if (isDevBuild) {
                 text = BuildConfig.FLAVOR
                 visibility = View.VISIBLE
             }
