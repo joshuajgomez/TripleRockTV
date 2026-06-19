@@ -41,6 +41,9 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: Verify navigation startDestination is splash screen
+        run: ./gradlew leanback-app:testOnlineDebugUnitTest --tests com.joshgm3z.triplerocktv.NavigationTest
+
       - name: Run Unit Tests (:leanback-app)
         run: ./gradlew leanback-app:testOnlineDebugUnitTest
 
