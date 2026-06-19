@@ -118,8 +118,8 @@ class SelfUpdateViewModel
                         DownloadState.Completed -> {
                             informInstallErrorAfterDelay()
                             uiState.copy(
-                                title = "Installing",
-                                subtitle = "Please grant permissions, when asked",
+                                title = "Update file downloaded",
+                                subtitle = "Trying to install automatically",
                             )
                         }
 
@@ -146,7 +146,6 @@ class SelfUpdateViewModel
             delay(3000)
             _uiState.update {
                 it.copy(
-                    title = "Update file downloaded",
                     subtitle = "Tap install to complete update",
                     enableButtons = true,
                     buttonAction = ButtonAction.Install
