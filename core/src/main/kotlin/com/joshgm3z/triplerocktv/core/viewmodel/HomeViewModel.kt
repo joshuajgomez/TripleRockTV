@@ -39,7 +39,7 @@ class HomeViewModel
         viewModelScope.launch(Dispatchers.IO) {
             localDatastore.getUserInfo()?.let {
                 if (it.lastContentUpdate == "") return@let
-                lastUpdatedTime = "Last updated\n${it.lastContentUpdate.toLong().relativeTime()}"
+                lastUpdatedTime = "Updated ${it.lastContentUpdate.toLong().relativeTime()}"
             }
             val categories = arrayListOf<HomeItem>()
             repository.fetchCategories(StreamType.VideoOnDemand).let {

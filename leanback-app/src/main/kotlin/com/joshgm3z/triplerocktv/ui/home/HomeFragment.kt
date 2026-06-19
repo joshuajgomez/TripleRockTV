@@ -99,7 +99,7 @@ class HomeFragment : BrowseSupportFragment() {
                     val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
                     settingsAdapter.add(
                         SettingItem(
-                            "Update media",
+                            "Sync media",
                             R.drawable.icon_download,
                             viewModel.lastUpdatedTime ?: ""
                         )

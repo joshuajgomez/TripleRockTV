@@ -32,6 +32,9 @@ fun Long.toTextTime(): String {
     }.trim()
 }
 
+fun String?.ifNullOrEmpty(defaultValue: String?) =
+    if (isNullOrEmpty()) defaultValue else this
+
 @Suppress("KotlinConstantConditions")
 val isDevBuild
     get() = BuildConfig.FLAVOR != "online"
