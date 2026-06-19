@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewRecentStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
@@ -35,7 +36,7 @@ class RecentStreamPresenter
             else -> "Unknown"
         }
         val imageUri = when (item) {
-            is StreamData -> item.movieMetadata?.backPosterUrl ?: item.streamIcon
+            is StreamData -> item.movieMetadata?.backPosterUrl.ifNullOrEmpty(item.streamIcon)
             is Episode -> item.episodeInfo?.movie_image
             else -> "Unknown"
         }

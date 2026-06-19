@@ -16,22 +16,22 @@ fun Long.relativeTime(now: Instant = Instant.now()): String {
         seconds < 60 -> "just now"
         seconds < 3600 -> {
             val mins = seconds / 60
-            if (mins == 1L) "1 minute ago" else "$mins minutes ago"
+            "${mins}m ago"
         }
 
         seconds < 86400 -> {
             val hours = seconds / 3600
-            if (hours == 1L) "1 hour ago" else "$hours hours ago"
+            "${hours}h ago"
         }
 
         seconds < 604800 -> { // Less than 1 week
             val days = seconds / 86400
-            if (days == 1L) "1 day ago" else "$days days ago"
+            "${days}d ago"
         }
 
         seconds < 2592000 -> { // Less than 30 days
             val weeks = seconds / 604800
-            if (weeks == 1L) "1 week ago" else "$weeks weeks ago"
+            "${weeks}w ago"
         }
 
         seconds < 31536000 -> { // Less than 1 year (365 days)
@@ -41,7 +41,7 @@ fun Long.relativeTime(now: Instant = Instant.now()): String {
 
         else -> {
             val years = seconds / 31536000
-            if (years == 1L) "1 year ago" else "$years years ago"
+            "${years}y ago"
         }
     }
 }

@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
 import com.joshgm3z.triplerocktv.core.util.toTextTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -101,7 +102,7 @@ class DetailsViewModel @Inject constructor(
                         director = it.movieMetadata.director.withPrefix("Director: "),
                         progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
                         inMyList = it.inMyList,
-                        coverImage = it.movieMetadata.backPosterUrl,
+                        coverImage = it.movieMetadata.backPosterUrl.ifNullOrEmpty(it.streamIcon),
                         subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
                     )
                 }
@@ -143,9 +144,6 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    private fun String?.ifNullOrEmpty(defaultValue: String?) =
-        if (isNullOrEmpty()) defaultValue else this
-
     private fun String?.withPrefix(text: String): String {
         if (this.isNullOrEmpty()) return ""
         return "$text$this"
@@ -161,16 +159,24 @@ class DetailsViewModel @Inject constructor(
     fun addToMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyList(streamId!!, StreamType.Series, true)
-            else repository.updateMyList(streamId!!, StreamType.Series,true)
+            if (streamType == StreamType.Series) repository.updateMyList(
+                streamId!!,
+                StreamType.Series,
+                true
+            )
+            else repository.updateMyList(streamId!!, StreamType.Series, true)
         }
     }
 
     fun removeFromMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyList(streamId!!,StreamType.Series, false)
-            else repository.updateMyList(streamId!!,StreamType.Series, false)
+            if (streamType == StreamType.Series) repository.updateMyList(
+                streamId!!,
+                StreamType.Series,
+                false
+            )
+            else repository.updateMyList(streamId!!, StreamType.Series, false)
         }
     }
 
