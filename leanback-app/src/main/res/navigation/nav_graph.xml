@@ -129,9 +129,10 @@
         android:label="SearchFragment">
         <action
             android:id="@+id/toDetails"
-            app:destination="@id/detailsFragment"
-            app:popUpTo="@id/searchFragment"
-            app:popUpToInclusive="true" />
+            app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
     </fragment>
 
     <fragment
