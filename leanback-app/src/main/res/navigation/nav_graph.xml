@@ -154,6 +154,9 @@
         <action
             android:id="@+id/toDetails"
             app:destination="@id/detailsFragment" />
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
     </fragment>
 
     <fragment
