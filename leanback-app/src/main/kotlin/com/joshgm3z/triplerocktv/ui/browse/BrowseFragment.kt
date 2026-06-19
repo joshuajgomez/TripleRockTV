@@ -221,16 +221,18 @@ class BrowseFragment : BrowseSupportFragment() {
         fun addRow(
             id: Long,
             header: String,
-            list: List<StreamData>
+            list: List<CategoryData>
         ) {
             if (list.isEmpty()) return
             val header = HeaderItem(id, header)
-            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+            val listRowAdapter = ArrayObjectAdapter(categoryPresenter)
             listRowAdapter.addAll(0, list)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
-        uiState.liveTvMap.forEach { (category, streams) ->
-            addRow(category.categoryId.toLong(), category.categoryName, streams)
+
+        var counter = 1L
+        uiState.categoryMap.forEach { (title, categories) ->
+            addRow(counter++, title, categories)
         }
     }
 

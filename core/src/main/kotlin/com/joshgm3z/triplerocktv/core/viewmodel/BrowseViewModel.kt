@@ -31,7 +31,7 @@ sealed class BrowseUiState {
     data class LiveTState(
         val recentPlayed: List<StreamData> = emptyList(),
         val myList: List<StreamData> = emptyList(),
-        val liveTvMap: Map<CategoryData, List<StreamData>> = emptyMap(),
+        val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
     ) : BrowseUiState()
 
     data class SeriesStreamState(
@@ -100,12 +100,36 @@ class BrowseViewModel @Inject constructor(
     private suspend fun getLiveTvState() = BrowseUiState.LiveTState(
         recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
         myList = repository.fetchMyList(StreamType.LiveTV),
-        liveTvMap = repository.fetchCategories(StreamType.LiveTV).associateWith { category ->
-            repository.fetchStreamsOfCategory(
-                category.categoryId,
-                StreamType.LiveTV
-            ) as List<StreamData>
-        },
+        categoryMap = mapOf(
+            "Malayalam" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Malayalam"
+            ),
+            "Hindi" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Hindi"
+            ) + repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Bollywood"
+            ),
+            "Tamil" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Tamil"
+            ),
+            "India" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "India"
+            ),
+            "Movies" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Movies"
+            ),
+            "News" to repository.fetchCategoriesByTitleKey(
+                StreamType.LiveTV,
+                "Movies"
+            ),
+            "All live TV" to repository.fetchCategories(StreamType.LiveTV)
+        )
     )
 
     fun onViewResume() {
