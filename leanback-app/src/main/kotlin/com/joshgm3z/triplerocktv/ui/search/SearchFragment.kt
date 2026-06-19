@@ -46,10 +46,18 @@ class SearchFragment : Fragment() {
     private fun onSearchResultClick(it: Any) {
         var text = ""
         when (it) {
-            is StreamData -> SearchFragmentDirections.toDetails().apply {
-                text = it.name
-                streamId = it.streamId
-                streamType = it.streamType
+            is StreamData -> when (it.streamType) {
+                StreamType.VideoOnDemand -> SearchFragmentDirections.toDetails().apply {
+                    text = it.name
+                    streamId = it.streamId
+                    streamType = it.streamType
+                }
+
+                else -> SearchFragmentDirections.toPlayback().apply {
+                    text = it.name
+                    streamId = it.streamId
+                    streamType = it.streamType
+                }
             }
 
             is SeriesStream -> SearchFragmentDirections.toDetails().apply {
