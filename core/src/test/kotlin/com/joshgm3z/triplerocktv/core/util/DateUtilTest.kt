@@ -16,13 +16,13 @@ class DateUtilTest {
     @Test
     fun relativeTime() {
         assertEquals("just now", now.relativeTime())
-        assertEquals("1 day ago", oneDayAgo.relativeTime())
-        assertEquals("3 days ago", threeDaysAgo.relativeTime())
-        assertEquals("1 week ago", oneWeekAgo.relativeTime())
-        assertEquals("2 weeks ago", twoWeeksAgo.relativeTime())
+        assertEquals("1d ago", oneDayAgo.relativeTime())
+        assertEquals("3d ago", threeDaysAgo.relativeTime())
+        assertEquals("1w ago", oneWeekAgo.relativeTime())
+        assertEquals("2w ago", twoWeeksAgo.relativeTime())
         assertEquals("1 month ago", oneMonthAgo.relativeTime())
         assertEquals("2 months ago", twoMonthsAgo.relativeTime())
-        assertEquals("2 years ago", twoYearsAgo.relativeTime())
+        assertEquals("2y ago", twoYearsAgo.relativeTime())
     }
 
 }
