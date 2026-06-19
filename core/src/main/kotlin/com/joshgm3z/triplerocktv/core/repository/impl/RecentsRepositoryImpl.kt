@@ -20,7 +20,9 @@ class RecentsRepositoryImpl
 ) : RecentsRepository {
     override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
         return recentlyPlayedDao.getRecentlyPlayedOfType(streamType).map {
-            streamDataDao.getByStreamId(it.id)
+            streamDataDao.getByStreamId(it.id).apply {
+                recentlyPlayed = it
+            }
         }
     }
 

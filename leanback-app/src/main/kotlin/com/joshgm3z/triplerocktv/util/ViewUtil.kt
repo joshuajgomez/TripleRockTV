@@ -2,9 +2,10 @@ package com.joshgm3z.triplerocktv.util
 
 import android.view.View
 import com.joshgm3z.triplerocktv.BuildConfig
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 
 fun View.setVisible(visible: Boolean?) {
     visibility = if (visible == true) View.VISIBLE else View.GONE
 }
 
-fun String.orIfDebug(secretText: String) = if (BuildConfig.FLAVOR != "online") secretText else this
+fun String.orIfDebug(secretText: String) = if (isDevBuild) secretText else this

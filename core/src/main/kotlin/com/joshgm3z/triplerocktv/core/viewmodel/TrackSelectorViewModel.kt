@@ -14,6 +14,7 @@ import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDemoBuild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -88,7 +89,7 @@ constructor(
     val trackButtonState = _trackButtonState.asStateFlow()
 
     init {
-        if (BuildConfig.FLAVOR == "demo") {
+        if (isDemoBuild) {
             subtitleTracks = getDemoTracks(TrackType.Subtitle)
             audioTracks = getDemoTracks(TrackType.Audio)
         }

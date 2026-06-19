@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
 import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
 import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -51,8 +52,8 @@ class SelfUpdateViewModel
     private val _uiState = MutableStateFlow(SelfUpdateUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val apkUrl = if (BuildConfig.FLAVOR == "online") onlineAppUrl else devAppUrl
-    private val apkTagUrl = if (BuildConfig.FLAVOR == "online") onlineAppTagUrl else devAppTagUrl
+    private val apkUrl = if (!isDevBuild) onlineAppUrl else devAppUrl
+    private val apkTagUrl = if (!isDevBuild) onlineAppTagUrl else devAppTagUrl
 
     private var downloadedFile: File? = null
 
