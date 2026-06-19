@@ -121,9 +121,17 @@ class StreamCatalogueFragment : Fragment() {
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
         when (item) {
-            is StreamData -> StreamCatalogueFragmentDirections.toDetails().apply {
-                streamId = item.streamId
-                streamType = item.streamType
+            is StreamData -> when (item.streamType) {
+                StreamType.VideoOnDemand -> StreamCatalogueFragmentDirections.toDetails()
+                    .apply {
+                        streamId = item.streamId
+                        streamType = item.streamType
+                    }
+
+                else -> StreamCatalogueFragmentDirections.toPlayback().apply {
+                    streamId = item.streamId
+                    streamType = item.streamType
+                }
             }
 
             is SeriesStream -> StreamCatalogueFragmentDirections.toDetails().apply {
