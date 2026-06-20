@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -15,11 +16,25 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+data class ProgramUiState(
+    val programs: List<Program> = emptyList(),
+    val videoToPlay: String? = null,
+)
+
+data class Program(
+    val title: String,
+    val description: String? = null,
+    val start: String,
+    val stop: String,
+    val isNowPlaying: Boolean = false,
+)
+
 @HiltViewModel
 class LiveTvViewModel
 @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
+    private val onlineRepository: MediaOnlineRepository,
     private val localDatastore: LocalDatastore
 ) : ViewModel() {
 
@@ -29,8 +44,8 @@ class LiveTvViewModel
     private val _uiState = MutableStateFlow<List<StreamData>?>(null)
     val uiState = _uiState.asStateFlow()
 
-    private val _videoUrlToPlay = MutableStateFlow<String?>(null)
-    val videoUrlToPlay = _videoUrlToPlay.asStateFlow()
+    private val _programUiState = MutableStateFlow<ProgramUiState?>(null)
+    val programUiState = _programUiState.asStateFlow()
 
     private lateinit var userInfo: UserInfo
 
@@ -53,6 +68,12 @@ class LiveTvViewModel
     }
 
     fun onStreamDataFocused(streamData: StreamData) {
-        _videoUrlToPlay.value = streamData.videoUrl(userInfo)
+        _programUiState.value = ProgramUiState(videoToPlay = streamData.videoUrl(userInfo))
+        viewModelScope.launch {
+            val listings = onlineRepository.getShortEpgListing(streamData.streamId)
+            listings.forEach {
+                Logger.debug("title=[${it.title()}], description=[${it.description()}]")
+            }
+        }
     }
 }

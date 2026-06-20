@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.core.repository.room.epg
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import okio.ByteString.Companion.decodeBase64
 
 @Entity(tableName = "epg_listing")
 data class IptvEpgListing(
@@ -16,4 +17,7 @@ data class IptvEpgListing(
     @SerializedName("channel_id") val channelId: String?,
     @SerializedName("start_timestamp") val startTimestamp: String?,
     @SerializedName("stop_timestamp") val stopTimestamp: String?
-)
+) {
+    fun title() = title?.decodeBase64()
+    fun description() = description?.decodeBase64()
+}
