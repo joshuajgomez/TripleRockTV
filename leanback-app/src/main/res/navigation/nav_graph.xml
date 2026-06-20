@@ -81,6 +81,9 @@
             android:id="@+id/toStreamCatalogue"
             app:destination="@id/streamsCatalogue" />
         <action
+            android:id="@+id/toLiveTvCatalogue"
+            app:destination="@id/liveTvCatalogue" />
+        <action
             android:id="@+id/toSearch"
             app:destination="@id/searchFragment" />
         <action
@@ -323,8 +326,21 @@
 
     <fragment
         android:id="@+id/liveTvGuide"
-        android:name="com.joshgm3z.triplerocktv.ui.livetv.LiveTvFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.livetv.LiveTvFragment_"
         android:label="LiveTvFragment">
+        <action
+            android:id="@+id/toPlayback"
+            app:destination="@id/playbackFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/liveTvCatalogue"
+        android:name="com.joshgm3z.triplerocktv.ui.livetv.LiveTvFragment"
+        android:label="LiveTvCatalogueFragment">
+        <argument
+            android:name="categoryId"
+            android:defaultValue="729"
+            app:argType="integer" />
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />

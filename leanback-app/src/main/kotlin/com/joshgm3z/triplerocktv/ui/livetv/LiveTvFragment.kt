@@ -6,103 +6,149 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.leanback.app.VerticalGridSupportFragment
+import androidx.leanback.app.VideoSupportFragment
+import androidx.leanback.app.VideoSupportFragmentGlueHost
+import androidx.leanback.media.PlaybackTransportControlGlue
+import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.FocusHighlight
+import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.OnItemViewSelectedListener
+import androidx.leanback.widget.PlaybackControlsRow
+import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.MediaItem
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.data.XmlTvProgram
-import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.toTextTime
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
-import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvBinding
-import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.util.setVisible
+import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import java.time.Duration
 import javax.inject.Inject
 
+@UnstableApi
 @AndroidEntryPoint
 class LiveTvFragment : Fragment() {
-    private lateinit var binding: FragmentLiveTvBinding
-
     private val viewModel: LiveTvViewModel by viewModels()
 
-    @Inject
-    lateinit var channelAdapter: ChannelAdapter
+    private lateinit var binding: FragmentLiveTvCatalogueBinding
+
+    private lateinit var rowsAdapter: ArrayObjectAdapter
 
     @Inject
-    lateinit var glideUtil: GlideUtil
+    lateinit var programPresenter: ProgramPresenter
 
-    private val timeFrameAdapter = TimeFrameAdapter()
+    private val player: ExoPlayer by lazy {
+        ExoPlayer.Builder(requireContext()).build()
+    }
+
+    private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentLiveTvBinding.inflate(inflater, container, false)
-        binding.rvChannels.adapter = channelAdapter
-        binding.rvTimeList.adapter = timeFrameAdapter
+        binding = FragmentLiveTvCatalogueBinding.inflate(
+            inflater,
+            container,
+            false
+        )
+        initRowFragment()
+        initPlayerFragment()
         return binding.root
+    }
+
+    private fun initPlayerFragment() {
+        LeanbackPlayerAdapter(requireContext(), player, 16).apply {
+            setRepeatAction(PlaybackControlsRow.RepeatAction.INDEX_NONE)
+            transportControlGlue = createControlGlue(this)
+        }
+
+        val videoSupportFragment =
+            childFragmentManager.findFragmentById(R.id.video_support_fragment) as? VideoSupportFragment
+
+        transportControlGlue.host = VideoSupportFragmentGlueHost(videoSupportFragment)
+        player.playWhenReady = true
+    }
+
+    fun createControlGlue(
+        adapter: LeanbackPlayerAdapter
+    ): PlaybackTransportControlGlue<LeanbackPlayerAdapter> {
+        return object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(
+            requireActivity(),
+            adapter
+        ) {
+            override fun onCreatePrimaryActions(primaryActionsAdapter: ArrayObjectAdapter?) {}
+        }.apply {
+            isControlsOverlayAutoHideEnabled = false
+        }
+    }
+
+    private fun initRowFragment() {
+        val gridFragment = VerticalGridSupportFragment()
+        gridFragment.gridPresenter = VerticalGridPresenter(
+            FocusHighlight.ZOOM_FACTOR_XSMALL,
+            false
+        ).apply {
+            numberOfColumns = 1
+        }
+        rowsAdapter = ArrayObjectAdapter(programPresenter)
+        gridFragment.adapter = rowsAdapter
+        gridFragment.onItemViewClickedListener = clickListener
+        gridFragment.setOnItemViewSelectedListener(selectionListener)
+
+        childFragmentManager.beginTransaction()
+            .replace(binding.flProgramsContainer.id, gridFragment)
+            .commit()
+    }
+
+    private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
+        val streamData = item as? StreamData ?: return@OnItemViewClickedListener
+        findNavController().navigate(LiveTvFragmentDirections.toPlayback().apply {
+            streamId = streamData.streamId
+            streamType = StreamType.LiveTV
+        })
+    }
+
+    private val selectionListener = OnItemViewSelectedListener { _, item, _, _ ->
+        val streamData = item as? StreamData ?: return@OnItemViewSelectedListener
+        viewModel.onStreamDataFocused(streamData)
+    }
+
+    private fun playVideo(videoUrl: String) {
+        player.stop()
+        player.clearMediaItems()
+
+        val mediaItem = MediaItem.Builder()
+            .setUri(videoUrl)
+            .build()
+
+        player.setMediaItem(mediaItem)
+        player.prepare()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                Logger.debug("uiState = [$it]")
-                if (it.channels.isEmpty()) return@collectLatest
-
-                binding.ivPoster.setVisible(true)
-                binding.placeholder.root.setVisible(false)
-                binding.timeMarkerView.setVisible(true)
-                channelAdapter.setChannels(
-                    it.timeFrames.first(),
-                    it.timeFrames.last(),
-                    it.currentTime,
-                    it.channels,
-                )
-                timeFrameAdapter.timeFrames = it.timeFrames
-                it.activeProgram?.let { program ->
-                    updateFocusedProgram(program)
+                it?.let {
+                    rowsAdapter.setItems(it, null)
                 }
-                binding.tvCurrentDate.text = it.currentTime.toTextTime()
-                binding.timeMarkerView.timeText = it.currentTime.toTextTime("hh:mm")
-
-                val minutesPassed = Duration
-                    .between(it.timeFrames.first(), it.currentTime)
-                    .toMinutes()
-                    .toInt()
-                binding.timeMarkerView.minutesOffset = minutesPassed
             }
         }
-        channelAdapter.onChannelClicked = { channel ->
-            findNavController().navigate(
-                LiveTvFragmentDirections.toPlayback().apply {
-                    this.streamId = channel.streamId
-                    this.streamType = StreamType.LiveTV
+        lifecycleScope.launch {
+            viewModel.videoUrlToPlay.collectLatest {
+                it?.let {
+                    playVideo(it)
                 }
-            )
-        }
-        channelAdapter.onChannelFocused = { channel ->
-            channel.programs.firstOrNull()?.let {
-                updateFocusedProgram(it)
             }
         }
-    }
-
-    private fun updateFocusedProgram(program: XmlTvProgram) {
-        binding.tvNowPlaying.setVisible(true)
-        binding.tvTitle.text = program.title
-        binding.tvDescription.text = program.description
-        binding.tvProgramTime.text =
-            "${program.start.toTextTime("hh:mm a")} to ${program.stop.toTextTime("hh:mm a")}"
-        glideUtil.loadImage(
-            program.icon,
-            binding.ivPoster,
-            R.drawable.default_program_poster
-        )
     }
 }

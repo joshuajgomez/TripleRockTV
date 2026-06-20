@@ -124,10 +124,16 @@ class BrowseFragment : BrowseSupportFragment() {
             // Handle item click if needed
             when (item) {
 
-                is CategoryData -> BrowseFragmentDirections.toStreamCatalogue().apply {
-                    categoryId = item.categoryId
-                    categoryName = item.categoryName
-                    streamType = item.streamType
+                is CategoryData -> when (item.streamType) {
+                    StreamType.LiveTV -> BrowseFragmentDirections.toLiveTvCatalogue().apply {
+                        categoryId = item.categoryId
+                    }
+
+                    else -> BrowseFragmentDirections.toStreamCatalogue().apply {
+                        categoryId = item.categoryId
+                        categoryName = item.categoryName
+                        streamType = item.streamType
+                    }
                 }
 
                 is SeriesStream -> BrowseFragmentDirections.toDetails().apply {
