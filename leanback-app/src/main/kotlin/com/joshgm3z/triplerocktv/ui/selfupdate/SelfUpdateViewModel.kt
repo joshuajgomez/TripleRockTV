@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
 import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
 import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.getVersionCode
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -82,7 +83,7 @@ class SelfUpdateViewModel
             val releaseName = fileDownloader.getLatestApkReleaseName(apkTagUrl)
             Logger.debug("releaseName = [$releaseName]")
             _uiState.update {
-                if (releaseName != null && releaseName.getRunNumber() > BuildConfig.VERSION_CODE) {
+                if (releaseName != null && releaseName.getVersionCode() > BuildConfig.VERSION_CODE) {
                     it.copy(
                         title = "Update available",
                         subtitle = "New version  $releaseName is available for download",

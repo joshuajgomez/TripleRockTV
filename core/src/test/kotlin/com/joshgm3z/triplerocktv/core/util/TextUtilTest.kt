@@ -15,4 +15,15 @@ class TextUtilTest {
         val text = "THE KAPIL SHARMA SHOW NEW SEASON  - S03E02 - "
         assertEquals(2, text.parseEpisodeNumber(3))
     }
+
+    @Test
+    fun test_getVersionCode() {
+        assertEquals(234, "v234".getVersionCode())
+        assertEquals(234, "dev-v234".getVersionCode())
+        assertEquals(234, "dev-v234".getVersionCode())
+        assertEquals(234, "v2026.12.31-run234".getVersionCode())
+        assertEquals(234, "v2026.12.31-dev-run234".getVersionCode())
+        assertEquals(0, "v".getVersionCode())
+    }
+
 }

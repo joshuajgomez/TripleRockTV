@@ -42,3 +42,7 @@ val isDevBuild
 @Suppress("KotlinConstantConditions")
 val isDemoBuild
     get() = BuildConfig.FLAVOR == "demo"
+
+fun String.getVersionCode(): Int = replace(Regex("[^0-9]"), "")
+    .takeLast(3)
+    .toIntOrNull() ?: 0

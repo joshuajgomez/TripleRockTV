@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.getVersionCode
 import java.lang.NumberFormatException
 import javax.inject.Inject
 
@@ -74,12 +75,8 @@ class AccessControlRepositoryImpl
 }
 
 fun String.isOlderThan(version: String): Boolean {
-    fun String.toNumber(): Int = replace("v", "")
-        .replace(".", "")
-        .toInt()
-
     return try {
-        this.toNumber() < version.toNumber()
+        this.getVersionCode() < version.getVersionCode()
     } catch (e: NumberFormatException) {
         Logger.error(e.message.toString())
         false
