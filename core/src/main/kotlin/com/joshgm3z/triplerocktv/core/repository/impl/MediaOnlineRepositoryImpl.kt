@@ -7,6 +7,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.EPGFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
+import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.CoroutineScope
@@ -104,5 +105,15 @@ class MediaOnlineRepositoryImpl
 
     override suspend fun getSeriesDataAndUpdate(streamId: Int) {
         seriesFetcher.getSeriesDataAndUpdate(streamId)
+    }
+
+    override suspend fun getShortEpgListing(
+        streamId: Int
+    ): List<IptvEpgListing> {
+        return iptvService?.getShortEpg(
+            username = username,
+            password = password,
+            streamId = streamId,
+        )?.epgListings ?: emptyList()
     }
 }

@@ -144,9 +144,9 @@ class LiveTvFragment : Fragment() {
             }
         }
         lifecycleScope.launch {
-            viewModel.videoUrlToPlay.collectLatest {
-                it?.let {
-                    playVideo(it)
+            viewModel.programUiState.collectLatest {
+                it?.videoToPlay?.let { videoUrl ->
+                    playVideo(videoUrl)
                 }
             }
         }
