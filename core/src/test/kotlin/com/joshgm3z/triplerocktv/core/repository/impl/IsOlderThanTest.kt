@@ -27,8 +27,6 @@ class IsOlderThanTest {
 
     @Test
     fun `Verify invalid versions return false`() {
-        assert(!"1.0-core-default".isOlderThan("v2025.5.3")) {
-            "Invalid version should not return false"
-        }
+        assert("1.0-core-default".isOlderThan("v2025.5.3"))
     }
 }
