@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.leanback.app.ErrorSupportFragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 
@@ -15,10 +16,10 @@ class AppUpdateInfoFragment : ErrorSupportFragment() {
         super.onCreate(savedInstanceState)
         imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_circle_down)
         message = args.message
-        buttonText = "Exit app"
+        buttonText = "Update app"
 
         buttonClickListener = View.OnClickListener {
-            requireActivity().finishAffinity()
+            findNavController().navigate(AppUpdateInfoFragmentDirections.toSelfUpdateDialog())
         }
     }
 }

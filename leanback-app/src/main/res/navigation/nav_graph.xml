@@ -290,6 +290,9 @@
         <argument
             android:name="message"
             app:argType="string" />
+        <action
+            android:id="@+id/toSelfUpdateDialog"
+            app:destination="@id/selfUpdateDialog" />
     </fragment>
 
     <dialog
