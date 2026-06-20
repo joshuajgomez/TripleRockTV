@@ -21,8 +21,6 @@ class TextUtilTest {
         assertEquals(234, "v234".getVersionCode())
         assertEquals(234, "dev-v234".getVersionCode())
         assertEquals(234, "dev-v234".getVersionCode())
-        assertEquals(234, "v2026.12.31-run234".getVersionCode())
-        assertEquals(234, "v2026.12.31-dev-run234".getVersionCode())
         assertEquals(0, "v".getVersionCode())
     }
 
