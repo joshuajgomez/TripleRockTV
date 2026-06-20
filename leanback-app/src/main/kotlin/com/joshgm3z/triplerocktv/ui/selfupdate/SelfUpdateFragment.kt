@@ -71,9 +71,3 @@ class SelfUpdateDialog : DialogFragment() {
         }
     }
 }
-
-fun String.getRunNumber() = "-run(\\d+)"
-    .toRegex()
-    .find(this)
-    ?.groupValues?.get(1)
-    ?.toInt() ?: 0
