@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
@@ -29,8 +30,10 @@ import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @UnstableApi
@@ -160,6 +163,21 @@ class LiveTvFragment : Fragment() {
                 }
                 binding.tvNoProgram.setVisible(it.programs.isEmpty())
                 binding.rvPrograms.setVisible(!it.programs.isEmpty())
+            }
+        }
+        channelPresenter.setFavorite = { streamData, add ->
+            lifecycleScope.launch {
+                val message = when {
+                    withContext(Dispatchers.IO) {
+                        viewModel.updateMyList(streamData, add)
+                    } -> when (add) {
+                        true -> "Added to favorites"
+                        else -> "Removed from favorites"
+                    }
+
+                    else -> "Error updating favorites"
+                }
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
     }

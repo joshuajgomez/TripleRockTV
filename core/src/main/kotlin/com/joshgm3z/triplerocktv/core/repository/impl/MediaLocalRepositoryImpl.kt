@@ -5,8 +5,6 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
-import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_DURATION_LEFT
-import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATION
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
@@ -21,10 +19,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
-
-class MissingSeasonsException(
-    message: String = "Missing seasons. Cannot fetch last played episode"
-) : Exception(message)
 
 class MediaLocalRepositoryImpl @Inject constructor(
     private val epgListingDao: EpgListingDao,
@@ -54,7 +48,12 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamType: StreamType
     ): List<Any> = when (streamType) {
         StreamType.Series -> seriesStreamsDao.getAllOfCategory(categoryId)
-        else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType)
+        else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType).map {
+            it.apply {
+                inMyList = favoriteDao.isFavorite(streamId).first()
+                recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+            }
+        }
     }.apply {
         Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
     }
@@ -143,14 +142,20 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamId: Int,
         streamType: StreamType,
         add: Boolean
-    ) = if (add) favoriteDao.insert(
-        Favorite(
-            streamId,
-            streamType,
-            System.currentTimeMillis()
+    ): Boolean = try {
+        if (add) favoriteDao.insert(
+            Favorite(
+                streamId,
+                streamType,
+                System.currentTimeMillis()
+            )
         )
-    )
-    else favoriteDao.delete(streamId)
+        else favoriteDao.delete(streamId)
+        true
+    } catch (e: Exception) {
+        e.printStackTrace()
+        false
+    }
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,

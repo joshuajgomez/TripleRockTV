@@ -40,7 +40,7 @@ interface MediaLocalRepository {
         streamId: Int,
         streamType: StreamType,
         add: Boolean
-    )
+    ): Boolean
 
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
 
