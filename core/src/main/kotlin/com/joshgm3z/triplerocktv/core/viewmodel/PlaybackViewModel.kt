@@ -82,6 +82,11 @@ class PlaybackViewModel @Inject constructor(
                         streamType = streamType!!
                     )
 
+                    StreamType.LiveTV -> recentsRepository.updatePlayedDuration(
+                        streamId = it,
+                        streamType = streamType!!
+                    )
+
                     StreamType.Series -> recentsRepository.updatePlayedDuration(
                         streamId = it,
                         seriesId = seriesId!!,

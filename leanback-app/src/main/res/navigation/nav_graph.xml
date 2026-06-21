@@ -327,7 +327,7 @@
         android:label="LiveTvCatalogueFragment">
         <argument
             android:name="categoryId"
-            android:defaultValue="729"
+            android:defaultValue="727"
             app:argType="integer" />
         <action
             android:id="@+id/toPlayback"

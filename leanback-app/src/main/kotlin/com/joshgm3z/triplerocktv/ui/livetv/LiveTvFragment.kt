@@ -140,6 +140,7 @@ class LiveTvFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.keepScreenOn = true
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 it?.let {
@@ -167,5 +168,6 @@ class LiveTvFragment : Fragment() {
         super.onPause()
         player.stop()
         player.clearMediaItems()
+        view?.keepScreenOn = false
     }
 }
