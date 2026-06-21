@@ -14,13 +14,24 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintEnd_toStartOf="@+id/video_support_fragment"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/iv_placeholder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/paogram_placeholder"
+        app:layout_constraintBottom_toBottomOf="@+id/video_support_fragment"
+        app:layout_constraintEnd_toEndOf="@+id/video_support_fragment"
+        app:layout_constraintStart_toStartOf="@+id/video_support_fragment"
+        app:layout_constraintTop_toTopOf="@+id/video_support_fragment" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/video_support_fragment"
         android:name="androidx.leanback.app.VideoSupportFragment"
-        android:layout_width="391dp"
-        android:layout_height="220dp"
+        android:layout_width="570dp"
+        android:layout_height="310dp"
         android:descendantFocusability="blocksDescendants"
         android:focusable="false"
         android:focusableInTouchMode="false"
@@ -43,7 +54,6 @@
         tools:listitem="@layout/item_program" />
 
     <TextView
-        android:visibility="gone"
         android:id="@+id/tv_no_program"
         android:layout_width="0dp"
         android:layout_height="50dp"
@@ -52,6 +62,7 @@
         android:gravity="center"
         android:text="No program info"
         android:textColor="?attr/colorForegroundMid"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/video_support_fragment"
         app:layout_constraintTop_toBottomOf="@id/video_support_fragment" />

@@ -72,7 +72,6 @@ class HomeFragment : BrowseSupportFragment() {
                 "Video on demand" -> HomeFragmentDirections.toBrowse(StreamType.VideoOnDemand)
                 "Series" -> HomeFragmentDirections.toBrowse(StreamType.Series)
                 "Live TV" -> HomeFragmentDirections.toBrowse(StreamType.LiveTV)
-                "EPG" -> HomeFragmentDirections.toLiveTvGuide()
                 else -> return@OnItemViewClickedListener
             }
 
