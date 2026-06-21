@@ -149,14 +149,16 @@ class LiveTvFragment : Fragment() {
         }
         lifecycleScope.launch {
             viewModel.programUiState.collectLatest {
-                it?.videoToPlay?.let { videoUrl ->
+                if (it == null) return@collectLatest
+
+                it.videoToPlay?.let { videoUrl ->
                     playVideo(videoUrl)
                 }
-                it?.programs?.let { programs ->
+                it.programs.let { programs ->
                     programAdapter.programs = programs
                 }
-                binding.tvNoProgram.setVisible(it?.programs.isNullOrEmpty())
-                binding.rvPrograms.setVisible(!it?.programs.isNullOrEmpty())
+                binding.tvNoProgram.setVisible(it.programs.isEmpty())
+                binding.rvPrograms.setVisible(!it.programs.isEmpty())
             }
         }
     }
