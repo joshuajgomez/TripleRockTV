@@ -42,7 +42,11 @@ class ProgramAdapter : RecyclerView.Adapter<ProgramAdapter.ProgramViewHolder>() 
             program.title
         )
         binding.tvProgramDescription.text = program.description
-        binding.tvProgramTime.text = "${program.start} - ${program.stop}"
+        val time = "${program.start} - ${program.stop}"
+        val nowPlayingTime = binding.root.context.resources.getString(
+            R.string.dot_between_text, "Now playing", time
+        )
+        binding.tvProgramTime.text = if (program.isNowPlaying) nowPlayingTime else time
         binding.root.isSelected = program.isNowPlaying
         binding.ivPlay.setVisible(program.isNowPlaying)
     }
