@@ -10,7 +10,7 @@ interface RecentsRepository {
 
     suspend fun updatePlayedDuration(
         streamId: Int,
-        positionMs: Long,
+        positionMs: Long = 0,
         streamType: StreamType,
         seriesId: Int? = null,
         timeStamp: Long = System.currentTimeMillis()
