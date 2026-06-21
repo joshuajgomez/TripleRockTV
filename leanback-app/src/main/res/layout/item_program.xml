@@ -4,9 +4,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginBottom="5dp"
     android:background="@drawable/program_background"
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false"
     android:padding="10dp"
     android:selectable="true">
+
+    <ImageView
+        android:id="@+id/iv_play"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:src="@drawable/baseline_play_arrow_14"
+        android:tint="?attr/colorForegroundPrimary"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="visible" />
 
     <TextView
         android:id="@+id/tv_program_time"
@@ -16,7 +31,7 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="?attr/colorForegroundPrimary"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/iv_play"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="8:00am to 9:00pm" />
 
@@ -24,7 +39,7 @@
         android:id="@+id/tv_program_name"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="5dp"
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="2"

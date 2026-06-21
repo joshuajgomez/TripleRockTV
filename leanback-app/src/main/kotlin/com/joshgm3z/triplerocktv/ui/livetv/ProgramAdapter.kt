@@ -5,8 +5,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.viewmodel.Program
 import com.joshgm3z.triplerocktv.databinding.ItemProgramBinding
+import com.joshgm3z.triplerocktv.util.setVisible
 
 class ProgramAdapter : RecyclerView.Adapter<ProgramAdapter.ProgramViewHolder>() {
     var programs: List<Program> = emptyList()
@@ -35,9 +37,14 @@ class ProgramAdapter : RecyclerView.Adapter<ProgramAdapter.ProgramViewHolder>() 
         val binding = ItemProgramBinding.bind(holder.itemView)
         val program = programs[position]
 
-        binding.tvProgramName.text = program.title
+        binding.tvProgramName.text = binding.root.context.resources.getString(
+            R.string.dot_before_text,
+            program.title
+        )
         binding.tvProgramDescription.text = program.description
-        binding.tvProgramTime.text = "${program.start} to ${program.stop}"
+        binding.tvProgramTime.text = "${program.start} - ${program.stop}"
+        binding.root.isSelected = program.isNowPlaying
+        binding.ivPlay.setVisible(program.isNowPlaying)
     }
 
     override fun getItemCount() = programs.size

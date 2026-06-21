@@ -3,8 +3,10 @@ package com.joshgm3z.triplerocktv.core.repository.room.epg
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.formatTimestamp
 import okio.ByteString.Companion.decodeBase64
+import java.time.Instant
 
 @Entity(tableName = "epg_listing")
 data class IptvEpgListing(
@@ -20,13 +22,32 @@ data class IptvEpgListing(
     @SerializedName("stop_timestamp") val stopTimestamp: String?
 ) {
     fun titleDecoded(): String = title?.decodeBase64().toString().removeTextPrefix()
+
     fun descriptionDecoded(): String = description?.decodeBase64().toString().removeTextPrefix()
+
     fun startTimestampFormatted(): String = startTimestamp.formatTimestamp()
+
     fun stopTimestampFormatted(): String = stopTimestamp.formatTimestamp()
+
+    fun isNowPlaying(): Boolean {
+        val start = startTimestamp?.toLongOrNull() ?: return false
+        val stop = stopTimestamp?.toLongOrNull() ?: return false
+        val now = Instant.now().epochSecond // IPTV timestamps are usually in seconds
+
+        val bool = now in start..stop
+        Logger.debug("isNowPlaying = [$bool], start = [$start], stop = [$stop], now = [$now], title = [${titleDecoded()}]")
+        return bool
+    }
 }
 
 private fun String.removeTextPrefix(): String {
-    return replace("text=", "")
-        .replace("]", "")
+    // This regex looks for 'text=' and captures everything until it hits ']]'
+    val regex = "text=(.*)(?=])".toRegex()
+    val match = regex.find(this)
+
+    return match?.groupValues?.get(1) ?: this
         .replace("[", "")
+        .replace("]", "")
+        .replace("text=", "")
+        .trim()
 }
