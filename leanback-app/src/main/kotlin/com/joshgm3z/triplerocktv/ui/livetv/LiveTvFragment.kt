@@ -42,7 +42,9 @@ class LiveTvFragment : Fragment() {
     private lateinit var rowsAdapter: ArrayObjectAdapter
 
     @Inject
-    lateinit var programPresenter: ProgramPresenter
+    lateinit var channelPresenter: ChannelPresenter
+
+    private val programAdapter = ProgramAdapter()
 
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(requireContext()).build()
@@ -60,6 +62,7 @@ class LiveTvFragment : Fragment() {
             container,
             false
         )
+        binding.rvPrograms.adapter = programAdapter
         initRowFragment()
         initPlayerFragment()
         return binding.root
@@ -99,7 +102,7 @@ class LiveTvFragment : Fragment() {
         ).apply {
             numberOfColumns = 1
         }
-        rowsAdapter = ArrayObjectAdapter(programPresenter)
+        rowsAdapter = ArrayObjectAdapter(channelPresenter)
         gridFragment.adapter = rowsAdapter
         gridFragment.onItemViewClickedListener = clickListener
         gridFragment.setOnItemViewSelectedListener(selectionListener)
@@ -147,6 +150,9 @@ class LiveTvFragment : Fragment() {
             viewModel.programUiState.collectLatest {
                 it?.videoToPlay?.let { videoUrl ->
                     playVideo(videoUrl)
+                }
+                it?.programs?.let { programs ->
+                    programAdapter.programs = programs
                 }
             }
         }

@@ -1,7 +1,13 @@
 package com.joshgm3z.triplerocktv.core.util
 
+import com.google.firebase.firestore.model.Values.timestamp
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import java.text.NumberFormat
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
+import kotlin.text.format
+import kotlin.time.ExperimentalTime
+import java.time.Instant
 
 fun Int.withComma(): String = try {
     NumberFormat.getInstance().format(this)
@@ -45,3 +51,16 @@ val isDemoBuild
 
 fun String.getVersionCode(): Int = replace(Regex("[^0-9]"), "")
     .toIntOrNull() ?: 0
+
+@OptIn(ExperimentalTime::class)
+fun String?.formatTimestamp(): String {
+    if (this == null) return ""
+    return try {
+        val instant = Instant.ofEpochSecond(this.toLong())
+        val formatter = DateTimeFormatter.ofPattern("HH:mm") // Use "hh:mm a" for 12-hour format
+            .withZone(ZoneId.systemDefault())
+        formatter.format(instant)
+    } catch (e: Exception) {
+        ""
+    }
+}
