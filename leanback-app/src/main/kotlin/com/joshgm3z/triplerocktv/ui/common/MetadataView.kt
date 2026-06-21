@@ -86,7 +86,7 @@ class MetadataView @JvmOverloads constructor(
         addMetadata(genre)
         addMetadata(rating.toString(), rating.isNonZero(), R.drawable.ic_star)
         addMetadata(duration)
-        addMetadata("My list", showMyList, R.drawable.baseline_playlist_add_check_14)
+        addMetadata("Favorite", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
         addMetadata(
             if (noOfSeasons == 1) "1 season" else "$noOfSeasons seasons",

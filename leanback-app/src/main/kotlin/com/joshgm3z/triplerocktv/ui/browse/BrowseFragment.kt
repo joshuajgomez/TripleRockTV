@@ -176,7 +176,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
 
         if (uiState.myList.isNotEmpty()) {
-            val header = HeaderItem(0, "My list")
+            val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
             listRowAdapter.addAll(0, uiState.myList)
             rowsAdapter.add(ListRow(header, listRowAdapter))
@@ -218,7 +218,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
 
         if (uiState.myList.isNotEmpty()) {
-            val header = HeaderItem(0, "My list")
+            val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
             listRowAdapter.addAll(0, uiState.myList)
             rowsAdapter.add(ListRow(header, listRowAdapter))
@@ -257,7 +257,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
 
         if (uiState.myList.isNotEmpty()) {
-            val header = HeaderItem(0, "My list")
+            val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
             listRowAdapter.addAll(0, uiState.myList)
             rowsAdapter.add(ListRow(header, listRowAdapter))

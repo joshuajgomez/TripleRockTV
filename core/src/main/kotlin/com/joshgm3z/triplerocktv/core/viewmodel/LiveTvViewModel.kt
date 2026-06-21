@@ -84,4 +84,15 @@ class LiveTvViewModel
             )
         }
     }
+
+    suspend fun updateMyList(
+        streamData: StreamData,
+        add: Boolean
+    ): Boolean {
+        return repository.updateMyList(
+            streamData.streamId,
+            StreamType.LiveTV,
+            add
+        )
+    }
 }
