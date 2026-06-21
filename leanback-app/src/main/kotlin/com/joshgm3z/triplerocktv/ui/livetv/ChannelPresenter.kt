@@ -33,7 +33,7 @@ class ChannelPresenter
         glideUtil.loadImage(
             streamData.streamIcon,
             binding.ivLogo,
-            R.drawable.baseline_ondemand_video_24
+            error = R.drawable.baseline_ondemand_video_24
         )
     }
 
