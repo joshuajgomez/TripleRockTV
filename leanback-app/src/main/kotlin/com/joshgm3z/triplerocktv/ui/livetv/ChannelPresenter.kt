@@ -8,7 +8,7 @@ import com.joshgm3z.triplerocktv.databinding.ViewProgramCardBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
-class ProgramPresenter
+class ChannelPresenter
 @Inject constructor(
     private val glideUtil: GlideUtil
 ) : Presenter() {

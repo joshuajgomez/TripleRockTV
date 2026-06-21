@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.core.repository.room.epg
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
+import com.joshgm3z.triplerocktv.core.util.formatTimestamp
 import okio.ByteString.Companion.decodeBase64
 
 @Entity(tableName = "epg_listing")
@@ -18,6 +19,14 @@ data class IptvEpgListing(
     @SerializedName("start_timestamp") val startTimestamp: String?,
     @SerializedName("stop_timestamp") val stopTimestamp: String?
 ) {
-    fun title() = title?.decodeBase64()
-    fun description() = description?.decodeBase64()
+    fun titleDecoded(): String = title?.decodeBase64().toString().removeTextPrefix()
+    fun descriptionDecoded(): String = description?.decodeBase64().toString().removeTextPrefix()
+    fun startTimestampFormatted(): String = startTimestamp.formatTimestamp()
+    fun stopTimestampFormatted(): String = stopTimestamp.formatTimestamp()
+}
+
+private fun String.removeTextPrefix(): String {
+    return replace("text=", "")
+        .replace("]", "")
+        .replace("[", "")
 }
