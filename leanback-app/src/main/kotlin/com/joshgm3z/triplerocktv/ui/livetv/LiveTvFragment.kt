@@ -27,6 +27,7 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
+import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -154,6 +155,8 @@ class LiveTvFragment : Fragment() {
                 it?.programs?.let { programs ->
                     programAdapter.programs = programs
                 }
+                binding.tvNoProgram.setVisible(it?.programs.isNullOrEmpty())
+                binding.rvPrograms.setVisible(!it?.programs.isNullOrEmpty())
             }
         }
     }

@@ -70,9 +70,6 @@ class LiveTvViewModel
     fun onStreamDataFocused(streamData: StreamData) {
         viewModelScope.launch {
             val listings = onlineRepository.getShortEpgListing(streamData.streamId)
-            listings.forEach {
-                Logger.debug("title=[$it]")
-            }
             _programUiState.value = ProgramUiState(
                 videoToPlay = streamData.videoUrl(userInfo),
                 programs = listings.map {
@@ -81,6 +78,7 @@ class LiveTvViewModel
                         description = it.descriptionDecoded(),
                         start = it.startTimestampFormatted(),
                         stop = it.stopTimestampFormatted(),
+                        isNowPlaying = it.isNowPlaying()
                     )
                 }
             )
