@@ -19,9 +19,8 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/video_support_fragment"
         android:name="androidx.leanback.app.VideoSupportFragment"
-        android:layout_width="390dp"
+        android:layout_width="391dp"
         android:layout_height="220dp"
-        android:background="#20ffffff"
         android:descendantFocusability="blocksDescendants"
         android:focusable="false"
         android:focusableInTouchMode="false"

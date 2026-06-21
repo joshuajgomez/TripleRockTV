@@ -160,4 +160,10 @@ class LiveTvFragment : Fragment() {
             }
         }
     }
+
+    override fun onPause() {
+        super.onPause()
+        player.stop()
+        player.clearMediaItems()
+    }
 }
