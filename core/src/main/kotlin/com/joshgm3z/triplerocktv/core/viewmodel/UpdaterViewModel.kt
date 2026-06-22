@@ -66,7 +66,7 @@ constructor(
                                 DownloadedItemState(status = "Tap update to fetch videos")
                             else DownloadedItemState(
                                 filesCount = "$countText videos",
-                                status = "Last updated ${lastContentUpdate.relativeTime()}"
+                                status = "Updated ${lastContentUpdate.relativeTime()}"
                             )
 
                     }
@@ -129,11 +129,18 @@ constructor(
                 type,
                 onFetch = {
                     viewModelScope.launch(Dispatchers.IO) {
+                        var numberOfFiles = ""
+                        if (it.status == LoadingStatus.Complete || it.status == LoadingStatus.Error) {
+                            numberOfFiles = localRepository.numberOfFiles(type).withComma()
+                            localDatastore.setLastContentUpdate(
+                                type, System.currentTimeMillis(), numberOfFiles
+                            )
+                        }
                         _uiState.update { currentState ->
                             val updatedMap = currentState.stateMap.toMutableMap()
                             updatedMap[type] = DownloadedItemState(
                                 filesCount = if (it.status == LoadingStatus.Complete)
-                                    "${localDatastore.getTotalCount(type)} videos" else null,
+                                    "$numberOfFiles videos" else null,
                                 status = when (it.status) {
                                     LoadingStatus.Ongoing -> "Updating ${it.percent}%"
                                     LoadingStatus.Complete -> "Update complete"
@@ -145,10 +152,6 @@ constructor(
                             currentState.copy(stateMap = updatedMap)
                         }
                         if (it.status == LoadingStatus.Complete || it.status == LoadingStatus.Error) {
-                            localDatastore.setLastContentUpdate(
-                                type, System.currentTimeMillis(),
-                                localRepository.numberOfFiles(type).withComma()
-                            )
                             resumeQueue()
                         }
                     }
