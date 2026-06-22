@@ -86,7 +86,7 @@ class SelfUpdateViewModel
                 if (releaseName != null && releaseName.getVersionCode() > BuildConfig.VERSION_CODE) {
                     it.copy(
                         title = "Update available",
-                        subtitle = "New version  $releaseName is available for download",
+                        subtitle = "New version $releaseName is available for download",
                         enableButtons = true,
                         buttonAction = ButtonAction.UpdateNow
                     )
