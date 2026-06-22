@@ -136,7 +136,7 @@ constructor(
                                     "${localDatastore.getTotalCount(type)} videos" else null,
                                 status = when (it.status) {
                                     LoadingStatus.Ongoing -> "Updating ${it.percent}%"
-                                    LoadingStatus.Complete -> "Last updated just now"
+                                    LoadingStatus.Complete -> "Update complete"
                                     LoadingStatus.Initial -> "Initialising"
                                     LoadingStatus.Error -> it.error ?: "Couldn't complete"
                                 },
