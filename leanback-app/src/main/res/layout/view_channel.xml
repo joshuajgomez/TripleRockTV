@@ -24,14 +24,36 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="5dp"
+        android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?attr/colorForegroundHigh"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/iv_star"
+        app:layout_constraintEnd_toStartOf="@+id/barrier"
         app:layout_constraintStart_toEndOf="@+id/iv_logo"
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Some movie with long name(2025) " />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="tv_added_to_favorites,iv_star" />
+
+    <TextView
+        android:id="@+id/tv_added_to_favorites"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:drawableStart="@drawable/baseline_check_24"
+        android:drawablePadding="3dp"
+        android:text="Added to favorites"
+        android:textColor="?attr/colorForegroundPrimary"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/iv_star"

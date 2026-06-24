@@ -166,18 +166,8 @@ class LiveTvFragment : Fragment() {
             }
         }
         channelPresenter.setFavorite = { streamData, add ->
-            lifecycleScope.launch {
-                val message = when {
-                    withContext(Dispatchers.IO) {
-                        viewModel.updateMyList(streamData, add)
-                    } -> when (add) {
-                        true -> "Added to favorites"
-                        else -> "Removed from favorites"
-                    }
-
-                    else -> "Error updating favorites"
-                }
-                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+            withContext(Dispatchers.IO) {
+                viewModel.updateMyList(streamData, add)
             }
         }
     }
