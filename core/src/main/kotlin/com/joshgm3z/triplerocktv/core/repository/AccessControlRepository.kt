@@ -6,6 +6,6 @@ data class AccessState(
 )
 
 interface AccessControlRepository {
-    suspend fun getAccessState(username: String?): AccessState
-    suspend fun appUpdateState(): AccessState
+    fun getAccessState(username: String?): AccessState
+    fun appUpdateState(): AccessState
 }
