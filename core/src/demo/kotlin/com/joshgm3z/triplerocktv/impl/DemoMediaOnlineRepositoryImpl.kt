@@ -4,6 +4,7 @@ import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import kotlinx.coroutines.delay
 import javax.inject.Inject
@@ -11,18 +12,6 @@ import javax.inject.Inject
 class DemoMediaOnlineRepositoryImpl
 @Inject
 constructor() : MediaOnlineRepository {
-    override suspend fun fetchContent(
-        onFetch: (StreamType, LoadingState) -> Unit,
-        onError: (String, String) -> Unit
-    ) {
-        StreamType.entries.forEach { type ->
-            repeat(10) { i ->
-                onFetch(type, LoadingState(i * 10, LoadingStatus.Ongoing))
-                delay(200)
-            }
-            onFetch(type, LoadingState(percent = 100, status = LoadingStatus.Complete))
-        }
-    }
 
     override suspend fun startUpdate(
         streamType: StreamType,
@@ -58,4 +47,7 @@ constructor() : MediaOnlineRepository {
     }
 
     override suspend fun getSeriesDataAndUpdate(streamId: Int) {}
+    override suspend fun getShortEpgListing(streamId: Int): List<IptvEpgListing> {
+        return emptyList()
+    }
 }
