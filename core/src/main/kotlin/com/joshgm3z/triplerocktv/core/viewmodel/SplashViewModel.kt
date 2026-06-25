@@ -9,6 +9,7 @@ import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -34,6 +35,7 @@ constructor(
     repository: MediaLocalRepository,
     loginRepository: LoginRepository,
     accessControlRepository: AccessControlRepository,
+    firebaseConfig: FirebaseConfig,
 ) : ViewModel() {
     private val _navDirectionState = MutableStateFlow<DestinationState?>(null)
     val navDirectionState = _navDirectionState.asStateFlow()

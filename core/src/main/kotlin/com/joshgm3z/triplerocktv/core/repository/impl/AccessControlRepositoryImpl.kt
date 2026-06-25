@@ -3,7 +3,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
-import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
+import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.getVersionCode
 import java.lang.NumberFormatException
@@ -11,65 +11,42 @@ import javax.inject.Inject
 
 class AccessControlRepositoryImpl
 @Inject constructor(
-    private val firestoreHelper: FirestoreHelper
+    private val firebaseConfig: FirebaseConfig
 ) : AccessControlRepository {
 
-    override suspend fun getAccessState(username: String?): AccessState {
+    override fun getAccessState(username: String?): AccessState {
         Logger.debug("username = [${username}]")
 
-        val map = firestoreHelper.getDataMap(
-            "access_control",
-            "global_access"
-        )
-
-        if (map == null) return AccessState(enabled = true, reason = "No restrictions found")
-
-        if (map.containsKey("global_access_enabled") && !(map["global_access_enabled"] as Boolean)) {
-            val reason = if (!map.containsKey("global_access_reason")) "Reason unknown"
-            else map["global_access_reason"] as String
-            return AccessState(enabled = false, reason = reason)
-        }
-
-        val bannedUsers = firestoreHelper.getDataMap(
-            "access_control",
-            "banned_users"
-        )
-        if (bannedUsers != null && bannedUsers.containsKey(username)) {
-            var message = "User $username is banned"
-            val reason = bannedUsers[username] as String
-            if (reason.isNotEmpty()) message = "$message. Reason: $reason"
-            return AccessState(
-                enabled = false,
-                reason = message
+        val globalAccess = firebaseConfig.getObject<AccessState>("global_access")
+            ?: AccessState(
+                enabled = true,
+                reason = "No restrictions found"
             )
-        }
+        if (!globalAccess.enabled) return globalAccess
+
+        val bannedUsers = firebaseConfig.getObject<List<String>>("banned_users") ?: emptyList()
+        if (bannedUsers.contains(username)) return AccessState(
+            enabled = false,
+            reason = "User $username is banned"
+        )
 
         return AccessState(enabled = true, reason = "No restrictions found")
     }
 
-    override suspend fun appUpdateState(): AccessState {
-        val map = firestoreHelper.getDataMap(
-            "access_control",
-            "forced_min_app_version"
+    override fun appUpdateState(): AccessState {
+        val forcedMinAppversion = firebaseConfig.getObject<String>("forced_min_app_version")
+            ?: return AccessState(enabled = true, reason = "No forced min version found")
+
+        val currentAppVersion = BuildConfig.VERSION_NAME
+        Logger.debug("currentAppVersion = [$currentAppVersion]")
+
+        return if (currentAppVersion.isOlderThan(forcedMinAppversion)) AccessState(
+            enabled = false,
+            reason = "Update app to continue"
+        ) else AccessState(
+            enabled = true,
+            reason = "Current version greater than forced min version"
         )
-
-        if (map == null) return AccessState(enabled = true, reason = "No restrictions found")
-
-        if (map.containsKey("version") && (map["version"] as String).isNotEmpty()) {
-            val currentAppVersion = BuildConfig.VERSION_NAME
-            Logger.debug("currentAppVersion = [$currentAppVersion]")
-
-            val forcedMinAppversion = map["version"] as String
-            if (currentAppVersion.isOlderThan(forcedMinAppversion)) {
-                return AccessState(
-                    enabled = false,
-                    reason = "Update to $forcedMinAppversion to continue using the app. " +
-                            "You are currently on $currentAppVersion"
-                )
-            }
-        }
-
-        return AccessState(enabled = true, reason = "No need to force min version")
     }
 
 }
