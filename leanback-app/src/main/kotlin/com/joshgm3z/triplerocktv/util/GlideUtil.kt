@@ -20,9 +20,9 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
-import com.joshgm3z.triplerocktv.BuildConfig
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDemoBuild
@@ -32,14 +32,26 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+private val invalidUrls = listOf(
+    "http://webhop.live:8080",
+    "http://wehop.live:8080",
+    "http://starshare.live:8080",
+    "http://starshare.org:8080",
+    "http://starshare.one:8080",
+)
+
 class GlideUtil
 @Inject constructor(
     scope: CoroutineScope,
+    firebaseConfig: FirebaseConfig,
     private val localDatastore: LocalDatastore,
     private val firebaseLogger: FirebaseLogger,
     @param:ApplicationContext private val context: Context,
 ) {
     private var serverUrl = ""
+    private val glideReplaceableUrls = firebaseConfig.getObject<List<String>>(
+        "glide_replaceable_urls"
+    ) ?: invalidUrls // Default to invalid urls if null
 
     init {
         scope.launch {
@@ -100,7 +112,11 @@ class GlideUtil
 
     private fun String?.orSampleIfDemo(): Any? {
         return when {
-            isDemoBuild -> AppCompatResources.getDrawable(context, R.drawable.avatar_movie)?.toBitmap()
+            isDemoBuild -> AppCompatResources.getDrawable(
+                context,
+                R.drawable.avatar_movie
+            )?.toBitmap()
+
             else -> this
         }
     }
@@ -130,26 +146,16 @@ class GlideUtil
         }
 
     }
-}
 
-val invalidUrls = listOf(
-    "http://webhop.live:8080",
-    "http://wehop.live:8080",
-    "http://starshare.live:8080",
-    "http://starshare.org:8080",
-    "http://starshare.one:8080",
-)
+    private fun String?.alternateUri(serverUrl: String): String? = when {
+        this == null -> null
+        glideReplaceableUrls.any { contains(it) } -> {
+            val invalidUrl = glideReplaceableUrls.first { contains(it) }
+            replace(invalidUrl, serverUrl)
+        }
 
-fun String?.alternateUri(serverUrl: String): String? = when {
-    this == null -> null
-    invalidUrls.any { contains(it) } -> {
-        val invalidUrl = invalidUrls.first { contains(it) }
-        replace(invalidUrl, serverUrl)
+        else -> this
     }
-
-    else -> this
-}.apply {
-//    Logger.debug("uri=[${this@alternateUri}], alternateUri=[$this]")
 }
 
 enum class DimMode(val value: Int) {

@@ -86,7 +86,13 @@ constructor() : MediaLocalRepository {
         return DemoData.getSampleSeriesStreams()
     }
 
-    override suspend fun updateMyList(streamId: Int, streamType: StreamType, add: Boolean) {}
+    override suspend fun updateMyList(
+        streamId: Int,
+        streamType: StreamType,
+        add: Boolean
+    ): Boolean {
+        return true
+    }
 
     override suspend fun updateSelectedSubtitle(
         streamId: Int,

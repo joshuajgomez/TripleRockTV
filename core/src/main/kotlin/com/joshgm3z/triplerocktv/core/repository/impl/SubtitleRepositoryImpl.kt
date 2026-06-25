@@ -4,23 +4,28 @@ import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.repository.SubtitleRepository
 import com.joshgm3z.triplerocktv.core.repository.retrofit.OpenSubtitlesDownloadRequest
 import com.joshgm3z.triplerocktv.core.repository.retrofit.OpenSubtitlesService
+import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import retrofit2.HttpException
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
+
+private val defaultUrl = "https://api.opensubtitles.com/api/v1/"
 
 class SubtitleRepositoryImpl
 @Inject
 constructor(
     scope: CoroutineScope,
+    firebaseConfig: FirebaseConfig,
 ) : SubtitleRepository {
+
+    private val baseUrl = firebaseConfig.getString("open_subtitles_api_url") ?: defaultUrl
 
     private val openSubtitlesService: OpenSubtitlesService by lazy {
         Retrofit.Builder()
-            .baseUrl("https://api.opensubtitles.com/api/v1/")
+            .baseUrl(baseUrl)
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(OpenSubtitlesService::class.java)

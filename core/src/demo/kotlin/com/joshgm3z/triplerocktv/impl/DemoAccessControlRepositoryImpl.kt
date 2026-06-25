@@ -9,11 +9,11 @@ import javax.inject.Inject
 class DemoAccessControlRepositoryImpl
 @Inject constructor() : AccessControlRepository {
 
-    override suspend fun getAccessState(username: String?): AccessState {
+    override fun getAccessState(username: String?): AccessState {
         return AccessState(enabled = true, reason = "Access disabled for user")
     }
 
-    override suspend fun appUpdateState(): AccessState {
+    override fun appUpdateState(): AccessState {
         Logger.debug("current app version name = [${BuildConfig.VERSION_NAME}]")
         return AccessState(
             enabled = true,

@@ -7,8 +7,10 @@ import com.google.gson.Gson
 import com.google.gson.JsonArray
 import org.json.JSONArray
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlin.jvm.java
 
+@Singleton
 class FirebaseConfig
 @Inject constructor() {
     val remoteConfig = Firebase.remoteConfig
@@ -38,5 +40,10 @@ class FirebaseConfig
             Logger.warn("Error parsing JSON for key $key: ${e.message}")
             null
         }
+    }
+
+    fun getString(key: String): String? {
+        val string = remoteConfig.getString(key)
+        return string.trim().ifEmpty { null }
     }
 }

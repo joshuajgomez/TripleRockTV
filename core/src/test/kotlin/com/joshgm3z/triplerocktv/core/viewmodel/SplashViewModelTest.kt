@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -28,6 +29,7 @@ class SplashViewModelTest {
     private val repository: MediaLocalRepository = mockk()
     private val accessControlRepository: AccessControlRepository = mockk()
     private val loginRepository: LoginRepository = mockk()
+    private val firebaseConfig: FirebaseConfig = mockk()
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -43,7 +45,7 @@ class SplashViewModelTest {
         Dispatchers.resetMain()
     }
 
-//    @Test TODO: Fix this test
+    //    @Test TODO: Fix this test
     fun `init sets AccessDisabled when access state is disabled`() = runTest {
         coEvery { localDatastore.getUserInfo() } returns null
         coEvery {
@@ -51,7 +53,13 @@ class SplashViewModelTest {
         } returns AccessState(enabled = false, reason = "Account Suspended")
         coEvery { accessControlRepository.appUpdateState() } returns mockk()
 
-        viewModel = SplashViewModel(localDatastore, repository, loginRepository, accessControlRepository )
+        viewModel = SplashViewModel(
+            localDatastore,
+            repository,
+            loginRepository,
+            accessControlRepository,
+            firebaseConfig
+        )
         // Act
         advanceUntilIdle() // Wait for init block coroutine to finish
 
