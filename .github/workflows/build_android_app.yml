@@ -84,12 +84,17 @@ jobs:
           mkdir -p release_artifacts
           cp leanback-app/build/outputs/apk/online/release/*.apk release_artifacts/3RockTV-leanback-app.apk
 
-      - name: Publish master-release
+      - name: Update master-release
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ env.RELEASE_TAG }}
+          tag_name: master-release
+          name: ${{ env.RELEASE_TAG }}
           files: release_artifacts/3RockTV-leanback-app.apk
-          body: "Auto-generated latest build triggered by ${{ env.TRIGGER_SOURCE }}. Uploaded on ${{ env.RELEASE_TIMESTAMP }}"
+          body: |
+            ## master release channel
+            This release is automatically updated on every push to the master branch.
+            **Built on:** ${{ github.event.head_commit.timestamp }}
+            **Commit:** ${{ github.sha }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
