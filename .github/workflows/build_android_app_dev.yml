@@ -70,7 +70,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           tag_name: dev-release # This is the "Moving" tag
-          name: "${{ env.RELEASE_TAG }}"
+          name: ${{ env.RELEASE_TAG }}
           prerelease: true # Marks it as a beta release
           files: release_artifacts/3RockTV-leanback-app-dev.apk
           body: |
