@@ -69,7 +69,7 @@ android {
 
     sourceSets {
         getByName("dev") {
-            java.srcDirs("src/online/kotlin")
+            kotlin.srcDirs("src/online/kotlin")
         }
     }
 
