@@ -50,7 +50,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         StreamType.Series -> seriesStreamsDao.getAllOfCategory(categoryId)
         else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType).map {
             it.apply {
-                inMyList = favoriteDao.isFavorite(streamId).first()
+                favorite = favoriteDao.isFavorite(streamId).first()
                 recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
             }
         }
@@ -62,7 +62,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamId: Int,
         streamType: StreamType,
     ): StreamData = streamDataDao.getByStreamId(streamId).apply {
-        inMyList = favoriteDao.isFavorite(streamId).first()
+        favorite = favoriteDao.isFavorite(streamId).first()
         recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
     }
 
@@ -93,7 +93,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
             Logger.debug("combine: recentPlayed = [${recentPlayed}], isFavorite = [${isFavorite}]")
             streamData.apply {
                 recentlyPlayed = recentPlayed
-                inMyList = isFavorite
+                favorite = isFavorite
             }
         }
 
@@ -106,7 +106,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         favoriteDao.isFavorite(seriesId)
     ) { seriesStream, recentPlayed, isFavorite ->
         seriesStream.apply {
-            inMyList = isFavorite
+            favorite = isFavorite
             recentPlayed?.let { lastPlayedEpisodeId = it.id }
             seasons?.forEach { season ->
                 season.episodes.forEach { episode ->
@@ -121,7 +121,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
             && epgListingDao.getAllEpgListings().isEmpty()
 
-    override suspend fun fetchMyList(streamType: StreamType): List<StreamData> {
+    override suspend fun fetchFavorites(streamType: StreamType): List<StreamData> {
         return favoriteDao.getFavoritesOfType(streamType).map {
             streamDataDao.getByStreamId(it.id)
         }
@@ -132,13 +132,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
         else emptyList()
     }
 
-    override suspend fun fetchMyListSeries(): List<SeriesStream> {
+    override suspend fun fetchFavoritesSeries(): List<SeriesStream> {
         return favoriteDao.getFavoritesOfType(StreamType.Series).map {
             seriesStreamsDao.getBySeriesId(it.id)
         }
     }
 
-    override suspend fun updateMyList(
+    override suspend fun updateFavorites(
         streamId: Int,
         streamType: StreamType,
         add: Boolean

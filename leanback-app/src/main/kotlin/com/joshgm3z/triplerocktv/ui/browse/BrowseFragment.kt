@@ -175,10 +175,10 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        if (uiState.myList.isNotEmpty()) {
+        if (uiState.favorites.isNotEmpty()) {
             val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.myList)
+            listRowAdapter.addAll(0, uiState.favorites)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
@@ -217,10 +217,10 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        if (uiState.myList.isNotEmpty()) {
+        if (uiState.favorites.isNotEmpty()) {
             val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.myList)
+            listRowAdapter.addAll(0, uiState.favorites)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
@@ -256,10 +256,10 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        if (uiState.myList.isNotEmpty()) {
+        if (uiState.favorites.isNotEmpty()) {
             val header = HeaderItem(0, "Favorites")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.myList)
+            listRowAdapter.addAll(0, uiState.favorites)
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 

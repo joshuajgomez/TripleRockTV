@@ -116,7 +116,7 @@ class StreamCatalogueFragment : Fragment() {
         binding.metadataView.rating = seriesStream.rating.parseToFloat()
         binding.metadataView.genre = seriesStream.genre
         binding.metadataView.noOfSeasons = seriesStream.seasons?.size
-        binding.metadataView.showMyList = seriesStream.inMyList
+        binding.metadataView.showMyList = seriesStream.favorite
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
