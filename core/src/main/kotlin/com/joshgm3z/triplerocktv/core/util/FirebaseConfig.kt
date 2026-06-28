@@ -17,7 +17,7 @@ class FirebaseConfig
 
     init {
         val configSettings = remoteConfigSettings {
-            minimumFetchIntervalInSeconds = 3 // 1 hour fetch interval
+            minimumFetchIntervalInSeconds = if (isDevBuild) 0 else 3600 // 1 hour fetch interval
         }
         remoteConfig.setConfigSettingsAsync(configSettings)
         remoteConfig.fetchAndActivate()

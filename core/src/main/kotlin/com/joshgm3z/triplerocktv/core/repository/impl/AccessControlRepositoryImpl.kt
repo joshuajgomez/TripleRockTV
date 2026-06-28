@@ -27,7 +27,7 @@ class AccessControlRepositoryImpl
         val bannedUsers = firebaseConfig.getObject<List<String>>("banned_users") ?: emptyList()
         if (bannedUsers.contains(username)) return AccessState(
             enabled = false,
-            reason = "User $username is banned"
+            reason = "User $username is banned from this app"
         )
 
         return AccessState(enabled = true, reason = "No restrictions found")
@@ -42,7 +42,7 @@ class AccessControlRepositoryImpl
 
         return if (currentAppVersion.isOlderThan(forcedMinAppversion)) AccessState(
             enabled = false,
-            reason = "Update app to continue"
+            reason = "Update to $forcedMinAppversion or newer to continue using the app"
         ) else AccessState(
             enabled = true,
             reason = "Current version greater than forced min version"
