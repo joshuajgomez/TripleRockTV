@@ -31,12 +31,14 @@ class RecentsRepositoryImpl
             .getRecentlyPlayedByType(StreamType.Series)
             .mapNotNull { recentlyPlayed ->
                 val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
-                val series = with(seriesStreamsDao.getBySeriesId(seriesId)) {
+                val seriesStream =
+                    seriesStreamsDao.getBySeriesId(seriesId) ?: return@mapNotNull null
+                val series = with(seriesStream) {
                     when {
                         !seasons.isNullOrEmpty() -> this
                         else -> {
                             onlineRepository.getSeriesDataAndUpdate(seriesId)
-                            seriesStreamsDao.getBySeriesId(seriesId)
+                            seriesStreamsDao.getBySeriesId(seriesId) ?: return@mapNotNull null
                         }
                     }
                 }

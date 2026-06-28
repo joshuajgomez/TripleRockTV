@@ -30,7 +30,7 @@ interface SeriesStreamsDao {
     fun searchStreams(streamName: String, limit: Int = SEARCH_LIMIT): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
-    fun getBySeriesId(seriesId: Int): SeriesStream
+    fun getBySeriesId(seriesId: Int): SeriesStream?
 
     @Query("SELECT * FROM series_stream")
     fun getAll(): List<SeriesStream>

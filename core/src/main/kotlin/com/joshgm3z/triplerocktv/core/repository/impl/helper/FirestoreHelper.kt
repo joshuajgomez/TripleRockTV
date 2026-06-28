@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -10,6 +11,18 @@ class FirestoreHelper
 @Inject constructor(
     private val db: FirebaseFirestore
 ) {
+    companion object {
+        fun log(dataMap: Map<String, Any>) {
+            FirebaseFirestore.getInstance()
+                .collection("logs")
+                .add(
+                    dataMap.toMutableMap().apply {
+                        put("timestamp", System.currentTimeMillis())
+                        put("app_version", BuildConfig.VERSION_NAME)
+                    }
+                )
+        }
+    }
 
     suspend fun getDataMap(collectionPath: String, documentId: String): Map<String, Any>? {
         Logger.debug("collectionPath = [${collectionPath}], documentId = [${documentId}]")
@@ -59,6 +72,14 @@ class FirestoreHelper
             .await()
         return document.id
     }
+
+    suspend fun log(dataMap: Map<String, Any>) = createDocumentIdInCollection(
+        collection = "logs",
+        dataMap = dataMap.toMutableMap().apply {
+            put("timestamp", System.currentTimeMillis())
+            put("app_version", BuildConfig.VERSION_NAME)
+        }
+    )
 
     fun listenToDataMap(
         collection: String,
