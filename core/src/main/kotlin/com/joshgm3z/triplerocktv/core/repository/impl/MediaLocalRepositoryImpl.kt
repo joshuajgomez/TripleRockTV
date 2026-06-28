@@ -71,7 +71,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         seriesId: Int,
     ): Episode {
         val seriesStream = seriesStreamsDao.getBySeriesId(seriesId)
-        seriesStream.seasons?.forEach { season ->
+        seriesStream?.seasons?.forEach { season ->
             season.episodes.forEach { episode ->
                 if (episode.id == episodeId) return episode.apply {
                     recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episodeId).first()
@@ -133,7 +133,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchFavoritesSeries(): List<SeriesStream> {
-        return favoriteDao.getFavoritesOfType(StreamType.Series).map {
+        return favoriteDao.getFavoritesOfType(StreamType.Series).mapNotNull {
             seriesStreamsDao.getBySeriesId(it.id)
         }
     }
