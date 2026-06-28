@@ -35,7 +35,7 @@ data class DetailsUiState(
     val episodeId: Int? = null,
     val noOfSeasons: Int? = null,
     val duration: String? = null,
-    val inMyList: Boolean = false,
+    val favorite: Boolean = false,
     val description: String? = null,
     val cast: String? = null,
     val director: String? = null,
@@ -101,7 +101,7 @@ class DetailsViewModel @Inject constructor(
                         cast = it.movieMetadata.cast.withPrefix("Cast: "),
                         director = it.movieMetadata.director.withPrefix("Director: "),
                         progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
-                        inMyList = it.inMyList,
+                        favorite = it.favorite,
                         coverImage = it.movieMetadata.backPosterUrl.ifNullOrEmpty(it.streamIcon),
                         subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
                     )
@@ -136,7 +136,7 @@ class DetailsViewModel @Inject constructor(
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
                         progressPercent = if (episodeToPlay.progressPercent() > 0) episodeToPlay.progressPercent() else null,
                         showMoreEpisodesButton = true,
-                        inMyList = seriesStream.inMyList,
+                        favorite = seriesStream.favorite,
                         noOfSeasons = seriesStream.seasons.size
                     )
                 }
@@ -159,24 +159,24 @@ class DetailsViewModel @Inject constructor(
     fun addToMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyList(
+            if (streamType == StreamType.Series) repository.updateFavorites(
                 streamId!!,
                 StreamType.Series,
                 true
             )
-            else repository.updateMyList(streamId!!, StreamType.Series, true)
+            else repository.updateFavorites(streamId!!, StreamType.Series, true)
         }
     }
 
     fun removeFromMyList(streamType: StreamType) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateMyList(
+            if (streamType == StreamType.Series) repository.updateFavorites(
                 streamId!!,
                 StreamType.Series,
                 false
             )
-            else repository.updateMyList(streamId!!, StreamType.Series, false)
+            else repository.updateFavorites(streamId!!, StreamType.Series, false)
         }
     }
 

@@ -144,8 +144,8 @@ class DetailsFragment : Fragment() {
         binding.progressBar.setVisible(uiState.progressPercent != null)
         binding.bvStartOver.setVisible(uiState.progressPercent != null)
         binding.bvPlay.setVisible(uiState.progressPercent == null)
-        binding.bvRemoveMyList.setVisible(uiState.inMyList)
-        binding.bvAddMyList.setVisible(!uiState.inMyList)
+        binding.bvRemoveMyList.setVisible(uiState.favorite)
+        binding.bvAddMyList.setVisible(!uiState.favorite)
         binding.bvMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
 
         // handle focus

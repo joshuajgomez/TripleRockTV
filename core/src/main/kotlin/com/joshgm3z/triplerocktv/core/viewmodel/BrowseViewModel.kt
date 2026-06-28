@@ -22,7 +22,7 @@ sealed class BrowseUiState {
     data class Error(val message: String) : BrowseUiState()
 
     data class VideoOnDemandState(
-        val myList: List<StreamData> = emptyList(),
+        val favorites: List<StreamData> = emptyList(),
         val recentPlayed: List<StreamData> = emptyList(),
         val newlyAdded: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
@@ -30,13 +30,13 @@ sealed class BrowseUiState {
 
     data class LiveTState(
         val recentPlayed: List<StreamData> = emptyList(),
-        val myList: List<StreamData> = emptyList(),
+        val favorites: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
     ) : BrowseUiState()
 
     data class SeriesStreamState(
         val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
-        val myList: List<SeriesStream> = emptyList(),
+        val favorites: List<SeriesStream> = emptyList(),
         val seriesMap: Map<CategoryData, List<SeriesStream>> = emptyMap(),
     ) : BrowseUiState()
 }
@@ -62,7 +62,7 @@ class BrowseViewModel @Inject constructor(
     }
 
     private suspend fun getSeriesStreamState() = BrowseUiState.SeriesStreamState(
-        myList = repository.fetchMyListSeries(),
+        favorites = repository.fetchFavoritesSeries(),
         recentPlayedEpisodes = recentsRepository.fetchRecentlyPlayedSeries(),
         seriesMap = repository.fetchCategories(StreamType.Series).associateWith { category ->
             repository.fetchStreamsOfCategory(
@@ -73,7 +73,7 @@ class BrowseViewModel @Inject constructor(
     )
 
     private suspend fun getVideoOnDemandState() = BrowseUiState.VideoOnDemandState(
-        myList = repository.fetchMyList(StreamType.VideoOnDemand),
+        favorites = repository.fetchFavorites(StreamType.VideoOnDemand),
         recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
         newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
         categoryMap = mapOf(
@@ -99,7 +99,7 @@ class BrowseViewModel @Inject constructor(
 
     private suspend fun getLiveTvState() = BrowseUiState.LiveTState(
         recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
-        myList = repository.fetchMyList(StreamType.LiveTV),
+        favorites = repository.fetchFavorites(StreamType.LiveTV),
         categoryMap = mapOf(
             "Malayalam" to repository.fetchCategoriesByTitleKey(
                 StreamType.LiveTV,

@@ -6,7 +6,6 @@ import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
-import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
 /**
@@ -41,7 +40,7 @@ data class StreamData(
     var recentlyPlayed: RecentlyPlayed? = null
 
     @Ignore
-    var inMyList: Boolean = false
+    var favorite: Boolean = false
 
     companion object {
         fun sample(): StreamData = StreamData(

@@ -40,7 +40,7 @@ class ChannelPresenter
         val binding = ViewChannelBinding.bind(viewHolder.view)
 
         binding.tvProgramName.text = streamData.name
-        binding.ivStar.setVisible(streamData.inMyList)
+        binding.ivStar.setVisible(streamData.favorite)
         binding.root.setOnLongClickListener {
             scope.launch {
                 val add = !binding.ivStar.isVisible

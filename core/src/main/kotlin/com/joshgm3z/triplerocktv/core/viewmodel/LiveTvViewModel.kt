@@ -89,7 +89,7 @@ class LiveTvViewModel
         streamData: StreamData,
         add: Boolean
     ): Boolean {
-        return repository.updateMyList(
+        return repository.updateFavorites(
             streamData.streamId,
             StreamType.LiveTV,
             add

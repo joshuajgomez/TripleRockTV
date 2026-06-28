@@ -28,7 +28,7 @@ data class SeriesStream(
     var lastPlayedEpisodeId: Int? = null
 
     @Ignore
-    var inMyList: Boolean = false
+    var favorite: Boolean = false
 }
 
 data class Season(
