@@ -274,16 +274,16 @@
             app:popUpToInclusive="true" />
     </dialog>
 
-    <fragment
+    <dialog
         android:id="@+id/accessDisabledFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.AccessDisabledFragment"
         android:label="AccessDisabledFragment">
         <argument
             android:name="message"
             app:argType="string" />
-    </fragment>
+    </dialog>
 
-    <fragment
+    <dialog
         android:id="@+id/appUpdateInfoFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.AppUpdateInfoFragment"
         android:label="AppUpdateInfoFragment">
@@ -293,7 +293,7 @@
         <action
             android:id="@+id/toSelfUpdateDialog"
             app:destination="@id/selfUpdateDialog" />
-    </fragment>
+    </dialog>
 
     <dialog
         android:id="@+id/trackSelectorFragment"
