@@ -36,6 +36,7 @@ class AccessDisabledFragment : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         binding.tvTitle.text = "Access restricted"
         binding.tvSubtitle.text = args.message
         binding.bvPositive.text = "Exit app"

@@ -58,20 +58,27 @@ class SplashScreenFragment : Fragment() {
             delay(2000)
             viewModel.navDirectionState.collectLatest {
                 when (it) {
-                    DestinationState.Login -> SplashScreenFragmentDirections.toLogin()
-                    DestinationState.Updater -> SplashScreenFragmentDirections.toUpdater()
+                    DestinationState.Login -> SplashScreenFragmentDirections
+                        .toLogin()
+
+                    DestinationState.Updater -> SplashScreenFragmentDirections
+                        .toUpdater()
                         .apply { autoUpdateAndExit = true }
 
-                    is DestinationState.AccessDisabled -> SplashScreenFragmentDirections.toAccessDisabled(
-                        it.message
-                    )
+                    is DestinationState.AccessDisabled -> SplashScreenFragmentDirections
+                        .toAccessDisabled()
+                        .apply { message = it.message }
 
-                    is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections.toAppUpdateInfo(
-                        it.message
-                    )
+                    is DestinationState.AppUpdateNeeded -> SplashScreenFragmentDirections
+                        .toAppUpdateInfo()
+                        .apply { message = it.message }
 
-                    is DestinationState.Error -> SplashScreenFragmentDirections.toError(it.message)
-                    is DestinationState.Home -> SplashScreenFragmentDirections.toHome()
+                    is DestinationState.Error -> SplashScreenFragmentDirections
+                        .toError(it.message)
+
+                    is DestinationState.Home -> SplashScreenFragmentDirections
+                        .toHome()
+
                     else -> return@collectLatest
                 }.let { destination ->
                     findNavController().navigate(destination)

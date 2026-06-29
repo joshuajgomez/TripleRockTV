@@ -280,6 +280,7 @@
         android:label="AccessDisabledFragment">
         <argument
             android:name="message"
+            android:defaultValue="Access to this app is disabled"
             app:argType="string" />
     </dialog>
 
@@ -289,6 +290,7 @@
         android:label="AppUpdateInfoFragment">
         <argument
             android:name="message"
+            android:defaultValue="Update to latest version to continue using the app"
             app:argType="string" />
         <action
             android:id="@+id/toSelfUpdateDialog"
