@@ -15,7 +15,7 @@ class FirebaseConfig
 @Inject constructor() {
     val remoteConfig = Firebase.remoteConfig
 
-    init {
+    fun init() {
         val configSettings = remoteConfigSettings {
             minimumFetchIntervalInSeconds = if (isDevBuild) 0 else 3600 // 1 hour fetch interval
         }
