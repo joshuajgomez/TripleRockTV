@@ -44,7 +44,7 @@ interface RecentlyPlayedDao {
     @Query("SELECT * FROM recent_played WHERE seriesId = :seriesId")
     fun getRecentlyPlayedBySeriesId(seriesId: Int): Flow<RecentlyPlayed?>
 
-    @Query("SELECT * FROM recent_played WHERE streamType = :type")
+    @Query("SELECT * FROM recent_played WHERE streamType = :type ORDER BY added DESC")
     fun getRecentlyPlayedOfType(type: StreamType): List<RecentlyPlayed>
 
     @Query(
