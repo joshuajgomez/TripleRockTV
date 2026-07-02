@@ -43,7 +43,7 @@ interface StreamDataDao {
     fun searchByName(streamName: String, limit: Int = SEARCH_LIMIT): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
-    fun getByStreamId(streamId: Int): StreamData
+    fun getByStreamId(streamId: Int): StreamData?
 
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")
     fun streamDataFlow(streamId: Int): Flow<StreamData>
