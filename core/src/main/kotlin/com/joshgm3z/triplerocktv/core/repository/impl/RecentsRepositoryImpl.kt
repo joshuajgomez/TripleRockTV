@@ -18,9 +18,19 @@ class RecentsRepositoryImpl
     private val seriesStreamsDao: SeriesStreamsDao,
     private val onlineRepository: MediaOnlineRepository,
 ) : RecentsRepository {
-    override suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData> {
+
+    override suspend fun fetchRecentlyPlayedStreamData(
+        streamType: StreamType
+    ): List<StreamData> {
         return recentlyPlayedDao.getRecentlyPlayedOfType(streamType).mapNotNull {
-            streamDataDao.getByStreamId(it.id)?.apply {
+            val streamData = streamDataDao.getByStreamId(it.id) ?: return@mapNotNull null
+            when {
+                streamData.movieMetadata != null -> streamData
+                else -> {
+                    onlineRepository.getMovieDataAndUpdate(it.id, streamType)
+                    streamDataDao.getByStreamId(it.id) ?: return@mapNotNull null
+                }
+            }.apply {
                 recentlyPlayed = it
             }
         }
