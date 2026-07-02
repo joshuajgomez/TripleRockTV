@@ -151,7 +151,7 @@ constructor(
         if (streamType != StreamType.VideoOnDemand) return
         getMovieData(streamId).let { movieMetaData ->
             val updatedStreamData = streamDataDao.getByStreamId(streamId)
-                .copy(movieMetadata = movieMetaData)
+                ?.copy(movieMetadata = movieMetaData) ?: return
             streamDataDao.update(updatedStreamData)
         }
     }

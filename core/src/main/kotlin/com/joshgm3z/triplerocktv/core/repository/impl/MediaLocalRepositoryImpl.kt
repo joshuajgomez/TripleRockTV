@@ -61,7 +61,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchStream(
         streamId: Int,
         streamType: StreamType,
-    ): StreamData = streamDataDao.getByStreamId(streamId).apply {
+    ): StreamData = streamDataDao.getByStreamId(streamId)!!.apply {
         favorite = favoriteDao.isFavorite(streamId).first()
         recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
     }
@@ -122,7 +122,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
             && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchFavorites(streamType: StreamType): List<StreamData> {
-        return favoriteDao.getFavoritesOfType(streamType).map {
+        return favoriteDao.getFavoritesOfType(streamType).mapNotNull {
             streamDataDao.getByStreamId(it.id)
         }
     }
