@@ -28,6 +28,7 @@ data class StreamData(
     val epgChannelId: String? = null,
 
     val streamType: StreamType,
+    // to delete
     val timeAddedToList: Long = 0,
     val subtitleUrl: String? = null,
     val subtitleTitle: String? = null,
