@@ -54,7 +54,7 @@ constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             if (autoUpdateAndExit) {
-                startUpdate(*_uiState.value.stateMap.keys.toTypedArray())
+                startUpdate(_uiState.value.stateMap.keys.toList())
             } else {
                 _uiState.update { currentState ->
                     val updatedMap = currentState.stateMap.toMutableMap()
@@ -79,7 +79,7 @@ constructor(
         }
     }
 
-    fun startUpdate(vararg streamTypes: StreamType) {
+    fun startUpdate(streamTypes: List<StreamType>) {
         _uiState.update { currentState ->
             val updatedMap = currentState.stateMap.toMutableMap()
             streamTypes.forEach { type ->

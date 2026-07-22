@@ -77,17 +77,17 @@ class UpdaterFragment : Fragment() {
         }
         binding.bvDownloadAll.setOnClickListener {
             viewModel.startUpdate(
-                StreamType.VideoOnDemand, StreamType.Series, StreamType.LiveTV
+                listOf(StreamType.VideoOnDemand, StreamType.Series, StreamType.LiveTV)
             )
         }
         binding.ucvVod.setOnClickListener {
-            viewModel.startUpdate(StreamType.VideoOnDemand)
+            viewModel.startUpdate(listOf(StreamType.VideoOnDemand))
         }
         binding.ucvSeries.setOnClickListener {
-            viewModel.startUpdate(StreamType.Series)
+            viewModel.startUpdate(listOf(StreamType.Series))
         }
         binding.ucvLivetv.setOnClickListener {
-            viewModel.startUpdate(StreamType.LiveTV)
+            viewModel.startUpdate(listOf(StreamType.LiveTV))
         }
         setupBackstackListener()
         binding.bvDownloadAll.post {

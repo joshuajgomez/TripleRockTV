@@ -59,20 +59,20 @@ class DetailsViewModel @Inject constructor(
 
     var isBlurSettingEnabled: Boolean = false
 
-    private var streamId: Int? = null
+    val streamId = savedStateHandle.get<Int>("streamId")
+        ?: throw IllegalArgumentException("streamId is required")
+
+    val streamType = savedStateHandle.get<StreamType>("streamType")
+        ?: throw IllegalArgumentException("streamType is required")
 
     init {
         viewModelScope.launch {
             isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
         }
-        val streamId = savedStateHandle.get<Int>("streamId")
-        val streamType = savedStateHandle.get<StreamType>("streamType")
-        if (streamId != null && streamType != null)
-            fetchStreamDetails(streamId, streamType)
+        fetchStreamDetails(streamId, streamType)
     }
 
     private fun fetchStreamDetails(streamId: Int, streamType: StreamType) {
-        this.streamId = streamId
         if (streamType == StreamType.VideoOnDemand) {
             fetchStreamData(streamId, streamType)
         } else if (streamType == StreamType.Series) {
@@ -156,27 +156,10 @@ class DetailsViewModel @Inject constructor(
         }
     }
 
-    fun addToMyList(streamType: StreamType) {
+    fun updateMyList(add: Boolean) {
         Logger.entry()
         viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateFavorites(
-                streamId!!,
-                StreamType.Series,
-                true
-            )
-            else repository.updateFavorites(streamId!!, StreamType.Series, true)
-        }
-    }
-
-    fun removeFromMyList(streamType: StreamType) {
-        Logger.entry()
-        viewModelScope.launch(Dispatchers.IO) {
-            if (streamType == StreamType.Series) repository.updateFavorites(
-                streamId!!,
-                StreamType.Series,
-                false
-            )
-            else repository.updateFavorites(streamId!!, StreamType.Series, false)
+            repository.updateFavorites(streamId, streamType, add)
         }
     }
 

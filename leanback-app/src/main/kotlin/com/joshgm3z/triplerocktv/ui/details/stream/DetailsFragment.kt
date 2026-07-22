@@ -101,8 +101,8 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.bvAddMyList.setOnClickListener { viewModel.addToMyList(args.streamType) }
-        binding.bvRemoveMyList.setOnClickListener { viewModel.removeFromMyList(args.streamType) }
+        binding.bvAddMyList.setOnClickListener { viewModel.updateMyList(true) }
+        binding.bvRemoveMyList.setOnClickListener { viewModel.updateMyList(false) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
