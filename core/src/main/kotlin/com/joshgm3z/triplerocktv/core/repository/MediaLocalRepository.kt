@@ -12,6 +12,8 @@ interface MediaLocalRepository {
 
     suspend fun fetchCategories(streamType: StreamType): List<CategoryData>
 
+    suspend fun getCategory(categoryId: Int): CategoryData?
+
     suspend fun fetchCategoriesByTitleKey(
         streamType: StreamType,
         titleKey: String
@@ -21,7 +23,20 @@ interface MediaLocalRepository {
 
     suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<Any>
 
+    fun fetchLiveStreamsOfCategoryFlow(
+        categoryId: Int,
+    ): Flow<List<StreamData>>
+
+    fun fetchPagingStreamsOfCategory(
+        categoryId: Int,
+        streamType: StreamType
+    ): PagingSource<Int, StreamData>
+
     fun fetchPagingCategoryData(streamType: StreamType): PagingSource<Int, CategoryData>
+
+    fun fetchPagingSeriesStreamsOfCategory(
+        categoryId: Int
+    ): PagingSource<Int, SeriesStream>
 
     suspend fun fetchStream(streamId: Int, streamType: StreamType): StreamData
 

@@ -13,6 +13,9 @@ interface CategoryDataDao {
     @Query("SELECT * FROM category_data WHERE streamType = :streamType")
     fun getAllOfType(streamType: StreamType): List<CategoryData>
 
+    @Query("SELECT * FROM category_data WHERE categoryId = :categoryId")
+    fun getCategory(categoryId: Int): CategoryData?
+
     @Query("SELECT * FROM category_data WHERE streamType = :streamType")
     fun getAllPagingOfType(streamType: StreamType): PagingSource<Int, CategoryData>
 
