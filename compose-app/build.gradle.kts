@@ -60,12 +60,16 @@ android {
     productFlavors {
         create("demo") {
             dimension = "environment"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "3TV-demo")
         }
         create("online") {
             dimension = "environment"
         }
         create("dev") {
             dimension = "environment"
+            applicationIdSuffix = ".dev"
+            resValue("string", "app_name", "3TV-dev")
             isDefault = true
         }
     }
