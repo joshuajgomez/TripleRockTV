@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.room.category
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -11,6 +12,9 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 interface CategoryDataDao {
     @Query("SELECT * FROM category_data WHERE streamType = :streamType")
     fun getAllOfType(streamType: StreamType): List<CategoryData>
+
+    @Query("SELECT * FROM category_data WHERE streamType = :streamType")
+    fun getAllPagingOfType(streamType: StreamType): PagingSource<Int, CategoryData>
 
     @Query("SELECT * FROM category_data WHERE streamType = :streamType AND categoryName LIKE '%' || :titleKey ||'%'")
     fun getAllOfTypeWithTitleKey(streamType: StreamType, titleKey: String): List<CategoryData>
