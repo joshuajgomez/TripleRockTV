@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.room.stream
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -22,10 +23,31 @@ interface StreamDataDao {
         streamType: StreamType
     ): List<StreamData>
 
+    @Query(
+        "SELECT * FROM stream_data " +
+                "WHERE categoryId = :categoryId AND streamType = :streamType " +
+                "ORDER BY added DESC"
+    )
+    fun getAllFromCategoryAndTypeFlow(
+        categoryId: Int,
+        streamType: StreamType
+    ): Flow<List<StreamData>>
+
+    @Query(
+        "SELECT * FROM stream_data " +
+                "WHERE categoryId = :categoryId AND streamType = :streamType " +
+                "ORDER BY added DESC"
+    )
+    fun getAllPagingFromCategoryAndType(
+        categoryId: Int,
+        streamType: StreamType
+    ): PagingSource<Int, StreamData>
+
     @Query("SELECT * FROM stream_data WHERE streamType = :streamType")
     fun getAll(streamType: StreamType): List<StreamData>
 
-    @Query("""
+    @Query(
+        """
     SELECT * FROM stream_data 
     WHERE name LIKE '%' || :streamName || '%' 
     ORDER BY 
@@ -39,7 +61,8 @@ interface StreamDataDao {
         END, 
         name ASC 
     LIMIT :limit
-""")
+"""
+    )
     fun searchByName(streamName: String, limit: Int = SEARCH_LIMIT): List<StreamData>
 
     @Query("SELECT * FROM stream_data WHERE streamId = :streamId")

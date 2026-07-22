@@ -35,6 +35,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamType: StreamType
     ): List<CategoryData> = categoryDataDao.getAllOfType(streamType)
 
+    override suspend fun getCategory(categoryId: Int): CategoryData? {
+        return categoryDataDao.getCategory(categoryId)
+    }
+
     override suspend fun fetchCategoriesByTitleKey(
         streamType: StreamType,
         titleKey: String
@@ -60,9 +64,37 @@ class MediaLocalRepositoryImpl @Inject constructor(
         Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
     }
 
+    override fun fetchLiveStreamsOfCategoryFlow(
+        categoryId: Int,
+    ): Flow<List<StreamData>> {
+        return combine(
+            streamDataDao.getAllFromCategoryAndTypeFlow(categoryId, StreamType.LiveTV),
+            favoriteDao.getFavoritesOfTypeFlow(StreamType.LiveTV)
+        ) { streams, favorites ->
+            streams.map { stream ->
+                stream.apply {
+                    favorite = favorites.firstOrNull { it.id == stream.streamId } != null
+                    recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+                }
+            }
+        }
+    }
+
+    override fun fetchPagingStreamsOfCategory(
+        categoryId: Int,
+        streamType: StreamType
+    ): PagingSource<Int, StreamData> = streamDataDao.getAllPagingFromCategoryAndType(
+        categoryId,
+        streamType
+    )
+
     override fun fetchPagingCategoryData(
         streamType: StreamType
     ): PagingSource<Int, CategoryData> = categoryDataDao.getAllPagingOfType(streamType)
+
+    override fun fetchPagingSeriesStreamsOfCategory(
+        categoryId: Int
+    ): PagingSource<Int, SeriesStream> = seriesStreamsDao.getAllPagingOfCategory(categoryId)
 
     override suspend fun fetchStream(
         streamId: Int,

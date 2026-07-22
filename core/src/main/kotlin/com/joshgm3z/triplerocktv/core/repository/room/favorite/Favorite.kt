@@ -41,4 +41,11 @@ interface FavoriteDao {
                 "ORDER BY added DESC LIMIT :count"
     )
     suspend fun getFavoritesOfType(streamType: StreamType, count: Int = 5): List<Favorite>
+
+    @Query(
+        "SELECT * FROM favorite " +
+                "WHERE streamType = :streamType " +
+                "ORDER BY added DESC LIMIT :count"
+    )
+    fun getFavoritesOfTypeFlow(streamType: StreamType, count: Int = 5): Flow<List<Favorite>>
 }
