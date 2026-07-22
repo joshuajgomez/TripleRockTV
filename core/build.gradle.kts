@@ -106,8 +106,11 @@ dependencies {
 
     implementation(libs.zxing.android.embedded)
 
+    implementation(libs.androidx.paging.runtime.ktx)
+
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
+    implementation(libs.room.paging)
     kapt(libs.room.compiler)
     testImplementation(kotlin("test"))
 

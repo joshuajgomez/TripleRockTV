@@ -5,6 +5,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
+import androidx.leanback.paging.PagingDataAdapter
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.HeaderItem
@@ -31,6 +32,8 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
+import com.joshgm3z.triplerocktv.ui.common.diffCallback
+import com.joshgm3z.triplerocktv.ui.common.diffCategoryCallback
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -86,9 +89,10 @@ class BrowseFragment : BrowseSupportFragment() {
                 when (it) {
                     is BrowseUiState.Loading -> progressBarManager.show()
                     is BrowseUiState.VideoOnDemandState -> showVoDState(it)
-                    is BrowseUiState.LiveTState -> showLiveTvState(it)
+                    is BrowseUiState.LiveTvState -> showLiveTvState(it)
                     is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
                     is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
+                    else -> BrowseFragmentDirections.toError("Empty content")
                 }
             }
         }
@@ -205,9 +209,20 @@ class BrowseFragment : BrowseSupportFragment() {
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
         }
+
+        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
+
+        rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
+
+        lifecycleScope.launch {
+            uiState.pagingCategoryData.collectLatest { pagingData ->
+                pagingDataAdapter.submitData(pagingData)
+            }
+        }
     }
 
-    private fun showLiveTvState(uiState: BrowseUiState.LiveTState) {
+    private fun showLiveTvState(uiState: BrowseUiState.LiveTvState) {
         rowsAdapter.clear()
 
         if (uiState.recentPlayed.isNotEmpty()) {
@@ -240,6 +255,17 @@ class BrowseFragment : BrowseSupportFragment() {
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
         }
+
+        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
+
+        rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
+
+        lifecycleScope.launch {
+            uiState.pagingCategoryData.collectLatest { pagingData ->
+                pagingDataAdapter.submitData(pagingData)
+            }
+        }
     }
 
     private fun showSeriesStreamState(uiState: BrowseUiState.SeriesStreamState) {
@@ -263,19 +289,15 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        fun addRow(
-            id: Long,
-            header: String,
-            list: List<SeriesStream>
-        ) {
-            if (list.isEmpty()) return
-            val header = HeaderItem(id, header)
-            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, list)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
-        }
-        uiState.seriesMap.forEach { (category, series) ->
-            addRow(category.categoryId.toLong(), category.categoryName, series)
+        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
+
+        rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
+
+        lifecycleScope.launch {
+            uiState.pagingCategoryData.collectLatest { pagingData ->
+                pagingDataAdapter.submitData(pagingData)
+            }
         }
     }
 
