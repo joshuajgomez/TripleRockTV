@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
+import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
@@ -18,6 +19,7 @@ import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -57,6 +59,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }.apply {
         Logger.info("fetchStreamsOfCategory($categoryId, $streamType): $this")
     }
+
+    override fun fetchPagingCategoryData(
+        streamType: StreamType
+    ): PagingSource<Int, CategoryData> = categoryDataDao.getAllPagingOfType(streamType)
 
     override suspend fun fetchStream(
         streamId: Int,

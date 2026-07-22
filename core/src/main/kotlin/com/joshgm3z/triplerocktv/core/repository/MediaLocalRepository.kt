@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository
 
+import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -19,6 +20,8 @@ interface MediaLocalRepository {
     suspend fun fetchEpgListings(): List<IptvEpgListing>
 
     suspend fun fetchStreamsOfCategory(categoryId: Int, streamType: StreamType): List<Any>
+
+    fun fetchPagingCategoryData(streamType: StreamType): PagingSource<Int, CategoryData>
 
     suspend fun fetchStream(streamId: Int, streamType: StreamType): StreamData
 

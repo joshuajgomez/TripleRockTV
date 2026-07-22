@@ -19,7 +19,7 @@ android {
         val versionOverride = project.findProperty("versionCodeOverride") as? String
         versionCode = versionOverride?.toInt() ?: 1
         val versionNameOverride = project.findProperty("versionNameOverride") as? String
-        versionName = versionNameOverride ?: "1.0-default"
+        versionName = versionNameOverride ?: "1.0-leanback-default"
     }
 
     signingConfigs {
@@ -112,6 +112,9 @@ dependencies {
     implementation(libs.androidx.media3.leanback)
     implementation(libs.androidx.media3.hls)
     implementation(libs.glide.transformations)
+
+    implementation(libs.androidx.paging.runtime.ktx)
+    implementation(libs.androidx.leanback.paging)
 
     testImplementation(kotlin("test"))
 
