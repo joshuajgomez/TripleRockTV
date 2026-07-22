@@ -31,6 +31,7 @@ exoplayer = "1.3.1"
 truth = "1.1.5"
 zxingAndroidEmbedded = "4.3.0"
 paging_version = "3.3.0"
+pagingCommon = "3.5.0"
 
 [libraries]
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
@@ -88,6 +89,7 @@ androidx-paging-compose = { group = "androidx.paging", name = "paging-compose", 
 
 truth = { module = "com.google.truth:truth", version.ref = "truth" }
 zxing-android-embedded = { module = "com.journeyapps:zxing-android-embedded", version.ref = "zxingAndroidEmbedded" }
+androidx-paging-common = { group = "androidx.paging", name = "paging-common", version.ref = "pagingCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
