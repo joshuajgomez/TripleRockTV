@@ -19,7 +19,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Decode Google Services JSON
-        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > leanback-app/google-services.json
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > leanback-app/google-services.json
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > compose-app/google-services.json
 
       - name: Decode default keystore
         run: |
@@ -58,6 +60,9 @@ jobs:
       - name: Build Dev Release APK (:leanback-app)
         run: ./gradlew leanback-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
+      - name: Build Dev Release APK (:compose-app)
+        run: ./gradlew compose-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
+
       - name: Clear Existing Release and Tag
         if: github.event_name != 'pull_request'
         env:
@@ -76,6 +81,7 @@ jobs:
         run: |
           mkdir -p release_artifacts
           cp leanback-app/build/outputs/apk/dev/release/*.apk release_artifacts/3RockTV-leanback-app-dev.apk
+          cp compose-app/build/outputs/apk/dev/release/*.apk release_artifacts/3RockTV-compose-app-dev.apk
 
       - name: Update dev-release
         uses: softprops/action-gh-release@v1
@@ -83,7 +89,7 @@ jobs:
           tag_name: dev-release
           name: ${{ env.RELEASE_TAG }}
           prerelease: true # Marks it as a beta release
-          files: release_artifacts/3RockTV-leanback-app-dev.apk
+          files: release_artifacts/3RockTV-leanback-app-dev.apk,release_artifacts/3RockTV-compose-app-dev.apk
           body: |
             ## dev release channel
             This release is automatically updated on every push to the dev branch.

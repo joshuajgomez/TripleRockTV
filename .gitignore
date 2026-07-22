@@ -11,4 +11,5 @@
 local.properties
 core/src/main/kotlin/com/joshgm3z/triplerocktv/core/repository/retrofit/Secrets.kt
 leanback-app/google-services.json
+compose-app/google-services.json
 security/default_keystore
