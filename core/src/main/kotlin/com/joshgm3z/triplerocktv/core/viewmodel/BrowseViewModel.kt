@@ -83,8 +83,9 @@ class BrowseViewModel @Inject constructor(
                 }
             ).flow.cachedIn(viewModelScope),
         )
-        return if (uiState.pagingCategoryData.firstOrNull() != null) uiState
-        else BrowseUiState.Empty(StreamType.Series)
+        val categoriesEmpty = repository.fetchCategories(StreamType.Series).isEmpty()
+        return if (categoriesEmpty) BrowseUiState.Empty(StreamType.Series)
+        else uiState
     }
 
     private suspend fun getVideoOnDemandState(): BrowseUiState {
@@ -108,8 +109,9 @@ class BrowseViewModel @Inject constructor(
                 }
             ).flow.cachedIn(viewModelScope)
         )
-        return if (uiState.pagingCategoryData.firstOrNull() != null) uiState
-        else BrowseUiState.Empty(StreamType.VideoOnDemand)
+        val categoriesEmpty = repository.fetchCategories(StreamType.VideoOnDemand).isEmpty()
+        return if (categoriesEmpty) BrowseUiState.Empty(StreamType.VideoOnDemand)
+        else uiState
     }
 
     private suspend fun getLiveTvState(): BrowseUiState {
@@ -132,8 +134,9 @@ class BrowseViewModel @Inject constructor(
                 }
             ).flow.cachedIn(viewModelScope),
         )
-        return if (uiState.pagingCategoryData.firstOrNull() != null) uiState
-        else BrowseUiState.Empty(StreamType.LiveTV)
+        val categoriesEmpty = repository.fetchCategories(StreamType.LiveTV).isEmpty()
+        return if (categoriesEmpty) BrowseUiState.Empty(StreamType.LiveTV)
+        else uiState
     }
 
     fun onViewResume() {
