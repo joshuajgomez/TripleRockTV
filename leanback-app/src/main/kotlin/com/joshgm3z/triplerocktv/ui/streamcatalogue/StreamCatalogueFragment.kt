@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
-import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.paging.PagingDataAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
@@ -15,6 +15,7 @@ import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.paging.PagingData
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.FragmentStreamCatalogueBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
@@ -23,8 +24,10 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.util.toTextTime
+import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
+import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.core.viewmodel.StreamViewModel
+import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -33,7 +36,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class StreamCatalogueFragment : Fragment() {
 
-    private val viewModel: StreamViewModel by viewModels()
+    private val viewModel: CatalogueViewModel by viewModels()
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
@@ -44,7 +47,7 @@ class StreamCatalogueFragment : Fragment() {
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
-    lateinit var rowsAdapter: ArrayObjectAdapter
+    lateinit var rowsAdapter: PagingDataAdapter<Any>
 
     private lateinit var binding: FragmentStreamCatalogueBinding
 
@@ -68,7 +71,7 @@ class StreamCatalogueFragment : Fragment() {
         ).apply {
             numberOfColumns = 5
         }
-        rowsAdapter = ArrayObjectAdapter(streamPresenter)
+        rowsAdapter = PagingDataAdapter(streamPresenter, diffCallback)
         gridFragment.adapter = rowsAdapter
         gridFragment.onItemViewClickedListener = clickListener
         gridFragment.setOnItemViewSelectedListener(selectionListener)
@@ -82,8 +85,20 @@ class StreamCatalogueFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                it?.let {
-                    rowsAdapter.setItems(it, null)
+                when (it) {
+                    is CatalogueUiState.VideoOnDemand -> {
+                        it.pagingStreams.collectLatest {
+                            rowsAdapter.submitData(it as PagingData<Any>)
+                        }
+                    }
+
+                    is CatalogueUiState.Series -> {
+                        it.pagingStreams.collectLatest {
+                            rowsAdapter.submitData(it as PagingData<Any>)
+                        }
+                    }
+
+                    else -> return@collectLatest
                 }
             }
         }

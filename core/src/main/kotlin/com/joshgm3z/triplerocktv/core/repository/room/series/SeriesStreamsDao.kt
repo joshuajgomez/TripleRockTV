@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.room.series
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
@@ -7,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.joshgm3z.triplerocktv.core.repository.SEARCH_LIMIT
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -40,6 +42,9 @@ interface SeriesStreamsDao {
 
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
     fun getAllOfCategory(categoryId: Int): List<SeriesStream>
+
+    @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
+    fun getAllPagingOfCategory(categoryId: Int): PagingSource<Int, SeriesStream>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<SeriesStream>)

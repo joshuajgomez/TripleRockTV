@@ -74,11 +74,18 @@ data class StreamData(
         else -> ((movieMetadata?.totalDurationMs ?: 0L) - recentlyPlayed!!.playedDuration)
     }
 
+    override fun toString(): String {
+        return "\nStreamData(streamId=$streamId, num=$num, name='$name', streamTypeText='$streamTypeText', streamIcon=$streamIcon, categoryId=$categoryId, added='$added', rating=$rating, extension='$extension', epgChannelId=$epgChannelId, streamType=$streamType, timeAddedToList=$timeAddedToList, subtitleUrl=$subtitleUrl, subtitleTitle=$subtitleTitle, subtitleLanguage=$subtitleLanguage, " +
+                "\n\tmovieMetadata=$movieMetadata, " +
+                "\n\trecentlyPlayed=$recentlyPlayed, favorite=$favorite, startedWatching=$startedWatching)"
+    }
+
     val startedWatching: Boolean
         get() = recentlyPlayed != null
                 && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
                 && movieMetadata?.totalDurationMs != 0L
                 && timeRemaining() > MIN_DURATION_LEFT
+
 }
 
 data class MovieMetadata(
