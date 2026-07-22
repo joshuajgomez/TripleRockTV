@@ -38,6 +38,8 @@ import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.util.errorListener
+import com.joshgm3z.triplerocktv.core.util.remindPeriodically
 import com.joshgm3z.triplerocktv.core.viewmodel.LoadTrack
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
@@ -111,7 +113,11 @@ class PlaybackFragment : Fragment() {
     }
 
     private fun initUi() {
-        player.addListener(errorListener(this))
+        player.addListener(
+            errorListener(onError = {
+                findNavController().navigate(PlaybackFragmentDirections.toError(it))
+            })
+        )
         player.addListener(playbackListener)
         player.addListener(trackViewModel.subtitleTrackListener)
 
@@ -127,7 +133,6 @@ class PlaybackFragment : Fragment() {
 
         requireActivity().setBackground(null)
 
-        viewModel.fetchStreamDetails(args.streamId, args.streamType, args.seriesId)
         lifecycleScope.launch {
             viewModel.playbackUiState.collectLatest {
                 it?.let { playbackUiState ->
@@ -183,7 +188,7 @@ class PlaybackFragment : Fragment() {
             }
         }
         lifecycleScope.launch {
-            PeriodicReminderUtility().getPeriodicReminder {
+            remindPeriodically {
                 if (player.isPlaying)
                     viewModel.updateLastPlayedPosition(player.currentPosition)
             }

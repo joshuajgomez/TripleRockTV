@@ -51,8 +51,9 @@ class AccessControlRepositoryImpl
 
 }
 
-fun String.isOlderThan(version: String): Boolean {
+fun String.isOlderThan(version: String?): Boolean {
     return try {
+        if (version == null) return false
         this.getVersionCode() < version.getVersionCode()
     } catch (e: NumberFormatException) {
         Logger.error(e.message.toString())

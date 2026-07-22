@@ -1,16 +1,15 @@
-package com.joshgm3z.triplerocktv.ui.player
+package com.joshgm3z.triplerocktv.core.util
 
 import androidx.annotation.OptIn
 import androidx.media3.common.PlaybackException
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.fragment.NavHostFragment.Companion.findNavController
 
 @OptIn(UnstableApi::class)
 fun errorListener(
-    fragment: PlaybackFragment,
     seekToDefaultPosition: () -> Unit = {},
-    prepare: () -> Unit = {}
+    prepare: () -> Unit = {},
+    onError: (String) -> Unit = {},
 ) = object : Player.Listener {
     override fun onPlayerError(error: PlaybackException) {
         super.onPlayerError(error)
@@ -36,11 +35,6 @@ fun errorListener(
             else -> "An unexpected playback error occurred: ${error.localizedMessage}"
         }
 
-        val action = PlaybackFragmentDirections.toError(errorMessage)
-        try {
-            findNavController(fragment).navigate(action)
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        onError(errorMessage)
     }
 }

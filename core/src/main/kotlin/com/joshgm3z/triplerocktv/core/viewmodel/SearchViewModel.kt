@@ -18,6 +18,7 @@ data class SearchUiState(
     val searchHints: List<String> = emptyList(),
     val streams: List<Any> = emptyList(),
     val statusText: String = "",
+    val loading: Boolean = false,
     val showRecentAddedTitle: Boolean = false,
 )
 
@@ -62,7 +63,12 @@ constructor(
             }
             return
         }
-        _uiState.update { it.copy(statusText = "Searching...") }
+        _uiState.update {
+            it.copy(
+                statusText = "Searching...",
+                loading = true
+            )
+        }
         val job = viewModelScope.launch(Dispatchers.IO) {
             val searchResult = repository.searchStreamByName(
                 text,
@@ -77,13 +83,15 @@ constructor(
                     it.copy(
                         streams = recentStreams,
                         statusText = "No results found",
-                        showRecentAddedTitle = true
+                        showRecentAddedTitle = true,
+                        loading = false
                     )
                 } else {
                     it.copy(
                         streams = searchResult,
                         statusText = "",
-                        showRecentAddedTitle = false
+                        showRecentAddedTitle = false,
+                        loading = false
                     )
                 }
             }
