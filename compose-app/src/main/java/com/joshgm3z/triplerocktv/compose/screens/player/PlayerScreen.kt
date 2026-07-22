@@ -1,10 +1,9 @@
-package com.joshgm3z.triplerocktv.compose.screens
+package com.joshgm3z.triplerocktv.compose.screens.player
 
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
-import android.view.WindowManager
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
@@ -36,7 +35,7 @@ import com.joshgm3z.triplerocktv.core.util.remindPeriodically
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 
 @Composable
-fun PlaybackScreen(
+fun PlayerScreen(
     viewModel: PlaybackViewModel = hiltViewModel(),
     navController: NavController
 ) {

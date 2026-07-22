@@ -303,7 +303,6 @@
         android:label="TrackSelectorFragment">
         <argument
             android:name="title"
-            android:defaultValue="Wonder Woman 1984"
             app:argType="string" />
     </dialog>
 

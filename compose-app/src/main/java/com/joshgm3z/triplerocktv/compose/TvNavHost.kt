@@ -5,6 +5,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.dialog
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.joshgm3z.triplerocktv.compose.screens.settings.AccessDisabledScreen
@@ -13,13 +14,14 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.AppUpdateScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.AccountDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.LoginScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.MediaSyncScreen
-import com.joshgm3z.triplerocktv.compose.screens.PlaybackScreen
+import com.joshgm3z.triplerocktv.compose.screens.player.PlayerScreen
 import com.joshgm3z.triplerocktv.compose.screens.SearchScreen
 import com.joshgm3z.triplerocktv.compose.screens.SplashScreen
 import com.joshgm3z.triplerocktv.compose.screens.StreamDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryBrowseScreen
 import com.joshgm3z.triplerocktv.compose.screens.common.ErrorDialog
 import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
+import com.joshgm3z.triplerocktv.compose.screens.player.track.TrackSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.settings.LogoutScreen
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import kotlinx.serialization.Serializable
@@ -75,12 +77,15 @@ open class NavMainDestination {
         val resume: Boolean = false,
         val seriesId: Int? = null
     ) : NavMainDestination()
+
+    @Serializable
+    class TrackSelector(val title: String)
 }
 
 @Composable
 fun TvNavHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavMainDestination.Splash) {
+    NavHost(navController = navController, startDestination = NavMainDestination.TrackSelector("Man from earth")) {
         composable<NavMainDestination.Login> {
             LoginScreen(onLoginSuccess = {
                 navController.navigate(NavMainDestination.Home)
@@ -155,7 +160,7 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.Playback> {
-            PlaybackScreen(navController = navController)
+            PlayerScreen(navController = navController)
         }
 
         composable<NavMainDestination.Search> {
@@ -186,6 +191,12 @@ fun TvNavHost() {
             val message = it.toRoute<NavMainDestination.Error>().message
             val summary = it.toRoute<NavMainDestination.Error>().summary
             ErrorDialog(message = message, summary = summary) {
+                navController.popBackStack()
+            }
+        }
+
+        dialog<NavMainDestination.TrackSelector> {
+            TrackSelectorDialog {
                 navController.popBackStack()
             }
         }
