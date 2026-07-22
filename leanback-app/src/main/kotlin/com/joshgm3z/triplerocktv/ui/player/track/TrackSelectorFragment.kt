@@ -29,8 +29,6 @@ class TrackSelectorFragment : DialogFragment(),
 
     private val viewModel: TrackSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
-    private val args by navArgs<TrackSelectorFragmentArgs>()
-
     private var _binding: LayoutTrackSelectorBinding? = null
     private val binding get() = _binding!!
 
@@ -101,7 +99,7 @@ class TrackSelectorFragment : DialogFragment(),
             }
         }
         binding.bvFindMoreButton.setOnClickListener {
-            viewModel.onFindMoreClicked(args.title)
+            viewModel.onFindMoreClicked()
         }
     }
 

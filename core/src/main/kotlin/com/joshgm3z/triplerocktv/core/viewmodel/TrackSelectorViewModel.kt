@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
 import androidx.annotation.OptIn
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.media3.common.C
@@ -24,15 +25,15 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class TrackInfo(
-    val id: String,
-    val groupIndex: Int,
-    val trackIndexInGroup: Int,
-    val mimeType: String?,
-    val language: String?,
-    val label: String?,
-    val roleFlags: Int,
-    val isSupported: Boolean,
-    val isSelected: Boolean,
+    val id: String = "",
+    val groupIndex: Int = 0,
+    val trackIndexInGroup: Int = 0,
+    val mimeType: String? = null,
+    val language: String? = null,
+    val label: String? = null,
+    val roleFlags: Int = 0,
+    val isSupported: Boolean = false,
+    val isSelected: Boolean = false,
     val trackType: TrackType,
 ) {
     override fun toString() = "\n{$language,$isSelected,$label}"
@@ -68,7 +69,8 @@ sealed class LoadTrack {
 class TrackSelectorViewModel
 @Inject
 constructor(
-    private val subtitleRepository: SubtitleRepository
+    private val subtitleRepository: SubtitleRepository,
+    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<TrackSelectorUiState?>(TrackSelectorUiState())
@@ -125,7 +127,8 @@ constructor(
         }
     }
 
-    fun onFindMoreClicked(title: String) {
+    fun onFindMoreClicked() {
+        val title = savedStateHandle.get<String>("title") ?: throw Exception("title is null")
         _uiState.update { it?.copy(isLoading = true) }
 
         viewModelScope.launch {

@@ -9,3 +9,10 @@ import androidx.compose.ui.tooling.preview.Preview
     showBackground = true
 )
 annotation class DarkPreview
+
+@Preview(
+    name = ">",
+    device = "spec:width=411dp,height=891dp,orientation=landscape,dpi=420",    uiMode = Configuration.UI_MODE_NIGHT_YES,
+    showBackground = true
+)
+annotation class DarkLandscapePreview
