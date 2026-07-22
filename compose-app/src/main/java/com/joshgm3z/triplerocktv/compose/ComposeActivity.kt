@@ -3,8 +3,20 @@ package com.joshgm3z.triplerocktv.compose
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
 import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +33,10 @@ class ComposeActivity : AppCompatActivity() {
         setContent {
             TripleRockTvTheme {
                 Surface(color = colorScheme.background) {
-                    TvNavHost()
+                    Box {
+                        TvNavHost()
+                        EnvironmentMarker()
+                    }
                 }
             }
         }
@@ -30,5 +45,29 @@ class ComposeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         firebaseConfig.init()
+    }
+}
+
+@Composable
+fun EnvironmentMarker() {
+    if (BuildConfig.FLAVOR != "online") {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 80.dp),
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Text(
+                text = BuildConfig.FLAVOR,
+                color = colorScheme.error,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .background(
+                        color = colorScheme.errorContainer,
+                        shape = RoundedCornerShape(10.dp)
+                    )
+                    .padding(horizontal = 5.dp)
+            )
+        }
     }
 }
