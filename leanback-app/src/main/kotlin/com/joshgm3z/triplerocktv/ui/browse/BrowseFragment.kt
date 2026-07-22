@@ -32,7 +32,6 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
-import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.ui.common.diffCategoryCallback
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
@@ -22,6 +23,7 @@ data class PlaybackUiState(
 
 @HiltViewModel
 class PlaybackViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
     private val recentsRepository: RecentsRepository,
     private val localDataStore: LocalDatastore,
@@ -30,17 +32,23 @@ class PlaybackViewModel @Inject constructor(
     private val _playbackUiState = MutableStateFlow<PlaybackUiState?>(null)
     val playbackUiState = _playbackUiState.asStateFlow()
 
-    private var streamId: Int? = null
-    private var seriesId: Int? = null
-    private var streamType: StreamType? = null
+    val streamId = savedStateHandle.get<Int>("streamId")
+        ?: throw Exception("Missing nav arg streamId")
+    private val streamType = savedStateHandle.get<StreamType>("streamType")
+        ?: throw Exception("Missing nav arg streamType")
+    private val seriesId = savedStateHandle.get<Int>("seriesId")
+
+    init {
+        if (streamType == StreamType.Series && seriesId == null) {
+            throw Exception("Missing nav arg seriesId for series stream")
+        }
+        fetchStreamDetails(streamId, streamType, seriesId)
+    }
 
     fun fetchStreamDetails(streamId: Int, streamType: StreamType, seriesId: Int? = null) {
         Logger.debug("streamId = [${streamId}], browseType = [${streamType}]")
-        this.streamType = streamType
-        this.seriesId = seriesId
         viewModelScope.launch(Dispatchers.IO) {
             val userInfo = localDataStore.getUserInfo()!!
-            this@PlaybackViewModel.streamId = streamId
             when (streamType) {
                 StreamType.VideoOnDemand -> _playbackUiState.update {
                     val result = repository.fetchStream(streamId, streamType)
@@ -65,8 +73,6 @@ class PlaybackViewModel @Inject constructor(
                         videoUrl = episode.videoUrl(userInfo),
                     )
                 }
-
-                else -> return@launch
             }
         }
     }
@@ -79,22 +85,20 @@ class PlaybackViewModel @Inject constructor(
                     StreamType.VideoOnDemand -> recentsRepository.updatePlayedDuration(
                         streamId = it,
                         positionMs = positionMs,
-                        streamType = streamType!!
+                        streamType = streamType
                     )
 
                     StreamType.LiveTV -> recentsRepository.updatePlayedDuration(
                         streamId = it,
-                        streamType = streamType!!
+                        streamType = streamType
                     )
 
                     StreamType.Series -> recentsRepository.updatePlayedDuration(
                         streamId = it,
-                        seriesId = seriesId!!,
+                        seriesId = seriesId,
                         positionMs = positionMs,
-                        streamType = streamType!!,
+                        streamType = streamType,
                     )
-
-                    else -> return@launch
                 }
             }
         } ?: throw Exception("Stream id is null")
@@ -102,10 +106,8 @@ class PlaybackViewModel @Inject constructor(
 
     fun updateSelectedSubtitle(language: String, title: String, url: String?) {
         Logger.debug("url = [${url}], language = [${language}]")
-        streamId?.let {
-            viewModelScope.launch(Dispatchers.IO) {
-                repository.updateSelectedSubtitle(it, language, title, url)
-            }
-        } ?: throw Exception("Stream id is null")
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateSelectedSubtitle(streamId, language, title, url)
+        }
     }
 }

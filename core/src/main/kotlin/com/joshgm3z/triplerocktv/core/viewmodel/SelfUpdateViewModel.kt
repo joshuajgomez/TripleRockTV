@@ -1,13 +1,14 @@
-package com.joshgm3z.triplerocktv.ui.selfupdate
+package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joshgm3z.triplerocktv.BuildConfig
+import com.joshgm3z.triplerocktv.core.BuildConfig
+import com.joshgm3z.triplerocktv.core.repository.impl.isOlderThan
 import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
 import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
 import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.getVersionCode
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -26,14 +27,35 @@ data class SelfUpdateUiState(
     val buttonAction: ButtonAction = ButtonAction.UpdateNow,
 )
 
-private val devAppUrl =
+fun getApkUrl(devBuild: Boolean, composeApp: Boolean) = when {
+    devBuild -> when {
+        composeApp -> devComposeAppUrl
+        else -> devAppUrl
+    }
+
+    else -> when {
+        composeApp -> onlineComposeAppUrl
+        else -> onlineAppUrl
+    }
+}
+
+fun getTagUrl(devBuild: Boolean) = when {
+    devBuild -> devAppTagUrl
+    else -> onlineAppTagUrl
+}
+
+private const val devAppUrl =
     "https://github.com/joshuajgomez/TripleRockTV/releases/download/dev-release/3RockTV-leanback-app-dev.apk"
-private val devAppTagUrl =
+private const val devComposeAppUrl =
+    "https://github.com/joshuajgomez/TripleRockTV/releases/download/dev-release/3RockTV-compose-app-dev.apk"
+private const val devAppTagUrl =
     "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/tags/dev-release"
 
-private val onlineAppUrl =
+private const val onlineAppUrl =
     "https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-leanback-app.apk"
-private val onlineAppTagUrl =
+private const val onlineComposeAppUrl =
+    "https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-compose-app.apk"
+private const val onlineAppTagUrl =
     "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/latest"
 
 enum class ButtonAction(val text: String) {
@@ -46,6 +68,7 @@ enum class ButtonAction(val text: String) {
 @HiltViewModel
 class SelfUpdateViewModel
 @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val fileDownloader: FileDownloader,
     private val apkInstaller: ApkInstaller
 ) : ViewModel() {
@@ -53,8 +76,10 @@ class SelfUpdateViewModel
     private val _uiState = MutableStateFlow(SelfUpdateUiState())
     val uiState = _uiState.asStateFlow()
 
-    private val apkUrl = if (!isDevBuild) onlineAppUrl else devAppUrl
-    private val apkTagUrl = if (!isDevBuild) onlineAppTagUrl else devAppTagUrl
+    private val isComposeApp = savedStateHandle.get<Boolean>("isComposeApp") ?: false
+
+    private val apkUrl = getApkUrl(isDevBuild, isComposeApp)
+    private val apkTagUrl = getTagUrl(isDevBuild)
 
     private var downloadedFile: File? = null
 
@@ -83,7 +108,7 @@ class SelfUpdateViewModel
             val releaseName = fileDownloader.getLatestApkReleaseName(apkTagUrl)
             Logger.debug("releaseName = [$releaseName]")
             _uiState.update {
-                if (releaseName != null && releaseName.getVersionCode() > BuildConfig.VERSION_CODE) {
+                if (BuildConfig.VERSION_NAME.isOlderThan(releaseName)) {
                     it.copy(
                         title = "Update available",
                         subtitle = "New version $releaseName is available for download",
