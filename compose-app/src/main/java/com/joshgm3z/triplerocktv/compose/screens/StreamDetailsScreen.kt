@@ -80,12 +80,12 @@ fun StreamDetailsScreen(
                     StreamType.Series -> NavMainDestination.Playback(
                         streamId = uiState.episodeId!!,
                         streamType = uiState.streamType,
-                        seriesId = viewModel.streamId!!,
+                        seriesId = viewModel.streamId,
                         resume = resume
                     )
 
                     else -> NavMainDestination.Playback(
-                        streamId = viewModel.streamId!!,
+                        streamId = viewModel.streamId,
                         streamType = uiState.streamType,
                         resume = resume
                     )

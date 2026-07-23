@@ -18,6 +18,7 @@ import javax.inject.Inject
 
 data class PlaybackUiState(
     val videoUrl: String,
+    val resumePosition: Long? = null,
     val playbackItem: Any,
 )
 
@@ -38,6 +39,9 @@ class PlaybackViewModel @Inject constructor(
         ?: throw Exception("Missing nav arg streamType")
     private val seriesId = savedStateHandle.get<Int>("seriesId")
 
+    private val resume = savedStateHandle.get<Boolean>("resume")
+        ?: throw Exception("Missing nav arg resume")
+
     init {
         if (streamType == StreamType.Series && seriesId == null) {
             throw Exception("Missing nav arg seriesId for series stream")
@@ -55,6 +59,8 @@ class PlaybackViewModel @Inject constructor(
                     PlaybackUiState(
                         playbackItem = result,
                         videoUrl = result.videoUrl(userInfo),
+                        resumePosition = if (resume) result.recentlyPlayed?.playedDuration
+                        else null
                     )
                 }
 
@@ -71,6 +77,8 @@ class PlaybackViewModel @Inject constructor(
                     PlaybackUiState(
                         playbackItem = episode!!,
                         videoUrl = episode.videoUrl(userInfo),
+                        resumePosition = if (resume) episode.recentlyPlayed?.playedDuration
+                        else null
                     )
                 }
             }

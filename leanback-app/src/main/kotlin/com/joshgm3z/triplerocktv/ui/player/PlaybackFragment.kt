@@ -39,7 +39,9 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.util.errorListener
+import com.joshgm3z.triplerocktv.core.util.loadSubtitle
 import com.joshgm3z.triplerocktv.core.util.remindPeriodically
+import com.joshgm3z.triplerocktv.core.util.switchTrack
 import com.joshgm3z.triplerocktv.core.viewmodel.LoadTrack
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
@@ -161,12 +163,12 @@ class PlaybackFragment : Fragment() {
                 it?.let {
                     when (it) {
                         is LoadTrack.OnlineSubtitle -> with(it.subtitleData) {
-                            loadSubtitle(this)
+                            player.loadSubtitle(this)
                             viewModel.updateSelectedSubtitle(language ?: "", title, url)
                         }
 
                         is LoadTrack.OfflineTrack -> with(it.trackInfo) {
-                            switchTrack(this)
+                            player.switchTrack(this)
                             if (trackType == TrackType.Subtitle) viewModel.updateSelectedSubtitle(
                                 language ?: "",
                                 label ?: "",
@@ -198,67 +200,6 @@ class PlaybackFragment : Fragment() {
             // Add to view hierarchy
             parent.addView(sv)
         }
-    }
-
-    private fun switchTrack(trackInfo: TrackInfo) {
-        Logger.debug("trackInfo = [${trackInfo}]")
-        val parametersBuilder = player.trackSelectionParameters.buildUpon()
-
-        when (trackInfo.trackType) {
-            TrackType.Subtitle -> {
-                if (trackInfo.label == "Disabled") {
-                    // Completely disable text tracks
-                    parametersBuilder.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
-                } else {
-                    // Enable text tracks and prefer the selected language
-                    parametersBuilder
-                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
-                        .setPreferredTextLanguage(trackInfo.language)
-                }
-            }
-
-            TrackType.Audio -> {
-                parametersBuilder.setPreferredAudioLanguage(trackInfo.language)
-            }
-        }
-
-        player.trackSelectionParameters = parametersBuilder.build()
-    }
-
-    private fun loadSubtitle(subtitleData: SubtitleData) {
-        Logger.debug("subtitleData = [${subtitleData}]")
-        val currentMediaItem = player.currentMediaItem ?: return
-        val currentPosition = player.currentPosition
-        val playWhenReady = player.playWhenReady
-
-        // 1. Create the subtitle configuration
-        subtitleData.url ?: return
-        val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url!!.toUri())
-            .setMimeType("application/x-subrip")
-            .setLanguage(subtitleData.language)
-            .setId("online")
-            .setLabel(subtitleData.title)
-            .setSelectionFlags(SELECTION_FLAG_DEFAULT)
-            .build()
-        player.trackSelectionParameters = player.trackSelectionParameters
-            .buildUpon()
-            .setPreferredTextLanguage(subtitleData.language) // Or any specific language code
-            .build()
-        // 2. Rebuild the MediaItem with the new subtitle
-        val updatedMediaItem = currentMediaItem.buildUpon()
-            .setSubtitleConfigurations(listOf(subtitleConfig))
-            .build()
-
-        // 3. Update the player
-        player.setMediaItem(
-            updatedMediaItem,
-            false
-        ) // false means don't reset position, but seek is safer
-        player.prepare()
-        player.seekTo(currentPosition)
-        player.playWhenReady = playWhenReady
-
-        Logger.info("Subtitle loaded from: ${subtitleData.url}")
     }
 
     private fun Int.getDrawable() = ContextCompat.getDrawable(
@@ -302,15 +243,14 @@ class PlaybackFragment : Fragment() {
                     ccAction -> {
                         videoTitle?.let { title ->
                             trackViewModel.loadTracksOfType(TrackType.Subtitle)
-                            val action = PlaybackFragmentDirections.toTrackSelector()
-                            action.title = title
+                            val action = PlaybackFragmentDirections.toTrackSelector(title)
                             findNavController().navigate(action)
                         }
                     }
 
                     audioAction -> {
                         trackViewModel.loadTracksOfType(TrackType.Audio)
-                        val action = PlaybackFragmentDirections.toTrackSelector()
+                        val action = PlaybackFragmentDirections.toTrackSelector("")
                         findNavController().navigate(action)
                     }
 

@@ -42,7 +42,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 
 @Composable
 fun TrackSelectorDialog(
-    viewModel: TrackSelectorViewModel = hiltViewModel(),
+    viewModel: TrackSelectorViewModel,
     goBack: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
