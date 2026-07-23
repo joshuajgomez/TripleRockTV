@@ -3,6 +3,8 @@ package com.joshgm3z.triplerocktv.compose
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.dialog
@@ -24,6 +26,7 @@ import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
 import com.joshgm3z.triplerocktv.compose.screens.player.track.TrackSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.settings.LogoutScreen
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import kotlinx.serialization.Serializable
 
 open class NavMainDestination {
@@ -79,13 +82,13 @@ open class NavMainDestination {
     ) : NavMainDestination()
 
     @Serializable
-    class TrackSelector(val title: String)
+    object TrackSelector
 }
 
 @Composable
 fun TvNavHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavMainDestination.TrackSelector("Man from earth")) {
+    NavHost(navController = navController, startDestination = NavMainDestination.Splash) {
         composable<NavMainDestination.Login> {
             LoginScreen(onLoginSuccess = {
                 navController.navigate(NavMainDestination.Home)
@@ -160,7 +163,18 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.Playback> {
-            PlayerScreen(navController = navController)
+            val viewModel = hiltViewModel<TrackSelectorViewModel>()
+            PlayerScreen(navController = navController, trackViewModel = viewModel)
+        }
+
+        dialog<NavMainDestination.TrackSelector> {
+            val parentEntry = remember(it) {
+                navController.getBackStackEntry<NavMainDestination.Playback>()
+            }
+            val viewModel = hiltViewModel<TrackSelectorViewModel>(parentEntry)
+            TrackSelectorDialog(viewModel = viewModel) {
+                navController.popBackStack()
+            }
         }
 
         composable<NavMainDestination.Search> {
@@ -191,12 +205,6 @@ fun TvNavHost() {
             val message = it.toRoute<NavMainDestination.Error>().message
             val summary = it.toRoute<NavMainDestination.Error>().summary
             ErrorDialog(message = message, summary = summary) {
-                navController.popBackStack()
-            }
-        }
-
-        dialog<NavMainDestination.TrackSelector> {
-            TrackSelectorDialog {
                 navController.popBackStack()
             }
         }

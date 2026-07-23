@@ -20,6 +20,8 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -70,8 +72,9 @@ class TrackSelectorViewModel
 @Inject
 constructor(
     private val subtitleRepository: SubtitleRepository,
-    private val savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
+
+    var title: String? = null
 
     private val _uiState = MutableStateFlow<TrackSelectorUiState?>(TrackSelectorUiState())
     val uiState = _uiState.asStateFlow()
@@ -125,14 +128,14 @@ constructor(
                 }
             )
         }
+        Logger.debug("_uiState[$trackType] = [${_uiState.value}]")
     }
 
     fun onFindMoreClicked() {
-        val title = savedStateHandle.get<String>("title") ?: throw Exception("title is null")
         _uiState.update { it?.copy(isLoading = true) }
 
         viewModelScope.launch {
-            val subtitles = subtitleRepository.findSubtitles(title)
+            val subtitles = subtitleRepository.findSubtitles(title!!)
             if (subtitles.isEmpty()) {
                 delay(1000)
                 _uiState.update {
@@ -158,8 +161,8 @@ constructor(
 
     private fun closeTrackSelectionPopup() {
         viewModelScope.launch {
-            _trackToLoad.value = null
             delay(1000)
+            _trackToLoad.value = null
             _uiState.value = null
         }
     }

@@ -3,8 +3,12 @@ package com.joshgm3z.triplerocktv.compose.screens.player.track
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -18,10 +22,16 @@ import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
@@ -55,15 +65,25 @@ private fun TracksContent(
     list: List<TrackInfo>,
     onClick: (TrackInfo) -> Unit = {},
 ) {
+    var selectedTrackInfo by remember {
+        mutableStateOf(
+            list.firstOrNull { it.isSelected }
+        )
+    }
     LazyColumn(
         modifier = Modifier
             .clip(RoundedCornerShape(10.dp))
             .background(color = cardColor())
     ) {
         itemsIndexed(list) { index, item ->
-            TrackItem(item) {
-                onClick(item)
-            }
+            TrackItem(
+                trackInfo = item,
+                selected = selectedTrackInfo?.id == item.id,
+                onClick = {
+                    selectedTrackInfo = item
+                    onClick(item)
+                }
+            )
             if (index < list.size - 1) {
                 HorizontalDivider(Modifier.alpha(0.5f))
             }
@@ -74,58 +94,50 @@ private fun TracksContent(
 @Composable
 private fun TrackItem(
     trackInfo: TrackInfo,
+    selected: Boolean = false,
     onClick: () -> Unit = {}
 ) {
-    ConstraintLayout(
+    Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
+            .fillMaxSize()
             .clickable(true) {
                 onClick()
             }
-            .fillMaxWidth()
-            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        val (titleRef, languageRef, iconRef) = createRefs()
         RadioButton(
-            selected = trackInfo.isSelected,
+            selected = selected,
             onClick = onClick,
-            modifier = Modifier
-                .constrainAs(iconRef) {
-                    top.linkTo(parent.top)
-                    bottom.linkTo(parent.bottom)
-                    start.linkTo(parent.start)
-                }
         )
-        Text(
-            text = trackInfo.language.languageName(),
-            color = textColor(),
-            modifier = Modifier.constrainAs(titleRef) {
-                top.linkTo(parent.top)
-                start.linkTo(iconRef.end, margin = 10.dp)
-            }
-        )
-        Row(
+        Column(
+            verticalArrangement = Arrangement.Center,
             modifier = Modifier
-                .constrainAs(languageRef) {
-                    top.linkTo(titleRef.bottom, margin = 3.dp)
-                    start.linkTo(titleRef.start)
-                }
-                .fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            if (trackInfo.id.contains("online")) Icon(
-                imageVector = Icons.Default.Cloud,
-                contentDescription = null,
-                tint = subTextColor(),
-                modifier = Modifier
-                    .size(15.dp)
-            )
             Text(
-                text = trackInfo.label ?: "Unknown",
-                color = subTextColor(),
-                style = typography.bodyMedium,
+                text = if (trackInfo.id == "disabled") "Disabled"
+                else trackInfo.language.languageName(),
+                color = textColor(),
             )
+            if (trackInfo.id != "disabled") Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                if (trackInfo.id.contains("online")) Icon(
+                    imageVector = Icons.Default.Cloud,
+                    contentDescription = null,
+                    tint = subTextColor(),
+                    modifier = Modifier
+                        .size(15.dp)
+                )
+                Text(
+                    text = trackInfo.label ?: "Unknown",
+                    color = subTextColor(),
+                    style = typography.bodyMedium,
+                    maxLines = 1
+                )
+            }
         }
     }
 }
@@ -147,6 +159,10 @@ private fun PreviewTracksContent() {
                         label = "Wonder.Women.1994.2004 HDRip",
                         language = "en",
                         id = "online"
+                    ),
+                    TrackInfo(
+                        trackType = TrackType.Subtitle,
+                        id = "disabled"
                     ),
                 )
             )
