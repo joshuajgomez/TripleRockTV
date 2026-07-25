@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.compose.screens.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -20,7 +21,8 @@ fun CloseButton(onClick: () -> Unit = {}) {
         modifier = Modifier
             .clip(CircleShape)
             .background(color = colorScheme.onBackground.copy(alpha = 0.1f))
-            .size(40.dp)
+            .size(30.dp)
+            .padding(5.dp)
     ) {
         Icon(
             imageVector = Icons.Default.Close,

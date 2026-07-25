@@ -22,3 +22,6 @@ fun subTextColor() = colorScheme.onBackground.copy(alpha = 0.4f)
 
 @Composable
 fun cardColor() = colorScheme.surfaceContainer
+
+@Composable
+fun selectedBgColor() = colorScheme.primaryContainer.copy(alpha = 0.5f)

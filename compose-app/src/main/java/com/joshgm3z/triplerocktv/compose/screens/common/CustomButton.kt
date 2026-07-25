@@ -100,7 +100,7 @@ private fun ButtonContent(
                 imageVector = it, contentDescription = null,
                 modifier = Modifier.size(18.dp)
             )
-            Spacer(Modifier.size(5.dp))
+            Spacer(Modifier.size(10.dp))
         }
         val modifier = if (textAlign == TextAlign.Center) Modifier
         else Modifier.fillMaxWidth()

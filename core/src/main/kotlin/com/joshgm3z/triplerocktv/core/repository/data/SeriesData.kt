@@ -102,11 +102,11 @@ data class Episode(
 }
 
 data class EpisodeInfo(
-    val releasedate: String?,
-    val plot: String?,
-    val duration_secs: Int?,
-    val duration: String?,
-    val movie_image: String?,
-    val rating: String?,
-    val season: String?,
+    val releasedate: String? = null,
+    val plot: String? = null,
+    val duration_secs: Int? = null,
+    val duration: String? = null,
+    val movie_image: String? = null,
+    val rating: String? = null,
+    val season: String? = null,
 )

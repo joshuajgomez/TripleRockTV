@@ -54,9 +54,9 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.joshgm3z.triplerocktv.compose.R
-import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.compose.screens.settings.SettingScaffold
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
