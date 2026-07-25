@@ -38,7 +38,9 @@ constructor(
                 it.copy(
                     userInfo = localDatastore.getUserInfo(),
                     isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
-                )
+                ).apply {
+                    Logger.debug("userInfo=[${userInfo}]")
+                }
             }
         }
     }
