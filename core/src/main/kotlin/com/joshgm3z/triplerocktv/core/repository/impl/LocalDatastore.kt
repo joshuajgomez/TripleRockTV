@@ -8,9 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamUserResponse
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class LocalDatastore
@@ -108,12 +106,4 @@ constructor(
         dataStore.edit { it.clear() }
     }
 
-    suspend fun setBlurSetting(enabled: Boolean) {
-        dataStore.edit { preferences ->
-            preferences[BLUR_SETTING] = enabled
-        }
-    }
-
-    fun blurSettingFlow(): Flow<Boolean> =
-        dataStore.data.map { preferences -> preferences[BLUR_SETTING] ?: true }
 }
