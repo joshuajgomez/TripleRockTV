@@ -13,11 +13,12 @@ import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.BuildConfig
+import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.ui.login.LoginActionsStylist
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.core.util.formatExpiryDate
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,7 +45,8 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
         val idBlur = 1L
         val idSignout = 2L
-        val idAppVersion = 3L
+        val idAccountExpiry = 3L
+        val idAppVersion = 4L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,6 +82,8 @@ class SettingsFragment : GuidedStepSupportFragment() {
         setText(idUsername, userInfo.username)
         setText(idPassword, userInfo.password)
         findActionById(idCredential)?.isEnabled = true
+        findActionById(idAccountExpiry)?.description =
+            "Valid till ${userInfo.expiryDate.formatExpiryDate()}"
         notifyActionChanged(findActionPositionById(idCredential))
     }
 
@@ -143,6 +147,15 @@ class SettingsFragment : GuidedStepSupportFragment() {
             GuidedAction.Builder(requireContext())
                 .id(idSignout) // Main Action ID
                 .title("Sign out")
+                .build()
+        )
+        actions.add(
+            GuidedAction.Builder(requireContext())
+                .id(idAccountExpiry) // Main Action ID
+                .title("Account expiry")
+                .description("Checking")
+                .focusable(false)
+                .infoOnly(true)
                 .build()
         )
         actions.add(
