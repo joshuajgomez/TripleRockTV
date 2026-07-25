@@ -82,9 +82,10 @@ class SettingsFragment : GuidedStepSupportFragment() {
         setText(idUsername, userInfo.username)
         setText(idPassword, userInfo.password)
         findActionById(idCredential)?.isEnabled = true
+        notifyActionChanged(findActionPositionById(idCredential))
         findActionById(idAccountExpiry)?.description =
             "Valid till ${userInfo.expiryDate.formatExpiryDate()}"
-        notifyActionChanged(findActionPositionById(idCredential))
+        notifyActionChanged(findActionPositionById(idAccountExpiry))
     }
 
     private fun enableViews(enable: Boolean) {
@@ -145,12 +146,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )*/
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idSignout) // Main Action ID
-                .title("Sign out")
-                .build()
-        )
-        actions.add(
-            GuidedAction.Builder(requireContext())
                 .id(idAccountExpiry) // Main Action ID
                 .title("Account expiry")
                 .description("Checking")
@@ -165,6 +160,12 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 .description(BuildConfig.VERSION_NAME)
                 .focusable(false)
                 .infoOnly(true)
+                .build()
+        )
+        actions.add(
+            GuidedAction.Builder(requireContext())
+                .id(idSignout) // Main Action ID
+                .title("Sign out")
                 .build()
         )
     }
