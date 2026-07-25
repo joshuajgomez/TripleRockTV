@@ -5,7 +5,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LiveTv
-import androidx.compose.material.icons.filled.LocalMovies
 import androidx.compose.material.icons.filled.Movie
 import androidx.compose.material.icons.filled.OndemandVideo
 import androidx.compose.material3.Icon
@@ -34,8 +32,8 @@ import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
-import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData

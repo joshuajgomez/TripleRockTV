@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.compose.screens.browse.uistate
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -19,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,21 +25,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.LineHeightStyle
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
-import com.bumptech.glide.integration.compose.Placeholder
-import com.bumptech.glide.integration.compose.placeholder
-import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
@@ -152,21 +141,6 @@ private fun darkOverlayBrush() = Brush.verticalGradient(
     ),
     // Start the gradient at 40% of the container height
     startY = 1f
-)
-
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun GlidePic(
-    modifier: Modifier = Modifier,
-    model: String?,
-    defaultDrawable: Int? = null,
-) = GlideImage(
-    modifier = modifier,
-    model = model,
-    failure = defaultDrawable?.let { placeholder(it) },
-    loading = defaultDrawable?.let { placeholder(it) },
-    contentDescription = null,
-    contentScale = ContentScale.Crop
 )
 
 @Composable

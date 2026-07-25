@@ -142,12 +142,6 @@ fun LazyGridScope.bottomSpacing() {
     }
 }
 
-fun LazyListScope.bottomSpacing() {
-    item {
-        Spacer(Modifier.size(appBottomPadding))
-    }
-}
-
 @DarkPreview
 @Composable
 private fun PreviewCategoryBrowseScreenContent() {

@@ -21,6 +21,7 @@ import com.joshgm3z.triplerocktv.compose.screens.SearchScreen
 import com.joshgm3z.triplerocktv.compose.screens.SplashScreen
 import com.joshgm3z.triplerocktv.compose.screens.StreamDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryBrowseScreen
+import com.joshgm3z.triplerocktv.compose.screens.browse.EpisodeSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.common.ErrorDialog
 import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
 import com.joshgm3z.triplerocktv.compose.screens.player.track.TrackSelectorDialog
@@ -64,6 +65,12 @@ open class NavMainDestination {
     class Details(val streamId: Int, val streamType: StreamType) : NavMainDestination()
 
     @Serializable
+    class EpisodeSelector(
+        val seriesId: Int,
+        val initialSelectedEpisodeId: Int? = null
+    ) : NavMainDestination()
+
+    @Serializable
     class Error(val message: String, val summary: String? = null) : NavMainDestination()
 
     @Serializable
@@ -88,7 +95,11 @@ open class NavMainDestination {
 @Composable
 fun TvNavHost() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = NavMainDestination.Splash) {
+    NavHost(
+        navController = navController,
+//        startDestination = NavMainDestination.EpisodeSelector(61, 17974)
+        startDestination = NavMainDestination.Splash
+    ) {
         composable<NavMainDestination.Login> {
             LoginScreen(onLoginSuccess = {
                 navController.navigate(NavMainDestination.Home)
@@ -207,6 +218,22 @@ fun TvNavHost() {
             ErrorDialog(message = message, summary = summary) {
                 navController.popBackStack()
             }
+        }
+
+        dialog<NavMainDestination.EpisodeSelector> {
+            EpisodeSelectorDialog(
+                onBackPress = {
+                    navController.popBackStack()
+                }, navigateToPlayer = { episodeId, seriesId ->
+                    navController.navigate(
+                        NavMainDestination.Playback(
+                            streamId = episodeId,
+                            streamType = StreamType.Series,
+                            resume = false,
+                            seriesId = seriesId
+                        )
+                    )
+                })
         }
     }
 }

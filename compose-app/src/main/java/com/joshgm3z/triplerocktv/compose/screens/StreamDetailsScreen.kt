@@ -4,31 +4,26 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.visible
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.automirrored.filled.PlaylistAddCheck
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material.icons.filled.PlaylistAddCheck
 import androidx.compose.material.icons.filled.PlaylistRemove
 import androidx.compose.material.icons.filled.RestartAlt
-import androidx.compose.material.icons.filled.Star
+import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,14 +31,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -52,19 +43,16 @@ import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.MetadataBar
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
 import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
-import com.joshgm3z.triplerocktv.compose.theme.Orange40
-import com.joshgm3z.triplerocktv.compose.theme.Pink40
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 @Composable
 fun StreamDetailsScreen(
@@ -95,7 +83,15 @@ fun StreamDetailsScreen(
             setFavorite = {
                 viewModel.updateMyList(it)
             },
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onMoreEpisodesClick = {
+                navigateMain(
+                    NavMainDestination.EpisodeSelector(
+                        seriesId = viewModel.streamId,
+                        initialSelectedEpisodeId = uiState.episodeId
+                    )
+                )
+            }
         )
     }
 }
@@ -107,6 +103,7 @@ private fun StreamDetailsScreenContent(
     onPlayClicked: (resume: Boolean) -> Unit = {},
     setFavorite: (add: Boolean) -> Unit = {},
     onBackClick: () -> Unit = {},
+    onMoreEpisodesClick: () -> Unit = {},
 ) {
     Box(modifier = Modifier.fillMaxSize()) {
         GlideImage(
@@ -162,6 +159,11 @@ private fun StreamDetailsScreenContent(
                         uiState.subtitle.ifNotNullOrEmpty { add(it) }
                     uiState.duration.ifNotNullOrEmpty { add(it) }
                 })
+            if (uiState.streamType == StreamType.Series && !uiState.subtitle.isNullOrEmpty()) Text(
+                text = uiState.subtitle!!,
+                color = colorScheme.primary,
+                style = typography.labelMedium
+            )
             uiState.description?.let {
                 Text(
                     text = it,
@@ -191,7 +193,8 @@ private fun StreamDetailsScreenContent(
             if (uiState.showButtons) ButtonContainer(
                 uiState,
                 onPlayClicked = onPlayClicked,
-                setFavorite = setFavorite
+                setFavorite = setFavorite,
+                moreEpisodes = onMoreEpisodesClick
             )
         }
     }
@@ -202,54 +205,11 @@ fun String?.ifNotNullOrEmpty(block: (String) -> Unit) {
 }
 
 @Composable
-fun MetadataBar(
-    rating: Float? = null,
-    favorite: Boolean = false,
-    list: List<String> = listOf()
-) {
-    val dot = "  •  "
-    val style = typography.labelLarge
-    val color = colorScheme.primary
-    val text = buildAnnotatedString {
-        if (rating != null && rating > 0) {
-            append(" $rating")
-            if (list.isNotEmpty()) append(dot)
-        }
-        list.forEachIndexed { index, string ->
-            append(string)
-            if (index < list.size - 1) append(dot)
-        }
-        if (favorite) append(dot)
-    }
-    Row(verticalAlignment = Alignment.CenterVertically) {
-        if (rating != null && rating > 0) {
-            Icon(
-                Icons.Default.Star,
-                contentDescription = null,
-                tint = Orange40,
-                modifier = Modifier.size(16.dp)
-            )
-        }
-        Text(
-            text = text,
-            style = style,
-            color = color
-        )
-        if (favorite) {
-            Icon(
-                Icons.AutoMirrored.Default.PlaylistAddCheck,
-                contentDescription = null,
-                modifier = Modifier.size(19.dp)
-            )
-        }
-    }
-}
-
-@Composable
 private fun ButtonContainer(
     uiState: DetailsUiState,
     onPlayClicked: (resume: Boolean) -> Unit = {},
     setFavorite: (add: Boolean) -> Unit = {},
+    moreEpisodes: () -> Unit = {},
 ) {
     val textAlign = TextAlign.Start
     Column {
@@ -285,6 +245,12 @@ private fun ButtonContainer(
             text = "Start over",
             imageVector = Icons.Default.RestartAlt,
             onClick = { onPlayClicked(false) },
+            textAlign = textAlign,
+        )
+        if (uiState.streamType == StreamType.Series) SecondaryButton(
+            text = "More episodes",
+            onClick = moreEpisodes,
+            imageVector = Icons.Default.VideoLibrary,
             textAlign = textAlign,
         )
         SecondaryButton(
@@ -346,11 +312,25 @@ private fun PreviewStreamDetailsScreen() {
 
 @DarkPreview
 @Composable
-private fun PreviewButtonContainer() {
+private fun PreviewButtonContainer_Vod() {
     DarkSurface {
         ButtonContainer(
             DetailsUiState(
                 streamType = StreamType.VideoOnDemand,
+                title = "Inception (2010)",
+                showButtons = true,
+            )
+        )
+    }
+}
+
+@DarkPreview
+@Composable
+private fun PreviewButtonContainer_Series() {
+    DarkSurface {
+        ButtonContainer(
+            DetailsUiState(
+                streamType = StreamType.Series,
                 title = "Inception (2010)",
                 showButtons = true,
             )

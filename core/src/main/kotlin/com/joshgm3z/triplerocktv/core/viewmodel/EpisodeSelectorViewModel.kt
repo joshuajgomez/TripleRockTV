@@ -28,7 +28,7 @@ class EpisodeSelectorViewModel
     repository: MediaLocalRepository,
 ) : ViewModel() {
 
-    private val seriesId: Int = savedStateHandle.get<Int>("seriesId")
+    val seriesId: Int = savedStateHandle.get<Int>("seriesId")
         ?: throw IllegalArgumentException("seriesId is required")
 
     private val initialSelectedEpisodeId: Int =
