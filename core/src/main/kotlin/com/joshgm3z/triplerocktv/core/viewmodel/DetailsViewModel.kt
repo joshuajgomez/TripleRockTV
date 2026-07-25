@@ -20,7 +20,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -57,8 +56,6 @@ class DetailsViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<DetailsUiState?>(null)
     val uiState = _uiState.asStateFlow()
 
-    var isBlurSettingEnabled: Boolean = false
-
     val streamId = savedStateHandle.get<Int>("streamId")
         ?: throw IllegalArgumentException("streamId is required")
 
@@ -66,9 +63,6 @@ class DetailsViewModel @Inject constructor(
         ?: throw IllegalArgumentException("streamType is required")
 
     init {
-        viewModelScope.launch {
-            isBlurSettingEnabled = localDatastore.blurSettingFlow().first()
-        }
         fetchStreamDetails(streamId, streamType)
     }
 

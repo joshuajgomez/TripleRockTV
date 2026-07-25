@@ -43,17 +43,15 @@ class SettingsFragment : GuidedStepSupportFragment() {
         val idLogin = 13L
         val idStatus = 14L
 
-        val idBlur = 1L
-        val idSignout = 2L
-        val idAccountExpiry = 3L
-        val idAppVersion = 4L
+        val idAccountExpiry = 1L
+        val idAppVersion = 2L
+        val idSignout = 3L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             viewModel.credentialState.collectLatest {
-                updateBlurSettings(it.isBlurSettingEnabled)
                 Logger.debug("credentialState = [${it}]")
                 it.userInfo?.let { userInfo -> updateCredentials(userInfo) }
                 when {
@@ -62,13 +60,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
                     it.verificationSuccess -> showLoginSuccess()
                 }
             }
-        }
-    }
-
-    private fun updateBlurSettings(enabled: Boolean) {
-        findActionById(idBlur)?.let {
-            it.isChecked = enabled
-            notifyActionChanged(findActionPositionById(idBlur))
         }
     }
 
@@ -147,7 +138,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idAccountExpiry) // Main Action ID
-                .title("Account expiry")
+                .title("IPTV account validity")
                 .description("Checking")
                 .focusable(false)
                 .infoOnly(true)
@@ -243,8 +234,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
         when (action.id) {
             idSignout -> SettingsFragmentDirections.toConfirmSignOutDialog()
                 .let { findNavController().navigate(it) }
-
-            idBlur -> viewModel.setBlurSetting(action.isChecked)
         }
     }
 

@@ -143,6 +143,7 @@ class PlaybackFragment : Fragment() {
                         is Episode -> (playbackUiState.playbackItem as Episode).title
                         else -> ""
                     }
+                    trackViewModel.title = videoTitle
                     val videoSubTitle = when (playbackUiState.playbackItem) {
                         is StreamData -> (playbackUiState.playbackItem as StreamData).movieMetadata?.genre
                         else -> ""
