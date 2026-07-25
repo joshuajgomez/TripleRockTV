@@ -1,8 +1,13 @@
 package com.joshgm3z.triplerocktv.compose
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +23,7 @@ import com.joshgm3z.triplerocktv.compose.screens.SearchScreen
 import com.joshgm3z.triplerocktv.compose.screens.SplashScreen
 import com.joshgm3z.triplerocktv.compose.screens.StreamDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryBrowseScreen
+import com.joshgm3z.triplerocktv.compose.screens.common.ErrorDialog
 import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.LogoutScreen
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -56,6 +62,9 @@ open class NavMainDestination {
 
     @Serializable
     class Details(val streamId: Int, val streamType: StreamType) : NavMainDestination()
+
+    @Serializable
+    class Error(val message: String, val summary: String? = null) : NavMainDestination()
 
     @Serializable
     class StreamCatalogue(
@@ -176,6 +185,14 @@ fun TvNavHost() {
                     navController.popBackStack()
                 }
             )
+        }
+
+        composable<NavMainDestination.Error> {
+            val message = it.toRoute<NavMainDestination.Error>().message
+            val summary = it.toRoute<NavMainDestination.Error>().summary
+            ErrorDialog(message = message, summary = summary) {
+                navController.popBackStack()
+            }
         }
     }
 }
