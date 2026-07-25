@@ -27,6 +27,7 @@ import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import com.joshgm3z.triplerocktv.core.util.remindPeriodically
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 
@@ -53,6 +54,7 @@ fun PlaybackScreen(
 
 @Composable
 fun RotateToLandscape() {
+    if (isDevBuild) return
     val context = LocalContext.current
     DisposableEffect(Unit) {
         val activity = context.findActivity()
