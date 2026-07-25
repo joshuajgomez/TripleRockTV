@@ -5,6 +5,7 @@ import androidx.media3.common.C
 import androidx.media3.common.C.SELECTION_FLAG_DEFAULT
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.common.TrackSelectionOverride
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
@@ -15,14 +16,19 @@ fun Player.switchTrack(trackInfo: TrackInfo) {
 
     when (trackInfo.trackType) {
         TrackType.Subtitle -> {
-            if (trackInfo.label == "Disabled") {
+            if (trackInfo.disableTrack) {
                 // Completely disable text tracks
                 parametersBuilder.setTrackTypeDisabled(C.TRACK_TYPE_TEXT, true)
             } else {
-                // Enable text tracks and prefer the selected language
-                parametersBuilder
-                    .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
-                    .setPreferredTextLanguage(trackInfo.language)
+                trackInfo.trackGroup?.let {
+                    val override = TrackSelectionOverride(
+                        it,
+                        listOf(trackInfo.trackIndexInGroup)
+                    )
+                    parametersBuilder
+                        .setTrackTypeDisabled(C.TRACK_TYPE_TEXT, false)
+                        .setOverrideForType(override)
+                }
             }
         }
 
@@ -42,7 +48,7 @@ fun Player.loadSubtitle(subtitleData: SubtitleData) {
 
     // 1. Create the subtitle configuration
     subtitleData.url ?: return
-    val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url!!.toUri())
+    val subtitleConfig = MediaItem.SubtitleConfiguration.Builder(subtitleData.url.toUri())
         .setMimeType("application/x-subrip")
         .setLanguage(subtitleData.language)
         .setId("online")

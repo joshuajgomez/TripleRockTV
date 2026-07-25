@@ -115,11 +115,11 @@ private fun TrackItem(
             modifier = Modifier
         ) {
             Text(
-                text = if (trackInfo.id == "disabled") "Disabled"
+                text = if (trackInfo.disableTrack) "Disabled"
                 else trackInfo.language.languageName(),
                 color = textColor(),
             )
-            if (trackInfo.id != "disabled") Row(
+            if (!trackInfo.disableTrack) Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(5.dp)
@@ -160,10 +160,9 @@ private fun PreviewTracksContent() {
                         language = "en",
                         id = "online"
                     ),
-                    TrackInfo(
-                        trackType = TrackType.Subtitle,
-                        id = "disabled"
-                    ),
+                    TrackInfo(trackType = TrackType.Subtitle).apply {
+                        disableTrack = true
+                    },
                 )
             )
         )
