@@ -3,11 +3,13 @@ package com.joshgm3z.triplerocktv.core.util
 import com.google.firebase.firestore.model.Values.timestamp
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import java.text.NumberFormat
+import java.text.SimpleDateFormat
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import kotlin.text.format
 import kotlin.time.ExperimentalTime
 import java.time.Instant
+import java.util.Date
 
 fun Int.withComma(): String = try {
     NumberFormat.getInstance().format(this)
@@ -64,5 +66,17 @@ fun String?.formatTimestamp(): String {
         formatter.format(instant)
     } catch (e: Exception) {
         ""
+    }
+}
+
+fun String?.formatExpiryDate(): String {
+    return try {
+        if (this == null) return "Unknown"
+        // Convert seconds to milliseconds
+        val date = Date(this.toLong() * 1000)
+        val format = SimpleDateFormat("MMM dd, yyyy")
+        format.format(date)
+    } catch (e: Exception) {
+        "Unknown"
     }
 }

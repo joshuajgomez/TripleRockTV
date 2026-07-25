@@ -1,13 +1,8 @@
 package com.joshgm3z.triplerocktv.compose
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Error
-import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.window.Dialog
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -15,7 +10,7 @@ import androidx.navigation.toRoute
 import com.joshgm3z.triplerocktv.compose.screens.settings.AccessDisabledScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.AppUpdateNeededScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.AppUpdateScreen
-import com.joshgm3z.triplerocktv.compose.screens.settings.EditLoginScreen
+import com.joshgm3z.triplerocktv.compose.screens.settings.AccountDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.LoginScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.MediaSyncScreen
 import com.joshgm3z.triplerocktv.compose.screens.PlaybackScreen
@@ -127,7 +122,7 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.EditLogin> {
-            EditLoginScreen(onBackClick = {
+            AccountDetailsScreen(onBackClick = {
                 navController.popBackStack()
             })
         }

@@ -78,8 +78,8 @@ val settingsList = listOf(
         "Account", listOf(
             SettingData(
                 NavMainDestination.EditLogin,
-                "Change login credentials",
-                "Modify your IPTV login credentials",
+                "Account details",
+                "View or edit your IPTV account details",
                 Icons.Default.Edit
             ),
             SettingData(
