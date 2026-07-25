@@ -9,6 +9,7 @@ import androidx.media3.common.C.FORMAT_HANDLED
 import androidx.media3.common.Format
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.Player
+import androidx.media3.common.TrackGroup
 import androidx.media3.common.Tracks
 import androidx.media3.common.util.UnstableApi
 import com.joshgm3z.triplerocktv.core.BuildConfig
@@ -27,7 +28,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class TrackInfo(
-    val id: String = "",
+    var id: String = "",
     val groupIndex: Int = 0,
     val trackIndexInGroup: Int = 0,
     val mimeType: String? = null,
@@ -35,9 +36,16 @@ data class TrackInfo(
     val label: String? = null,
     val roleFlags: Int = 0,
     val isSupported: Boolean = false,
-    val isSelected: Boolean = false,
+    var isSelected: Boolean = false,
+    val trackGroup: TrackGroup? = null,
     val trackType: TrackType,
 ) {
+    var disableTrack: Boolean
+        get() = id == "disabled"
+        set(value) {
+            if (value) id = "disabled"
+        }
+
     override fun toString() = "\n{$language,$isSelected,$label}"
 }
 
@@ -208,12 +216,12 @@ constructor(
 
 private fun MutableList<TrackInfo>.plusDisableSubtitleTrack(): MutableList<TrackInfo> =
     this.apply {
-        if (any { it.label == "Disabled" }) return@apply
+        if (any { it.disableTrack }) return@apply
         add(
-            TrackInfo(
-                "disabled", 0, 0, "", language = "", label = "Disabled", 0,
-                false, !any { it.isSelected }, TrackType.Subtitle
-            )
+            TrackInfo(trackType = TrackType.Subtitle).apply {
+                disableTrack = true
+                isSelected = !any { it.isSelected }
+            }
         )
     }
 
@@ -237,7 +245,8 @@ private fun Tracks.Group.parseTracks(
             roleFlags = format.roleFlags,
             isSupported = FORMAT_HANDLED == getTrackSupport(i),
             isSelected = isTrackSelected(i),
-            trackType = trackType
+            trackType = trackType,
+            trackGroup = mediaTrackGroup
         ).apply {
 //            Logger.debug("trackType=$trackType,$this")
         }

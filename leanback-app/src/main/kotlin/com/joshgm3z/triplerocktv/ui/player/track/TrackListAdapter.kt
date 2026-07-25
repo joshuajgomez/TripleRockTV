@@ -42,7 +42,7 @@ class TrackListAdapter : RecyclerView.Adapter<TrackListViewHolder>() {
         position: Int
     ) {
         val data = trackList[position]
-        if (data.label == "Disabled") {
+        if (data.disableTrack) {
             holder.language = "Disabled"
             holder.text = ""
         } else {
