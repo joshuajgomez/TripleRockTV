@@ -19,6 +19,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
 import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -50,24 +51,22 @@ class ComposeActivity : AppCompatActivity() {
 
 @Composable
 fun EnvironmentMarker() {
-    if (BuildConfig.FLAVOR != "online") {
-        Row(
+    if (isDevBuild) Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 80.dp),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = BuildConfig.FLAVOR,
+            color = colorScheme.error,
+            textAlign = TextAlign.Center,
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(top = 80.dp),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = BuildConfig.FLAVOR,
-                color = colorScheme.error,
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .background(
-                        color = colorScheme.errorContainer,
-                        shape = RoundedCornerShape(10.dp)
-                    )
-                    .padding(horizontal = 5.dp)
-            )
-        }
+                .background(
+                    color = colorScheme.errorContainer,
+                    shape = RoundedCornerShape(10.dp)
+                )
+                .padding(horizontal = 5.dp)
+        )
     }
 }
