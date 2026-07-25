@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.ImageButton
 import androidx.activity.compose.BackHandler
 import androidx.annotation.OptIn
 import androidx.compose.foundation.background
@@ -29,6 +31,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import androidx.navigation.NavController
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
+import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
@@ -133,13 +136,14 @@ private fun PlaybackScreenContent(
 
     AndroidView(
         factory = { ctx ->
-            PlayerView(ctx).apply {
+            val playerView = LayoutInflater.from(ctx)
+                .inflate(R.layout.custom_player_view, null) as PlayerView
+            playerView.apply {
                 player = exoPlayer
                 keepScreenOn = true
                 subtitleTrackListener?.let { player?.addListener(it) }
                 setShowSubtitleButton(true)
-                findViewById<View>(androidx.media3.ui.R.id.exo_subtitle)?.let {
-                    it.isEnabled = true
+                findViewById<ImageButton>(R.id.custom_exo_subtitle)?.let {
                     it.setOnClickListener { onCaptionsClicked() }
                 }
             }
