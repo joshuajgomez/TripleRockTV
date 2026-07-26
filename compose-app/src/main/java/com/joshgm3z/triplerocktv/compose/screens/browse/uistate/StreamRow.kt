@@ -33,10 +33,11 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.sampleLiveTvList
+import com.joshgm3z.triplerocktv.core.util.sampleVodList
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -77,8 +78,7 @@ fun StreamItem(
         modifier = Modifier
             .width(125.dp)
             .height(170.dp)
-            .clip(RoundedCornerShape(cardCornerRadius))
-            .background(color = colorScheme.onBackground.copy(alpha = 0.1f)),
+            .clip(RoundedCornerShape(cardCornerRadius)),
         contentAlignment = Alignment.BottomCenter
     ) {
         if (stream is StreamData
@@ -99,16 +99,16 @@ fun IconPosterCard(
     Column(
         verticalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier
+            .background(color = colorScheme.onBackground.copy(alpha = 0.1f))
             .fillMaxSize()
             .padding(10.dp)
-            .clickable(true) {
-                onStreamClick()
-            }
+            .clickable(true) { onStreamClick() }
     ) {
         GlidePic(
             model = stream.streamIcon,
             defaultDrawable = R.drawable.outline_live_tv_24,
-            modifier = Modifier.size(60.dp)
+            modifier = Modifier.size(60.dp),
+            emptyBackground = true
         )
         Text(
             text = stream.name,
@@ -178,7 +178,7 @@ fun StreamPlaceholder(stream: Any) {
 @DarkPreview
 fun PreviewStreamItem_Vod() {
     DarkSurface {
-        StreamItem(stream = sampleStreamDataList(StreamType.VideoOnDemand).first())
+        StreamItem(stream = sampleVodList.first())
     }
 }
 
@@ -186,7 +186,7 @@ fun PreviewStreamItem_Vod() {
 @DarkPreview
 fun PreviewStreamItem_LiveTv() {
     DarkSurface {
-        StreamItem(stream = sampleStreamDataList(StreamType.LiveTV).first())
+        StreamItem(stream = sampleLiveTvList.first())
     }
 }
 
@@ -196,7 +196,7 @@ fun PreviewStreamRow() {
     DarkSurface {
         StreamRow(
             title = "OSCAR WINNING MOVIES",
-            streams = sampleStreamDataList()
+            streams = sampleVodList
         )
     }
 }

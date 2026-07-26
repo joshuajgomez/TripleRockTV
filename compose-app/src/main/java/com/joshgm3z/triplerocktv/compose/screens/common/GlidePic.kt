@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -15,8 +16,12 @@ fun GlidePic(
     modifier: Modifier = Modifier,
     model: String?,
     defaultDrawable: Int? = null,
+    emptyBackground: Boolean = false,
 ) = GlideImage(
-    modifier = modifier.background(color = colorScheme.onBackground.copy(alpha = 0.1f)),
+    modifier = modifier.background(
+        color = if (emptyBackground) Color.Transparent
+        else colorScheme.onBackground.copy(alpha = 0.1f)
+    ),
     model = model,
     failure = defaultDrawable?.let { placeholder(it) },
     loading = defaultDrawable?.let { placeholder(it) },
