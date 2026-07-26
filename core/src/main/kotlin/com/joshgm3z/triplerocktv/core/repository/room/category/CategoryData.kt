@@ -8,9 +8,9 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
     primaryKeys = ["categoryId", "streamType"]
 )
 data class CategoryData(
-    val categoryId: Int,
-    val categoryName: String,
-    val parentId: Int,
+    val categoryId: Int = 0,
+    val categoryName: String = "",
+    val parentId: Int = 0,
     var count: Int = 0,
 
     var firstStreamIcon: String? = null,
