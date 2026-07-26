@@ -31,7 +31,6 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
@@ -40,6 +39,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
+import com.joshgm3z.triplerocktv.core.util.sampleVodList
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -149,7 +149,7 @@ fun PreviewRecentStreamRow() {
     DarkSurface {
         RecentStreamRow(
             title = "Continue watching",
-            streams = sampleStreamDataList().map {
+            streams = sampleVodList.map {
                 it.copy(
                     movieMetadata = MovieMetadata(
                         totalDurationMs = 120 * 1000L,

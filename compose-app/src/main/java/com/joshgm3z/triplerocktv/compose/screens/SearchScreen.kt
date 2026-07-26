@@ -42,13 +42,14 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.sampleLiveTvList
+import com.joshgm3z.triplerocktv.core.util.sampleVodList
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 
@@ -255,8 +256,8 @@ private fun PreviewSearchScreen() {
                     "Search hint 4",
                     "Search hint 5",
                 ),
-                streams = sampleStreamDataList().subList(0, 6)
-                        + sampleStreamDataList(StreamType.LiveTV).subList(0, 3)
+                streams = sampleVodList.subList(0, 6)
+                        + sampleLiveTvList.subList(0, 3)
             )
         )
     }
@@ -276,8 +277,8 @@ private fun PreviewSearchScreen_Empty() {
                     "Search hint 5",
                 ),
                 statusText = "Searching",
-                streams = sampleStreamDataList().subList(0, 6)
-                        + sampleStreamDataList(StreamType.LiveTV).subList(0, 3)
+                streams = sampleVodList.subList(0, 6)
+                        + sampleLiveTvList.subList(0, 3)
             )
         )
     }

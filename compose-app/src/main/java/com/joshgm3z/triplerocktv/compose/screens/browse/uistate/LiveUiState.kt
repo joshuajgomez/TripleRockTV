@@ -22,12 +22,11 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryItem
 import com.joshgm3z.triplerocktv.compose.screens.browse.ChannelItem
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleCategoryList
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
-import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.sampleVodCategoryList
+import com.joshgm3z.triplerocktv.core.util.sampleVodList
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -122,10 +121,10 @@ private fun PreviewVodUiState() {
         LiveUiState(
             uiState = BrowseUiState.LiveTvState(
                 pagingCategoryData = MutableStateFlow(
-                    PagingData.from(sampleCategoryList)
+                    PagingData.from(sampleVodCategoryList)
                 ),
-                recentPlayed = sampleStreamDataList().subList(0, 3),
-                favorites = sampleStreamDataList().subList(0, 3)
+                recentPlayed = sampleVodList.subList(0, 3),
+                favorites = sampleVodList.subList(0, 3)
             )
         )
     }

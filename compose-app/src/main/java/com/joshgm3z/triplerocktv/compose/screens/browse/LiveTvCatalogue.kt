@@ -57,12 +57,13 @@ import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
-import com.joshgm3z.triplerocktv.compose.screens.common.sampleStreamDataList
 import com.joshgm3z.triplerocktv.compose.screens.settings.SettingScaffold
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.sampleLiveTvList
+import com.joshgm3z.triplerocktv.core.util.sampleVodList
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -306,7 +307,7 @@ private fun darkOverlayBrush() = Brush.horizontalGradient(
 private fun PreviewChannelItem() {
     DarkSurface {
         ChannelItem(
-            streamData = sampleStreamDataList().first(),
+            streamData = sampleVodList.first(),
             selected = true
         )
     }
@@ -319,7 +320,7 @@ private fun PreviewLiveTvCatalogue() {
         LiveTvCatalogue(
             uiState = CatalogueUiState.LiveTv(
                 categoryName = "Live Tv",
-                streamDataList = MutableStateFlow(sampleStreamDataList())
+                streamDataList = MutableStateFlow(sampleLiveTvList)
             )
         )
     }

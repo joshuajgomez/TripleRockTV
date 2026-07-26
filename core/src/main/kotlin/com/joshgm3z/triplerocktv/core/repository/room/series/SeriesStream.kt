@@ -8,19 +8,19 @@ import com.joshgm3z.triplerocktv.core.repository.data.Episode
 @Entity(tableName = "series_stream")
 data class SeriesStream(
     @PrimaryKey
-    val seriesId: Int,
-    val num: Int,
-    val name: String,
-    val coverImageUrl: String?,
-    val backdropUrl: String?,
-    val plot: String?,
-    val cast: String?,
-    val director: String?,
-    val genre: String?,
-    val releaseDate: String?,
-    val lastModified: String?,
-    val rating: String?,
-    val categoryId: Int,
+    val seriesId: Int = 0,
+    val num: Int = 0,
+    val name: String = "",
+    val coverImageUrl: String? = null,
+    val backdropUrl: String? = null,
+    val plot: String? = null,
+    val cast: String? = null,
+    val director: String? = null,
+    val genre: String? = null,
+    val releaseDate: String? = null,
+    val lastModified: String? = null,
+    val rating: String? = null,
+    val categoryId: Int = 0,
 
     val seasons: List<Season>? = null,
 ) {

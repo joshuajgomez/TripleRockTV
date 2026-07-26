@@ -16,15 +16,15 @@ const val MIN_DURATION_LEFT = 5 * 60 * 1000L // 180,000 ms
 
 @Entity(tableName = "stream_data")
 data class StreamData(
-    @PrimaryKey val streamId: Int,
-    val num: Int,
-    val name: String,
-    val streamTypeText: String,
-    val streamIcon: String?,
-    val categoryId: Int,
-    val added: String,
-    val rating: Float,
-    val extension: String,
+    @PrimaryKey val streamId: Int = 0,
+    val num: Int = 0,
+    val name: String = "",
+    val streamTypeText: String = "",
+    val streamIcon: String? = "",
+    val categoryId: Int = 0,
+    val added: String = "",
+    val rating: Float = 0f,
+    val extension: String = "",
     val epgChannelId: String? = null,
 
     val streamType: StreamType,
