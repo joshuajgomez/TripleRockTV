@@ -41,7 +41,9 @@ constructor(
                 if (list.isNotEmpty()) {
                     categoriesToStore.add(it.apply {
                         count = list.size
-                        firstStreamIcon = list.firstOrNull()?.streamIcon
+                        firstStreamIcon = list.maxByOrNull {
+                            it.added
+                        }?.streamIcon
                     })
                     streamDataListToStore.addAll(list)
                 }
