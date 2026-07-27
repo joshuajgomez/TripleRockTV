@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -14,13 +15,18 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class SearchUiState(
-    val searchHints: List<String> = emptyList(),
-    val streams: List<Any> = emptyList(),
-    val statusText: String = "",
-    val loading: Boolean = false,
-    val showRecentAddedTitle: Boolean = false,
-)
+sealed class SearchUiState {
+    class Initial(
+        val hints: List<String>,
+        val initialStreams: List<StreamData>
+    ) : SearchUiState()
+
+    object Loading : SearchUiState()
+    object NoResult : SearchUiState()
+    class Result(
+        val list: List<Any>
+    ) : SearchUiState()
+}
 
 @HiltViewModel
 class SearchViewModel
@@ -30,23 +36,26 @@ constructor(
     private val mediaLocalRepository: MediaLocalRepository
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SearchUiState())
+    private val _uiState = MutableStateFlow<SearchUiState?>(null)
     val uiState = _uiState.asStateFlow()
 
-    private var recentStreams: List<Any> = emptyList()
+    private var initialState: SearchUiState.Initial? = null
 
     private var job: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            recentStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
-            _uiState.update {
-                it.copy(
-                    searchHints = repository.getSearchTextList(),
-                    streams = recentStreams,
-                    showRecentAddedTitle = recentStreams.isNotEmpty()
-                )
-            }
+            initialState = SearchUiState.Initial(
+                hints = repository.getSearchTextList(),
+                initialStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
+            )
+            resetUiState()
+        }
+    }
+
+    fun resetUiState() {
+        viewModelScope.launch {
+            _uiState.value = initialState
         }
     }
 
@@ -54,21 +63,11 @@ constructor(
         this.job?.cancel()
 
         if (text.isEmpty()) {
-            _uiState.update {
-                it.copy(
-                    statusText = "",
-                    streams = recentStreams,
-                    showRecentAddedTitle = recentStreams.isNotEmpty()
-                )
-            }
+            resetUiState()
             return
         }
-        _uiState.update {
-            it.copy(
-                statusText = "Searching...",
-                loading = true
-            )
-        }
+        _uiState.value = SearchUiState.Loading
+
         val job = viewModelScope.launch(Dispatchers.IO) {
             val searchResult = repository.searchStreamByName(
                 text,
@@ -78,23 +77,8 @@ constructor(
                 StreamType.LiveTV
             ) + repository.searchSeriesByName(text)
 
-            _uiState.update {
-                if (searchResult.isEmpty()) {
-                    it.copy(
-                        streams = recentStreams,
-                        statusText = "No results found",
-                        showRecentAddedTitle = true,
-                        loading = false
-                    )
-                } else {
-                    it.copy(
-                        streams = searchResult,
-                        statusText = "",
-                        showRecentAddedTitle = false,
-                        loading = false
-                    )
-                }
-            }
+            _uiState.value = if (searchResult.isEmpty()) SearchUiState.NoResult
+            else SearchUiState.Result(list = searchResult)
         }
         this.job = job
         job.invokeOnCompletion {
