@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.compose.screens.browse.uistate
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,12 +22,13 @@ import androidx.compose.ui.unit.dp
 fun SectionTitle(
     title: String,
     showLoading: Boolean = false,
+    paddingValues: PaddingValues = PaddingValues(horizontal = 20.dp)
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(color = colorScheme.background)
-            .padding(horizontal = 20.dp),
+            .padding(paddingValues = paddingValues),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

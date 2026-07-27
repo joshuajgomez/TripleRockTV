@@ -29,6 +29,7 @@ val appTopPadding = 70.dp
 @Composable
 fun SettingScaffold(
     title: String,
+    innerPadding: Boolean = true,
     onBackClick: () -> Unit = {},
     applyBottomPadding: Boolean = true,
     content: @Composable ColumnScope.() -> Unit,
@@ -37,15 +38,18 @@ fun SettingScaffold(
         modifier = Modifier
             .fillMaxSize()
             .padding(
-                start = appHorizontalPadding,
-                end = appHorizontalPadding,
                 top = appTopPadding,
                 bottom = if (applyBottomPadding) appBottomPadding else 0.dp,
             )
     ) {
         AppHeader(title, onBackClick)
         Spacer(Modifier.size(10.dp))
-        content()
+        Column(
+            modifier = if (!innerPadding) Modifier
+            else Modifier.padding(horizontal = appHorizontalPadding)
+        ) {
+            content()
+        }
     }
 }
 
@@ -55,7 +59,9 @@ private fun AppHeader(
     onBackClick: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = appHorizontalPadding)
     ) {
         IconButton(
             onClick = onBackClick,

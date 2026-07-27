@@ -75,11 +75,13 @@ private fun AccountDetailsScreenContent(
 
     SettingScaffold(
         title = "Account details",
+        innerPadding = false,
         onBackClick = onBackClick
     ) {
         SectionTitle("Account expiry")
         Column(
             modifier = Modifier
+                .padding(horizontal = appHorizontalPadding)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = cardColor())
@@ -94,6 +96,7 @@ private fun AccountDetailsScreenContent(
         SectionTitle("Login details")
         Column(
             modifier = Modifier
+                .padding(horizontal = appHorizontalPadding)
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = cardColor())
