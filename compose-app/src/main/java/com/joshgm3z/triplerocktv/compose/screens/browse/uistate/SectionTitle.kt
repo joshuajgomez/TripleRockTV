@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.compose.screens.browse.uistate
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,14 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun SectionTitle(title: String, showLoading: Boolean = false) {
+fun SectionTitle(
+    title: String,
+    showLoading: Boolean = false,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(end = 10.dp),
+            .background(color = colorScheme.background)
+            .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

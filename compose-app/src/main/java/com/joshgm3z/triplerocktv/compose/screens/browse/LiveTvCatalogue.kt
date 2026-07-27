@@ -54,6 +54,7 @@ import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.joshgm3z.triplerocktv.compose.R
+import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
@@ -122,7 +123,7 @@ fun LiveTvCatalogue(
                         onStreamDataLongClick(item)
                     }
                 )
-                if (index < streamDataList.size - 1) HorizontalDivider()
+                CustomHorizontalDivider(index, streamDataList.size)
             }
         }
     }

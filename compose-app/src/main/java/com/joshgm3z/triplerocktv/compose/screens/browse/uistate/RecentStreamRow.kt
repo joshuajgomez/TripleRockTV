@@ -25,12 +25,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
+import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
@@ -46,6 +49,8 @@ import com.joshgm3z.triplerocktv.core.util.sampleVodList
 fun RecentStreamRow(
     title: String,
     streams: List<Any> = emptyList(),
+    sidePadding: Dp = 10.dp,
+    listHorizontalPadding: Dp = 5.dp,
     onStreamClick: (Int, StreamType) -> Unit = { _, _ -> }
 ) {
     if (streams.isEmpty()) return
@@ -54,7 +59,8 @@ fun RecentStreamRow(
         modifier = Modifier.fillMaxWidth()
     ) {
         SectionTitle(title = title)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(listHorizontalPadding)) {
+            listSpacing(sidePadding)
             items(streams) {
                 RecentStreamItem(
                     stream = it,
@@ -67,6 +73,7 @@ fun RecentStreamRow(
                     }
                 )
             }
+            listSpacing(sidePadding)
         }
     }
 }

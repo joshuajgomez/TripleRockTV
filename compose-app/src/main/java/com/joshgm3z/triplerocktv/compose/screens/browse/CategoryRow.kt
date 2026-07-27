@@ -18,11 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
@@ -34,19 +36,23 @@ import com.joshgm3z.triplerocktv.core.util.withComma
 fun CategoryRow(
     title: String = "Malayalam",
     categories: List<CategoryData> = emptyList(),
+    sidePadding: Dp = 10.dp,
+    listHorizontalPadding: Dp = 5.dp,
     onCategoryClick: (CategoryData) -> Unit = {},
 ) {
     Column {
         SectionTitle(title = title)
         LazyRow(
             modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
+            horizontalArrangement = Arrangement.spacedBy(listHorizontalPadding)
         ) {
+            listSpacing(sidePadding)
             items(categories) {
-                CategoryItem(it) {
+                CategoryItem(categoryData = it) {
                     onCategoryClick(it)
                 }
             }
+            listSpacing(sidePadding)
         }
     }
 }
@@ -54,11 +60,12 @@ fun CategoryRow(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CategoryItem(
+    modifier: Modifier = Modifier,
     categoryData: CategoryData,
     onClick: () -> Unit
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .width(185.dp)
             .height(80.dp)
             .clip(RoundedCornerShape(8.dp))
@@ -78,6 +85,23 @@ fun CategoryItem(
             style = typography.bodyMedium,
             color = subTextColor(),
             maxLines = 1,
+        )
+    }
+}
+
+@DarkPreview
+@Composable
+private fun PreviewCategoryItem() {
+    DarkSurface {
+        CategoryItem(
+            categoryData = CategoryData(
+                categoryName = "OSCAR WINNING MOVIES NOW",
+                categoryId = 1,
+                parentId = 1,
+                count = 4,
+                streamType = StreamType.VideoOnDemand
+            ),
+            onClick = {}
         )
     }
 }
