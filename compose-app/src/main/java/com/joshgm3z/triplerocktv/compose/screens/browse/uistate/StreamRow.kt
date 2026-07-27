@@ -26,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.joshgm3z.triplerocktv.compose.R
@@ -33,6 +34,8 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
+import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -44,14 +47,15 @@ import com.joshgm3z.triplerocktv.core.util.sampleVodList
 fun StreamRow(
     title: String = "OSCAR WINNING MOVIES",
     streams: List<Any> = emptyList(),
+    sidePadding: Dp = 10.dp,
+    listHorizontalPadding: Dp = 5.dp,
     onStreamClick: (Int, StreamType) -> Unit = { _, _ -> }
 ) {
     if (streams.isEmpty()) return
-    Column(
-        modifier = Modifier.fillMaxWidth()
-    ) {
+    Column(modifier = Modifier.fillMaxWidth()) {
         SectionTitle(title = title)
-        LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(listHorizontalPadding)) {
+            listSpacing(sidePadding)
             items(streams) {
                 StreamItem(
                     stream = it,
@@ -64,6 +68,7 @@ fun StreamRow(
                     }
                 )
             }
+            listSpacing(sidePadding)
         }
     }
 }
