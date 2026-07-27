@@ -24,6 +24,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
@@ -46,9 +47,7 @@ fun SubtitleDownloaderContent(
             SubtitleResultItem(item) {
                 onClick(item)
             }
-            if (index < listState.list.size - 1) {
-                HorizontalDivider(Modifier.alpha(0.3f))
-            }
+            CustomHorizontalDivider(index, listState.list.size)
         }
     }
 }

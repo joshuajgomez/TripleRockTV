@@ -34,6 +34,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
@@ -84,9 +85,7 @@ private fun TracksContent(
                     onClick(item)
                 }
             )
-            if (index < list.size - 1) {
-                HorizontalDivider(Modifier.alpha(0.5f))
-            }
+            CustomHorizontalDivider(index, list.size)
         }
     }
 }
