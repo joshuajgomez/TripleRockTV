@@ -47,7 +47,9 @@ constructor(
                     categoriesToStore.add(
                         it.apply {
                             count = list.size
-                            firstStreamIcon = list.firstOrNull()?.coverImageUrl
+                            firstStreamIcon = list.maxByOrNull {
+                                it.lastModified?.toIntOrNull() ?: 0
+                            }?.coverImageUrl
                         }
                     )
                     seriesStreamListToStore.addAll(list)
