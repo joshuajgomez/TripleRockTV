@@ -191,7 +191,7 @@ private fun Header(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .background(brush = gradientBrush())
+            .background(brush = headerGradientBrush())
             .padding(
                 top = appTopPadding, bottom = 10.dp,
                 start = appHorizontalPadding, end = appHorizontalPadding
@@ -222,7 +222,7 @@ private fun Header(
 }
 
 @Composable
-private fun gradientBrush() = Brush.verticalGradient(
+fun headerGradientBrush() = Brush.verticalGradient(
     colors = listOf(
         colorScheme.background,
         colorScheme.background.copy(alpha = 0.9f),

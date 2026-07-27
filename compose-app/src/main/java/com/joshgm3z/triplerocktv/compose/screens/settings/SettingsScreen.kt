@@ -34,6 +34,88 @@ import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.BuildConfig
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
+import com.joshgm3z.triplerocktv.compose.theme.subTextColor
+import com.joshgm3z.triplerocktv.compose.theme.textColor
+
+@Composable
+fun SettingsScreen(onSettingClick: (NavMainDestination) -> Unit = {}) {
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(vertical = 25.dp)
+    ) {
+        Text(
+            text = "Settings",
+            color = textColor(),
+            style = typography.headlineMedium,
+            modifier = Modifier.padding(horizontal = appHorizontalPadding)
+        )
+        settingsList.forEach {
+            SectionTitle(it.title)
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = appHorizontalPadding)
+                    .clip(RoundedCornerShape(10.dp))
+                    .background(color = cardColor())
+            ) {
+                it.settings.forEachIndexed { index, data ->
+                    SettingsItem(data) {
+                        data.navMainDestination?.let { destination ->
+                            onSettingClick(destination)
+                        }
+                    }
+                    if (index < it.settings.size - 1) HorizontalDivider(
+                        thickness = 2.dp,
+                        color = colorScheme.background
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun SettingsItem(
+    settingData: SettingData,
+    onClick: () -> Unit = {}
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(true) { onClick() }
+            .padding(
+                horizontal = appHorizontalPadding,
+                vertical = 10.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            imageVector = settingData.icon,
+            contentDescription = settingData.title,
+            tint = colorScheme.onBackground,
+            modifier = Modifier
+                .size(40.dp)
+                .background(
+                    colorScheme.primaryContainer.copy(alpha = 0.5f),
+                    shape = CircleShape
+                )
+                .padding(9.dp)
+        )
+        Spacer(modifier = Modifier.size(20.dp))
+        Column {
+            Text(
+                text = settingData.title,
+                color = textColor(),
+                style = typography.titleMedium,
+            )
+            Text(
+                text = settingData.subtitle,
+                color = subTextColor(),
+                style = typography.bodyMedium,
+            )
+        }
+    }
+}
 
 data class SettingData(
     val navMainDestination: NavMainDestination?,
@@ -91,87 +173,6 @@ val settingsList = listOf(
         )
     ),
 )
-
-@Composable
-fun SettingsScreen(onSettingClick: (NavMainDestination) -> Unit = {}) {
-    Column(
-        Modifier
-            .fillMaxSize()
-            .padding(
-                horizontal = appHorizontalPadding,
-                vertical = 25.dp
-            )
-    ) {
-        Text(
-            text = "Settings",
-            color = colorScheme.onBackground,
-            style = typography.headlineMedium,
-            modifier = Modifier
-        )
-        settingsList.forEach {
-            SectionTitle(it.title)
-            Column(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(color = cardColor())
-            ) {
-                it.settings.forEachIndexed { index, data ->
-                    SettingsItem(data) {
-                        if (data.navMainDestination != null)
-                            onSettingClick(data.navMainDestination)
-                    }
-                    if (index < it.settings.size - 1) HorizontalDivider(
-                        thickness = 2.dp,
-                        color = colorScheme.background
-                    )
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun SettingsItem(
-    settingData: SettingData,
-    onClick: () -> Unit = {}
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(true) { onClick() }
-            .padding(
-                horizontal = appHorizontalPadding,
-                vertical = 10.dp
-            ),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = settingData.icon,
-            contentDescription = settingData.title,
-            tint = colorScheme.onBackground,
-            modifier = Modifier
-                .size(40.dp)
-                .background(
-                    colorScheme.primaryContainer.copy(alpha = 0.5f),
-                    shape = CircleShape
-                )
-                .padding(9.dp)
-        )
-        Spacer(modifier = Modifier.size(20.dp))
-        Column {
-            Text(
-                text = settingData.title,
-                color = colorScheme.onBackground,
-                style = typography.titleMedium,
-            )
-            Text(
-                text = settingData.subtitle,
-                color = colorScheme.onBackground.copy(alpha = 0.5f),
-                style = typography.bodyMedium,
-            )
-        }
-    }
-}
 
 @DarkPreview
 @Composable
