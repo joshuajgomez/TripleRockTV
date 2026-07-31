@@ -1,16 +1,24 @@
 package com.joshgm3z.triplerocktv.compose.screens.browse
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyGridScope
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
@@ -20,9 +28,15 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
@@ -30,13 +44,16 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
+import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
+import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.gridSpacing
 import com.joshgm3z.triplerocktv.core.util.sampleSeriesList
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
+import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -131,21 +148,39 @@ fun VerticalGrid(
     onBackClick: () -> Unit = {},
     getStreamItems: LazyGridScope.() -> Unit = {},
 ) {
-    Box {
+    val scrollState = rememberLazyGridState()
+    val isScrolled by remember {
+        derivedStateOf {
+            scrollState.firstVisibleItemIndex > 0
+                    || scrollState.firstVisibleItemScrollOffset > 0
+        }
+    }
+
+    Column {
+        Header(
+            title = title,
+            onBackClick = onBackClick,
+            isScrolled = isScrolled
+        )
         LazyVerticalGrid(
+            state = scrollState,
             columns = GridCells.Fixed(3),
             verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
-            modifier = Modifier.padding(horizontal = appHorizontalPadding)
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = appHorizontalPadding)
         ) {
-            gridSpacing(180.dp)
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                Text(
+                    text = title,
+                    style = typography.headlineLarge,
+                    modifier = Modifier.padding(bottom = 10.dp)
+                )
+            }
             getStreamItems()
             gridSpacing()
         }
-        Header(
-            title = title,
-            onBackClick = onBackClick
-        )
     }
 }
 
@@ -186,38 +221,30 @@ fun LazyGridScope.seriesItems(
 @Composable
 private fun Header(
     title: String,
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    isScrolled: Boolean
 ) {
-    Column(
+    val backgroundColor = if (isScrolled) cardColor()
+    else Color.Transparent
+    Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(brush = headerGradientBrush())
+            .background(color = backgroundColor)
             .padding(
-                top = appTopPadding, bottom = 10.dp,
+                top = appTopPadding, bottom = 15.dp,
                 start = appHorizontalPadding, end = appHorizontalPadding
-            )
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier
-                .background(
-                    color = colorScheme.primaryContainer,
-                    shape = CircleShape
-                )
-                .size(40.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = null,
-                tint = colorScheme.onPrimaryContainer
+        CloseButton { onBackClick() }
+        AnimatedVisibility(visible = isScrolled) {
+            Text(
+                text = title,
+                style = typography.titleMedium,
+                color = colorScheme.onBackground,
+                modifier = Modifier.padding(horizontal = 20.dp)
             )
         }
-        Spacer(Modifier.size(20.dp))
-        Text(
-            text = title,
-            style = typography.headlineSmall,
-            color = colorScheme.onBackground
-        )
     }
 }
 
