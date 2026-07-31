@@ -136,6 +136,7 @@ fun FullSizePosterCard(
                 is SeriesStream -> stream.coverImageUrl
                 else -> return
             },
+            defaultDrawable = R.drawable.avatar_movie,
             modifier = Modifier
                 .fillMaxSize()
                 .clickable(true) {
