@@ -12,16 +12,20 @@ import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CloseButton(onClick: () -> Unit = {}) {
+fun CloseButton(
+    size: Dp = 30.dp,
+    onClick: () -> Unit = {},
+) {
     IconButton(
         onClick = onClick,
         modifier = Modifier
             .clip(CircleShape)
             .background(color = colorScheme.onBackground.copy(alpha = 0.1f))
-            .size(30.dp)
+            .size(size)
             .padding(5.dp)
     ) {
         Icon(
