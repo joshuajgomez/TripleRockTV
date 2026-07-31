@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -251,9 +253,10 @@ fun TopPart(
                     start = 10.dp, end = 10.dp,
                     top = appTopPadding, bottom = 10.dp
                 )
+                .height(60.dp)
                 .clip(RoundedCornerShape(30.dp))
                 .background(color = cardColor())
-                .padding(horizontal = 15.dp),
+                .padding(start = 15.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -285,16 +288,20 @@ fun TopPart(
                     .fillMaxWidth()
                     .weight(1f)
             )
-            Text(
-                text = "Cancel",
-                style = typography.titleMedium,
+            Row(
                 modifier = Modifier
-                    .clip(RoundedCornerShape(5.dp))
                     .clickable(true) {
                         onBackClick()
                     }
-                    .padding(horizontal = 10.dp, vertical = 5.dp)
-            )
+                    .fillMaxHeight()
+                    .padding(start = 10.dp, end = 16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Cancel",
+                    style = typography.titleMedium,
+                )
+            }
         }
     }
 }
