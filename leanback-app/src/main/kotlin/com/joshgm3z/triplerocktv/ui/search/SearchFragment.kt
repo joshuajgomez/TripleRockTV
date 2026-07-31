@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
 import com.joshgm3z.triplerocktv.ui.streamcatalogue.StreamPresenter
@@ -87,16 +88,41 @@ class SearchFragment : Fragment() {
         initViews()
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                binding.rvHints.adapter = SimpleTextAdapter(it.searchHints) { text ->
-                    binding.keyboardView.text = text
+                when (it) {
+                    is SearchUiState.Initial -> {
+                        binding.rvHints.adapter = SimpleTextAdapter(it.hints) { text ->
+                            binding.keyboardView.text = text
+                        }
+                        binding.tvStreamsTitle.setVisible(true)
+                        streamAdapter.items = it.initialStreams
+                        binding.rvSearchList.layoutAnimation =
+                            AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
+                        binding.rvSearchList.scheduleLayoutAnimation()
+                    }
+
+                    is SearchUiState.Loading -> {
+                        binding.tvStatus.setVisible(true)
+                        binding.tvStatus.text = "Searching"
+                        streamAdapter.items = emptyList()
+                    }
+
+                    is SearchUiState.NoResult -> {
+                        binding.tvStatus.setVisible(true)
+                        streamAdapter.items = emptyList()
+                        binding.tvStatus.text = "No results found"
+                    }
+
+                    is SearchUiState.Result -> {
+                        binding.tvStatus.setVisible(false)
+                        binding.tvStreamsTitle.setVisible(false)
+                        streamAdapter.items = it.list
+                        binding.rvSearchList.layoutAnimation =
+                            AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
+                        binding.rvSearchList.scheduleLayoutAnimation()
+                    }
+
+                    else -> {}
                 }
-                binding.tvStatus.text = it.statusText
-                binding.tvStatus.setVisible(it.statusText.isNotEmpty())
-                binding.tvStreamsTitle.setVisible(it.showRecentAddedTitle)
-                streamAdapter.items = it.streams
-                binding.rvSearchList.layoutAnimation =
-                    AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
-                binding.rvSearchList.scheduleLayoutAnimation()
             }
         }
     }
