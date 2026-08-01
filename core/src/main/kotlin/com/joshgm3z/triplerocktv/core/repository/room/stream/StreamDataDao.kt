@@ -43,6 +43,12 @@ interface StreamDataDao {
         streamType: StreamType
     ): PagingSource<Int, StreamData>
 
+    @Query("SELECT COUNT(*) FROM stream_data WHERE categoryId = :categoryId AND streamType = :streamType")
+    suspend fun getCount(
+        categoryId: Int,
+        streamType: StreamType
+    ): Int
+
     @Query("SELECT * FROM stream_data WHERE streamType = :streamType")
     fun getAll(streamType: StreamType): List<StreamData>
 

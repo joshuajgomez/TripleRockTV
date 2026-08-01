@@ -26,23 +26,27 @@ import javax.inject.Inject
 
 sealed class CatalogueUiState(
     val categoryName: String,
-    val streamType: StreamType
+    val streamType: StreamType,
+    val count: Int,
 ) {
     class VideoOnDemand(
         categoryName: String = "Video on demand",
+        count: Int = 0,
         val pagingStreams: Flow<PagingData<StreamData>> = emptyFlow(),
-    ) : CatalogueUiState(categoryName, StreamType.VideoOnDemand)
+    ) : CatalogueUiState(categoryName, StreamType.VideoOnDemand, count)
 
     class LiveTv(
         categoryName: String = "Live Tv",
+        count: Int = 0,
         val userInfo: UserInfo? = null,
         val streamDataList: Flow<List<StreamData>> = emptyFlow(),
-    ) : CatalogueUiState(categoryName, StreamType.LiveTV)
+    ) : CatalogueUiState(categoryName, StreamType.LiveTV, count)
 
     class Series(
         categoryName: String = "Series",
+        count: Int = 0,
         val pagingStreams: Flow<PagingData<SeriesStream>> = emptyFlow(),
-    ) : CatalogueUiState(categoryName, StreamType.Series)
+    ) : CatalogueUiState(categoryName, StreamType.Series, count)
 }
 
 private val pagingConfig = PagingConfig(
@@ -90,13 +94,15 @@ constructor(
                                 streamType
                             )
                         }
-                    ).flow.cachedIn(viewModelScope)
+                    ).flow.cachedIn(viewModelScope),
+                    count = repository.getStreamsCountOfCategory(categoryId, streamType)
                 )
 
                 StreamType.LiveTV -> CatalogueUiState.LiveTv(
                     categoryName = categoryName,
                     userInfo = localDatastore.getUserInfo(),
-                    streamDataList = repository.fetchLiveStreamsOfCategoryFlow(categoryId)
+                    streamDataList = repository.fetchLiveStreamsOfCategoryFlow(categoryId),
+                    count = repository.getStreamsCountOfCategory(categoryId, streamType)
                 )
 
                 StreamType.Series -> CatalogueUiState.Series(
@@ -106,7 +112,8 @@ constructor(
                         pagingSourceFactory = {
                             repository.fetchPagingSeriesStreamsOfCategory(categoryId)
                         }
-                    ).flow.cachedIn(viewModelScope)
+                    ).flow.cachedIn(viewModelScope),
+                    count = repository.getStreamsCountOfCategory(categoryId, streamType)
                 )
             }
         }

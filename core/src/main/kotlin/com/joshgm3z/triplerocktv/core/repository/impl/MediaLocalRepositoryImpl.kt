@@ -215,4 +215,11 @@ class MediaLocalRepositoryImpl @Inject constructor(
             StreamType.Series -> seriesStreamsDao.getAll().size
         }
     }
+
+    override suspend fun getStreamsCountOfCategory(categoryId: Int, streamType: StreamType): Int {
+        return when (streamType) {
+            StreamType.Series -> seriesStreamsDao.getCount(categoryId)
+            else -> streamDataDao.getCount(categoryId, streamType)
+        }
+    }
 }
