@@ -2,6 +2,10 @@ package com.joshgm3z.triplerocktv.compose.screens.browse
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -44,7 +48,6 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
-import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
@@ -54,10 +57,13 @@ import com.joshgm3z.triplerocktv.core.util.sampleSeriesList
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
+import com.joshgm3z.triplerocktv.compose.theme.subTextColor
+import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.sampleVodList
+import com.joshgm3z.triplerocktv.core.util.withComma
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -121,6 +127,7 @@ private fun CategoryBrowse(
                         onClick = onStreamDataClick
                     )
                 },
+                count = uiState.count
             )
         }
 
@@ -135,6 +142,7 @@ private fun CategoryBrowse(
                         onClick = onSeriesClick
                     )
                 },
+                count = uiState.count
             )
         }
 
@@ -145,6 +153,7 @@ private fun CategoryBrowse(
 @Composable
 fun VerticalGrid(
     title: String,
+    count: Int,
     onBackClick: () -> Unit = {},
     getStreamItems: LazyGridScope.() -> Unit = {},
 ) {
@@ -172,11 +181,18 @@ fun VerticalGrid(
                 .padding(horizontal = appHorizontalPadding)
         ) {
             item(span = { GridItemSpan(maxLineSpan) }) {
-                Text(
-                    text = title,
-                    style = typography.headlineLarge,
-                    modifier = Modifier.padding(bottom = 10.dp)
-                )
+                Column(modifier = Modifier.padding(vertical = 10.dp)) {
+                    Text(
+                        text = title,
+                        color = textColor(),
+                        style = typography.headlineLarge,
+                    )
+                    Text(
+                        text = "${count.withComma()} ${if (count > 1) "videos" else "video"}",
+                        color = subTextColor(),
+                        style = typography.bodyMedium,
+                    )
+                }
             }
             getStreamItems()
             gridSpacing()
@@ -237,12 +253,16 @@ private fun Header(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CloseButton { onBackClick() }
-        AnimatedVisibility(visible = isScrolled) {
+        AnimatedVisibility(
+            visible = isScrolled,
+            enter = fadeIn() + slideInVertically { it / 2 },
+            exit = fadeOut() + slideOutVertically { it / 2 }
+        ) {
             Text(
                 text = title,
-                style = typography.titleMedium,
+                style = typography.titleLarge,
                 color = colorScheme.onBackground,
-                modifier = Modifier.padding(horizontal = 20.dp)
+                modifier = Modifier.padding(horizontal = 10.dp)
             )
         }
     }
@@ -265,7 +285,8 @@ private fun PreviewCategoryBrowse_Vod() {
         CategoryBrowse(
             uiState = CatalogueUiState.VideoOnDemand(
                 categoryName = "Category name",
-                pagingStreams = MutableStateFlow(PagingData.from(sampleVodList))
+                pagingStreams = MutableStateFlow(PagingData.from(sampleVodList)),
+                count = 1235,
             ),
         )
     }
@@ -278,7 +299,8 @@ private fun PreviewCategoryBrowse_Series() {
         CategoryBrowse(
             uiState = CatalogueUiState.Series(
                 categoryName = "Category name",
-                pagingStreams = MutableStateFlow(PagingData.from(sampleSeriesList))
+                pagingStreams = MutableStateFlow(PagingData.from(sampleSeriesList)),
+                count = 123,
             ),
         )
     }
