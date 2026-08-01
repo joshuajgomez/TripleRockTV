@@ -8,6 +8,7 @@ import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
 import com.joshgm3z.triplerocktv.core.repository.SEARCH_LIMIT
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import kotlinx.coroutines.flow.Flow
 
@@ -45,6 +46,9 @@ interface SeriesStreamsDao {
 
     @Query("SELECT * FROM series_stream WHERE categoryId = :categoryId")
     fun getAllPagingOfCategory(categoryId: Int): PagingSource<Int, SeriesStream>
+
+    @Query("SELECT COUNT(*) FROM series_stream WHERE categoryId = :categoryId")
+    suspend fun getCount(categoryId: Int): Int
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<SeriesStream>)
