@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.compose.screens
 
-import androidx.compose.foundation.layout.Arrangement
+import android.R.attr.top
+import android.R.id.closeButton
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
@@ -23,11 +25,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
+import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
@@ -44,7 +49,6 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.ifNotNullOrEmpty
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
-import kotlin.contracts.ExperimentalContracts
 
 @Composable
 fun StreamDetailsScreen(
@@ -88,7 +92,37 @@ fun StreamDetailsScreen(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class, ExperimentalContracts::class)
+private enum class LayoutId {
+    Poster,
+    CloseButton,
+    TextColumn,
+    Buttons
+}
+
+private fun getConstraints() = ConstraintSet {
+    val poster = createRefFor(LayoutId.Poster)
+    val closeButton = createRefFor(LayoutId.CloseButton)
+    val textColumn = createRefFor(LayoutId.TextColumn)
+    val buttons = createRefFor(LayoutId.Buttons)
+
+    constrain(poster) {
+        top.linkTo(parent.top, margin = appTopPadding)
+        start.linkTo(parent.start)
+        end.linkTo(parent.end)
+    }
+    constrain(closeButton) {
+        top.linkTo(poster.top, margin = 15.dp)
+        start.linkTo(parent.start, margin = 15.dp)
+    }
+    constrain(textColumn) {
+        top.linkTo(poster.bottom, margin = 15.dp)
+        start.linkTo(closeButton.start)
+    }
+    constrain(buttons) {
+        bottom.linkTo(parent.bottom, margin = appBottomPadding)
+    }
+}
+
 @Composable
 private fun StreamDetailsScreenContent(
     uiState: DetailsUiState,
@@ -97,39 +131,23 @@ private fun StreamDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onMoreEpisodesClick: () -> Unit = {},
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(top = appTopPadding)
+    ConstraintLayout(
+        constraintSet = getConstraints(),
+        modifier = Modifier.fillMaxSize()
     ) {
-        Box {
-            GlidePic(
-                model = uiState.coverImage,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(220.dp)
-            )
-            CloseButton(
-                onClick = onBackClick,
-                showBackground = true,
-                modifier = Modifier
-                    .padding(
-                        horizontal = appHorizontalPadding,
-                        vertical = 15.dp
-                    )
-            )
-        }
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
+        GlidePic(
+            model = uiState.coverImage,
             modifier = Modifier
-                .fillMaxSize()
-                .padding(
-                    start = appHorizontalPadding,
-                    end = appHorizontalPadding,
-                    top = 15.dp,
-                    bottom = appBottomPadding
-                )
-        ) {
+                .fillMaxWidth()
+                .height(220.dp)
+                .layoutId(LayoutId.Poster)
+        )
+        CloseButton(
+            onClick = onBackClick,
+            showBackground = true,
+            modifier = Modifier.layoutId(LayoutId.CloseButton)
+        )
+        Column(modifier = Modifier.layoutId(LayoutId.TextColumn)) {
             Text(
                 text = uiState.title,
                 color = colorScheme.onBackground,
@@ -143,12 +161,14 @@ private fun StreamDetailsScreenContent(
                     if (uiState.streamType == StreamType.VideoOnDemand)
                         uiState.subtitle.ifNotNullOrEmpty { add(it) }
                     uiState.duration.ifNotNullOrEmpty { add(it) }
-                })
+                }
+            )
             if (uiState.streamType == StreamType.Series && !uiState.subtitle.isNullOrEmpty()) Text(
                 text = uiState.subtitle!!,
                 color = colorScheme.primary,
                 style = typography.labelMedium
             )
+            Spacer(Modifier.size(10.dp))
             uiState.description?.let {
                 Text(
                     text = it,
@@ -156,6 +176,7 @@ private fun StreamDetailsScreenContent(
                     style = typography.bodyMedium
                 )
             }
+            Spacer(Modifier.size(10.dp))
             uiState.cast?.let {
                 Text(
                     text = it,
@@ -170,30 +191,30 @@ private fun StreamDetailsScreenContent(
                     style = typography.bodyMedium
                 )
             }
-            Spacer(
-                Modifier
-                    .fillMaxSize()
-                    .weight(1f)
-            )
-            if (uiState.showButtons) ButtonContainer(
-                uiState,
-                onPlayClicked = onPlayClicked,
-                setFavorite = setFavorite,
-                moreEpisodes = onMoreEpisodesClick
-            )
         }
+
+        if (uiState.showButtons) ButtonContainer(
+            uiState = uiState,
+            onPlayClicked = onPlayClicked,
+            setFavorite = setFavorite,
+            moreEpisodes = onMoreEpisodesClick,
+            modifier = Modifier
+                .padding(horizontal = appHorizontalPadding)
+                .layoutId(LayoutId.Buttons)
+        )
     }
 }
 
 @Composable
 private fun ButtonContainer(
+    modifier: Modifier = Modifier,
     uiState: DetailsUiState,
     onPlayClicked: (resume: Boolean) -> Unit = {},
     setFavorite: (add: Boolean) -> Unit = {},
     moreEpisodes: () -> Unit = {},
 ) {
     val textAlign = TextAlign.Start
-    Column {
+    Column(modifier = modifier) {
         PrimaryButton(
             visible = uiState.progressPercent == null,
             text = "Play",
@@ -251,34 +272,42 @@ private fun ButtonContainer(
     }
 }
 
+private val sampleUiState = DetailsUiState(
+    streamType = StreamType.VideoOnDemand,
+    coverImage = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
+    title = "Inception (2010)",
+    description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
+    cast = "Cast: Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page",
+    director = "Director: Christopher Nolan",
+    rating = 8.3f,
+    showButtons = true,
+    subtitle = "Drama, Thriller",
+    favorite = true,
+    duration = "1h 2m"
+)
+
 @DarkPreview
 @Composable
 private fun PreviewStreamDetailsScreen() {
     DarkSurface {
-        StreamDetailsScreenContent(
-            DetailsUiState(
-                streamType = StreamType.VideoOnDemand,
-                coverImage = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/qmDpIHrmpJINaRKAfWQfftjCdyi.jpg",
-                title = "Inception (2010)",
-                description = "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
-                cast = "Cast: Leonardo DiCaprio, Joseph Gordon-Levitt, Ellen Page",
-                director = "Director: Christopher Nolan",
-                rating = 8.3f,
-                showButtons = true,
-                subtitle = "Drama, Thriller",
-                favorite = true,
-                duration = "1h 2m"
-            )
-        )
+        StreamDetailsScreenContent(sampleUiState)
     }
 }
 
-@DarkPreview
+@DarkLandscapePreview
+@Composable
+private fun PreviewStreamDetailsScreen_Landscape() {
+    DarkSurface {
+        StreamDetailsScreenContent(sampleUiState)
+    }
+}
+
+//@DarkPreview
 @Composable
 private fun PreviewButtonContainer_Vod() {
     DarkSurface {
         ButtonContainer(
-            DetailsUiState(
+            uiState = DetailsUiState(
                 streamType = StreamType.VideoOnDemand,
                 title = "Inception (2010)",
                 showButtons = true,
@@ -287,12 +316,12 @@ private fun PreviewButtonContainer_Vod() {
     }
 }
 
-@DarkPreview
+//@DarkPreview
 @Composable
 private fun PreviewButtonContainer_Series() {
     DarkSurface {
         ButtonContainer(
-            DetailsUiState(
+            uiState = DetailsUiState(
                 streamType = StreamType.Series,
                 title = "Inception (2010)",
                 showButtons = true,
@@ -301,12 +330,12 @@ private fun PreviewButtonContainer_Series() {
     }
 }
 
-@DarkPreview
+//@DarkPreview
 @Composable
 private fun PreviewButtonContainer_resume_remove() {
     DarkSurface {
         ButtonContainer(
-            DetailsUiState(
+            uiState = DetailsUiState(
                 streamType = StreamType.VideoOnDemand,
                 title = "Inception (2010)",
                 showButtons = true,
