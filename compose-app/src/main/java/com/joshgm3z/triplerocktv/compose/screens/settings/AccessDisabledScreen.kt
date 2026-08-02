@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.compose.screens.settings
 
 import androidx.compose.runtime.Composable
+import com.joshgm3z.triplerocktv.compose.screens.common.ButtonItem
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.InfoWithButtons
@@ -14,8 +15,13 @@ fun AccessDisabledScreen(
     InfoWithButtons(
         title = title,
         message = message,
-        button1 = "Exit app",
-        onButton1Clicked = onExitClicked
+        buttons = listOf(
+            ButtonItem(
+                primary = true,
+                text = "Exit app",
+                onClick = onExitClicked
+            )
+        ),
     )
 }
 

@@ -169,7 +169,7 @@ fun VerticalGrid(
         Header(
             title = title,
             onBackClick = onBackClick,
-            isScrolled = isScrolled
+            showTitle = isScrolled
         )
         LazyVerticalGrid(
             state = scrollState,
@@ -235,12 +235,12 @@ fun LazyGridScope.seriesItems(
 }
 
 @Composable
-private fun Header(
+fun Header(
     title: String,
     onBackClick: () -> Unit = {},
-    isScrolled: Boolean
+    showTitle: Boolean = true
 ) {
-    val backgroundColor = if (isScrolled) cardColor()
+    val backgroundColor = if (showTitle) cardColor()
     else Color.Transparent
     Row(
         modifier = Modifier
@@ -254,7 +254,7 @@ private fun Header(
     ) {
         CloseButton { onBackClick() }
         AnimatedVisibility(
-            visible = isScrolled,
+            visible = showTitle,
             enter = fadeIn() + slideInVertically { it / 2 },
             exit = fadeOut() + slideOutVertically { it / 2 }
         ) {

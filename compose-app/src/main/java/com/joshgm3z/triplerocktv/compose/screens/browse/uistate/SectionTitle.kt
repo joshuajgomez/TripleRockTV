@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 
 @Composable
 fun SectionTitle(
@@ -34,8 +35,8 @@ fun SectionTitle(
     ) {
         Text(
             text = title,
-            style = typography.titleMedium,
-            color = colorScheme.onBackground.copy(alpha = 0.5f),
+            style = typography.titleSmall,
+            color = subTextColor(),
             modifier = Modifier
                 .padding(
                     start = 5.dp, end = 5.dp,

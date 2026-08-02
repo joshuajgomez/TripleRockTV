@@ -15,14 +15,19 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 
+data class ButtonItem(
+    val primary: Boolean = false,
+    val text: String,
+    val onClick: () -> Unit = {},
+    val enabled: Boolean = true,
+    val loading: Boolean = false,
+)
+
 @Composable
 fun InfoWithButtons(
     title: String,
-    message: String = "",
-    button1: String? = null,
-    button2: String? = null,
-    onButton1Clicked: () -> Unit = {},
-    onButton2Clicked: () -> Unit = {},
+    message: String? = null,
+    buttons: List<ButtonItem> = emptyList()
 ) {
     Column(
         modifier = Modifier
@@ -36,25 +41,38 @@ fun InfoWithButtons(
     ) {
         Text(
             text = title,
-            style = typography.titleLarge,
+            style = typography.headlineLarge,
             color = colorScheme.onBackground
         )
         Spacer(Modifier.size(10.dp))
-        Text(
-            text = message,
-            style = typography.bodyLarge,
-            color = colorScheme.onBackground.copy(alpha = 0.5f)
-        )
+        message?.let {
+            Text(
+                text = it,
+                style = typography.bodyLarge,
+                color = colorScheme.onBackground.copy(alpha = 0.5f)
+            )
+        }
         Spacer(
             Modifier
                 .fillMaxSize()
                 .weight(1f)
         )
-        button1?.let {
-            PrimaryButton(text = it, onClick = onButton1Clicked)
-        }
-        button2?.let {
-            SecondaryButton(text = it, onClick = onButton2Clicked)
+        buttons.forEach {
+            if (it.primary) {
+                PrimaryButton(
+                    text = it.text,
+                    onClick = it.onClick,
+                    enabled = it.enabled,
+                    loading = it.loading
+                )
+            } else {
+                SecondaryButton(
+                    text = it.text,
+                    onClick = it.onClick,
+                    enabled = it.enabled,
+                    loading = it.loading
+                )
+            }
         }
     }
 }
@@ -64,10 +82,17 @@ fun InfoWithButtons(
 fun PreviewInfoWithButtons() {
     DarkSurface {
         InfoWithButtons(
-            title = "Access disabled",
-            message = "The user jgomez is banned from using this app",
-            button1 = "Exit",
-            button2 = "Contact support"
+            title = "Some major info",
+            message = "More information about the major info",
+            buttons = listOf(
+                ButtonItem(
+                    primary = true,
+                    text = "Okay"
+                ),
+                ButtonItem(
+                    text = "Contact support"
+                )
+            )
         )
     }
 }

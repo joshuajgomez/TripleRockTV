@@ -1,7 +1,9 @@
 package com.joshgm3z.triplerocktv.compose.screens.settings
 
 import androidx.compose.runtime.Composable
+import com.joshgm3z.triplerocktv.compose.screens.common.ButtonItem
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.InfoWithButtons
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
 
@@ -15,17 +17,24 @@ fun AppUpdateNeededScreen(
     InfoWithButtons(
         title = title,
         message = message,
-        button1 = "Check updates",
-        button2 = "Exit app",
-        onButton1Clicked = { navigateToAppUpdate() },
-        onButton2Clicked = onExitClicked
+        buttons = listOf(
+            ButtonItem(
+                primary = true,
+                text = "Check updates",
+                onClick = navigateToAppUpdate
+            ),
+            ButtonItem(
+                text = "Exit app",
+                onClick = onExitClicked
+            )
+        )
     )
 }
 
 @DarkPreview
 @Composable
 fun PreviewAppUpdateNeededScreen() {
-    TripleRockTvTheme {
+    DarkSurface {
         AppUpdateNeededScreen(
             message = "Update to v234 to continue using the app"
         )
