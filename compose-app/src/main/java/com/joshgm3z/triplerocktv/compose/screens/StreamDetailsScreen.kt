@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.compose.screens
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -9,18 +8,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.PlaylistRemove
 import androidx.compose.material.icons.filled.RestartAlt
 import androidx.compose.material.icons.filled.VideoLibrary
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -29,20 +23,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
-import com.bumptech.glide.integration.compose.GlideImage
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
-import com.joshgm3z.triplerocktv.compose.R
+import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.MetadataBar
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
@@ -50,6 +41,7 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.util.ifNotNullOrEmpty
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import kotlin.contracts.ExperimentalContracts
@@ -105,43 +97,36 @@ private fun StreamDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onMoreEpisodesClick: () -> Unit = {},
 ) {
-    Box(modifier = Modifier.fillMaxSize()) {
-        GlideImage(
-            model = uiState.coverImage.orPreview(),
-            contentDescription = null,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(300.dp),
-            contentScale = ContentScale.Crop
-        )
-        IconButton(
-            onClick = onBackClick,
-            modifier = Modifier
-                .padding(
-                    horizontal = appHorizontalPadding,
-                    vertical = appTopPadding
-                )
-                .background(
-                    color = colorScheme.onBackground.copy(alpha = 0.5f),
-                    shape = CircleShape
-                )
-                .size(40.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Close,
-                contentDescription = null,
-                tint = colorScheme.background
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(top = appTopPadding)
+    ) {
+        Box {
+            GlidePic(
+                model = uiState.coverImage,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
+            )
+            CloseButton(
+                onClick = onBackClick,
+                showBackground = true,
+                modifier = Modifier
+                    .padding(
+                        horizontal = appHorizontalPadding,
+                        vertical = 15.dp
+                    )
             )
         }
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
             modifier = Modifier
-                .background(brush = darkOverlayBrush())
                 .fillMaxSize()
                 .padding(
                     start = appHorizontalPadding,
                     end = appHorizontalPadding,
-                    top = 250.dp,
+                    top = 15.dp,
                     bottom = appBottomPadding
                 )
         ) {
@@ -198,10 +183,6 @@ private fun StreamDetailsScreenContent(
             )
         }
     }
-}
-
-fun String?.ifNotNullOrEmpty(block: (String) -> Unit) {
-    if (!isNullOrEmpty()) block(this)
 }
 
 @Composable
@@ -268,24 +249,6 @@ private fun ButtonContainer(
             textAlign = textAlign,
         )
     }
-}
-
-@Composable
-fun darkOverlayBrush() = Brush.verticalGradient(
-    colors = listOf(
-        Color.Transparent,
-        colorScheme.background,
-        colorScheme.background,
-        colorScheme.background,
-    ),
-    // Start the gradient at 40% of the container height
-    startY = 0.1f
-)
-
-@Composable
-private fun String?.orPreview(): Any? = when {
-    LocalInspectionMode.current -> R.drawable.backdrop_office
-    else -> this
 }
 
 @DarkPreview

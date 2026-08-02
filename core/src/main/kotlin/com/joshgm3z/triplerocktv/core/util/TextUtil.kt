@@ -80,3 +80,7 @@ fun String?.formatExpiryDate(): String {
         "Unknown"
     }
 }
+
+fun String?.ifNotNullOrEmpty(block: (String) -> Unit) {
+    if (!isNullOrEmpty()) block(this)
+}
