@@ -2,6 +2,8 @@ package com.joshgm3z.triplerocktv.compose.screens
 
 import android.R.attr.top
 import android.R.id.closeButton
+import android.content.res.Configuration
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.PlayArrow
@@ -25,8 +28,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -35,6 +40,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
+import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
@@ -100,34 +106,59 @@ private enum class LayoutId {
     Buttons
 }
 
-private fun getConstraints() = ConstraintSet {
+private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
     val poster = createRefFor(LayoutId.Poster)
     val closeButton = createRefFor(LayoutId.CloseButton)
     val textColumn = createRefFor(LayoutId.TextColumn)
     val buttons = createRefFor(LayoutId.Buttons)
 
-    constrain(poster) {
-        top.linkTo(parent.top, margin = appTopPadding)
-        start.linkTo(parent.start)
-        end.linkTo(parent.end)
-        width = Dimension.fillToConstraints
-        height = Dimension.value(220.dp)
-    }
-    constrain(closeButton) {
-        top.linkTo(poster.top, margin = 15.dp)
-        start.linkTo(textColumn.start)
-    }
-    constrain(textColumn) {
-        top.linkTo(poster.bottom, margin = 15.dp)
-        start.linkTo(parent.start, margin = 15.dp)
-        end.linkTo(parent.end, margin = 15.dp)
-        width = Dimension.fillToConstraints
-    }
-    constrain(buttons) {
-        bottom.linkTo(parent.bottom, margin = appBottomPadding)
-        start.linkTo(textColumn.start)
-        end.linkTo(textColumn.end)
-        width = Dimension.fillToConstraints
+    if (isLandscape) {
+        constrain(poster) {
+            top.linkTo(parent.top, margin = 50.dp)
+            start.linkTo(parent.start, margin = 15.dp)
+            width = Dimension.value(450.dp)
+            height = Dimension.value(250.dp)
+        }
+        constrain(closeButton) {
+            top.linkTo(poster.top, margin = 15.dp)
+            start.linkTo(poster.start, margin = 15.dp)
+        }
+        constrain(textColumn) {
+            top.linkTo(poster.top)
+            start.linkTo(poster.end, margin = 15.dp)
+            end.linkTo(parent.end, margin = 15.dp)
+            width = Dimension.fillToConstraints
+        }
+        constrain(buttons) {
+            bottom.linkTo(parent.bottom, margin = appBottomPadding)
+            start.linkTo(textColumn.start)
+            end.linkTo(textColumn.end)
+            width = Dimension.fillToConstraints
+        }
+    } else {
+        constrain(poster) {
+            top.linkTo(parent.top, margin = appTopPadding)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            width = Dimension.fillToConstraints
+            height = Dimension.value(220.dp)
+        }
+        constrain(closeButton) {
+            top.linkTo(poster.top, margin = 15.dp)
+            start.linkTo(textColumn.start)
+        }
+        constrain(textColumn) {
+            top.linkTo(poster.bottom, margin = 15.dp)
+            start.linkTo(parent.start, margin = 15.dp)
+            end.linkTo(parent.end, margin = 15.dp)
+            width = Dimension.fillToConstraints
+        }
+        constrain(buttons) {
+            bottom.linkTo(parent.bottom, margin = appBottomPadding)
+            start.linkTo(textColumn.start)
+            end.linkTo(textColumn.end)
+            width = Dimension.fillToConstraints
+        }
     }
 }
 
@@ -139,13 +170,18 @@ private fun StreamDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onMoreEpisodesClick: () -> Unit = {},
 ) {
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     ConstraintLayout(
-        constraintSet = getConstraints(),
+        constraintSet = getConstraints(isLandscape),
         modifier = Modifier.fillMaxSize()
     ) {
+        val posterModifier = if (isLandscape) Modifier.clip(RoundedCornerShape(15.dp))
+        else Modifier
         GlidePic(
             model = uiState.coverImage,
-            modifier = Modifier.layoutId(LayoutId.Poster)
+            modifier = posterModifier.layoutId(LayoutId.Poster)
         )
         CloseButton(
             onClick = onBackClick,
@@ -217,7 +253,7 @@ private fun ButtonContainer(
     moreEpisodes: () -> Unit = {},
 ) {
     val textAlign = TextAlign.Start
-    Column(modifier = modifier) {
+    Column(modifier = modifier.background(color = colorScheme.background)) {
         PrimaryButton(
             visible = uiState.progressPercent == null,
             text = "Play",
