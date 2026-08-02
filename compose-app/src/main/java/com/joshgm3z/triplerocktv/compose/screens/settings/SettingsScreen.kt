@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -33,6 +35,8 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.BuildConfig
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
@@ -40,36 +44,40 @@ import com.joshgm3z.triplerocktv.compose.theme.textColor
 @Composable
 fun SettingsScreen(onSettingClick: (NavMainDestination) -> Unit = {}) {
     Column(
-        Modifier
-            .fillMaxSize()
-            .padding(vertical = 25.dp)
+        modifier = Modifier.fillMaxSize()
     ) {
-        Text(
-            text = "Settings",
-            color = textColor(),
-            style = typography.headlineMedium,
-            modifier = Modifier.padding(horizontal = appHorizontalPadding)
-        )
-        settingsList.forEach {
-            SectionTitle(it.title)
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = appHorizontalPadding)
-                    .clip(RoundedCornerShape(10.dp))
-                    .background(color = cardColor())
-            ) {
-                it.settings.forEachIndexed { index, data ->
-                    SettingsItem(data) {
-                        data.navMainDestination?.let { destination ->
-                            onSettingClick(destination)
+        LazyColumn {
+            listSpacing(appTopPadding)
+            item {
+                Text(
+                    text = "Settings",
+                    color = textColor(),
+                    style = typography.headlineMedium,
+                    modifier = Modifier.padding(horizontal = appHorizontalPadding)
+                )
+            }
+            items(settingsList) { settingCategory ->
+                SectionTitle(settingCategory.title)
+                Column(
+                    modifier = Modifier
+                        .padding(horizontal = appHorizontalPadding)
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(color = cardColor())
+                ) {
+                    settingCategory.settings.forEachIndexed { index, data ->
+                        SettingsItem(data) {
+                            data.navMainDestination?.let { destination ->
+                                onSettingClick(destination)
+                            }
                         }
+                        if (index < settingCategory.settings.size - 1) HorizontalDivider(
+                            thickness = 2.dp,
+                            color = colorScheme.background
+                        )
                     }
-                    if (index < it.settings.size - 1) HorizontalDivider(
-                        thickness = 2.dp,
-                        color = colorScheme.background
-                    )
                 }
             }
+            listSpacing(appBottomPadding)
         }
     }
 }
