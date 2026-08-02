@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.compose.screens.browse
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
@@ -41,6 +42,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
@@ -50,6 +52,7 @@ import androidx.paging.compose.itemKey
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.gridSpacing
@@ -165,6 +168,9 @@ fun VerticalGrid(
         }
     }
 
+    val configuration = LocalConfiguration.current
+    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+
     Column {
         Header(
             title = title,
@@ -173,7 +179,7 @@ fun VerticalGrid(
         )
         LazyVerticalGrid(
             state = scrollState,
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(if (isLandscape) 6 else 3),
             verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             modifier = Modifier
@@ -232,6 +238,7 @@ fun LazyGridScope.seriesItems(
             )
         }
     }
+
 }
 
 @Composable
@@ -292,7 +299,21 @@ private fun PreviewCategoryBrowse_Vod() {
     }
 }
 
-@DarkPreview
+@DarkLandscapePreview
+@Composable
+private fun PreviewCategoryBrowse_Vod_Landscape() {
+    DarkSurface {
+        CategoryBrowse(
+            uiState = CatalogueUiState.VideoOnDemand(
+                categoryName = "Category name",
+                pagingStreams = MutableStateFlow(PagingData.from(sampleVodList)),
+                count = 1235,
+            ),
+        )
+    }
+}
+
+//@DarkPreview
 @Composable
 private fun PreviewCategoryBrowse_Series() {
     DarkSurface {
