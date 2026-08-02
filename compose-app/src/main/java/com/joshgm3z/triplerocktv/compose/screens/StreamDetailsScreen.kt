@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
@@ -109,17 +110,24 @@ private fun getConstraints() = ConstraintSet {
         top.linkTo(parent.top, margin = appTopPadding)
         start.linkTo(parent.start)
         end.linkTo(parent.end)
+        width = Dimension.fillToConstraints
+        height = Dimension.value(220.dp)
     }
     constrain(closeButton) {
         top.linkTo(poster.top, margin = 15.dp)
-        start.linkTo(parent.start, margin = 15.dp)
+        start.linkTo(textColumn.start)
     }
     constrain(textColumn) {
         top.linkTo(poster.bottom, margin = 15.dp)
-        start.linkTo(closeButton.start)
+        start.linkTo(parent.start, margin = 15.dp)
+        end.linkTo(parent.end, margin = 15.dp)
+        width = Dimension.fillToConstraints
     }
     constrain(buttons) {
         bottom.linkTo(parent.bottom, margin = appBottomPadding)
+        start.linkTo(textColumn.start)
+        end.linkTo(textColumn.end)
+        width = Dimension.fillToConstraints
     }
 }
 
@@ -137,10 +145,7 @@ private fun StreamDetailsScreenContent(
     ) {
         GlidePic(
             model = uiState.coverImage,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .layoutId(LayoutId.Poster)
+            modifier = Modifier.layoutId(LayoutId.Poster)
         )
         CloseButton(
             onClick = onBackClick,
@@ -198,9 +203,7 @@ private fun StreamDetailsScreenContent(
             onPlayClicked = onPlayClicked,
             setFavorite = setFavorite,
             moreEpisodes = onMoreEpisodesClick,
-            modifier = Modifier
-                .padding(horizontal = appHorizontalPadding)
-                .layoutId(LayoutId.Buttons)
+            modifier = Modifier.layoutId(LayoutId.Buttons)
         )
     }
 }
