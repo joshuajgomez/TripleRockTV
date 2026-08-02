@@ -19,6 +19,7 @@ import com.joshgm3z.triplerocktv.compose.theme.Orange40
 
 @Composable
 fun MetadataBar(
+    modifier: Modifier = Modifier,
     rating: Float? = null,
     favorite: Boolean = false,
     style: TextStyle = typography.labelLarge,
@@ -38,7 +39,10 @@ fun MetadataBar(
         }
         if (favorite) append(dot)
     }
-    Row(verticalAlignment = Alignment.CenterVertically) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = modifier
+    ) {
         if (rating != null && rating > 0) {
             Icon(
                 Icons.Default.Star,
