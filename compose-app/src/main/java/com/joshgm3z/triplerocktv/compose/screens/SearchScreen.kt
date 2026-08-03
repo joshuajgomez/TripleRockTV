@@ -122,10 +122,17 @@ fun SearchScreenContent(
                         }
                     }
                     item(span = { GridItemSpan(maxLineSpan) }) {
-                        SectionTitle(
+                        if (uiState.initialStreams.isNotEmpty()) SectionTitle(
                             title = "Recently added",
                             paddingValues = PaddingValues(0.dp)
+                        ) else Text(
+                            text = "Nothing to search. Sync media to start seeing content here.",
+                            style = typography.bodyMedium,
+                            color = subTextColor(),
+                            modifier = Modifier.padding(horizontal = 50.dp),
+                            textAlign = TextAlign.Center
                         )
+
                     }
                     items(uiState.initialStreams) {
                         StreamItem(it, onStreamClick = {
@@ -349,7 +356,7 @@ private fun PreviewSearchScreen_Initial() {
                     "Search hint 4",
                     "Search hint 5",
                 ),
-                initialStreams = sampleVodList.subList(0, 6)
+                initialStreams = emptyList()
             )
         )
     }
