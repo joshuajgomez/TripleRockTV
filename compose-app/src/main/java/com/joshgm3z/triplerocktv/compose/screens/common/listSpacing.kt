@@ -8,7 +8,6 @@ import androidx.compose.foundation.lazy.grid.LazyGridScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
 
 fun LazyListScope.listSpacing(size: Dp = 50.dp) = item {
     Spacer(Modifier.size(size))

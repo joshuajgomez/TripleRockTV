@@ -24,6 +24,7 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
+import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
@@ -32,8 +33,6 @@ import com.joshgm3z.triplerocktv.core.util.orIfDebug
 import com.joshgm3z.triplerocktv.core.viewmodel.CredentialUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SettingsViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @Composable
 fun AccountDetailsScreen(

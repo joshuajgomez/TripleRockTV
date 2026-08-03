@@ -7,20 +7,16 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.paging.PagingData
-import androidx.paging.PagingSource
-import androidx.paging.PagingState
 import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.paging.compose.itemKey
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryItem
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryRow
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
-import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.util.sampleLabelToCategoryMap
@@ -28,7 +24,6 @@ import com.joshgm3z.triplerocktv.core.util.sampleVodCategoryList
 import com.joshgm3z.triplerocktv.core.util.sampleVodList
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.emptyFlow
 
 @Composable
 fun VodUiState(

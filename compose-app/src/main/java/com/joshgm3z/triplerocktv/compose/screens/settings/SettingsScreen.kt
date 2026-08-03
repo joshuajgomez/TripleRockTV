@@ -35,7 +35,9 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.BuildConfig
-import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
+import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor

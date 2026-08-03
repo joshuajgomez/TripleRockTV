@@ -14,10 +14,8 @@ import androidx.compose.ui.unit.dp
 import com.joshgm3z.triplerocktv.compose.screens.browse.Header
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
-
-val appHorizontalPadding = 20.dp
-val appBottomPadding = 40.dp
-val appTopPadding = 70.dp
+import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
 
 @Composable
 fun SettingScaffold(

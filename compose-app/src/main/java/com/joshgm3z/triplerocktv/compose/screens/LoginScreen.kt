@@ -26,8 +26,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
-import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
