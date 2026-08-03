@@ -54,12 +54,15 @@ fun PlayerScreen(
     trackViewModel: TrackSelectorViewModel,
     navController: NavController
 ) {
-    RotateToLandscape()
-    BackHandler {
+    fun onBackPress() {
         navController.previousBackStackEntry
             ?.savedStateHandle
             ?.set("selectedStreamId", viewModel.streamId)
         navController.popBackStack()
+    }
+    RotateToLandscape()
+    BackHandler {
+        onBackPress()
     }
 
     val uiState by viewModel.playbackUiState.collectAsState()
@@ -86,6 +89,9 @@ fun PlayerScreen(
                     )
                 )
             },
+            onBackPress = {
+                onBackPress()
+            },
             onCaptionsClicked = {
                 trackViewModel.loadTracksOfType(TrackType.Subtitle)
                 navController.navigate(NavMainDestination.TrackSelector)
@@ -107,6 +113,7 @@ private fun PlaybackScreenContent(
     updateLastPlayedPosition: (Long) -> Unit = {},
     onError: (String) -> Unit = {},
     onCaptionsClicked: () -> Unit = {},
+    onBackPress: () -> Unit = {},
     updateSelectedSubtitle: (language: String, title: String, url: String?) -> Unit = { _, _, _ -> },
     subtitleTrackListener: Player.Listener? = null,
     trackToLoadFlow: StateFlow<LoadTrack?> = MutableStateFlow(null),
@@ -145,6 +152,9 @@ private fun PlaybackScreenContent(
                 setShowSubtitleButton(true)
                 findViewById<ImageButton>(R.id.custom_exo_subtitle)?.let {
                     it.setOnClickListener { onCaptionsClicked() }
+                }
+                findViewById<ImageButton>(R.id.iv_back_button)?.let {
+                    it.setOnClickListener { onBackPress() }
                 }
             }
         },
