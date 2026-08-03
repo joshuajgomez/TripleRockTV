@@ -25,6 +25,15 @@
         android:layout_height="0dp"
         android:background="@color/exo_black_opacity_60"/>
 
+    <ImageButton
+        android:id="@+id/iv_back_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/bg_circle"
+        android:src="@drawable/outline_arrow_back_24" />
+
     <FrameLayout android:id="@id/exo_bottom_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/exo_styled_bottom_bar_height"
