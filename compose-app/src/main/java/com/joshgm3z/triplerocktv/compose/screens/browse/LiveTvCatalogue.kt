@@ -45,7 +45,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
@@ -67,6 +66,7 @@ import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.isLandscape
 import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
@@ -159,10 +159,9 @@ fun LiveTvCatalogue(
 
     val url = if (LocalInspectionMode.current) ""
     else selectedSteamData?.videoUrl(uiState.userInfo!!)
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     ConstraintLayout(
-        constraintSet = getConstraints(isLandscape),
+        constraintSet = getConstraints(isLandscape()),
         modifier = Modifier.fillMaxSize()
     ) {
         TvBox(
