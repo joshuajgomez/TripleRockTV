@@ -4,6 +4,8 @@ import android.R.attr.top
 import android.R.id.closeButton
 import android.content.res.Configuration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.Orientation
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
 import androidx.compose.material.icons.filled.PlayArrow
@@ -50,6 +54,8 @@ import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
+import com.joshgm3z.triplerocktv.compose.theme.subTextColor
+import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.ifNotNullOrEmpty
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
@@ -101,6 +107,7 @@ private enum class LayoutId {
     Poster,
     CloseButton,
     TextColumn,
+    Title,
     Buttons
 }
 
@@ -109,6 +116,7 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
     val closeButton = createRefFor(LayoutId.CloseButton)
     val textColumn = createRefFor(LayoutId.TextColumn)
     val buttons = createRefFor(LayoutId.Buttons)
+    val title = createRefFor(LayoutId.Title)
 
     if (isLandscape) {
         constrain(poster) {
@@ -121,11 +129,17 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             top.linkTo(poster.top, margin = 15.dp)
             start.linkTo(poster.start, margin = 15.dp)
         }
+        constrain(title) {
+            top.linkTo(poster.bottom, margin = 15.dp)
+            start.linkTo(poster.start, margin = 5.dp)
+        }
         constrain(textColumn) {
             top.linkTo(poster.top)
+            bottom.linkTo(buttons.top, margin = 10.dp)
             start.linkTo(poster.end, margin = 15.dp)
             end.linkTo(parent.end, margin = 15.dp)
             width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
         }
         constrain(buttons) {
             bottom.linkTo(parent.bottom, margin = appBottomPadding)
@@ -145,8 +159,12 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             top.linkTo(poster.top, margin = 15.dp)
             start.linkTo(textColumn.start)
         }
-        constrain(textColumn) {
+        constrain(title) {
             top.linkTo(poster.bottom, margin = 15.dp)
+            start.linkTo(textColumn.start)
+        }
+        constrain(textColumn) {
+            top.linkTo(title.bottom)
             start.linkTo(parent.start, margin = 15.dp)
             end.linkTo(parent.end, margin = 15.dp)
             width = Dimension.fillToConstraints
@@ -185,10 +203,10 @@ private fun StreamDetailsScreenContent(
             showBackground = true,
             modifier = Modifier.layoutId(LayoutId.CloseButton)
         )
-        Column(modifier = Modifier.layoutId(LayoutId.TextColumn)) {
+        Column(modifier = Modifier.layoutId(LayoutId.Title)) {
             Text(
                 text = uiState.title,
-                color = colorScheme.onBackground,
+                color = textColor(),
                 style = typography.titleLarge,
                 fontWeight = FontWeight.Bold
             )
@@ -201,16 +219,22 @@ private fun StreamDetailsScreenContent(
                     uiState.duration.ifNotNullOrEmpty { add(it) }
                 }
             )
+        }
+        Column(
+            modifier = Modifier
+                .layoutId(LayoutId.TextColumn)
+                .verticalScroll(rememberScrollState())
+        ) {
             if (uiState.streamType == StreamType.Series && !uiState.subtitle.isNullOrEmpty()) Text(
                 text = uiState.subtitle!!,
                 color = colorScheme.primary,
-                style = typography.labelMedium
+                style = typography.labelMedium,
+                modifier = Modifier.padding(bottom = 10.dp)
             )
-            Spacer(Modifier.size(10.dp))
             uiState.description?.let {
                 Text(
                     text = it,
-                    color = colorScheme.onBackground.copy(alpha = 0.8f),
+                    color = textColor(),
                     style = typography.bodyMedium
                 )
             }
@@ -218,14 +242,14 @@ private fun StreamDetailsScreenContent(
             uiState.cast?.let {
                 Text(
                     text = it,
-                    color = colorScheme.onBackground.copy(alpha = 0.5f),
+                    color = subTextColor(),
                     style = typography.bodyMedium
                 )
             }
             uiState.director?.let {
                 Text(
                     text = it,
-                    color = colorScheme.onBackground.copy(alpha = 0.5f),
+                    color = subTextColor(),
                     style = typography.bodyMedium
                 )
             }
