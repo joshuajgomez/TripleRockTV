@@ -49,6 +49,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -86,7 +87,10 @@ private enum class LayoutId {
     Title
 }
 
-private fun getConstraints(isLandscape: Boolean) = ConstraintSet {
+private fun getConstraints(
+    isLandscape: Boolean,
+    appTopPadding: Dp
+) = ConstraintSet {
     val tvBox = createRefFor(LayoutId.TvBox)
     val streamList = createRefFor(LayoutId.StreamList)
     val closeButton = createRefFor(LayoutId.CloseButton)
@@ -161,7 +165,7 @@ fun LiveTvCatalogue(
     else selectedSteamData?.videoUrl(uiState.userInfo!!)
 
     ConstraintLayout(
-        constraintSet = getConstraints(isLandscape()),
+        constraintSet = getConstraints(isLandscape(), appTopPadding()),
         modifier = Modifier.fillMaxSize()
     ) {
         TvBox(
@@ -214,7 +218,7 @@ fun LiveTvCatalogue(
                 CustomHorizontalDivider(index, streamDataList.size)
             }
 
-            listSpacing(appBottomPadding)
+            listSpacing(appBottomPadding())
         }
     }
 }

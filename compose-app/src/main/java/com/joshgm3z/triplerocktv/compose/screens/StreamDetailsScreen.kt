@@ -31,6 +31,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.ConstraintSet
@@ -106,7 +107,10 @@ private enum class LayoutId {
     Buttons
 }
 
-private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
+private fun getConstraints(
+    isLandscape: Boolean = false,
+    appTopPadding: Dp
+) = ConstraintSet {
     val poster = createRefFor(LayoutId.Poster)
     val closeButton = createRefFor(LayoutId.CloseButton)
     val textColumn = createRefFor(LayoutId.TextColumn)
@@ -136,7 +140,7 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             height = Dimension.fillToConstraints
         }
         constrain(buttons) {
-            bottom.linkTo(parent.bottom, margin = appBottomPadding)
+            bottom.linkTo(parent.bottom, margin = appBottomPadding())
             start.linkTo(textColumn.start)
             end.linkTo(textColumn.end)
             width = Dimension.fillToConstraints
@@ -163,7 +167,7 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             width = Dimension.fillToConstraints
         }
         constrain(buttons) {
-            bottom.linkTo(parent.bottom, margin = appBottomPadding)
+            bottom.linkTo(parent.bottom, margin = appBottomPadding())
             start.linkTo(textColumn.start)
             end.linkTo(textColumn.end)
             width = Dimension.fillToConstraints
@@ -180,7 +184,7 @@ private fun StreamDetailsScreenContent(
     onMoreEpisodesClick: () -> Unit = {},
 ) {
     ConstraintLayout(
-        constraintSet = getConstraints(isLandscape()),
+        constraintSet = getConstraints(isLandscape(), appTopPadding = appTopPadding()),
         modifier = Modifier.fillMaxSize()
     ) {
         val posterModifier = if (!isLandscape()) Modifier

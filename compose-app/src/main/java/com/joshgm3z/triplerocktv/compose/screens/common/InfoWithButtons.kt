@@ -32,8 +32,8 @@ fun InfoWithButtons(
             .padding(
                 start = appHorizontalPadding,
                 end = appHorizontalPadding,
-                top = appTopPadding,
-                bottom = appBottomPadding,
+                top =  appTopPadding(),
+                bottom = appBottomPadding(),
             )
     ) {
         Text(

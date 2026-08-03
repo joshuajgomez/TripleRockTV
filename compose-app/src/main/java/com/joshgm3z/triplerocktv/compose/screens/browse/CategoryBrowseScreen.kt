@@ -30,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.PagingData
@@ -157,8 +156,6 @@ fun VerticalGrid(
         }
     }
 
-    val configuration = LocalConfiguration.current
-
     Column {
         Header(
             title = title,
@@ -242,7 +239,7 @@ fun Header(
             .fillMaxWidth()
             .background(color = backgroundColor)
             .padding(
-                top = appTopPadding, bottom = 15.dp,
+                top =  appTopPadding(), bottom = 15.dp,
                 start = appHorizontalPadding, end = appHorizontalPadding
             ),
         verticalAlignment = Alignment.CenterVertically
