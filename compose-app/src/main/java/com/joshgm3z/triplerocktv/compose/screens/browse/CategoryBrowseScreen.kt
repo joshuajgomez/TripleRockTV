@@ -46,6 +46,7 @@ import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.gridSpacing
+import com.joshgm3z.triplerocktv.compose.screens.common.isLandscape
 import com.joshgm3z.triplerocktv.core.util.sampleSeriesList
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
@@ -157,7 +158,6 @@ fun VerticalGrid(
     }
 
     val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     Column {
         Header(
@@ -167,7 +167,7 @@ fun VerticalGrid(
         )
         LazyVerticalGrid(
             state = scrollState,
-            columns = GridCells.Fixed(if (isLandscape) 6 else 3),
+            columns = GridCells.Fixed(if (isLandscape()) 6 else 3),
             verticalArrangement = Arrangement.spacedBy(5.dp),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             modifier = Modifier

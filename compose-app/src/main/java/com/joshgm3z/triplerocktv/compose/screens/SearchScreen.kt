@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.compose.screens
 
+import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -45,6 +46,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,11 +55,13 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.headerGradientBrush
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.gridSpacing
+import com.joshgm3z.triplerocktv.compose.screens.common.isLandscape
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
@@ -104,9 +108,10 @@ fun SearchScreenContent(
     onBackClick: () -> Unit = {}
 ) {
     var text by remember { mutableStateOf("") }
+
     Box {
         LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
+            columns = GridCells.Fixed(if (isLandscape()) 6 else 3),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
             modifier = Modifier
@@ -310,7 +315,7 @@ fun TopPart(
     }
 }
 
-@DarkPreview
+@DarkLandscapePreview
 @Composable
 private fun PreviewSearchScreen_Results() {
     DarkSurface {
@@ -353,7 +358,7 @@ private fun PreviewSearchScreen_Initial() {
                     "Search hint 4",
                     "Search hint 5",
                 ),
-                initialStreams = emptyList()
+                initialStreams = sampleVodList.subList(0, 6)
             )
         )
     }

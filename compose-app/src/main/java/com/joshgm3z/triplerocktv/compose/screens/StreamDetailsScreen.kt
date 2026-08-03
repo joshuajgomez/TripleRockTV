@@ -1,17 +1,11 @@
 package com.joshgm3z.triplerocktv.compose.screens
 
-import android.R.attr.top
-import android.R.id.closeButton
-import android.content.res.Configuration
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -34,9 +28,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.focus.FocusRequester.Companion.createRefs
 import androidx.compose.ui.layout.layoutId
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -56,6 +48,7 @@ import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.isLandscape
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -186,14 +179,12 @@ private fun StreamDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onMoreEpisodesClick: () -> Unit = {},
 ) {
-    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
-
     ConstraintLayout(
-        constraintSet = getConstraints(isLandscape),
+        constraintSet = getConstraints(isLandscape()),
         modifier = Modifier.fillMaxSize()
     ) {
-        val posterModifier = if (isLandscape) Modifier.clip(RoundedCornerShape(15.dp))
-        else Modifier
+        val posterModifier = if (!isLandscape()) Modifier
+        else Modifier.clip(RoundedCornerShape(15.dp))
         GlidePic(
             model = uiState.coverImage,
             defaultDrawable = R.drawable.backdrop_avatar,
