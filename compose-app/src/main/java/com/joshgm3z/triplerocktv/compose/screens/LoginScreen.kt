@@ -81,7 +81,7 @@ private fun LoginScreenContent(
             .padding(
                 start = appHorizontalPadding,
                 end = appHorizontalPadding,
-                bottom = appBottomPadding,
+                bottom = appBottomPadding(),
             ),
         verticalArrangement = Arrangement.Bottom
     ) {

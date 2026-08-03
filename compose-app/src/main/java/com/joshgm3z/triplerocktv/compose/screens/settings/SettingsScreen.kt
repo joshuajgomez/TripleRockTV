@@ -48,6 +48,7 @@ fun SettingsScreen(onSettingClick: (NavMainDestination) -> Unit = {}) {
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        val appTopPadding = appTopPadding()
         LazyColumn {
             listSpacing(appTopPadding)
             item {
@@ -79,7 +80,7 @@ fun SettingsScreen(onSettingClick: (NavMainDestination) -> Unit = {}) {
                     }
                 }
             }
-            listSpacing(appBottomPadding)
+            listSpacing(appBottomPadding())
         }
     }
 }

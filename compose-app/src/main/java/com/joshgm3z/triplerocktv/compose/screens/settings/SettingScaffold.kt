@@ -28,7 +28,7 @@ fun SettingScaffold(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(bottom = if (applyBottomPadding) appBottomPadding else 0.dp)
+            .padding(bottom = if (applyBottomPadding) appBottomPadding() else 0.dp)
     ) {
         Header(title, onBackClick)
         Spacer(Modifier.size(10.dp))
