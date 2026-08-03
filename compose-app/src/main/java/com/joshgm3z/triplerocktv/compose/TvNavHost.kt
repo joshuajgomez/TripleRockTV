@@ -23,6 +23,7 @@ import com.joshgm3z.triplerocktv.compose.screens.StreamDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.browse.CategoryBrowseScreen
 import com.joshgm3z.triplerocktv.compose.screens.browse.EpisodeSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.common.ErrorDialog
+import com.joshgm3z.triplerocktv.compose.screens.common.MediaSyncExitDialog
 import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
 import com.joshgm3z.triplerocktv.compose.screens.player.track.TrackSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.settings.LogoutScreen
@@ -62,6 +63,9 @@ open class NavMainDestination {
     object Search : NavMainDestination()
 
     @Serializable
+    object MediaSyncExitDialog : NavMainDestination()
+
+    @Serializable
     class Details(val streamId: Int, val streamType: StreamType) : NavMainDestination()
 
     @Serializable
@@ -97,7 +101,6 @@ fun TvNavHost() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-//        startDestination = NavMainDestination.EpisodeSelector(61, 17974)
         startDestination = NavMainDestination.Splash
     ) {
         composable<NavMainDestination.Login> {
@@ -147,11 +150,15 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.MediaSync> {
-            MediaSyncScreen(onSyncComplete = {
-                /*navController.navigate(NavMainDestination.Home)*/
-            }, onBackPress = {
-                navController.popBackStack()
-            })
+            MediaSyncScreen(
+                onSyncComplete = {
+                    /*navController.navigate(NavMainDestination.Home)*/
+                }, onBackPress = {
+                    navController.popBackStack()
+                },
+                showExitDialog = {
+                    navController.navigate(NavMainDestination.MediaSyncExitDialog)
+                })
         }
         composable<NavMainDestination.Home> {
             HomeScreen {
@@ -234,6 +241,19 @@ fun TvNavHost() {
                         )
                     )
                 })
+        }
+
+        dialog<NavMainDestination.MediaSyncExitDialog> {
+            MediaSyncExitDialog(
+                onExitScreenClick = {
+                    navController.navigate(NavMainDestination.Splash) {
+                        popUpTo<NavMainDestination.Splash> {
+                            inclusive = true
+                        }
+                    }
+                },
+                onBackClick = { navController.popBackStack() }
+            )
         }
     }
 }
