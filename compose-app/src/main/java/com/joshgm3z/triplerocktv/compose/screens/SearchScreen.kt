@@ -17,13 +17,17 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowOutward
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
@@ -48,6 +52,7 @@ import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.browse.headerGradientBrush
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.StreamItem
+import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
@@ -250,28 +255,24 @@ fun TopPart(
     onSearchInputChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
 ) {
-    Column(
+    Row(
         modifier = Modifier
             .background(brush = headerGradientBrush())
+            .padding(
+                start = 10.dp, end = 10.dp,
+                top = appTopPadding, bottom = 10.dp
+            ),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
             modifier = Modifier
-                .padding(
-                    start = 10.dp, end = 10.dp,
-                    top = appTopPadding, bottom = 10.dp
-                )
-                .height(60.dp)
                 .clip(RoundedCornerShape(30.dp))
                 .background(color = cardColor())
-                .padding(start = 15.dp),
+                .fillMaxWidth()
+                .weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Search,
-                contentDescription = null,
-                modifier = Modifier.size(25.dp),
-                tint = colorScheme.primary
-            )
+            CloseButton { onBackClick() }
             TextField(
                 value = text,
                 onValueChange = {
@@ -295,18 +296,14 @@ fun TopPart(
                     .fillMaxWidth()
                     .weight(1f)
             )
-            Row(
-                modifier = Modifier
-                    .clickable(true) {
-                        onBackClick()
-                    }
-                    .fillMaxHeight()
-                    .padding(start = 10.dp, end = 16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            IconButton(
+                onClick = { onSearchInputChange("") },
+                modifier = Modifier.clip(CircleShape)
             ) {
-                Text(
-                    text = "Cancel",
-                    style = typography.titleMedium,
+                Icon(
+                    imageVector = Icons.Default.Clear,
+                    contentDescription = null,
+                    tint = subTextColor()
                 )
             }
         }
