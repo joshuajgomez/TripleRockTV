@@ -31,7 +31,6 @@ fun CloseButton(
                 if (showBackground) colorScheme.background
                 else Color.Transparent
             )
-            .size(size)
     ) {
         Icon(
             imageVector = Icons.AutoMirrored.Default.ArrowBack,
