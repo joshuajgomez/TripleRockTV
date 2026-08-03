@@ -7,4 +7,4 @@ val appHorizontalPadding = 20.dp
 fun appBottomPadding() = 40.dp
 
 @Composable
-fun appTopPadding() = if (isLandscape()) 30.dp else 70.dp
+fun appTopPadding() = if (isLandscape()) 40.dp else 70.dp

@@ -8,6 +8,7 @@ import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -156,12 +157,8 @@ fun VerticalGrid(
         }
     }
 
-    Column {
-        Header(
-            title = title,
-            onBackClick = onBackClick,
-            showTitle = isScrolled
-        )
+    Box {
+        val appTopPadding = appTopPadding()
         LazyVerticalGrid(
             state = scrollState,
             columns = GridCells.Fixed(if (isLandscape()) 6 else 3),
@@ -171,6 +168,7 @@ fun VerticalGrid(
                 .fillMaxSize()
                 .padding(horizontal = appHorizontalPadding)
         ) {
+            gridSpacing(appTopPadding + 40.dp)
             item(span = { GridItemSpan(maxLineSpan) }) {
                 Column(modifier = Modifier.padding(vertical = 10.dp)) {
                     Text(
@@ -188,6 +186,11 @@ fun VerticalGrid(
             getStreamItems()
             gridSpacing()
         }
+        Header(
+            title = title,
+            onBackClick = onBackClick,
+            showTitle = isScrolled
+        )
     }
 }
 
@@ -232,15 +235,14 @@ fun Header(
     onBackClick: () -> Unit = {},
     showTitle: Boolean = true
 ) {
-    val backgroundColor = if (showTitle) cardColor()
-    else Color.Transparent
+    val modifier = if (!showTitle) Modifier
+    else Modifier.background(brush = headerGradientBrush())
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
-            .background(color = backgroundColor)
             .padding(
-                top =  appTopPadding(), bottom = 15.dp,
-                start = appHorizontalPadding, end = appHorizontalPadding
+                top = appTopPadding(),
+                start = 10.dp, end = 10.dp
             ),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -263,9 +265,9 @@ fun Header(
 @Composable
 fun headerGradientBrush() = Brush.verticalGradient(
     colors = listOf(
-        colorScheme.background,
-        colorScheme.background.copy(alpha = 0.9f),
-        colorScheme.background.copy(alpha = 0.5f),
+        Color.Black,
+        Color.Black.copy(alpha = 0.9f),
+        Color.Black.copy(alpha = 0.8f),
     ),
     startY = 0.1f
 )
