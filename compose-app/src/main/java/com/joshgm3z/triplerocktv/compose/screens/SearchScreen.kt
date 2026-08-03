@@ -14,6 +14,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -31,6 +32,7 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -100,10 +102,19 @@ fun SearchScreenContent(
     ) -> Unit = { _, _, _ -> },
     onBackClick: () -> Unit = {}
 ) {
+    val scrollState = rememberLazyGridState()
+    val isScrolled by remember {
+        derivedStateOf {
+            scrollState.firstVisibleItemIndex > 0
+                    || scrollState.firstVisibleItemScrollOffset > 0
+        }
+    }
     var text by remember { mutableStateOf("") }
 
     Box {
+        val appTopPadding = appTopPadding()
         LazyVerticalGrid(
+            state = scrollState,
             columns = GridCells.Fixed(if (isLandscape()) 6 else 3),
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(5.dp),
@@ -111,7 +122,7 @@ fun SearchScreenContent(
                 .fillMaxSize()
                 .padding(horizontal = appHorizontalPadding)
         ) {
-            gridSpacing(140.dp)
+            gridSpacing(appTopPadding + 70.dp)
 
             when (uiState) {
                 is SearchUiState.Initial -> {
@@ -200,6 +211,7 @@ fun SearchScreenContent(
         }
         TopPart(
             text = text,
+            showBackground = isScrolled,
             onSearchInputChange = {
                 text = it
                 onSearchInputChange(it)
@@ -250,16 +262,17 @@ fun SearchHintUi(
 @Composable
 fun TopPart(
     text: String,
+    showBackground: Boolean = true,
     onSearchInputChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
 ) {
+    val modifier = if (!showBackground) Modifier
+    else Modifier.background(brush = headerGradientBrush())
     Row(
-        modifier = Modifier
-            .background(brush = headerGradientBrush())
-            .padding(
-                start = 10.dp, end = 10.dp,
-                top =  appTopPadding(), bottom = 10.dp
-            ),
+        modifier = modifier.padding(
+            start = 10.dp, end = 10.dp,
+            top = appTopPadding(), bottom = 10.dp
+        ),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
