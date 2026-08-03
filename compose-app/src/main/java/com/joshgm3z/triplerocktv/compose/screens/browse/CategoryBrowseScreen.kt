@@ -43,10 +43,10 @@ import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.appHorizontalPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
 import com.joshgm3z.triplerocktv.compose.screens.common.gridSpacing
 import com.joshgm3z.triplerocktv.core.util.sampleSeriesList
-import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor

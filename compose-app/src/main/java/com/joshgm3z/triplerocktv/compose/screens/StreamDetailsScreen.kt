@@ -40,7 +40,6 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
-import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
@@ -49,9 +48,8 @@ import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
 import com.joshgm3z.triplerocktv.compose.screens.common.MetadataBar
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
-import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.ifNotNullOrEmpty
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
@@ -170,8 +168,7 @@ private fun StreamDetailsScreenContent(
     onBackClick: () -> Unit = {},
     onMoreEpisodesClick: () -> Unit = {},
 ) {
-    val configuration = LocalConfiguration.current
-    val isLandscape = configuration.orientation == Configuration.ORIENTATION_LANDSCAPE
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
 
     ConstraintLayout(
         constraintSet = getConstraints(isLandscape),

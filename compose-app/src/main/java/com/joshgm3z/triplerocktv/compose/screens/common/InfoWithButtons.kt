@@ -11,9 +11,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.joshgm3z.triplerocktv.compose.screens.settings.appBottomPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appHorizontalPadding
-import com.joshgm3z.triplerocktv.compose.screens.settings.appTopPadding
 
 data class ButtonItem(
     val primary: Boolean = false,

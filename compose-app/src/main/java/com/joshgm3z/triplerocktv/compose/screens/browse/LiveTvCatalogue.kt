@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.compose.screens.browse
 
+import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -22,11 +23,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -41,33 +40,99 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.layoutId
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.ConstraintSet
+import androidx.constraintlayout.compose.Dimension
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.PlayerView
 import com.joshgm3z.triplerocktv.compose.R
+import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
+import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
-import com.joshgm3z.triplerocktv.compose.screens.settings.SettingScaffold
-import com.joshgm3z.triplerocktv.compose.theme.cardColor
+import com.joshgm3z.triplerocktv.compose.screens.common.appBottomPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.appTopPadding
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
+import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.sampleLiveTvList
 import com.joshgm3z.triplerocktv.core.util.sampleVodList
+import com.joshgm3z.triplerocktv.core.util.withComma
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
+
+private enum class LayoutId {
+    TvBox,
+    StreamList,
+    CloseButton,
+    Title
+}
+
+private fun getConstraints(isLandscape: Boolean) = ConstraintSet {
+    val tvBox = createRefFor(LayoutId.TvBox)
+    val streamList = createRefFor(LayoutId.StreamList)
+    val closeButton = createRefFor(LayoutId.CloseButton)
+    val title = createRefFor(LayoutId.Title)
+
+    constrain(closeButton) {
+        top.linkTo(tvBox.top, margin = 15.dp)
+        start.linkTo(tvBox.start, margin = 15.dp)
+    }
+    constrain(title) {
+        top.linkTo(tvBox.bottom, margin = 10.dp)
+        start.linkTo(tvBox.start, margin = 15.dp)
+    }
+
+    if (isLandscape) {
+        constrain(tvBox) {
+            top.linkTo(parent.top, margin = 50.dp)
+            start.linkTo(parent.start, margin = 15.dp)
+            width = Dimension.value(450.dp)
+            height = Dimension.value(250.dp)
+        }
+        constrain(streamList) {
+            top.linkTo(tvBox.top)
+            start.linkTo(tvBox.end, margin = 10.dp)
+            end.linkTo(parent.end, margin = 10.dp)
+            bottom.linkTo(parent.bottom)
+            width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
+        }
+    } else {
+        constrain(tvBox) {
+            top.linkTo(parent.top, margin = appTopPadding)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            width = Dimension.fillToConstraints
+            height = Dimension.value(230.dp)
+        }
+        constrain(streamList) {
+            top.linkTo(title.bottom)
+            start.linkTo(parent.start, margin = 10.dp)
+            end.linkTo(parent.end, margin = 10.dp)
+            bottom.linkTo(parent.bottom)
+            width = Dimension.fillToConstraints
+            height = Dimension.fillToConstraints
+        }
+    }
+}
 
 @Composable
 fun LiveTvCatalogue(
@@ -93,19 +158,42 @@ fun LiveTvCatalogue(
         }
     }
 
-    SettingScaffold(
-        title = uiState.categoryName,
-        onBackClick = onBackClick
+    val url = if (LocalInspectionMode.current) ""
+    else selectedSteamData?.videoUrl(uiState.userInfo!!)
+    val isLandscape = LocalConfiguration.current.orientation == Configuration.ORIENTATION_LANDSCAPE
+
+    ConstraintLayout(
+        constraintSet = getConstraints(isLandscape),
+        modifier = Modifier.fillMaxSize()
     ) {
-        val url = if (LocalInspectionMode.current) ""
-        else selectedSteamData?.videoUrl(uiState.userInfo!!)
-        TvBox(url)
-        Spacer(Modifier.size(20.dp))
+        TvBox(
+            modifier = Modifier.layoutId(LayoutId.TvBox),
+            videoUrl = url
+        )
+        CloseButton(
+            onClick = onBackClick, showBackground = true,
+            modifier = Modifier.layoutId(LayoutId.CloseButton)
+        )
+
+        Column(
+            modifier = Modifier
+                .padding(bottom = 15.dp)
+                .layoutId(LayoutId.Title)
+        ) {
+            Text(
+                text = uiState.categoryName,
+                style = typography.titleLarge,
+                color = textColor(),
+            )
+            Text(
+                text = "${uiState.count.withComma()} channels",
+                style = typography.bodyMedium,
+                color = subTextColor(),
+            )
+        }
         LazyColumn(
             state = listState,
-            modifier = Modifier
-                .clip(RoundedCornerShape(10.dp))
-                .background(color = cardColor())
+            modifier = Modifier.layoutId(LayoutId.StreamList)
         ) {
             itemsIndexed(streamDataList) { index, item ->
                 ChannelItem(
@@ -125,12 +213,17 @@ fun LiveTvCatalogue(
                 )
                 CustomHorizontalDivider(index, streamDataList.size)
             }
+
+            listSpacing(appBottomPadding)
         }
     }
 }
 
 @Composable
-fun TvBox(videoUrl: String?) {
+fun TvBox(
+    modifier: Modifier = Modifier,
+    videoUrl: String?
+) {
     Logger.debug("videoUrl = [${videoUrl}]")
     val context = LocalContext.current
     val isPreview = LocalInspectionMode.current
@@ -169,9 +262,7 @@ fun TvBox(videoUrl: String?) {
                 keepScreenOn = true
             }
         },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp)
+        modifier = modifier
     )
 }
 
@@ -209,10 +300,6 @@ fun ChannelItem(
                         }
                     )
                 }
-                .background(
-                    color = if (selected) colorScheme.onPrimaryFixed
-                    else Color.Transparent
-                )
                 .padding(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -220,7 +307,10 @@ fun ChannelItem(
                 Text(
                     text = it.toString(),
                     style = typography.labelLarge,
-                    color = textColor(),
+                    color = if (selected) colorScheme.primary
+                    else textColor().copy(alpha = 0.6f),
+                    fontWeight = if (selected) FontWeight.Bold
+                    else FontWeight.Normal,
                     textAlign = TextAlign.Center,
                     modifier = Modifier.width(20.dp)
                 )
@@ -238,7 +328,10 @@ fun ChannelItem(
                 text = streamData.name,
                 maxLines = 1,
                 style = typography.bodyMedium,
-                color = textColor(),
+                color = if (selected) colorScheme.primary
+                else textColor().copy(alpha = 0.6f),
+                fontWeight = if (selected) FontWeight.Bold
+                else FontWeight.Normal,
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
@@ -303,7 +396,7 @@ private fun darkOverlayBrush() = Brush.horizontalGradient(
     ),
 )
 
-@DarkPreview
+//@DarkPreview
 @Composable
 private fun PreviewChannelItem() {
     DarkSurface {
@@ -314,9 +407,22 @@ private fun PreviewChannelItem() {
     }
 }
 
-//@DarkPreview
+@DarkPreview
 @Composable
 private fun PreviewLiveTvCatalogue() {
+    DarkSurface {
+        LiveTvCatalogue(
+            uiState = CatalogueUiState.LiveTv(
+                categoryName = "Live Tv",
+                streamDataList = MutableStateFlow(sampleLiveTvList)
+            )
+        )
+    }
+}
+
+@DarkLandscapePreview
+@Composable
+private fun PreviewLiveTvCatalogue_Landscape() {
     DarkSurface {
         LiveTvCatalogue(
             uiState = CatalogueUiState.LiveTv(
