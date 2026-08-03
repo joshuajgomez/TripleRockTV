@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.compose.screens.settings
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,14 +46,22 @@ fun MediaSyncScreen(
     viewModel: UpdaterViewModel = hiltViewModel(),
     onSyncComplete: () -> Unit = {},
     onBackPress: () -> Unit = {},
+    showExitDialog: () -> Unit = {},
 ) {
     viewModel.uiState.collectAsState().value.let { uiState ->
+        fun onBackPressWrapper() {
+            if (!uiState.enableButtons) showExitDialog()
+            else onBackPress()
+        }
+        BackHandler(enabled = !uiState.enableButtons) {
+            showExitDialog()
+        }
         MediaSyncScreenContent(
             uiState = uiState,
             onDownloadClick = {
                 viewModel.startUpdate(it)
             },
-            onBackPress = onBackPress
+            onBackPress = { onBackPressWrapper() }
         )
     }
 }
