@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -105,7 +106,6 @@ private fun getConstraints(isLandscape: Boolean) = ConstraintSet {
             top.linkTo(parent.top, margin = 50.dp)
             start.linkTo(parent.start, margin = 15.dp)
             width = Dimension.value(450.dp)
-            height = Dimension.value(250.dp)
         }
         constrain(streamList) {
             top.linkTo(tvBox.top)
@@ -121,7 +121,6 @@ private fun getConstraints(isLandscape: Boolean) = ConstraintSet {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             width = Dimension.fillToConstraints
-            height = Dimension.value(230.dp)
         }
         constrain(streamList) {
             top.linkTo(title.bottom)
@@ -167,7 +166,9 @@ fun LiveTvCatalogue(
         modifier = Modifier.fillMaxSize()
     ) {
         TvBox(
-            modifier = Modifier.layoutId(LayoutId.TvBox),
+            modifier = Modifier
+                .layoutId(LayoutId.TvBox)
+                .aspectRatio(1.78f),
             videoUrl = url
         )
         CloseButton(
