@@ -191,7 +191,6 @@ private fun StreamDetailsScreenContent(
         else Modifier.clip(RoundedCornerShape(15.dp))
         GlidePic(
             model = uiState.coverImage,
-            defaultDrawable = R.drawable.backdrop_avatar,
             modifier = posterModifier
                 .layoutId(LayoutId.Poster)
                 .aspectRatio(1.78f)
