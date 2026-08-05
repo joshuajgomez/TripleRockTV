@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -44,6 +45,7 @@ import androidx.constraintlayout.compose.ConstraintSet
 import androidx.constraintlayout.compose.Dimension
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
+import com.joshgm3z.triplerocktv.compose.R
 import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
@@ -123,7 +125,6 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             top.linkTo(parent.top, margin = 50.dp)
             start.linkTo(parent.start, margin = 15.dp)
             width = Dimension.value(450.dp)
-            height = Dimension.value(250.dp)
         }
         constrain(closeButton) {
             top.linkTo(poster.top, margin = 15.dp)
@@ -153,7 +154,6 @@ private fun getConstraints(isLandscape: Boolean = false) = ConstraintSet {
             start.linkTo(parent.start)
             end.linkTo(parent.end)
             width = Dimension.fillToConstraints
-            height = Dimension.value(220.dp)
         }
         constrain(closeButton) {
             top.linkTo(poster.top, margin = 15.dp)
@@ -196,7 +196,10 @@ private fun StreamDetailsScreenContent(
         else Modifier
         GlidePic(
             model = uiState.coverImage,
-            modifier = posterModifier.layoutId(LayoutId.Poster)
+            defaultDrawable = R.drawable.backdrop_avatar,
+            modifier = posterModifier
+                .layoutId(LayoutId.Poster)
+                .aspectRatio(1.78f)
         )
         CloseButton(
             onClick = onBackClick,
