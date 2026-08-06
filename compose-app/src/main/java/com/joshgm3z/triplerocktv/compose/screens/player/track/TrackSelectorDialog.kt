@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.compose.screens.player.track
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,8 +12,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -23,6 +26,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -33,12 +37,15 @@ import com.joshgm3z.triplerocktv.compose.screens.common.CloseButton
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
+import com.joshgm3z.triplerocktv.compose.theme.Blue40
+import com.joshgm3z.triplerocktv.compose.theme.Pink40
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.core.viewmodel.ListState
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
 
 @Composable
 fun TrackSelectorDialog(
@@ -79,9 +86,7 @@ fun TrackSelectorDialogContent(
         contentAlignment = Alignment.BottomCenter
     ) {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(vertical = 15.dp, horizontal = 15.dp),
+            modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             TopRow(
@@ -95,7 +100,6 @@ fun TrackSelectorDialogContent(
                 onFindMoreClicked = onFindMoreClicked,
                 showFindMoreButton = uiState.listState is ListState.SubtitleTracks
             )
-            Spacer(Modifier.size(10.dp))
             when (uiState.listState) {
                 is ListState.OnlineSubtitleTracks -> SubtitleDownloaderContent(
                     listState = uiState.listState as ListState.OnlineSubtitleTracks,
@@ -138,7 +142,6 @@ fun TopRow(
         verticalAlignment = Alignment.CenterVertically
     ) {
         CloseButton { onBackPress() }
-        Spacer(Modifier.size(15.dp))
         Text(
             text = title,
             style = typography.titleMedium,
@@ -150,19 +153,75 @@ fun TopRow(
                 .fillMaxWidth()
                 .weight(1f)
         )
-        if (showFindMoreButton) SecondaryButton(
-            text = "OpenSubtitles.com",
-            fillMaxWidth = false,
-            imageVector = Icons.Default.Search
-        ) {
+        if (showFindMoreButton) SearchButton {
             onFindMoreClicked()
         }
     }
 }
 
+@Composable
+fun SearchButton(onClick: () -> Unit) {
+    val color = Blue40
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .padding(end = 10.dp)
+            .clip(RoundedCornerShape(10.dp))
+            .clickable(true) { onClick() }
+            .padding(horizontal = 10.dp, vertical = 5.dp),
+    ) {
+        Icon(
+            imageVector = Icons.Default.Search,
+            contentDescription = null,
+            modifier = Modifier.size(17.dp),
+            tint = color
+        )
+        Spacer(Modifier.size(1.dp))
+        Text(
+            text = "OpenSubtitles.com",
+            style = typography.labelLarge,
+            color = color
+        )
+    }
+}
+
 @DarkLandscapePreview
 @Composable
-fun PreviewSubtitleDownloaderDialog() {
+private fun PreviewTrackSelectorDialogContent() {
+    DarkSurface {
+        TrackSelectorDialogContent(
+            uiState = TrackSelectorUiState(
+                isLoading = false,
+                listState = ListState.SubtitleTracks(
+                    listOf(
+                        TrackInfo(
+                            trackType = TrackType.Subtitle,
+                            label = "Wonder.Women.1994.2004 HDRip",
+                            language = "en",
+                            id = "online"
+                        ),
+                        TrackInfo(
+                            trackType = TrackType.Subtitle,
+                            label = "Wonder.Women.1994.2004 HDRip",
+                            language = "en",
+                            id = "online"
+                        ),
+                        TrackInfo(
+                            trackType = TrackType.Subtitle,
+                            label = "Wonder.Women.1994.2004 HDRip",
+                            language = "en",
+                            id = "online"
+                        ),
+                    )
+                )
+            )
+        )
+    }
+}
+
+@DarkLandscapePreview
+@Composable
+private fun PreviewSubtitleDownloaderDialog() {
     DarkSurface {
         TrackSelectorDialogContent(
             uiState = TrackSelectorUiState(
@@ -187,7 +246,11 @@ fun PreviewSubtitleDownloaderDialog() {
                             fileId = 1234,
                             downloadCount = 300,
                         ),
-                    )
+                    ),
+                    languages = listOf(
+                        "en", "es", "fr"
+                    ),
+                    selectedLanguage = "en",
                 ),
             )
         )

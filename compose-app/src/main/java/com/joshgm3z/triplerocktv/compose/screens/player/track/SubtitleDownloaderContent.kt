@@ -32,6 +32,7 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkLandscapePreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
+import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.compose.theme.cardColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
@@ -46,6 +47,7 @@ fun SubtitleDownloaderContent(
 ) {
     Column {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            listSpacing(10.dp)
             items(mutableListOf("All").apply { addAll(listState.languages) }) {
                 val chipShape = RoundedCornerShape(5.dp)
                 val selected = listState.selectedLanguage == it
@@ -68,10 +70,12 @@ fun SubtitleDownloaderContent(
                         .padding(horizontal = 5.dp, vertical = 3.dp)
                 )
             }
+            listSpacing(10.dp)
         }
         Spacer(Modifier.size(10.dp))
         LazyColumn(
             modifier = Modifier
+                .padding(horizontal = 10.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = cardColor())
         ) {

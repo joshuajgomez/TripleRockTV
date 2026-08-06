@@ -13,6 +13,7 @@ val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
 val Orange40 = Color(0xFFFB8C00)
+val Blue40 = Color(0xFF1E88E5)
 
 @Composable
 fun textColor() = colorScheme.onBackground.copy(alpha = 0.8f)
