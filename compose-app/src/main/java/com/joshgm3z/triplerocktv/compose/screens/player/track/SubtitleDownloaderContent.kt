@@ -1,18 +1,23 @@
 package com.joshgm3z.triplerocktv.compose.screens.player.track
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDownward
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.MaterialTheme.typography
@@ -20,8 +25,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.joshgm3z.triplerocktv.compose.screens.common.CustomHorizontalDivider
@@ -36,18 +41,46 @@ import com.joshgm3z.triplerocktv.core.viewmodel.ListState
 @Composable
 fun SubtitleDownloaderContent(
     listState: ListState.OnlineSubtitleTracks,
-    onClick: (SubtitleData) -> Unit = {}
+    onClick: (SubtitleData) -> Unit = {},
+    onLanguageClick: (String?) -> Unit = {},
 ) {
-    LazyColumn(
-        modifier = Modifier
-            .clip(RoundedCornerShape(10.dp))
-            .background(color = cardColor())
-    ) {
-        itemsIndexed(listState.list) { index, item ->
-            SubtitleResultItem(item) {
-                onClick(item)
+    Column {
+        LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+            items(mutableListOf("All").apply { addAll(listState.languages) }) {
+                val chipShape = RoundedCornerShape(5.dp)
+                val selected = listState.selectedLanguage == it
+                        || (listState.selectedLanguage == null && it == "All")
+                Text(
+                    text = it.languageName(),
+                    color = colorScheme.onBackground,
+                    style = typography.labelMedium,
+                    modifier = Modifier
+                        .clip(chipShape)
+                        .clickable(!selected) {
+                            onLanguageClick(if (it == "All") null else it)
+                        }
+                        .background(color = if (selected) colorScheme.onPrimaryFixed else cardColor())
+                        .border(
+                            width = if (selected) 1.dp else 0.dp,
+                            color = if (selected) colorScheme.outline else Color.Transparent,
+                            shape = chipShape
+                        )
+                        .padding(horizontal = 5.dp, vertical = 3.dp)
+                )
             }
-            CustomHorizontalDivider(index, listState.list.size)
+        }
+        Spacer(Modifier.size(10.dp))
+        LazyColumn(
+            modifier = Modifier
+                .clip(RoundedCornerShape(10.dp))
+                .background(color = cardColor())
+        ) {
+            itemsIndexed(listState.list) { index, item ->
+                SubtitleResultItem(item) {
+                    onClick(item)
+                }
+                CustomHorizontalDivider(index, listState.list.size)
+            }
         }
     }
 }
@@ -153,8 +186,12 @@ private fun PreviewSubtitleDownloaderContent() {
                         fileId = 1234,
                         downloadCount = 300,
                     ),
-                )
-            )
+                ),
+                languages = listOf(
+                    "English", " Spanish ", " French "
+                ),
+                selectedLanguage = null,
+            ),
         )
     }
 }
