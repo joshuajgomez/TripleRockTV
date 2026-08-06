@@ -71,8 +71,14 @@ private fun TracksContent(
             list.firstOrNull { it.isSelected }
         )
     }
-    LazyColumn(
+    if (list.isEmpty()) Text(
+        text = "Loading tracks",
+        style = typography.bodyLarge,
+        color = subTextColor(),
+        modifier = Modifier.padding(top = 30.dp)
+    ) else LazyColumn(
         modifier = Modifier
+            .padding(horizontal = 10.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = cardColor())
     ) {
