@@ -26,6 +26,8 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 data class TrackInfo(
     var id: String = "",
@@ -61,7 +63,11 @@ data class TrackButtonState(
 sealed class ListState {
     class SubtitleTracks(val list: List<TrackInfo>) : ListState()
     class AudioTracks(val list: List<TrackInfo>) : ListState()
-    class OnlineSubtitleTracks(val list: List<SubtitleData>) : ListState()
+    data class OnlineSubtitleTracks(
+        val list: List<SubtitleData>,
+        val languages: List<String> = emptyList(),
+        val selectedLanguage: String? = null,
+    ) : ListState()
 }
 
 data class TrackSelectorUiState(
@@ -100,6 +106,8 @@ constructor(
 
     private val _trackButtonState = MutableStateFlow(TrackButtonState())
     val trackButtonState = _trackButtonState.asStateFlow()
+
+    private var onlineSubtitleTracks = emptyList<SubtitleData>()
 
     init {
         if (isDemoBuild) {
@@ -145,7 +153,7 @@ constructor(
         viewModelScope.launch {
             val subtitles = subtitleRepository.findSubtitles(title!!)
             if (subtitles.isEmpty()) {
-                delay(1000)
+                delay(1.seconds)
                 _uiState.update {
                     it?.copy(
                         isLoading = false,
@@ -153,13 +161,20 @@ constructor(
                     )
                 }
             } else _uiState.update {
+                onlineSubtitleTracks = subtitles
                 it?.copy(
                     isLoading = false,
-                    listState = ListState.OnlineSubtitleTracks(subtitles)
+                    listState = ListState.OnlineSubtitleTracks(
+                        list = subtitles,
+                        languages = subtitles.getLanguages()
+                    )
                 )
             }
         }
     }
+
+    private fun List<SubtitleData>.getLanguages(): List<String> =
+        mapNotNull { it.language }.distinct().sortedBy { it != "en" }
 
     fun onTrackClicked(trackInfo: TrackInfo) {
         Logger.debug("trackInfo = [${trackInfo}]")
@@ -169,7 +184,7 @@ constructor(
 
     private fun closeTrackSelectionPopup() {
         viewModelScope.launch {
-            delay(1000)
+            delay(1.seconds)
             _trackToLoad.value = null
             _uiState.value = null
         }
@@ -182,6 +197,19 @@ constructor(
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             _trackToLoad.value = LoadTrack.OnlineSubtitle(subtitleData.copy(url = url))
+        }
+    }
+
+    fun onLanguageClick(language: String?) {
+        _uiState.update {
+            it?.copy(
+                listState = (it.listState as ListState.OnlineSubtitleTracks).copy(
+                    list = onlineSubtitleTracks.filter { subtitleData ->
+                        language == null || subtitleData.language == language
+                    },
+                    selectedLanguage = language
+                )
+            )
         }
     }
 

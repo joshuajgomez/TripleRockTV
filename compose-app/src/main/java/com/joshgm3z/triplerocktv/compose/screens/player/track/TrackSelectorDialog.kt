@@ -56,7 +56,8 @@ fun TrackSelectorDialog(
             onBackPress = goBack,
             onDownloadSubtitleClicked = { viewModel.onDownloadedSubtitleClick(it) },
             onFindMoreClicked = { viewModel.onFindMoreClicked() },
-            onTrackClicked = { viewModel.onTrackClicked(it) }
+            onTrackClicked = { viewModel.onTrackClicked(it) },
+            onLanguageClick = { viewModel.onLanguageClick(it) }
         )
     }
 }
@@ -68,6 +69,7 @@ fun TrackSelectorDialogContent(
     onFindMoreClicked: () -> Unit = {},
     onTrackClicked: (TrackInfo) -> Unit = {},
     onBackPress: () -> Unit = {},
+    onLanguageClick: (String?) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -98,6 +100,7 @@ fun TrackSelectorDialogContent(
                 is ListState.OnlineSubtitleTracks -> SubtitleDownloaderContent(
                     listState = uiState.listState as ListState.OnlineSubtitleTracks,
                     onClick = onDownloadSubtitleClicked,
+                    onLanguageClick = onLanguageClick
                 )
 
                 is ListState.SubtitleTracks -> SubtitleTracks(
@@ -185,7 +188,7 @@ fun PreviewSubtitleDownloaderDialog() {
                             downloadCount = 300,
                         ),
                     )
-                )
+                ),
             )
         )
     }
