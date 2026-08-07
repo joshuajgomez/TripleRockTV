@@ -58,7 +58,7 @@ class TrackSelectorFragment : DialogFragment(),
             clickListener = this@TrackSelectorFragment
         }
         textAdapter = TextAdapter {
-            viewModel.onLanguageClick(if (it == "All") null else it)
+            viewModel.onLanguageClick(it)
         }.apply {
             binding.rvLanguageChips.adapter = this
         }
@@ -75,7 +75,6 @@ class TrackSelectorFragment : DialogFragment(),
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                Logger.debug("uiState = $it")
                 it ?: run {
                     findNavController().popBackStack()
                     return@collectLatest
@@ -112,11 +111,8 @@ class TrackSelectorFragment : DialogFragment(),
     }
 
     private fun showOnlineSubtitles(listState: ListState.OnlineSubtitleTracks) {
-        Logger.debug("listState = [$listState]")
         downloadedSubtitleAdapter.subtitleList = listState.list
-        textAdapter.texts = mutableListOf("All").apply {
-            addAll(listState.languages)
-        }
+        textAdapter.texts = listState.languages
         textAdapter.selectedText = listState.selectedLanguage
         binding.rvOnlineSubtitleList.setVisible(true)
         binding.rvLanguageChips.setVisible(true)

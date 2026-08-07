@@ -166,7 +166,8 @@ constructor(
                     isLoading = false,
                     listState = ListState.OnlineSubtitleTracks(
                         list = subtitles,
-                        languages = subtitles.getLanguages()
+                        languages = subtitles.getLanguages(),
+                        selectedLanguage = "All"
                     )
                 )
             }
@@ -174,7 +175,27 @@ constructor(
     }
 
     private fun List<SubtitleData>.getLanguages(): List<String> =
-        mapNotNull { it.language }.distinct().sortedBy { it != "en" }
+        mutableListOf("All").apply {
+            addAll(
+                this@getLanguages
+                    .mapNotNull { it.language }
+                    .distinct()
+                    .sortedBy { it != "en" }
+            )
+        }
+
+    fun onLanguageClick(language: String) {
+        _uiState.update { uiState ->
+            val listState = uiState?.listState as ListState.OnlineSubtitleTracks
+            uiState.copy(
+                listState = listState.copy(
+                    list = if (language == "All") onlineSubtitleTracks
+                    else onlineSubtitleTracks.filter { it.language == language },
+                    selectedLanguage = language
+                )
+            )
+        }
+    }
 
     fun onTrackClicked(trackInfo: TrackInfo) {
         Logger.debug("trackInfo = [${trackInfo}]")
@@ -197,20 +218,6 @@ constructor(
         viewModelScope.launch {
             val url = subtitleRepository.getSubtitleUrl(subtitleData.fileId)
             _trackToLoad.value = LoadTrack.OnlineSubtitle(subtitleData.copy(url = url))
-        }
-    }
-
-    fun onLanguageClick(language: String?) {
-        Logger.debug("language = [${language}]")
-        _uiState.update {
-            it?.copy(
-                listState = (it.listState as ListState.OnlineSubtitleTracks).copy(
-                    list = onlineSubtitleTracks.filter { subtitleData ->
-                        language == null || subtitleData.language == language
-                    },
-                    selectedLanguage = language
-                )
-            )
         }
     }
 

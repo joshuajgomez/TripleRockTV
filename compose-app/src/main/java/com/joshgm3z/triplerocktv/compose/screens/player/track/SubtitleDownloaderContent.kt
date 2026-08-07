@@ -43,15 +43,14 @@ import com.joshgm3z.triplerocktv.core.viewmodel.ListState
 fun SubtitleDownloaderContent(
     listState: ListState.OnlineSubtitleTracks,
     onClick: (SubtitleData) -> Unit = {},
-    onLanguageClick: (String?) -> Unit = {},
+    onLanguageClick: (String) -> Unit = {},
 ) {
     Column {
         LazyRow(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
             listSpacing(10.dp)
-            items(mutableListOf("All").apply { addAll(listState.languages) }) {
+            items(listState.languages) {
                 val chipShape = RoundedCornerShape(5.dp)
                 val selected = listState.selectedLanguage == it
-                        || (listState.selectedLanguage == null && it == "All")
                 Text(
                     text = it.languageName(),
                     color = colorScheme.onBackground,
@@ -59,7 +58,7 @@ fun SubtitleDownloaderContent(
                     modifier = Modifier
                         .clip(chipShape)
                         .clickable(!selected) {
-                            onLanguageClick(if (it == "All") null else it)
+                            onLanguageClick(it)
                         }
                         .background(color = if (selected) colorScheme.onPrimaryFixed else cardColor())
                         .border(
@@ -72,10 +71,10 @@ fun SubtitleDownloaderContent(
             }
             listSpacing(10.dp)
         }
-        Spacer(Modifier.size(10.dp))
+        Spacer(Modifier.size(5.dp))
         LazyColumn(
             modifier = Modifier
-                .padding(horizontal = 10.dp)
+                .padding(10.dp)
                 .clip(RoundedCornerShape(10.dp))
                 .background(color = cardColor())
         ) {
