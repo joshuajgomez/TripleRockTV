@@ -41,6 +41,8 @@ fun String?.languageName(): String {
         "sl" -> "Slovenian"
         "lt" -> "Lithuanian"
         "lv" -> "Latvian"
+        "ea" -> "Spanish (Spain)"
+        "nb" -> "Norwegian Bokmål"
         "et" -> "Estonian"
         "ms" -> "Malay"
         "id" -> "Indonesian"

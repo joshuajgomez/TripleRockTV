@@ -201,6 +201,7 @@ constructor(
     }
 
     fun onLanguageClick(language: String?) {
+        Logger.debug("language = [${language}]")
         _uiState.update {
             it?.copy(
                 listState = (it.listState as ListState.OnlineSubtitleTracks).copy(

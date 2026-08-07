@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:barrierDirection="bottom"
-        app:constraint_referenced_ids="tv_title,tv_status" />
+        app:constraint_referenced_ids="tv_title,tv_status,rv_language_chips" />
 
     <TextView
         android:id="@+id/tv_status"
@@ -43,6 +43,20 @@
         tools:visibility="visible" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_language_chips"
+        android:layout_width="match_parent"
+        android:layout_height="27dp"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:visibility="gone"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_title"
+        tools:itemCount="4"
+        tools:listitem="@layout/item_text_chip"
+        tools:visibility="visible" />
+
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_track_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -56,10 +70,13 @@
         android:id="@+id/rv_online_subtitle_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="15dp"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/barrier_title_bottom"
+        app:layout_constraintVertical_bias="0.0"
         tools:itemCount="2"
         tools:listitem="@layout/item_downloaded_subtitle" />
 
