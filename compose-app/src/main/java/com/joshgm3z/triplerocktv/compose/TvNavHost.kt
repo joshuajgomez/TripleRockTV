@@ -151,16 +151,15 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.MediaSync> {
-            /*MediaSyncScreen(
+            MediaSyncScreen(
                 onSyncComplete = {
-                    *//*navController.navigate(NavMainDestination.Home)*//*
+                    //navController.navigate(NavMainDestination.Home)
                 }, onBackPress = {
                     navController.popBackStack()
                 },
                 showExitDialog = {
                     navController.navigate(NavMainDestination.MediaSyncExitDialog)
-                })*/
-            PlayerScreen2()
+                })
         }
         composable<NavMainDestination.Home> {
             HomeScreen {
