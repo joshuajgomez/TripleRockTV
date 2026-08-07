@@ -78,7 +78,7 @@ private fun TracksContent(
         modifier = Modifier.padding(top = 30.dp)
     ) else LazyColumn(
         modifier = Modifier
-            .padding(horizontal = 10.dp)
+            .padding(10.dp)
             .clip(RoundedCornerShape(10.dp))
             .background(color = cardColor())
     ) {

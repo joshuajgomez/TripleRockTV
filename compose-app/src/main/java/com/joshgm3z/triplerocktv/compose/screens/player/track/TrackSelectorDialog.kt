@@ -76,7 +76,7 @@ fun TrackSelectorDialogContent(
     onFindMoreClicked: () -> Unit = {},
     onTrackClicked: (TrackInfo) -> Unit = {},
     onBackPress: () -> Unit = {},
-    onLanguageClick: (String?) -> Unit = {},
+    onLanguageClick: (String) -> Unit = {},
 ) {
     Box(
         modifier = Modifier
@@ -92,7 +92,7 @@ fun TrackSelectorDialogContent(
             TopRow(
                 title = when (uiState.listState) {
                     is ListState.SubtitleTracks -> "Subtitle tracks"
-                    is ListState.OnlineSubtitleTracks -> "Results from OpenSubtitles.com"
+                    is ListState.OnlineSubtitleTracks -> "Subtitles from OpenSubtitles.com"
                     is ListState.AudioTracks -> "Audio tracks"
                     else -> "Unknown"
                 },
@@ -228,6 +228,18 @@ private fun PreviewSubtitleDownloaderDialog() {
                 isLoading = false,
                 listState = ListState.OnlineSubtitleTracks(
                     listOf(
+                        SubtitleData(
+                            title = "Wonder.Women.2024.HDRip.Xeno200",
+                            language = "English",
+                            fileId = 1234,
+                            downloadCount = 300,
+                        ),
+                        SubtitleData(
+                            title = "Wonder.Women.2024.HDRip.Xeno200",
+                            language = "English",
+                            fileId = 1234,
+                            downloadCount = 300,
+                        ),
                         SubtitleData(
                             title = "Wonder.Women.2024.HDRip.Xeno200",
                             language = "English",
