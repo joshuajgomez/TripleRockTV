@@ -14,6 +14,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.databinding.LayoutTrackSelectorBinding
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.languageName
 import com.joshgm3z.triplerocktv.core.viewmodel.ListState
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
@@ -36,6 +37,8 @@ class TrackSelectorFragment : DialogFragment(),
 
     private lateinit var downloadedSubtitleAdapter: DownloadedSubtitleListAdapter
 
+    private lateinit var textAdapter: TextAdapter
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
@@ -53,6 +56,11 @@ class TrackSelectorFragment : DialogFragment(),
             binding.rvTrackList.adapter = this
             binding.rvTrackList.layoutManager = LinearLayoutManager(context)
             clickListener = this@TrackSelectorFragment
+        }
+        textAdapter = TextAdapter {
+            viewModel.onLanguageClick(if (it == "All") null else it)
+        }.apply {
+            binding.rvLanguageChips.adapter = this
         }
         downloadedSubtitleAdapter = DownloadedSubtitleListAdapter().apply {
             binding.rvOnlineSubtitleList.adapter = this
@@ -91,7 +99,7 @@ class TrackSelectorFragment : DialogFragment(),
 
                     is ListState.OnlineSubtitleTracks -> {
                         binding.tvTitle.text = getText(R.string.open_subtitles)
-                        showOnlineSubtitles((it.listState as ListState.OnlineSubtitleTracks).list)
+                        showOnlineSubtitles(it.listState as ListState.OnlineSubtitleTracks)
                     }
 
                     else -> return@collectLatest
@@ -103,17 +111,22 @@ class TrackSelectorFragment : DialogFragment(),
         }
     }
 
-    private fun showOnlineSubtitles(list: List<SubtitleData>) {
-        if (downloadedSubtitleAdapter.subtitleList.isNotEmpty()) return
-
-        downloadedSubtitleAdapter.subtitleList = list
+    private fun showOnlineSubtitles(listState: ListState.OnlineSubtitleTracks) {
+        Logger.debug("listState = [$listState]")
+        downloadedSubtitleAdapter.subtitleList = listState.list
+        textAdapter.texts = mutableListOf("All").apply {
+            addAll(listState.languages)
+        }
+        textAdapter.selectedText = listState.selectedLanguage
         binding.rvOnlineSubtitleList.setVisible(true)
+        binding.rvLanguageChips.setVisible(true)
         binding.rvTrackList.setVisible(false)
     }
 
     private fun showTracks(list: List<TrackInfo>) {
         adapter.trackList = list
         binding.rvOnlineSubtitleList.setVisible(false)
+        binding.rvLanguageChips.setVisible(false)
         binding.rvTrackList.setVisible(true)
         binding.rvTrackList.post {
             binding.rvTrackList.layoutManager
