@@ -25,6 +25,7 @@ import com.joshgm3z.triplerocktv.compose.screens.browse.EpisodeSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.common.ErrorDialog
 import com.joshgm3z.triplerocktv.compose.screens.common.MediaSyncExitDialog
 import com.joshgm3z.triplerocktv.compose.screens.home.HomeScreen
+import com.joshgm3z.triplerocktv.compose.screens.player.PlayerScreen2
 import com.joshgm3z.triplerocktv.compose.screens.player.track.TrackSelectorDialog
 import com.joshgm3z.triplerocktv.compose.screens.settings.LogoutScreen
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -150,15 +151,16 @@ fun TvNavHost() {
         }
 
         composable<NavMainDestination.MediaSync> {
-            MediaSyncScreen(
+            /*MediaSyncScreen(
                 onSyncComplete = {
-                    /*navController.navigate(NavMainDestination.Home)*/
+                    *//*navController.navigate(NavMainDestination.Home)*//*
                 }, onBackPress = {
                     navController.popBackStack()
                 },
                 showExitDialog = {
                     navController.navigate(NavMainDestination.MediaSyncExitDialog)
-                })
+                })*/
+            PlayerScreen2()
         }
         composable<NavMainDestination.Home> {
             HomeScreen {
