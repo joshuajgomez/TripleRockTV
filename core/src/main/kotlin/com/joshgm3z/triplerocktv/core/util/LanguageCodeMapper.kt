@@ -5,7 +5,7 @@ fun String?.languageName(): String {
     val normalized = trim().lowercase().replace('_', '-')
     return when (normalized) {
         "en" -> "English"
-        "es" -> "Spanish"
+        "es", "sp" -> "Spanish"
         "fr" -> "French"
         "de" -> "German"
         "it" -> "Italian"
@@ -58,6 +58,9 @@ fun String?.languageName(): String {
         "kn" -> "Kannada"
         "ml" -> "Malayalam"
         "si" -> "Sinhala"
+        "bg" -> "Bulgarian"
+        "sq" -> "Albanian"
+        "ku" -> "Kurdish"
         else -> this
     }
 }
