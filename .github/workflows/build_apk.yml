@@ -1,9 +1,11 @@
-name: Publish dev-release
+name: Build & Publish APK
 
 on:
   push:
-    branches: [ "dev" ]
-  workflow_dispatch: # Allows manual triggering from the GitHub Actions tab
+    branches: [ "master", "dev" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
 
 jobs:
   build:
@@ -44,35 +46,31 @@ jobs:
       - name: Verify navigation startDestination is splash screen
         run: ./gradlew leanback-app:testOnlineDebugUnitTest --tests com.joshgm3z.triplerocktv.NavigationTest
 
-      - name: Generate Tag Name
+      - name: Set Environment Variables
         run: |
           echo "RELEASE_CODE=${{ github.run_number }}" >> $GITHUB_ENV
-          echo "RELEASE_TAG=dev${{ github.run_number }}" >> $GITHUB_ENV
-          echo "RELEASE_TIMESTAMP=$(TZ='Europe/Stockholm' date +'%Y.%m.%d %I:%M %p %Z')" >> $GITHUB_ENV
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            echo "TRIGGER_SOURCE=pull request (#${{ github.event.pull_request.number }})" >> $GITHUB_ENV
-          elif [ "${{ github.event_name }}" == "push" ]; then
-            echo "TRIGGER_SOURCE=push to master" >> $GITHUB_ENV
+          echo "RELEASE_TAG_VERSION=v${{ github.run_number }}" >> $GITHUB_ENV
+          
+          if [[ "${{ github.ref_name }}" == "dev" ]]; then
+            echo "GRADLE_TASK=assembleDevRelease" >> $GITHUB_ENV
+            echo "RELEASE_NAME=dev-release" >> $GITHUB_ENV
+            echo "IS_PRERELEASE=true" >> $GITHUB_ENV
           else
-            echo "TRIGGER_SOURCE=manual trigger" >> $GITHUB_ENV
+            echo "GRADLE_TASK=assembleOnlineRelease" >> $GITHUB_ENV
+            echo "RELEASE_NAME=master-release" >> $GITHUB_ENV
+            echo "IS_PRERELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Build Dev Release APK (:leanback-app)
-        run: ./gradlew leanback-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
-
-      - name: Build Dev Release APK (:compose-app)
-        run: ./gradlew compose-app:assembleDevRelease -PversionNameOverride=${{ env.RELEASE_TAG }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
+      - name: Build Release APK (:app)
+        run: ./gradlew ${{ env.GRADLE_TASK }} -PversionNameOverride=${{ env.RELEASE_TAG_VERSION }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
       - name: Clear Existing Release and Tag
         if: github.event_name != 'pull_request'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          TAG_NAME: dev-release
+          TAG_NAME: ${{ env.RELEASE_NAME }}
         run: |
-          # Delete the release if it exists
           gh release delete $TAG_NAME --yes || echo "No release found"
-          
-          # Delete the tag on the remote to avoid 'already exists' conflicts
           git tag -d $TAG_NAME || echo "No local tag"
           git push --delete origin $TAG_NAME || echo "No tag found"
 
@@ -80,19 +78,20 @@ jobs:
         if: github.event_name != 'pull_request'
         run: |
           mkdir -p release_artifacts
-          cp leanback-app/build/outputs/apk/dev/release/*.apk release_artifacts/3RockTV-leanback-app-dev.apk
-          cp compose-app/build/outputs/apk/dev/release/*.apk release_artifacts/3RockTV-compose-app-dev.apk
+          cp leanback-app/build/outputs/apk/*/release/*.apk release_artifacts/3RockTV-leanback-app.apk
+          cp compose-app/build/outputs/apk/*/release/*.apk release_artifacts/3RockTV-compose-app.apk
 
-      - name: Update dev-release
+      - name: Update Release
+        if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: dev-release
-          name: ${{ env.RELEASE_TAG }}
-          prerelease: true # Marks it as a beta release
-          files: release_artifacts/3RockTV-leanback-app-dev.apk,release_artifacts/3RockTV-compose-app-dev.apk
+          tag_name: ${{ env.RELEASE_NAME }}
+          name: ${{ env.RELEASE_TAG_VERSION }}
+          prerelease: ${{ env.IS_PRERELEASE == 'true' }}
+          files: release_artifacts/3RockTV-leanback-app.apk,release_artifacts/3RockTV-compose-app.apk
           body: |
-            ## dev release channel
-            This release is automatically updated on every push to the dev branch.
+            ## ${{ env.RELEASE_NAME }} channel
+            This release is automatically updated on every push to the ${{ github.ref_name }} branch.
             **Built on:** ${{ github.event.head_commit.timestamp }}
             **Commit:** ${{ github.sha }}
           append_body: false
