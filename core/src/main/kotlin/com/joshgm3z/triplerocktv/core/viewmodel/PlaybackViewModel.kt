@@ -87,7 +87,7 @@ class PlaybackViewModel @Inject constructor(
 
     fun updateLastPlayedPosition(positionMs: Long) {
         Logger.debug("positionMs = [${positionMs}]")
-        streamId?.let {
+        streamId.let {
             viewModelScope.launch(Dispatchers.IO) {
                 when (streamType) {
                     StreamType.VideoOnDemand -> recentsRepository.updatePlayedDuration(

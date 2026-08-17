@@ -36,6 +36,11 @@
             <enum name="active" value="2" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="TileButtonView">
+        <attr name="android:text" />
+        <attr name="android:drawable" />
+        <attr name="progress" format="integer" />
+    </declare-styleable>
     <declare-styleable name="UpdateCategoryView">
         <attr name="title" format="string" />
         <attr name="subtitle" format="string" />

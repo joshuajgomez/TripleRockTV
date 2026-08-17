@@ -128,7 +128,10 @@ class MediaLocalRepositoryImpl @Inject constructor(
             recentlyPlayedDao.getRecentlyPlayedById(streamId),
             favoriteDao.isFavorite(streamId)
         ) { streamData, recentPlayed, isFavorite ->
-            Logger.debug("combine: recentPlayed = [${recentPlayed}], isFavorite = [${isFavorite}]")
+            Logger.debug("combine: " +
+                    "\n\tstreamData.name=[${streamData.name}], " +
+                    "\n\trecentPlayed = [${recentPlayed}], " +
+                    "\n\tisFavorite = [${isFavorite}]")
             streamData.apply {
                 recentlyPlayed = recentPlayed
                 favorite = isFavorite
