@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
@@ -73,7 +74,19 @@ class FirestoreHelper
         return document.id
     }
 
-    suspend fun log(dataMap: Map<String, Any>) = createDocumentIdInCollection(
+    fun updateDocumentInCollection(
+        documentId: String,
+        collection: String,
+        dataMap: Map<String, Any> = mapOf("input" to "")
+    ) = db.collection(collection)
+        .document(documentId)
+        .set(dataMap)
+
+    fun log(
+        sessionId: String,
+        dataMap: Map<String, Any>
+    ) = updateDocumentInCollection(
+        documentId = sessionId,
         collection = "logs",
         dataMap = dataMap.toMutableMap().apply {
             put("timestamp", System.currentTimeMillis())
