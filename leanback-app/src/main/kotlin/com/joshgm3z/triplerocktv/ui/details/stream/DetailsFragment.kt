@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -67,9 +66,6 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.bvResume.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            binding.progressBar.setVisible(hasFocus)
-        }
         binding.bvStartOver.setOnClickListener {
             DetailsFragmentDirections.toPlayback().apply {
                 streamType = args.streamType
@@ -125,7 +121,7 @@ class DetailsFragment : Fragment() {
             binding.bvPlay.text = "Play $it"
         }
         handleBlur(uiState.coverImage)
-        binding.progressBar.progress = uiState.progressPercent ?: 0
+        binding.bvResume.progress = uiState.progressPercent ?: 0
 
         binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
         binding.metadataView.rating = uiState.rating
@@ -141,7 +137,6 @@ class DetailsFragment : Fragment() {
         // button visibility
         if (!uiState.showButtons) return
         binding.bvResume.setVisible(uiState.progressPercent != null)
-        binding.progressBar.setVisible(uiState.progressPercent != null)
         binding.bvStartOver.setVisible(uiState.progressPercent != null)
         binding.bvPlay.setVisible(uiState.progressPercent == null)
         binding.bvRemoveMyList.setVisible(uiState.favorite)

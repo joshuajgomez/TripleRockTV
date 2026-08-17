@@ -3,204 +3,159 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/color_background"
+    android:padding="20dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_backdrop"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:contentDescription="null"
+        android:layout_width="650dp"
+        android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintEnd_toStartOf="@id/fl_sidebar"
         app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/RoundedRectangle"
         tools:src="@drawable/backdrop_office"
         tools:visibility="visible" />
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/fl_sidebar"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="20dp"
         android:background="@drawable/gradient_transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/tv_title"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="@dimen/screen_edge_padding"
-        android:maxEms="17"
-        android:textColor="?attr/colorForegroundHigh"
-        android:textSize="@dimen/text_size_medium"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="@string/sample_movie_name" />
-
-    <com.joshgm3z.triplerocktv.ui.common.MetadataView
-        android:id="@+id/metadata_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_genre"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        app:color="?attr/colorForegroundPrimary"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/metadata_view"
-        app:placeholderWidth="130dp"
-        tools:text="Comedy" />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_description"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:ellipsize="end"
-        android:maxLines="7"
-        app:color="?attr/colorForegroundMid"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_genre"
-        app:placeholderHeight="100dp"
-        tools:text="@string/sample_long_description" />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_cast"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:lines="2"
-        android:maxEms="17"
-        app:color="?attr/colorForegroundLow"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_description"
-        tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-    <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-        android:id="@+id/tv_director"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:maxEms="17"
-        app:color="?attr/colorForegroundLow"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title"
-        app:layout_constraintTop_toBottomOf="@+id/tv_cast"
-        app:placeholderWidth="180dp"
-        tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-    <androidx.constraintlayout.helper.widget.Flow
-        android:id="@+id/flow_buttons"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
         android:orientation="vertical"
-        app:constraint_referenced_ids="bv_resume,bv_start_over,bv_play,bv_more_episodes,bv_add_my_list,bv_remove_my_list"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/tv_title"
-        app:layout_constraintStart_toStartOf="@+id/tv_title" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_backdrop"
+        app:layout_constraintTop_toTopOf="parent">
 
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_resume"
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/colorForegroundHigh"
+            android:textSize="@dimen/text_size_medium"
+            android:textStyle="bold"
+            tools:text="@string/sample_movie_name" />
+
+        <com.joshgm3z.triplerocktv.ui.common.MetadataView
+            android:id="@+id/metadata_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp" />
+
+        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+            android:id="@+id/tv_genre"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:color="?attr/colorForegroundPrimary"
+            tools:text="Comedy" />
+
+        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+            android:id="@+id/tv_description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:ellipsize="end"
+            android:maxLines="14"
+            app:color="?attr/colorForegroundMid"
+            app:placeholderHeight="100dp"
+            tools:text="@string/sample_long_description" />
+
+        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+            android:id="@+id/tv_cast"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lines="2"
+            app:color="?attr/colorForegroundLow"
+            tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
+            android:id="@+id/tv_director"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:color="?attr/colorForegroundLow"
+            app:placeholderWidth="180dp"
+            tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_button_container"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawable="@drawable/baseline_play_arrow_14"
-        android:text="Resume"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent" />
-
-    <ProgressBar
-        android:id="@+id/progress_bar"
-        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center|end"
-        android:layout_marginEnd="40dp"
-        android:progressBackgroundTint="?attr/colorSurfaceHigh"
-        android:progressTint="?attr/colorSurfaceLow"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@id/bv_resume"
-        app:layout_constraintEnd_toEndOf="@id/bv_resume"
-        app:layout_constraintTop_toTopOf="@id/bv_resume"
-        tools:progress="30" />
-
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_play"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="20dp"
-        android:drawable="@drawable/baseline_play_arrow_14"
-        android:text="Play"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent"
-        tools:visibility="visible" />
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@id/iv_backdrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/iv_backdrop">
 
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_start_over"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawable="@drawable/baseline_replay_14"
-        android:text="Start over"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent"
-        tools:visibility="visible" />
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_resume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawable="@drawable/baseline_play_arrow_14"
+            android:text="Resume"
+            android:visibility="gone"
+            tools:visibility="gone" />
 
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_more_episodes"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawable="@drawable/outline_video_template_14"
-        android:text="More episodes"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent"
-        tools:visibility="visible" />
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawable="@drawable/baseline_play_arrow_14"
+            android:text="Play"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_add_my_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawable="@drawable/baseline_playlist_add_14"
-        android:text="Add to favorites"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent"
-        tools:visibility="visible" />
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_start_over"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawable="@drawable/baseline_replay_14"
+            android:text="Start over"
+            android:visibility="gone"
+            tools:visibility="visible" />
 
-    <com.joshgm3z.triplerocktv.ui.common.ButtonView
-        android:id="@+id/bv_remove_my_list"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:drawable="@drawable/baseline_playlist_add_check_14"
-        android:text="Added to favorites"
-        android:textAlignment="viewStart"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="@+id/flow_buttons"
-        app:layout_constraintStart_toStartOf="@+id/flow_buttons"
-        app:type="transparent"
-        tools:visibility="visible" />
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_more_episodes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawable="@drawable/outline_video_template_14"
+            android:text="More episodes"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_add_my_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawable="@drawable/baseline_playlist_add_14"
+            android:text="Add to favorites"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
+            android:id="@+id/bv_remove_my_list"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:drawable="@drawable/baseline_playlist_add_check_14"
+            android:text="Remove from favorites"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
