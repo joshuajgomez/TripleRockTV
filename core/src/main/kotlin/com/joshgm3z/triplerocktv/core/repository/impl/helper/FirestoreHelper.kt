@@ -74,15 +74,25 @@ class FirestoreHelper
         return document.id
     }
 
-    suspend fun log(dataMap: Map<String, Any>) {
-        if (isDevBuild) createDocumentIdInCollection(
-            collection = "logs",
-            dataMap = dataMap.toMutableMap().apply {
-                put("timestamp", System.currentTimeMillis())
-                put("app_version", BuildConfig.VERSION_NAME)
-            }
-        )
-    }
+    fun updateDocumentInCollection(
+        documentId: String,
+        collection: String,
+        dataMap: Map<String, Any> = mapOf("input" to "")
+    ) = db.collection(collection)
+        .document(documentId)
+        .set(dataMap)
+
+    fun log(
+        sessionId: String,
+        dataMap: Map<String, Any>
+    ) = updateDocumentInCollection(
+        documentId = sessionId,
+        collection = "logs",
+        dataMap = dataMap.toMutableMap().apply {
+            put("timestamp", System.currentTimeMillis())
+            put("app_version", BuildConfig.VERSION_NAME)
+        }
+    )
 
     fun listenToDataMap(
         collection: String,
