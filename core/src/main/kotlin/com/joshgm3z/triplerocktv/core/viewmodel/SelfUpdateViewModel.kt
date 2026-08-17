@@ -27,36 +27,17 @@ data class SelfUpdateUiState(
     val buttonAction: ButtonAction = ButtonAction.UpdateNow,
 )
 
-fun getApkUrl(devBuild: Boolean, composeApp: Boolean) = when {
-    devBuild -> when {
-        composeApp -> devComposeAppUrl
-        else -> devAppUrl
-    }
-
-    else -> when {
-        composeApp -> onlineComposeAppUrl
-        else -> onlineAppUrl
-    }
+val tag = when {
+    isDevBuild -> "dev-release"
+    else -> "master-release"
 }
 
-fun getTagUrl(devBuild: Boolean) = when {
-    devBuild -> devAppTagUrl
-    else -> onlineAppTagUrl
-}
-
-private const val devAppUrl =
-    "https://github.com/joshuajgomez/TripleRockTV/releases/download/dev-release/3RockTV-leanback-app-dev.apk"
-private const val devComposeAppUrl =
-    "https://github.com/joshuajgomez/TripleRockTV/releases/download/dev-release/3RockTV-compose-app-dev.apk"
-private const val devAppTagUrl =
-    "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/tags/dev-release"
-
-private const val onlineAppUrl =
-    "https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-leanback-app.apk"
-private const val onlineComposeAppUrl =
-    "https://github.com/joshuajgomez/TripleRockTV/releases/latest/download/3RockTV-compose-app.apk"
-private const val onlineAppTagUrl =
-    "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/latest"
+private val leanbackAppUrl: String
+    get() = "https://github.com/joshuajgomez/TripleRockTV/releases/download/$tag/3RockTV-leanback-app.apk"
+private val composeAppUrl: String
+    get() = "https://github.com/joshuajgomez/TripleRockTV/releases/download/$tag/3RockTV-compose-app.apk"
+private val appTagUrl: String
+    get() = "https://api.github.com/repos/joshuajgomez/TripleRockTV/releases/tags/$tag"
 
 enum class ButtonAction(val text: String) {
     UpdateNow("Update now"),
@@ -78,8 +59,8 @@ class SelfUpdateViewModel
 
     private val isComposeApp = savedStateHandle.get<Boolean>("isComposeApp") ?: false
 
-    private val apkUrl = getApkUrl(isDevBuild, isComposeApp)
-    private val apkTagUrl = getTagUrl(isDevBuild)
+    private val apkUrl = if (isComposeApp) composeAppUrl else leanbackAppUrl
+    private val apkTagUrl = appTagUrl
 
     private var downloadedFile: File? = null
 
