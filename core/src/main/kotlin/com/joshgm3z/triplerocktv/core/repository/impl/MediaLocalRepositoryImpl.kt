@@ -4,6 +4,8 @@ import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -15,7 +17,9 @@ import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
+import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
@@ -29,6 +33,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val categoryDataDao: CategoryDataDao,
     private val favoriteDao: FavoriteDao,
     private val recentlyPlayedDao: RecentlyPlayedDao,
+    private val firestoreLogger: FirestoreLogger,
 ) : MediaLocalRepository {
 
     override suspend fun fetchCategories(
@@ -128,10 +133,24 @@ class MediaLocalRepositoryImpl @Inject constructor(
             recentlyPlayedDao.getRecentlyPlayedById(streamId),
             favoriteDao.isFavorite(streamId)
         ) { streamData, recentPlayed, isFavorite ->
-            Logger.debug("combine: " +
-                    "\n\tstreamData.name=[${streamData.name}], " +
-                    "\n\trecentPlayed = [${recentPlayed}], " +
-                    "\n\tisFavorite = [${isFavorite}]")
+            firestoreLogger.log(
+                mapOf(
+                    "event" to "streamDataFlow",
+                    "streamName" to streamData.name,
+                    "streamId" to streamId,
+                    "streamType" to streamType.name,
+                    "totalDurationMs" to (streamData.movieMetadata?.totalDurationMs ?: "null"),
+                    "recentPlayed" to (recentPlayed ?: "null"),
+                    "isFavorite" to isFavorite
+                )
+            )
+
+            Logger.debug(
+                "combine: " +
+                        "\n\tstreamData.name=[${streamData.name}], " +
+                        "\n\trecentPlayed = [${recentPlayed}], " +
+                        "\n\tisFavorite = [${isFavorite}]"
+            )
             streamData.apply {
                 recentlyPlayed = recentPlayed
                 favorite = isFavorite
