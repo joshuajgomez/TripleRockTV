@@ -5,6 +5,7 @@ import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -32,7 +33,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     private val categoryDataDao: CategoryDataDao,
     private val favoriteDao: FavoriteDao,
     private val recentlyPlayedDao: RecentlyPlayedDao,
-    private val firestoreHelper: FirestoreHelper
+    private val firestoreLogger: FirestoreLogger,
 ) : MediaLocalRepository {
 
     override suspend fun fetchCategories(
@@ -132,11 +133,13 @@ class MediaLocalRepositoryImpl @Inject constructor(
             recentlyPlayedDao.getRecentlyPlayedById(streamId),
             favoriteDao.isFavorite(streamId)
         ) { streamData, recentPlayed, isFavorite ->
-            firestoreHelper.log(
+            firestoreLogger.log(
                 mapOf(
                     "event" to "streamDataFlow",
+                    "streamName" to streamData.name,
                     "streamId" to streamId,
                     "streamType" to streamType.name,
+                    "totalDurationMs" to (streamData.movieMetadata?.totalDurationMs ?: "null"),
                     "recentPlayed" to (recentPlayed ?: "null"),
                     "isFavorite" to isFavorite
                 )
