@@ -54,8 +54,8 @@ class StreamPresenter
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
-        Glide.with(imageView.context).clear(imageView)
+        val binding = ViewStreamCardBinding.bind(viewHolder.view)
+        Glide.with(binding.root.context).clear(binding.posterImage)
     }
 
 }

@@ -51,5 +51,5 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        tools:src="@drawable/avatar_movie" />
+        tools:src="@drawable/" />
 </FrameLayout>
