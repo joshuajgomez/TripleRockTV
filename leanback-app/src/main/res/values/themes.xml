@@ -47,6 +47,6 @@
         <item name="cornerSize">12dp</item>
     </style>
     <style name="RoundedPoster">
-        <item name="cornerSize">8dp</item>
+        <item name="cornerSize">9dp</item>
     </style>
 </resources>
