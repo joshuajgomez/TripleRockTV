@@ -122,7 +122,7 @@ constructor(
 
     suspend fun fetchMetadata(streamId: Int): MovieMetadata? {
         return withContext(Dispatchers.IO) {
-            onlineRepository.getMovieDataAndUpdate(streamId)
+            onlineRepository.getMovieMetadata(streamId)
         }
     }
 
