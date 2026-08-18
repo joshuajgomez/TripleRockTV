@@ -84,3 +84,8 @@ fun String?.formatExpiryDate(): String {
 fun String?.ifNotNullOrEmpty(block: (String) -> Unit) {
     if (!isNullOrEmpty()) block(this)
 }
+
+fun String?.withPrefix(text: String): String {
+    if (this.isNullOrEmpty()) return ""
+    return "$text$this"
+}

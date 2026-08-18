@@ -24,6 +24,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.util.toTextTime
+import com.joshgm3z.triplerocktv.core.util.withPrefix
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -111,9 +112,12 @@ class StreamCatalogueFragment : Fragment() {
             val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId) ?: return@launch
 
             binding.includeDetails.tvDescription.text = updatedMovieMetadata.description
-            binding.includeDetails.metadataView.genre = updatedMovieMetadata.genre
+            binding.includeDetails.tvCast.text = updatedMovieMetadata.cast.withPrefix("Cast: ")
+            binding.includeDetails.tvDirector.text = updatedMovieMetadata.director.withPrefix("Director: ")
+            binding.includeDetails.tvGenre.text = updatedMovieMetadata.genre
             binding.includeDetails.metadataView.rating = streamData.rating
-            binding.includeDetails.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
+            binding.includeDetails.metadataView.duration =
+                streamData.movieMetadata?.totalDurationMs?.toTextTime()
             /*glideUtil.loadImage(
                 updatedMovieMetadata.backPosterUrl,
                 binding.ivBackdrop
