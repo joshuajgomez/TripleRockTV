@@ -149,12 +149,12 @@ constructor(
         }
     }
 
-    suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
-        if (streamType != StreamType.VideoOnDemand) return
+    suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {
         getMovieData(streamId).let { movieMetaData ->
             val updatedStreamData = streamDataDao.getByStreamId(streamId)
-                ?.copy(movieMetadata = movieMetaData) ?: return
+                ?.copy(movieMetadata = movieMetaData) ?: return null
             streamDataDao.update(updatedStreamData)
+            return movieMetaData
         }
     }
 

@@ -88,11 +88,11 @@ class MediaOnlineRepositoryImpl
         }
     }
 
-    override suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType) {
+    override suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {
         if (iptvService == null) {
             fetchIptvService()
         }
-        onlineDataFetcher.getMovieDataAndUpdate(streamId, streamType)
+        return onlineDataFetcher.getMovieDataAndUpdate(streamId)
     }
 
     override suspend fun getMovieMetadata(streamId: Int): MovieMetadata? {

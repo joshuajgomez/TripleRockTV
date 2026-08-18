@@ -22,6 +22,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 sealed class CatalogueUiState(
@@ -120,7 +121,9 @@ constructor(
     }
 
     suspend fun fetchMetadata(streamId: Int): MovieMetadata? {
-        return onlineRepository.getMovieMetadata(streamId)
+        return withContext(Dispatchers.IO) {
+            onlineRepository.getMovieDataAndUpdate(streamId)
+        }
     }
 
     fun updateFavorites(streamId: Int, add: Boolean) {
