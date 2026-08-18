@@ -123,16 +123,16 @@ class DetailsFragment : Fragment() {
         handleBlur(uiState.coverImage)
         binding.bvResume.progress = uiState.progressPercent ?: 0
 
-        binding.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
-        binding.metadataView.rating = uiState.rating
-        binding.metadataView.duration = uiState.duration
-        binding.metadataView.noOfSeasons = uiState.noOfSeasons
+        binding.includeDetails.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
+        binding.includeDetails.metadataView.rating = uiState.rating
+        binding.includeDetails.metadataView.duration = uiState.duration
+        binding.includeDetails.metadataView.noOfSeasons = uiState.noOfSeasons
 
-        binding.tvTitle.text = uiState.title
-        binding.tvGenre.text(uiState.subtitle)
-        binding.tvDescription.text(uiState.description)
-        binding.tvCast.text(uiState.cast)
-        binding.tvDirector.text(uiState.director)
+        binding.includeDetails.tvTitle.text = uiState.title
+        binding.includeDetails.tvGenre.text(uiState.subtitle)
+        binding.includeDetails.tvDescription.text(uiState.description)
+        binding.includeDetails.tvCast.text(uiState.cast)
+        binding.includeDetails.tvDirector.text(uiState.director)
 
         // button visibility
         if (!uiState.showButtons) return

@@ -7,64 +7,23 @@
     android:background="?attr/colorBackground"
     tools:context=".ui.splash.SplashScreenFragment">
 
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/iv_backdrop"
-        android:layout_width="250dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="80dp"
-        android:layout_marginTop="30dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintDimensionRatio="16:9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:shapeAppearanceOverlay="@style/RoundedRectangle"
-        tools:src="@drawable/backdrop_office" />
-
-    <LinearLayout
-        android:id="@+id/ll_metadata"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="80dp"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_backdrop"
-        app:layout_constraintTop_toTopOf="@id/iv_backdrop">
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:maxEms="25"
-            android:textColor="?attr/colorForegroundHigh"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            tools:text="@string/subtitle_file_name" />
-
-        <com.joshgm3z.triplerocktv.ui.common.MetadataView
-            android:id="@+id/metadata_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <TextView
-            android:id="@+id/tv_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:ellipsize="end"
-            android:maxEms="40"
-            android:maxLines="3"
-            android:textColor="?attr/colorForegroundMid"
-            android:textSize="12sp"
-            tools:text="@string/sample_long_description" />
-    </LinearLayout>
-
     <FrameLayout
         android:id="@+id/fl_stream_row_container"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_marginEnd="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/include_details"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <include
+        android:id="@+id/include_details"
+        layout="@layout/layout_details_metadata"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="20dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
