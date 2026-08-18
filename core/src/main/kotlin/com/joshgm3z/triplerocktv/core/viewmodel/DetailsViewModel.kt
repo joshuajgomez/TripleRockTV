@@ -142,7 +142,7 @@ class DetailsViewModel @Inject constructor(
     private fun searchMetadata(streamData: StreamData) {
         Logger.debug("streamData = [${streamData}]")
         viewModelScope.launch(Dispatchers.IO) {
-            onlineRepository.getMovieDataAndUpdate(streamData.streamId, streamData.streamType)
+            onlineRepository.getMovieDataAndUpdate(streamData.streamId)
         }
     }
 

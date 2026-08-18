@@ -29,7 +29,7 @@ interface MediaOnlineRepository {
         onError: (String, String) -> Unit,
     )
 
-    suspend fun getMovieDataAndUpdate(streamId: Int, streamType: StreamType)
+    suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata?
 
     suspend fun getMovieMetadata(streamId: Int): MovieMetadata?
 

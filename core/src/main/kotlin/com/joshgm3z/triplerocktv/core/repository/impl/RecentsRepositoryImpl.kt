@@ -27,7 +27,7 @@ class RecentsRepositoryImpl
             when {
                 streamData.movieMetadata != null -> streamData
                 else -> {
-                    onlineRepository.getMovieDataAndUpdate(it.id, streamType)
+                    onlineRepository.getMovieDataAndUpdate(it.id)
                     streamDataDao.getByStreamId(it.id) ?: return@mapNotNull null
                 }
             }.apply {

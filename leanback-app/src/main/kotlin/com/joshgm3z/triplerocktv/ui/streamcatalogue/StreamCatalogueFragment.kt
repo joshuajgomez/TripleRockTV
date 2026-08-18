@@ -30,6 +30,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
