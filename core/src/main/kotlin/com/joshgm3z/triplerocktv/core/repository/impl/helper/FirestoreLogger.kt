@@ -12,16 +12,17 @@ class FirestoreLogger
     scope: CoroutineScope,
     private val firestoreHelper: FirestoreHelper
 ) {
-    private lateinit var sessionId: String
+    private var sessionId: String? = null
 
     init {
         scope.launch {
             sessionId = datastore.getUserInfo()?.sessionId
-                ?: throw Exception("Session ID not found")
         }
     }
 
     fun log(dataMap: Map<String, Any>) {
-        if (isDevBuild) firestoreHelper.log(sessionId, dataMap)
+        if (isDevBuild) sessionId?.let {
+            firestoreHelper.log(it, dataMap)
+        }
     }
 }
