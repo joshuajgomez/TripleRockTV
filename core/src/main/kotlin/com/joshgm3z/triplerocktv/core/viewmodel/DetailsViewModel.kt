@@ -15,6 +15,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
 import com.joshgm3z.triplerocktv.core.util.toTextTime
+import com.joshgm3z.triplerocktv.core.util.withPrefix
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -136,11 +137,6 @@ class DetailsViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    private fun String?.withPrefix(text: String): String {
-        if (this.isNullOrEmpty()) return ""
-        return "$text$this"
     }
 
     private fun searchMetadata(streamData: StreamData) {
