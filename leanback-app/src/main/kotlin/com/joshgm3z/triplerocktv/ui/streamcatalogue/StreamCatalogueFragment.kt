@@ -137,12 +137,14 @@ class StreamCatalogueFragment : Fragment() {
     private fun updateSeriesStream(seriesStream: SeriesStream) {
         binding.includeDetails.tvTitle.text = seriesStream.name
         binding.includeDetails.tvDescription.text = seriesStream.plot
+        binding.includeDetails.tvCast.text = seriesStream.cast.withPrefix("Cast: ")
+        binding.includeDetails.tvDirector.text = seriesStream.director.withPrefix("Director: ")
+        binding.includeDetails.tvGenre.text = seriesStream.genre
         /*glideUtil.loadImage(
             seriesStream.backdropUrl,
             binding.ivBackdrop
         )*/
         binding.includeDetails.metadataView.rating = seriesStream.rating.parseToFloat()
-        binding.includeDetails.metadataView.genre = seriesStream.genre
         binding.includeDetails.metadataView.noOfSeasons = seriesStream.seasons?.size
         binding.includeDetails.metadataView.showMyList = seriesStream.favorite
     }
