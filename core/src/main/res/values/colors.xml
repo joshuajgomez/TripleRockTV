@@ -11,8 +11,8 @@
     <color name="color_foreground_primary">#B66500</color>
 
     <color name="color_foreground_high">#F5F5F0</color>
-    <color name="color_foreground_mid">#4D4D49</color>
-    <color name="color_foreground_low">#373732</color>
+    <color name="color_foreground_mid">#8A8A83</color>
+    <color name="color_foreground_low">#4B4B45</color>
 
     <color name="color_foreground_fault">#EF5350</color>
 
