@@ -107,21 +107,29 @@ class StreamCatalogueFragment : Fragment() {
 
     private fun updateStreamData(streamData: StreamData) {
         binding.includeDetails.tvTitle.text = streamData.name
+        binding.includeDetails.metadataView.rating = streamData.rating
+        binding.includeDetails.tvDescription.text = null
+        binding.includeDetails.tvGenre.text = null
+        binding.includeDetails.tvCast.text = null
+        binding.includeDetails.tvDirector.text = null
+        binding.includeDetails.metadataView.duration = null
 
         lifecycleScope.launch {
-            val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId) ?: return@launch
+            val updatedMovieMetadata = streamData.movieMetadata
+                ?: viewModel.fetchMetadata(streamData.streamId)
+                ?: return@launch
 
-            binding.includeDetails.tvDescription.text = updatedMovieMetadata.description
-            binding.includeDetails.tvCast.text = updatedMovieMetadata.cast.withPrefix("Cast: ")
-            binding.includeDetails.tvDirector.text = updatedMovieMetadata.director.withPrefix("Director: ")
-            binding.includeDetails.tvGenre.text = updatedMovieMetadata.genre
-            binding.includeDetails.metadataView.rating = streamData.rating
-            binding.includeDetails.metadataView.duration =
-                streamData.movieMetadata?.totalDurationMs?.toTextTime()
-            /*glideUtil.loadImage(
-                updatedMovieMetadata.backPosterUrl,
-                binding.ivBackdrop
-            )*/
+            updatedMovieMetadata.let {
+                binding.includeDetails.tvDescription.text = it.description
+                binding.includeDetails.tvCast.text = it.cast.withPrefix("Cast: ")
+                binding.includeDetails.tvDirector.text = it.director.withPrefix("Director: ")
+                binding.includeDetails.tvGenre.text = it.genre
+                binding.includeDetails.metadataView.duration = it.totalDurationMs.toTextTime()
+                /*glideUtil.loadImage(
+                    it.backPosterUrl,
+                    binding.ivBackdrop
+                )*/
+            }
         }
     }
 
