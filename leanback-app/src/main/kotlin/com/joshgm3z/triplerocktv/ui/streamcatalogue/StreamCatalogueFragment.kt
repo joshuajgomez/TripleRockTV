@@ -69,7 +69,7 @@ class StreamCatalogueFragment : Fragment() {
             FocusHighlight.ZOOM_FACTOR_XSMALL,
             false
         ).apply {
-            numberOfColumns = 5
+            numberOfColumns = 4
         }
         rowsAdapter = PagingDataAdapter(streamPresenter, diffCallback)
         gridFragment.adapter = rowsAdapter
@@ -105,33 +105,33 @@ class StreamCatalogueFragment : Fragment() {
     }
 
     private fun updateStreamData(streamData: StreamData) {
-        binding.tvTitle.text = streamData.name
+        binding.includeDetails.tvTitle.text = streamData.name
 
         lifecycleScope.launch {
             val updatedMovieMetadata = viewModel.fetchMetadata(streamData.streamId) ?: return@launch
 
-            binding.tvDescription.text = updatedMovieMetadata.description
-            binding.metadataView.genre = updatedMovieMetadata.genre
-            binding.metadataView.rating = streamData.rating
-            binding.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
-            glideUtil.loadImage(
+            binding.includeDetails.tvDescription.text = updatedMovieMetadata.description
+            binding.includeDetails.metadataView.genre = updatedMovieMetadata.genre
+            binding.includeDetails.metadataView.rating = streamData.rating
+            binding.includeDetails.metadataView.duration = streamData.movieMetadata?.totalDurationMs?.toTextTime()
+            /*glideUtil.loadImage(
                 updatedMovieMetadata.backPosterUrl,
                 binding.ivBackdrop
-            )
+            )*/
         }
     }
 
     private fun updateSeriesStream(seriesStream: SeriesStream) {
-        binding.tvTitle.text = seriesStream.name
-        binding.tvDescription.text = seriesStream.plot
-        glideUtil.loadImage(
+        binding.includeDetails.tvTitle.text = seriesStream.name
+        binding.includeDetails.tvDescription.text = seriesStream.plot
+        /*glideUtil.loadImage(
             seriesStream.backdropUrl,
             binding.ivBackdrop
-        )
-        binding.metadataView.rating = seriesStream.rating.parseToFloat()
-        binding.metadataView.genre = seriesStream.genre
-        binding.metadataView.noOfSeasons = seriesStream.seasons?.size
-        binding.metadataView.showMyList = seriesStream.favorite
+        )*/
+        binding.includeDetails.metadataView.rating = seriesStream.rating.parseToFloat()
+        binding.includeDetails.metadataView.genre = seriesStream.genre
+        binding.includeDetails.metadataView.noOfSeasons = seriesStream.seasons?.size
+        binding.includeDetails.metadataView.showMyList = seriesStream.favorite
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->

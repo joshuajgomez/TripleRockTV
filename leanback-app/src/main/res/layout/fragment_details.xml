@@ -14,78 +14,23 @@
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:layout_constraintDimensionRatio="16:9"
-        app:layout_constraintEnd_toStartOf="@id/fl_sidebar"
+        app:layout_constraintEnd_toStartOf="@id/include_details"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/RoundedRectangle"
         tools:src="@drawable/backdrop_office"
         tools:visibility="visible" />
 
-    <LinearLayout
-        android:id="@+id/fl_sidebar"
-        android:layout_width="0dp"
+    <include
+        android:id="@+id/include_details"
+        layout="@layout/layout_details_metadata"
+        android:layout_width="250dp"
         android:layout_height="0dp"
         android:layout_marginStart="20dp"
-        android:background="@drawable/gradient_transparent"
-        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_backdrop"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="?attr/colorForegroundHigh"
-            android:textSize="@dimen/text_size_medium"
-            android:textStyle="bold"
-            tools:text="@string/sample_movie_name" />
-
-        <com.joshgm3z.triplerocktv.ui.common.MetadataView
-            android:id="@+id/metadata_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp" />
-
-        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-            android:id="@+id/tv_genre"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:color="?attr/colorForegroundPrimary"
-            tools:text="Comedy" />
-
-        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-            android:id="@+id/tv_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:ellipsize="end"
-            android:maxLines="14"
-            app:color="?attr/colorForegroundMid"
-            app:placeholderHeight="100dp"
-            tools:text="@string/sample_long_description" />
-
-        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-            android:id="@+id/tv_cast"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:lines="2"
-            app:color="?attr/colorForegroundLow"
-            tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-        <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-            android:id="@+id/tv_director"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            app:color="?attr/colorForegroundLow"
-            app:placeholderWidth="180dp"
-            tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
-
-    </LinearLayout>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/ll_button_container"
