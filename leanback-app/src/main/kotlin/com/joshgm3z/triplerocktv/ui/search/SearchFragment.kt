@@ -93,6 +93,7 @@ class SearchFragment : Fragment() {
                         binding.rvHints.adapter = SimpleTextAdapter(it.hints) { text ->
                             binding.keyboardView.text = text
                         }
+                        binding.tvStatus.setVisible(false)
                         binding.tvStreamsTitle.setVisible(true)
                         streamAdapter.items = it.initialStreams
                         binding.rvSearchList.layoutAnimation =
@@ -101,15 +102,15 @@ class SearchFragment : Fragment() {
                     }
 
                     is SearchUiState.Loading -> {
-                        binding.tvStatus.setVisible(true)
                         binding.tvStatus.text = "Searching"
+                        binding.tvStatus.setVisible(true)
                         streamAdapter.items = emptyList()
                     }
 
                     is SearchUiState.NoResult -> {
+                        binding.tvStatus.text = "No results found"
                         binding.tvStatus.setVisible(true)
                         streamAdapter.items = emptyList()
-                        binding.tvStatus.text = "No results found"
                     }
 
                     is SearchUiState.Result -> {
