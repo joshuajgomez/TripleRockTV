@@ -9,8 +9,6 @@ import android.net.Uri
 import android.os.Environment
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.json.JSONObject
 import java.io.File
 import java.net.HttpURLConnection
@@ -23,6 +21,11 @@ enum class DownloadState {
     Completed,
     Error
 }
+
+data class ReleaseInfo(
+    val name: String,
+    val description: String,
+)
 
 class FileDownloader
 @Inject constructor(
@@ -95,7 +98,7 @@ class FileDownloader
         }
     }
 
-    suspend fun getLatestApkReleaseName(apkUrl: String): String? {
+    fun getLatestApkReleaseName(apkUrl: String): ReleaseInfo? {
         val url = URL(apkUrl)
         val connection = url.openConnection() as HttpURLConnection
 
@@ -104,11 +107,10 @@ class FileDownloader
             Logger.debug("response = [$response]")
             val jsonObject = JSONObject(response)
 
-            // 1. Get the Release Name (e.g., "Dev Build v2024.05.20-dev-run42")
-            val releaseName = jsonObject.getString("name")
-
-            // 2. Extract the number after "-run" using Regex
-            return releaseName
+            return ReleaseInfo(
+                name = jsonObject.getString("name"),
+                description = jsonObject.getString("body"),
+            )
         }
         return null
     }

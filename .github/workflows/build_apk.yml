@@ -50,7 +50,8 @@ jobs:
         run: |
           echo "RELEASE_CODE=${{ github.run_number }}" >> $GITHUB_ENV
           echo "RELEASE_TAG_VERSION=v${{ github.run_number }}" >> $GITHUB_ENV
-          
+          echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+
           if [[ "${{ github.ref_name }}" == "dev" ]]; then
             echo "GRADLE_TASK=assembleDevRelease" >> $GITHUB_ENV
             echo "RELEASE_NAME=dev-release" >> $GITHUB_ENV
@@ -81,6 +82,11 @@ jobs:
           cp leanback-app/build/outputs/apk/*/release/*.apk release_artifacts/3RockTV-leanback-app.apk
           cp compose-app/build/outputs/apk/*/release/*.apk release_artifacts/3RockTV-compose-app.apk
 
+      - name: Get Last Commit Message
+        if: github.event_name != 'pull_request'
+        id: last_commit
+        run: echo "msg=$(git log -1 --pretty=%s)" >> $GITHUB_OUTPUT
+
       - name: Update Release
         if: github.event_name != 'pull_request'
         uses: softprops/action-gh-release@v1
@@ -88,13 +94,12 @@ jobs:
           tag_name: ${{ env.RELEASE_NAME }}
           name: ${{ env.RELEASE_TAG_VERSION }}
           prerelease: ${{ env.IS_PRERELEASE == 'true' }}
-          files: release_artifacts/3RockTV-leanback-app.apk,release_artifacts/3RockTV-compose-app.apk
+          files: |
+            release_artifacts/3RockTV-leanback-app.apk
+            release_artifacts/3RockTV-compose-app.apk
           body: |
-            ## ${{ env.RELEASE_NAME }} channel
-            This release is automatically updated on every push to the ${{ github.ref_name }} branch.
-            **Built on:** ${{ github.event.head_commit.timestamp }}
-            **Commit:** ${{ github.sha }}
-          append_body: false
+            Last commit: 
+            * ${{ steps.last_commit.outputs.msg }} [${{ env.SHORT_SHA }}]
           overwrite: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

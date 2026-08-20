@@ -85,14 +85,14 @@ class SelfUpdateViewModel
         }
 
         viewModelScope.launch(Dispatchers.IO) {
-            delay(2000)
-            val releaseName = fileDownloader.getLatestApkReleaseName(apkTagUrl)
-            Logger.debug("releaseName = [$releaseName]")
+            delay(1000)
+            val releaseInfo = fileDownloader.getLatestApkReleaseName(apkTagUrl)
+            Logger.debug("releaseInfo = [$releaseInfo]")
             _uiState.update {
-                if (BuildConfig.VERSION_NAME.isOlderThan(releaseName)) {
+                if (BuildConfig.VERSION_NAME.isOlderThan(releaseInfo?.name)) {
                     it.copy(
-                        title = "Update available",
-                        subtitle = "New version $releaseName is available for download",
+                        title = "New version ${releaseInfo?.name} available",
+                        subtitle = releaseInfo?.description,
                         enableButtons = true,
                         buttonAction = ButtonAction.UpdateNow
                     )

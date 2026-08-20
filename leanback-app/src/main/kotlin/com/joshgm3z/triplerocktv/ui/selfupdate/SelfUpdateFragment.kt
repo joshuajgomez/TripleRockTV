@@ -35,7 +35,7 @@ class SelfUpdateDialog : DialogFragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = LayoutDialogBinding.inflate(inflater, container, false)
+        binding = LayoutDialogBinding.inflate(inflater)
         return binding.root
     }
 
