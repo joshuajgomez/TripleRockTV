@@ -25,5 +25,14 @@
         android:textAlignment="center"
         android:textColor="@color/color_foreground_primary_selector"
         android:textFontWeight="500"
-        android:textSize="15sp" />
+        android:textSize="15sp"
+        android:visibility="gone" />
+
+    <ProgressBar
+        android:layout_gravity="center"
+        android:id="@+id/progress_bar"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:indeterminateTint="@color/color_foreground_primary_selector" />
+
 </merge>

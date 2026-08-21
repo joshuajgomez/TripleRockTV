@@ -65,7 +65,7 @@ class LoginRepositoryImpl @Inject constructor(
             }
         } catch (e: Exception) {
             delay(1000)
-            onError("Connection failed: ${e.localizedMessage ?: "Unknown error"}")
+            onError(e.localizedMessage ?: "Unknown error")
         }
     }
 

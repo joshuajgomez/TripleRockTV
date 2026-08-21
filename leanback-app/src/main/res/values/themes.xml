@@ -43,9 +43,29 @@
         <item name="android:focusableInTouchMode">true</item>
     </style>
 
+    <style name="TextInputStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">10dp</item>
+        <item name="android:paddingVertical">3dp</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:textFontWeight">500</item>
+        <item name="android:textColor">@color/edit_text_color_selector</item>
+        <item name="android:textColorHint">?attr/colorForegroundLow</item>
+        <item name="android:background">@drawable/edittext_background</item>
+        <item name="android:focusable">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:drawablePadding">10dp</item>
+        <item name="android:drawableTint">?attr/colorForegroundPrimary</item>
+        <item name="android:focusableInTouchMode">true</item>
+    </style>
+
     <style name="RoundedRectangle">
         <item name="cornerSize">12dp</item>
     </style>
+
     <style name="RoundedPoster">
         <item name="cornerSize">9dp</item>
     </style>

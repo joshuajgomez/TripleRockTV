@@ -30,6 +30,8 @@
         <attr name="android:text" />
         <attr name="android:drawable" />
         <attr name="android:textAlignment" />
+        <attr name="android:enabled" />
+        <attr name="loading" format="boolean" />
         <attr name="type">
             <enum name="filled" value="0" />
             <enum name="transparent" value="1" />

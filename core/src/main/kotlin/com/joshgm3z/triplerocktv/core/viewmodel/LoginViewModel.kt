@@ -60,7 +60,7 @@ class LoginViewModel
                     Firebase.analytics.setUserId(username)
                     Firebase.crashlytics.setUserId(username)
                     _uiState.update {
-                        it.copy(loginSuccess = true, loading = false)
+                        it.copy(loginSuccess = true)
                     }
                 },
                 onError = { error ->

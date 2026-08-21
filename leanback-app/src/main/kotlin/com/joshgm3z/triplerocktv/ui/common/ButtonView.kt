@@ -8,6 +8,8 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.withStyledAttributes
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.databinding.ViewButtonBinding
+import com.joshgm3z.triplerocktv.util.setVisible
+import androidx.core.view.isVisible
 
 class ButtonView @JvmOverloads constructor(
     context: Context,
@@ -72,9 +74,22 @@ class ButtonView @JvmOverloads constructor(
                         )
                     }
                 }
+                getBoolean(R.styleable.ButtonView_loading, false).let {
+                    loading = it
+                }
+                getBoolean(R.styleable.ButtonView_android_enabled, true).let {
+                    binding.root.isEnabled = it
+                }
             }
         }
     }
+
+    var loading: Boolean
+        get() = binding.progressBar.isVisible
+        set(value) {
+            binding.tvTitle.setVisible(!value)
+            binding.progressBar.setVisible(value)
+        }
 
     var text: String
         get() = binding.tvTitle.text.toString()
