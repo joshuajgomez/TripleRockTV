@@ -12,6 +12,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="50dp"
         android:background="@android:color/transparent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/ll_container" />
 
@@ -20,90 +21,58 @@
         android:layout_width="320dp"
         android:layout_height="match_parent"
         android:background="?attr/colorSurfaceLow"
-        android:gravity="center_horizontal|bottom"
+        android:gravity="bottom"
         android:orientation="vertical"
         android:paddingHorizontal="30dp"
         app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="10dp"
             android:src="@drawable/logo_vd_vector" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Sign in with your"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/colorForegroundMid"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="IPTV login details"
-                android:textAppearance="?android:attr/textAppearanceMedium"
-                android:textColor="?attr/colorForegroundPrimary"
-                android:textStyle="bold" />
-        </LinearLayout>
+            android:layout_marginStart="10dp"
+            android:text="@string/login_summary"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?attr/colorForegroundMid"
+            android:textStyle="bold" />
 
         <EditText
             android:id="@+id/et_server_url"
+            style="@style/TextInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
-            android:background="@drawable/edittext_background"
             android:drawableStart="@drawable/outline_link_2_24"
-            android:drawablePadding="10sp"
-            android:drawableTint="?attr/colorForegroundPrimary"
-            android:hint="https://riseiptv.xyz:8080"
-            android:textColor="?attr/colorForegroundHigh"
-            android:textColorHint="?attr/colorForegroundLow"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:hint="Server URL" />
 
         <EditText
             android:id="@+id/et_username"
+            style="@style/TextInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/edittext_background"
             android:drawableStart="@drawable/outline_person_24"
-            android:drawablePadding="10sp"
-            android:drawableTint="?attr/colorForegroundPrimary"
-            android:hint="Username"
-            android:textColor="?attr/colorForegroundHigh"
-            android:textColorHint="?attr/colorForegroundLow"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:hint="Username" />
 
         <EditText
             android:id="@+id/et_password"
+            style="@style/TextInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:background="@drawable/edittext_background"
             android:drawableStart="@drawable/outline_password_24"
-            android:drawablePadding="10sp"
-            android:drawableTint="?attr/colorForegroundPrimary"
-            android:hint="Password"
-            android:textColor="?attr/colorForegroundHigh"
-            android:textColorHint="?attr/colorForegroundLow"
-            android:textSize="18sp"
-            android:textStyle="bold" />
+            android:hint="Password" />
 
         <com.joshgm3z.triplerocktv.ui.common.ButtonView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginBottom="30dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             android:text="Login" />
     </LinearLayout>
 

@@ -19,6 +19,13 @@ class LoginFragment2 : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         binding = FragmentLoginBinding.inflate(inflater)
+        listOf(
+            binding.etServerUrl,
+            binding.etPassword,
+            binding.etUsername,
+        ).forEach {
+            it.showSoftInputOnFocus = false
+        }
         return binding.root
     }
 }
