@@ -92,7 +92,7 @@ class LoginFragment : GuidedStepSupportFragment() {
         lifecycleScope.launch {
             delay(2000)
             findNavController().navigate(
-                LoginFragmentDirections.toUpdater().apply { autoUpdateAndExit = true })
+                LoginFragment2Directions.toUpdater().apply { autoUpdateAndExit = true })
         }
     }
 

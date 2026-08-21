@@ -4,7 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:background="@drawable/bg_rounded_card"
+    android:orientation="vertical"
+    android:paddingHorizontal="10dp"
+    android:paddingVertical="5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +33,7 @@
             android:layout_marginStart="1dp"
             android:layout_marginEnd="1dp"
             android:layout_weight="1"
-            android:src="@drawable/baseline_delete_forever_24"
+            android:src="@drawable/outline_delete_24"
             app:layout_constraintStart_toEndOf="@id/iv_backspace"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -41,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
             android:layout_weight="1"
-            android:src="@drawable/baseline_backspace_24"
+            android:src="@drawable/outline_backspace_24"
             app:layout_constraintStart_toEndOf="@id/iv_backspace"
             app:layout_constraintTop_toTopOf="parent" />
 
