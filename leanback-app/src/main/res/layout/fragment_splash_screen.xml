@@ -5,18 +5,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.splash.SplashScreenFragment">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/iv_logo"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:orientation="vertical">
+        android:src="@drawable/logo_avd_anim" />
 
-        <ImageView
-            android:id="@+id/iv_logo"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:src="@drawable/logo_avd_anim" />
-
-    </LinearLayout>
 </FrameLayout>
