@@ -48,10 +48,10 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingHorizontal">10dp</item>
         <item name="android:paddingVertical">3dp</item>
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">15sp</item>
         <item name="android:maxLines">1</item>
         <item name="android:layout_marginTop">20dp</item>
-        <item name="android:textStyle">bold</item>
+        <item name="android:textFontWeight">500</item>
         <item name="android:textColor">?attr/colorForegroundHigh</item>
         <item name="android:textColorHint">?attr/colorForegroundLow</item>
         <item name="android:background">@drawable/edittext_background</item>
