@@ -13,3 +13,4 @@ core/src/main/kotlin/com/joshgm3z/triplerocktv/core/repository/retrofit/Secrets.
 leanback-app/google-services.json
 compose-app/google-services.json
 security/default_keystore
+extras/postman/postman/collections/New Collection.postman_collection.json
