@@ -30,13 +30,12 @@ import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class StreamCatalogueFragment : Fragment() {
+class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     private val viewModel: CatalogueViewModel by viewModels()
 
@@ -55,32 +54,31 @@ class StreamCatalogueFragment : Fragment() {
 
     private val args: StreamCatalogueFragmentArgs by navArgs()
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentStreamCatalogueBinding.inflate(inflater)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         initRowFragment()
-        return binding.root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
     }
 
     private fun initRowFragment() {
-        val gridFragment = VerticalGridSupportFragment()
-        gridFragment.gridPresenter = VerticalGridPresenter(
+//        val gridFragment = VerticalGridSupportFragment()
+        gridPresenter = VerticalGridPresenter(
             FocusHighlight.ZOOM_FACTOR_XSMALL,
             false
         ).apply {
-            numberOfColumns = 4
+            numberOfColumns = 5
         }
         rowsAdapter = PagingDataAdapter(streamPresenter, diffCallback)
-        gridFragment.adapter = rowsAdapter
-        gridFragment.onItemViewClickedListener = clickListener
-        gridFragment.setOnItemViewSelectedListener(selectionListener)
+        adapter = rowsAdapter
+        onItemViewClickedListener = clickListener
+        setOnItemViewSelectedListener(selectionListener)
 
-        childFragmentManager.beginTransaction()
+        /*childFragmentManager.beginTransaction()
             .replace(binding.flStreamRowContainer.id, gridFragment)
-            .commit()
+            .commit()*/
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -107,6 +105,7 @@ class StreamCatalogueFragment : Fragment() {
     }
 
     private fun updateStreamData(streamData: StreamData) {
+        return
         binding.includeDetails.tvTitle.text = streamData.name
         binding.includeDetails.metadataView.rating = streamData.rating
         binding.includeDetails.tvDescription.text = null
