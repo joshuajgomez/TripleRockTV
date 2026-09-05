@@ -51,9 +51,9 @@ sealed class CatalogueUiState(
 }
 
 private val pagingConfig = PagingConfig(
-    pageSize = 8,
-    enablePlaceholders = false,
-    prefetchDistance = 3
+    pageSize = 30,
+    enablePlaceholders = true,
+    prefetchDistance = 15
 )
 
 @HiltViewModel

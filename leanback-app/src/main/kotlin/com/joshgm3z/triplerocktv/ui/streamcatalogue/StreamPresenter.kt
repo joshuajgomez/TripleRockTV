@@ -33,12 +33,12 @@ class StreamPresenter
         val title = when (item) {
             is StreamData -> item.name
             is SeriesStream -> item.name
-            else -> "Unknown"
+            else -> null
         }
         val imageUri = when (item) {
             is StreamData -> item.streamIcon
             is SeriesStream -> item.coverImageUrl
-            else -> "Unknown"
+            else -> null
         }
         val rating = when (item) {
             is StreamData -> item.rating
