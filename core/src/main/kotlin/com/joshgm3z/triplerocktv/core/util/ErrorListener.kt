@@ -26,11 +26,9 @@ fun errorListener(
             PlaybackException.ERROR_CODE_DECODING_FAILED ->
                 "Video format not supported on this device"
 
-            PlaybackException.ERROR_CODE_REMOTE_ERROR ->
-                "Could not reach the video stream"
-
+            PlaybackException.ERROR_CODE_REMOTE_ERROR,
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ->
-                "Authentication failed. Please check your credentials"
+                "Could not reach the video stream"
 
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 seekToDefaultPosition()
