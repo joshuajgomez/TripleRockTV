@@ -35,6 +35,7 @@ import androidx.fragment.app.Fragment
 import androidx.media3.common.C
 import androidx.media3.common.text.CueGroup
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
@@ -66,6 +67,9 @@ const val FAST_FORWARD_DURATION_SHORT = 10000
 class PlaybackFragment : Fragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
+
+    @Inject
+    lateinit var firestoreLogger: FirestoreLogger
 
     private val trackViewModel: TrackSelectorViewModel by hiltNavGraphViewModels(
         R.id.nav_graph
@@ -116,9 +120,14 @@ class PlaybackFragment : Fragment() {
 
     private fun initUi() {
         player.addListener(
-            errorListener(onError = {
-                findNavController().navigate(PlaybackFragmentDirections.toError(it))
-            })
+            errorListener(
+                onError = {
+                    findNavController().navigate(PlaybackFragmentDirections.toError(it))
+                },
+                errorLog = {
+                    firestoreLogger.log(mapOf("playback_error" to it))
+                }
+            )
         )
         player.addListener(playbackListener)
         player.addListener(trackViewModel.subtitleTrackListener)
