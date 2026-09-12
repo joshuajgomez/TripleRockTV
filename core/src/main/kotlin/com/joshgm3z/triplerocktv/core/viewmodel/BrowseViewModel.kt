@@ -31,6 +31,8 @@ sealed class BrowseUiState {
     data class VideoOnDemandState(
         val favorites: List<StreamData> = emptyList(),
         val recentPlayed: List<StreamData> = emptyList(),
+        val favoritesFlow: Flow<List<StreamData>> = emptyFlow(),
+        val recentPlayedFlow: Flow<List<StreamData>> = emptyFlow(),
         val newlyAdded: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
@@ -39,6 +41,8 @@ sealed class BrowseUiState {
     data class LiveTvState(
         val recentPlayed: List<StreamData> = emptyList(),
         val favorites: List<StreamData> = emptyList(),
+        val favoritesFlow: Flow<List<StreamData>> = emptyFlow(),
+        val recentPlayedFlow: Flow<List<StreamData>> = emptyFlow(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
     ) : BrowseUiState()
@@ -46,6 +50,8 @@ sealed class BrowseUiState {
     data class SeriesStreamState(
         val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
         val favorites: List<SeriesStream> = emptyList(),
+        val favoritesFlow: Flow<List<SeriesStream>> = emptyFlow(),
+        val recentPlayedEpisodesFlow: Flow<List<SeriesStream>> = emptyFlow(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
     ) : BrowseUiState()
 }
@@ -72,10 +78,21 @@ class BrowseViewModel @Inject constructor(
 
     val isBlurSettingEnabled: Boolean = true
 
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            _uiState.value = when (streamType) {
+                StreamType.VideoOnDemand -> getVideoOnDemandState()
+                StreamType.Series -> getSeriesStreamState()
+                StreamType.LiveTV -> getLiveTvState()
+                else -> throw IllegalArgumentException("Invalid stream type")
+            }
+        }
+    }
+
     private suspend fun getSeriesStreamState(): BrowseUiState {
         val uiState = BrowseUiState.SeriesStreamState(
-            favorites = repository.fetchFavoritesSeries(),
-            recentPlayedEpisodes = recentsRepository.fetchRecentlyPlayedSeries(),
+            favoritesFlow = repository.favoritesSeriesFlow(),
+            recentPlayedEpisodesFlow = recentsRepository.recentlyPlayedSeriesFlow(),
             pagingCategoryData = Pager(
                 config = pagingConfig,
                 pagingSourceFactory = {
@@ -90,8 +107,8 @@ class BrowseViewModel @Inject constructor(
 
     private suspend fun getVideoOnDemandState(): BrowseUiState {
         val uiState = BrowseUiState.VideoOnDemandState(
-            favorites = repository.fetchFavorites(StreamType.VideoOnDemand),
-            recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.VideoOnDemand),
+            favoritesFlow = repository.favoritesFlow(StreamType.VideoOnDemand),
+            recentPlayedFlow = recentsRepository.recentlyPlayedStreamDataFlow(StreamType.VideoOnDemand),
             newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
             categoryMap = mutableMapOf<String, List<CategoryData>>().apply {
                 listOf("English", "Malayalam", "Hindi", "Tamil").forEach { lang ->
@@ -116,8 +133,8 @@ class BrowseViewModel @Inject constructor(
 
     private suspend fun getLiveTvState(): BrowseUiState {
         val uiState = BrowseUiState.LiveTvState(
-            recentPlayed = recentsRepository.fetchRecentlyPlayedStreamData(StreamType.LiveTV),
-            favorites = repository.fetchFavorites(StreamType.LiveTV),
+            favoritesFlow = repository.favoritesFlow(StreamType.LiveTV),
+            recentPlayedFlow = recentsRepository.recentlyPlayedStreamDataFlow(StreamType.LiveTV),
             categoryMap = mutableMapOf<String, List<CategoryData>>().apply {
                 listOf("English", "Malayalam", "News", "India", "Hindi", "Tamil").forEach { lang ->
                     val categories = repository.fetchCategoriesByTitleKey(
@@ -137,16 +154,5 @@ class BrowseViewModel @Inject constructor(
         val categoriesEmpty = repository.fetchCategories(StreamType.LiveTV).isEmpty()
         return if (categoriesEmpty) BrowseUiState.Empty(StreamType.LiveTV)
         else uiState
-    }
-
-    fun onViewResume() {
-        viewModelScope.launch(Dispatchers.IO) {
-            _uiState.value = when (streamType) {
-                StreamType.VideoOnDemand -> getVideoOnDemandState()
-                StreamType.Series -> getSeriesStreamState()
-                StreamType.LiveTV -> getLiveTvState()
-                else -> throw IllegalArgumentException("Invalid stream type")
-            }
-        }
     }
 }

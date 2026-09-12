@@ -50,9 +50,13 @@ interface MediaLocalRepository {
 
     suspend fun fetchFavorites(streamType: StreamType): List<StreamData>
 
+    fun favoritesFlow(streamType: StreamType): Flow<List<StreamData>>
+
     suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData>
 
     suspend fun fetchFavoritesSeries(): List<SeriesStream>
+
+    suspend fun favoritesSeriesFlow(): Flow<List<SeriesStream>>
 
     suspend fun updateFavorites(
         streamId: Int,

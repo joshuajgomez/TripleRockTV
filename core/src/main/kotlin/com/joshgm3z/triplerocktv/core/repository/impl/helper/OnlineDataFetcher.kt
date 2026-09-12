@@ -13,7 +13,9 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.MovieMetadata
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.util.Logger
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class OnlineDataFetcher
@@ -151,8 +153,9 @@ constructor(
 
     suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {
         getMovieData(streamId).let { movieMetaData ->
-            val updatedStreamData = streamDataDao.getByStreamId(streamId)
-                ?.copy(movieMetadata = movieMetaData) ?: return null
+            val updatedStreamData = withContext(Dispatchers.IO) {
+                streamDataDao.getByStreamId(streamId)
+            }?.copy(movieMetadata = movieMetaData) ?: return null
             streamDataDao.update(updatedStreamData)
             return movieMetaData
         }

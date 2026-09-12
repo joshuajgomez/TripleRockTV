@@ -27,9 +27,6 @@ fun BrowseScreen(
     viewModel: BrowseViewModel = hiltViewModel(),
     navigateMain: (NavMainDestination) -> Unit = {},
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.onViewResume()
-    }
     viewModel.uiState.collectAsState().value.let { uiState ->
         BrowseScreenContent(
             uiState = uiState,

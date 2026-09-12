@@ -32,6 +32,8 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
+import com.joshgm3z.triplerocktv.ui.common.diffCallback
+import com.joshgm3z.triplerocktv.ui.common.diffCallback2
 import com.joshgm3z.triplerocktv.ui.common.diffCategoryCallback
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -171,22 +173,28 @@ class BrowseFragment : BrowseSupportFragment() {
     private fun showVoDState(uiState: BrowseUiState.VideoOnDemandState) {
         rowsAdapter.clear()
 
-        if (uiState.recentPlayed.isNotEmpty()) {
-            val header = HeaderItem(0, "Recently played")
-            val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
-            listRowAdapter.addAll(0, uiState.recentPlayed)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+        val recentsHeader = HeaderItem(0L, "Recently played")
+        val recentsListRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
+        rowsAdapter.add(ListRow(recentsHeader, recentsListRowAdapter))
+
+        lifecycleScope.launch {
+            uiState.recentPlayedFlow.collectLatest {
+                recentsListRowAdapter.setItems(it, diffCallback2)
+            }
         }
 
-        if (uiState.favorites.isNotEmpty()) {
-            val header = HeaderItem(0, "Favorites")
-            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.favorites)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+        val header = HeaderItem(1L, "Favorites")
+        val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+        rowsAdapter.add(ListRow(header, listRowAdapter))
+
+        lifecycleScope.launch {
+            uiState.favoritesFlow.collectLatest {
+                listRowAdapter.setItems(it, diffCallback2)
+            }
         }
 
         if (uiState.newlyAdded.isNotEmpty()) {
-            val header = HeaderItem(0, "Newly added")
+            val header = HeaderItem(2L, "Newly added")
             val listRowAdapter = ArrayObjectAdapter(streamPresenter)
             listRowAdapter.addAll(0, uiState.newlyAdded)
             rowsAdapter.add(ListRow(header, listRowAdapter))
@@ -204,12 +212,12 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        var counter = 1L
+        var counter = 3L
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
         }
 
-        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingHeader = HeaderItem(100L, "All Categories")
         val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
 
         rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
@@ -224,18 +232,24 @@ class BrowseFragment : BrowseSupportFragment() {
     private fun showLiveTvState(uiState: BrowseUiState.LiveTvState) {
         rowsAdapter.clear()
 
-        if (uiState.recentPlayed.isNotEmpty()) {
-            val header = HeaderItem(0, "Recently played")
-            val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
-            listRowAdapter.addAll(0, uiState.recentPlayed)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+        val recentsHeader = HeaderItem(0L, "Recently played")
+        val recentsListRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
+        rowsAdapter.add(ListRow(recentsHeader, recentsListRowAdapter))
+
+        lifecycleScope.launch {
+            uiState.recentPlayedFlow.collectLatest {
+                recentsListRowAdapter.setItems(it, diffCallback2)
+            }
         }
 
-        if (uiState.favorites.isNotEmpty()) {
-            val header = HeaderItem(0, "Favorites")
-            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.favorites)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+        val header = HeaderItem(1L, "Favorites")
+        val listRowAdapter = ArrayObjectAdapter(streamPresenter)
+        rowsAdapter.add(ListRow(header, listRowAdapter))
+
+        lifecycleScope.launch {
+            uiState.favoritesFlow.collectLatest {
+                listRowAdapter.setItems(it, diffCallback2)
+            }
         }
 
         fun addRow(
@@ -250,12 +264,12 @@ class BrowseFragment : BrowseSupportFragment() {
             rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        var counter = 1L
+        var counter = 3L
         uiState.categoryMap.forEach { (title, categories) ->
             addRow(counter++, title, categories)
         }
 
-        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingHeader = HeaderItem(100L, "All Categories")
         val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
 
         rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
@@ -270,25 +284,30 @@ class BrowseFragment : BrowseSupportFragment() {
     private fun showSeriesStreamState(uiState: BrowseUiState.SeriesStreamState) {
         rowsAdapter.clear()
 
-        if (uiState.recentPlayedEpisodes.isNotEmpty()) {
-            val episodes = uiState.recentPlayedEpisodes.map {
-                episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
-                it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
+        val recentsHeader = HeaderItem(0L, "Recently played")
+        val recentsListRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
+        rowsAdapter.add(ListRow(recentsHeader, recentsListRowAdapter))
+
+        lifecycleScope.launch {
+            uiState.recentPlayedEpisodesFlow.collectLatest { series ->
+                val episodes = series.map {
+                    episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
+                    it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
+                }
+                recentsListRowAdapter.setItems(episodes, diffCallback2)
             }
-            val header = HeaderItem(0, "Recently played")
-            val listRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
-            listRowAdapter.addAll(0, episodes)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
         }
 
-        if (uiState.favorites.isNotEmpty()) {
-            val header = HeaderItem(0, "Favorites")
-            val listRowAdapter = ArrayObjectAdapter(streamPresenter)
-            listRowAdapter.addAll(0, uiState.favorites)
-            rowsAdapter.add(ListRow(header, listRowAdapter))
+        val favHeader = HeaderItem(1L, "Favorites")
+        val favListRowAdapter = ArrayObjectAdapter(streamPresenter)
+        rowsAdapter.add(ListRow(favHeader, favListRowAdapter))
+        lifecycleScope.launch {
+            uiState.favoritesFlow.collectLatest {
+                favListRowAdapter.setItems(it, diffCallback2)
+            }
         }
 
-        val pagingHeader = HeaderItem(100, "All Categories")
+        val pagingHeader = HeaderItem(100L, "All Categories")
         val pagingDataAdapter = PagingDataAdapter(categoryPresenter, diffCategoryCallback)
 
         rowsAdapter.add(ListRow(pagingHeader, pagingDataAdapter))
@@ -325,7 +344,5 @@ class BrowseFragment : BrowseSupportFragment() {
             ScreenName.Browse,
             mapOf("browse_streamType" to args.streamType.name)
         )
-
-        viewModel.onViewResume()
     }
 }

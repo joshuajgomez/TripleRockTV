@@ -9,6 +9,10 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class RecentsRepositoryImpl
@@ -36,6 +40,27 @@ class RecentsRepositoryImpl
         }
     }
 
+    override fun recentlyPlayedStreamDataFlow(streamType: StreamType): Flow<List<StreamData>> {
+        return recentlyPlayedDao.recentlyPlayedFlowOfType(streamType).map {
+            it.mapNotNull { recentlyPlayed ->
+                val streamData = withContext(Dispatchers.IO) {
+                    streamDataDao.getByStreamId(recentlyPlayed.id)
+                } ?: return@mapNotNull null
+                when {
+                    streamData.movieMetadata != null -> streamData
+                    else -> {
+                        onlineRepository.getMovieDataAndUpdate(recentlyPlayed.id)
+                        withContext(Dispatchers.IO) {
+                            streamDataDao.getByStreamId(recentlyPlayed.id)
+                        } ?: return@mapNotNull null
+                    }
+                }.apply {
+                    this.recentlyPlayed = recentlyPlayed
+                }
+            }
+        }
+    }
+
     override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
         return recentlyPlayedDao
             .getRecentlyPlayedByType(StreamType.Series)
@@ -55,6 +80,30 @@ class RecentsRepositoryImpl
                 series.lastPlayedEpisodeId = recentlyPlayed.id
                 if (series.hasStartedLastEpisode(recentlyPlayed)) series else null
             }
+    }
+
+    override fun recentlyPlayedSeriesFlow(): Flow<List<SeriesStream>> {
+        return recentlyPlayedDao.recentlyPlayedFlowOfType(StreamType.Series).map {
+            it.mapNotNull { recentlyPlayed ->
+                val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
+                val seriesStream = withContext(Dispatchers.IO) {
+                    seriesStreamsDao.getBySeriesId(seriesId)
+                } ?: return@mapNotNull null
+                val series = with(seriesStream) {
+                    when {
+                        !seasons.isNullOrEmpty() -> this
+                        else -> {
+                            onlineRepository.getSeriesDataAndUpdate(seriesId)
+                            withContext(Dispatchers.IO) {
+                                seriesStreamsDao.getBySeriesId(seriesId)
+                            } ?: return@mapNotNull null
+                        }
+                    }
+                }
+                series.lastPlayedEpisodeId = recentlyPlayed.id
+                if (series.hasStartedLastEpisode(recentlyPlayed)) series else null
+            }
+        }
     }
 
     private fun SeriesStream.hasStartedLastEpisode(recent: RecentlyPlayed): Boolean {

@@ -20,10 +20,12 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class MediaLocalRepositoryImpl @Inject constructor(
@@ -187,6 +189,16 @@ class MediaLocalRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun favoritesFlow(streamType: StreamType): Flow<List<StreamData>> {
+        return favoriteDao.favoritesFlowOfType(streamType).map {
+            it.mapNotNull { favorite ->
+                withContext(Dispatchers.IO) {
+                    streamDataDao.getByStreamId(favorite.id)
+                }
+            }
+        }
+    }
+
     override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
         return if (streamType == StreamType.VideoOnDemand) streamDataDao.getNewlyAdded10()
         else emptyList()
@@ -195,6 +207,16 @@ class MediaLocalRepositoryImpl @Inject constructor(
     override suspend fun fetchFavoritesSeries(): List<SeriesStream> {
         return favoriteDao.getFavoritesOfType(StreamType.Series).mapNotNull {
             seriesStreamsDao.getBySeriesId(it.id)
+        }
+    }
+
+    override suspend fun favoritesSeriesFlow(): Flow<List<SeriesStream>> {
+        return favoriteDao.favoritesFlowOfType(StreamType.Series).map {
+            it.mapNotNull { favorite ->
+                withContext(Dispatchers.IO) {
+                    seriesStreamsDao.getBySeriesId(favorite.id)
+                }
+            }
         }
     }
 

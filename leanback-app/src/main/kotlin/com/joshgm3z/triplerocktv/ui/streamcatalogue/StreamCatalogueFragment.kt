@@ -134,6 +134,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
     }
 
     private fun updateSeriesStream(seriesStream: SeriesStream) {
+        return
         binding.includeDetails.tvTitle.text = seriesStream.name
         binding.includeDetails.tvDescription.text = seriesStream.plot
         binding.includeDetails.tvCast.text = seriesStream.cast.withPrefix("Cast: ")
