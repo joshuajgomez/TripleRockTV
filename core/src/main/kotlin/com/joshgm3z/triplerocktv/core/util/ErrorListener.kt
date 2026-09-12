@@ -39,7 +39,7 @@ fun errorListener(
                 return // Try to recover for live streams
             }
 
-            else -> "An unexpected playback error occurred: ${error.localizedMessage}"
+            else -> "Error playing video: ${error.localizedMessage} [${error.errorCode}]"
         }
 
         onError(errorMessage)
