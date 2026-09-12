@@ -30,6 +30,9 @@ fun errorListener(
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ->
                 "Could not reach the video stream"
 
+            PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ->
+                "Unsupported format"
+
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 seekToDefaultPosition()
                 prepare()
