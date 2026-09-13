@@ -64,6 +64,7 @@ class GlideUtil
         imageView: ImageView,
         placeholder: Int? = null,
         error: Int? = null,
+        onSuccess: () -> Unit = {},
     ) {
         url.isNullOrEmpty() && return
         val builder = Glide.with(imageView.context)
@@ -71,7 +72,7 @@ class GlideUtil
         placeholder?.let { builder.placeholder(it) }
         error?.let { builder.error(it) }
         builder
-            .listener(glideErrorListener)
+            .listener(glideErrorListener(onSuccess))
             .centerCrop()
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(imageView)
@@ -121,7 +122,9 @@ class GlideUtil
         }
     }
 
-    private val glideErrorListener = object : RequestListener<Drawable> {
+    private fun glideErrorListener(
+        onSuccess: () -> Unit
+    ) = object : RequestListener<Drawable> {
         override fun onLoadFailed(
             e: GlideException?,
             model: Any?,
@@ -142,6 +145,7 @@ class GlideUtil
             dataSource: DataSource?,
             isFirstResource: Boolean
         ): Boolean {
+            onSuccess()
             return false
         }
 

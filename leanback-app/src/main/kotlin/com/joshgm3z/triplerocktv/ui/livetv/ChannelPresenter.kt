@@ -41,7 +41,7 @@ class ChannelPresenter
 
         binding.tvProgramName.text = streamData.name
         binding.ivStar.setVisible(streamData.favorite)
-        binding.root.setOnLongClickListener {
+        if (setFavorite != null) binding.root.setOnLongClickListener {
             scope.launch {
                 val add = !binding.ivStar.isVisible
                 val success = setFavorite?.invoke(streamData, !binding.ivStar.isVisible) ?: false
