@@ -41,7 +41,7 @@ class LiveTvViewModel
     private val categoryId = savedStateHandle.get<Int>("categoryId")
         ?: throw IllegalStateException("categoryId not found")
 
-    val selectedStreamId = savedStateHandle.get<Int>("selectedStreamId")
+    var selectedStreamId = savedStateHandle.get<Int>("selectedStreamId")
 
     private val _uiState = MutableStateFlow<List<StreamData>?>(null)
     val uiState = _uiState.asStateFlow()

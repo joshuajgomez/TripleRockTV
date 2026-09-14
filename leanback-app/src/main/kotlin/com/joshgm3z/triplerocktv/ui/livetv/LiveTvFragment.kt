@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
@@ -32,6 +31,7 @@ import com.joshgm3z.triplerocktv.ui.common.diffCallback2
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -119,6 +119,7 @@ class LiveTvFragment : Fragment() {
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
         val streamData = item as? StreamData ?: return@OnItemViewClickedListener
+        viewModel.selectedStreamId = streamData.streamId
         findNavController().navigate(LiveTvFragmentDirections.toPlayback().apply {
             streamId = streamData.streamId
             streamType = StreamType.LiveTV
@@ -150,6 +151,7 @@ class LiveTvFragment : Fragment() {
                 it?.let { streams ->
                     rowsAdapter.setItems(streams, diffCallback2)
 
+                    delay(100)
                     viewModel.selectedStreamId?.let { selectedStreamId ->
                         streams
                             .indexOfFirst { stream -> stream.streamId == selectedStreamId }
