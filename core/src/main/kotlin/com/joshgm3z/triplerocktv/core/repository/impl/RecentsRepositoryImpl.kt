@@ -47,7 +47,9 @@ class RecentsRepositoryImpl
                     streamDataDao.getByStreamId(recentlyPlayed.id)
                 } ?: return@mapNotNull null
                 when {
-                    streamData.movieMetadata != null -> streamData
+                    streamData.movieMetadata != null
+                            || streamData.streamType == StreamType.LiveTV -> streamData
+
                     else -> {
                         onlineRepository.getMovieDataAndUpdate(recentlyPlayed.id)
                         withContext(Dispatchers.IO) {
