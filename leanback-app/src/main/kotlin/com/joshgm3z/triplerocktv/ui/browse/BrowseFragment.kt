@@ -32,10 +32,8 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
-import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.ui.common.diffCallback2
 import com.joshgm3z.triplerocktv.ui.common.diffCategoryCallback
-import com.joshgm3z.triplerocktv.ui.livetv.ChannelPresenter
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -53,9 +51,6 @@ class BrowseFragment : BrowseSupportFragment() {
 
     @Inject
     lateinit var streamPresenter: StreamPresenter
-
-    @Inject
-    lateinit var channelPresenter: ChannelPresenter
 
     @Inject
     lateinit var recentStreamPresenter: RecentStreamPresenter
@@ -237,7 +232,7 @@ class BrowseFragment : BrowseSupportFragment() {
         rowsAdapter.clear()
 
         val recentsHeader = HeaderItem(0L, "Recently played")
-        val recentsListRowAdapter = ArrayObjectAdapter(channelPresenter)
+        val recentsListRowAdapter = ArrayObjectAdapter(streamPresenter)
         rowsAdapter.add(ListRow(recentsHeader, recentsListRowAdapter))
 
         lifecycleScope.launch {
@@ -247,7 +242,7 @@ class BrowseFragment : BrowseSupportFragment() {
         }
 
         val header = HeaderItem(1L, "Favorites")
-        val listRowAdapter = ArrayObjectAdapter(channelPresenter)
+        val listRowAdapter = ArrayObjectAdapter(streamPresenter)
         rowsAdapter.add(ListRow(header, listRowAdapter))
 
         lifecycleScope.launch {

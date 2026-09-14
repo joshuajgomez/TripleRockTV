@@ -4,6 +4,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
@@ -56,12 +58,28 @@ class StreamAdapter
             is SeriesStream -> item.rating.parseToFloat()
             else -> null
         }
+        val streamType = when (item) {
+            is StreamData -> item.streamType
+            is SeriesStream -> StreamType.Series
+            else -> null
+        }
 
         binding.tvRating.text = rating.toString()
         binding.tvRating.setVisible(rating != null && rating > 0)
 
         binding.streamTitle.text = title
-        glideUtil.loadImage(imageUri, binding.posterImage)
+        when (streamType) {
+            StreamType.LiveTV -> glideUtil.loadImage(
+                imageUri,
+                binding.ivIcon,
+                error = R.drawable.ic_video_file
+            )
+
+            else -> glideUtil.loadImage(
+                imageUri,
+                binding.posterImage
+            )
+        }
 
         binding.root.setOnClickListener { onClick(item) }
     }

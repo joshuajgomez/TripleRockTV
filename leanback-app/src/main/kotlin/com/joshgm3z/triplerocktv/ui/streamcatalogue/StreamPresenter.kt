@@ -6,6 +6,7 @@ import android.widget.ImageView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
@@ -45,17 +46,36 @@ class StreamPresenter
             is SeriesStream -> item.rating.parseToFloat()
             else -> null
         }
+        val streamType = when (item) {
+            is StreamData -> item.streamType
+            is SeriesStream -> StreamType.Series
+            else -> null
+        }
 
         binding.tvRating.text = rating.toString()
         binding.tvRating.setVisible(rating != null && rating > 0)
 
         binding.streamTitle.text = title
-        glideUtil.loadImage(imageUri, binding.posterImage)
+
+        when (streamType) {
+            StreamType.LiveTV -> glideUtil.loadImage(
+                imageUri,
+                binding.ivIcon,
+                error = R.drawable.ic_video_file
+            )
+
+            else -> glideUtil.loadImage(
+                imageUri,
+                binding.posterImage
+            )
+        }
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val binding = ViewStreamCardBinding.bind(viewHolder.view)
         Glide.with(binding.root.context).clear(binding.posterImage)
+        Glide.with(binding.root.context).clear(binding.ivIcon)
+        binding.ivIcon.setImageResource(R.drawable.ic_video_file)
     }
 
 }
