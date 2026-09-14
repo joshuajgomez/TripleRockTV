@@ -330,6 +330,10 @@
             android:name="categoryId"
             android:defaultValue="727"
             app:argType="integer" />
+        <argument
+            android:name="selectedStreamId"
+            android:defaultValue="166605"
+            app:argType="integer" />
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />

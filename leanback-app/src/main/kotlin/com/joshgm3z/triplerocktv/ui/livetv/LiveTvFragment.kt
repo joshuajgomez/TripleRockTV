@@ -28,6 +28,7 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
+import com.joshgm3z.triplerocktv.ui.common.diffCallback2
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -146,8 +147,14 @@ class LiveTvFragment : Fragment() {
         view.keepScreenOn = true
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
-                it?.let {
-                    rowsAdapter.setItems(it, null)
+                it?.let { streams ->
+                    rowsAdapter.setItems(streams, diffCallback2)
+
+                    viewModel.selectedStreamId?.let { selectedStreamId ->
+                        streams
+                            .indexOfFirst { stream -> stream.streamId == selectedStreamId }
+                            .let { index -> if (index != -1) selectStream(index) }
+                    }
                 }
             }
         }
@@ -170,6 +177,13 @@ class LiveTvFragment : Fragment() {
                 viewModel.updateMyList(streamData, add)
             }
         }
+    }
+
+    private fun selectStream(position: Int) {
+        val gridFragment = childFragmentManager.findFragmentById(
+            binding.flProgramsContainer.id
+        ) as? VerticalGridSupportFragment
+        gridFragment?.setSelectedPosition(position)
     }
 
     override fun onPause() {

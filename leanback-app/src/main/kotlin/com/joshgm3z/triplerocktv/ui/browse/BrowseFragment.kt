@@ -152,9 +152,9 @@ class BrowseFragment : BrowseSupportFragment() {
                     }
 
                     else -> {
-                        BrowseFragmentDirections.toPlayback().apply {
-                            streamType = item.streamType
-                            streamId = item.streamId
+                        BrowseFragmentDirections.toLiveTvCatalogue().apply {
+                            categoryId = item.categoryId
+                            selectedStreamId = item.streamId
                         }
                     }
                 }
