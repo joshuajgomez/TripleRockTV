@@ -6,6 +6,7 @@ import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
+import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.delay
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -67,6 +68,28 @@ class LoginRepositoryImpl @Inject constructor(
             delay(1000)
             onError("Connection failed: ${e.localizedMessage ?: "Unknown error"}")
         }
+    }
+
+    override suspend fun validLogin(
+        webUrl: String,
+        username: String,
+        password: String,
+    ): Boolean = try {
+        val baseUrl = if (webUrl.endsWith("/")) webUrl else "$webUrl/"
+        val retrofit = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+        val service = retrofit.create(XtreamService::class.java)
+        val response = service.validateLogin(username, password)
+
+        when {
+            !response.isSuccessful -> false
+            else -> response.body()?.user_info?.auth == 1
+        }
+    } catch (e: Exception) {
+        Logger.error(e.message.toString())
+        false
     }
 
     private fun buildUserMap(

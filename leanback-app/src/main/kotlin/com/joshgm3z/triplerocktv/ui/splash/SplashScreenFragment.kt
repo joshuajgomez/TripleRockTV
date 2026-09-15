@@ -76,6 +76,9 @@ class SplashScreenFragment : Fragment() {
                     is DestinationState.Error -> SplashScreenFragmentDirections
                         .toError(it.message)
 
+                    is DestinationState.NetworkError -> SplashScreenFragmentDirections
+                        .toNetworkError()
+
                     is DestinationState.Home -> SplashScreenFragmentDirections
                         .toHome()
 

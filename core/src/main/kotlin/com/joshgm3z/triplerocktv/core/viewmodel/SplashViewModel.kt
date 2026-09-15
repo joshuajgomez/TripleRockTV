@@ -9,8 +9,8 @@ import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
-import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.NetworkUtil
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -22,6 +22,7 @@ sealed class DestinationState {
     object Login : DestinationState()
     object Updater : DestinationState()
     object Home : DestinationState()
+    object NetworkError : DestinationState()
     class Error(val message: String) : DestinationState()
     class AccessDisabled(val message: String) : DestinationState()
     class AppUpdateNeeded(val message: String) : DestinationState()
@@ -35,7 +36,7 @@ constructor(
     repository: MediaLocalRepository,
     loginRepository: LoginRepository,
     accessControlRepository: AccessControlRepository,
-    firebaseConfig: FirebaseConfig,
+    networkUtil: NetworkUtil,
 ) : ViewModel() {
     private val _navDirectionState = MutableStateFlow<DestinationState?>(null)
     val navDirectionState = _navDirectionState.asStateFlow()
@@ -53,13 +54,26 @@ constructor(
             var appUpdateState = accessControlRepository.appUpdateState()
 
             _navDirectionState.value = when {
-                !accessState.enabled -> DestinationState.AccessDisabled(accessState.reason)
+                !accessState.enabled -> DestinationState.AccessDisabled(
+                    accessState.reason
+                )
+
                 !appUpdateState.enabled -> DestinationState.AppUpdateNeeded(
                     appUpdateState.reason
                 )
 
                 userInfo == null -> DestinationState.Login
+
+                !networkUtil.isInternetConnected() -> DestinationState.NetworkError
+
+                !loginRepository.validLogin(
+                    userInfo.webUrl,
+                    userInfo.username,
+                    userInfo.password
+                ) -> DestinationState.Login
+
                 repository.isContentEmpty() -> DestinationState.Updater
+
                 else -> DestinationState.Home
             }
         }

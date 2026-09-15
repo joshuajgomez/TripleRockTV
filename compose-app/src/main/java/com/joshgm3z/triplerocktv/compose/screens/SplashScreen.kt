@@ -32,6 +32,7 @@ fun SplashScreen(
             DestinationState.Updater -> NavMainDestination.MediaSync
             DestinationState.Login -> NavMainDestination.Login
             is DestinationState.Error -> TODO()
+            is DestinationState.NetworkError -> TODO()
         }
         LaunchedEffect(route) {
 //            delay(1000)

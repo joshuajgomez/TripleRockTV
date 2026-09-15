@@ -9,6 +9,13 @@ interface LoginRepository {
         onError: (String) -> Unit,
     )
 
+    suspend fun validLogin(
+        webUrl: String,
+        username: String,
+        password: String,
+    ): Boolean
+
     suspend fun addIfNotExist()
+
     suspend fun tryLogout(onLogoutComplete: () -> Unit) {}
 }
