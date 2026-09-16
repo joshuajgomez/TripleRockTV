@@ -36,6 +36,8 @@ class DownloadCancelDialog : DialogFragment() {
         binding.bvNegative.setVisible(true)
         binding.bvPositive.text = "Exit screen"
         binding.bvNegative.text = "Continue download"
+        binding.tvTitle.text = "Download not complete"
+        binding.tvSubtitle.text = "If you exit this screen, any remaining download will be cancelled"
 
         binding.bvPositive.setOnClickListener {
             findNavController().navigate(DownloadCancelDialogDirections.toSplash())
