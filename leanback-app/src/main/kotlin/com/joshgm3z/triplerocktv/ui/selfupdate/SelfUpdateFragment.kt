@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,6 +14,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.SelfUpdateViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
+import io.noties.markwon.Markwon
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
@@ -46,7 +48,14 @@ class SelfUpdateDialog : DialogFragment() {
         lifecycleScope.launch {
             viewModel.uiState.collect {
                 binding.tvTitle.text = it.title
-                binding.tvSubtitle.text = it.subtitle
+
+                if (it.subtitle == null) {
+                    binding.tvSubtitle.text = ""
+                } else {
+                    val markwon = Markwon.create(requireContext())
+                    markwon.setMarkdown(binding.tvSubtitle, it.subtitle.toString())
+                }
+
                 binding.bvPositive.text = it.buttonAction.text
                 binding.bvPositive.isEnabled = it.enableButtons
                 binding.bvNegative.isEnabled = it.enableButtons

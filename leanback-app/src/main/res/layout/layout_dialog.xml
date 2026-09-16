@@ -27,7 +27,7 @@
         android:layout_marginTop="10dp"
         android:ellipsize="end"
         android:maxLines="7"
-        android:text="@string/release_metadata"
+        tools:text="@string/release_metadata"
         android:textColor="?attr/colorForegroundMid"
         app:layout_constraintEnd_toEndOf="@id/tv_title"
         app:layout_constraintStart_toStartOf="parent"

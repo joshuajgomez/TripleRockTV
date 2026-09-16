@@ -125,4 +125,6 @@ dependencies {
     testImplementation(libs.robolectric)
     testImplementation(libs.androidx.junit)
     testImplementation(libs.truth)
+
+    implementation("io.noties.markwon:core:4.6.2")
 }

@@ -98,7 +98,8 @@ jobs:
             release_artifacts/3RockTV-leanback-app.apk
             release_artifacts/3RockTV-compose-app.apk
           body: |
-            ${{ env.SHORT_SHA }} ${{ steps.last_commit.outputs.msg }}
+            **Release note:**
+            > ${{ steps.last_commit.outputs.msg }} `${{ env.SHORT_SHA }}`
           overwrite: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
