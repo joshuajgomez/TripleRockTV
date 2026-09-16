@@ -21,11 +21,6 @@
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/toUpdater"
-            app:destination="@id/updaterFragment"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/toAccessDisabled"
             app:destination="@id/accessDisabledFragment"
             app:popUpTo="@id/splashScreenFragment"
@@ -55,9 +50,6 @@
         <action
             android:id="@+id/toConfirmSignOutDialog"
             app:destination="@id/signOutDialogFragment" />
-        <action
-            android:id="@+id/toUpdater"
-            app:destination="@id/updaterFragment" />
         <action
             android:id="@+id/toSettings"
             app:destination="@id/settingsFragment" />
@@ -101,31 +93,10 @@
         android:name="com.joshgm3z.triplerocktv.ui.login.LoginFragment"
         android:label="MediaLoginFragment">
         <action
-            android:id="@+id/toUpdater"
-            app:destination="@id/updaterFragment"
-            app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/updaterFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.loading.UpdaterFragment"
-        android:label="UpdaterFragment">
-        <argument
-            android:name="autoUpdateAndExit"
-            android:defaultValue="false"
-            app:argType="boolean" />
-        <action
             android:id="@+id/toSplash"
             app:destination="@id/splashScreenFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-        <action
-            android:id="@+id/toLoadingError"
-            app:destination="@id/loadingErrorFragment" />
-        <action
-            android:id="@+id/toDownloadCancelDialog"
-            app:destination="@id/downloadCancelDialog" />
     </fragment>
 
     <fragment
@@ -320,17 +291,6 @@
         <argument
             android:name="title"
             app:argType="string" />
-    </dialog>
-
-    <dialog
-        android:id="@+id/downloadCancelDialog"
-        android:name="com.joshgm3z.triplerocktv.ui.loading.DownloadCancelDialog"
-        android:label="DownloadCancelDialog">
-        <action
-            android:id="@+id/toSplash"
-            app:destination="@id/splashScreenFragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
     </dialog>
 
     <dialog

@@ -1,12 +1,9 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
-import com.joshgm3z.triplerocktv.core.repository.LoadingState
-import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.username
-import com.joshgm3z.triplerocktv.core.repository.impl.REQUEST_DELAY
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
@@ -15,7 +12,6 @@ import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.parseEpisodeNumber
-import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 class SeriesFetcher
@@ -26,77 +22,12 @@ constructor(
 ) {
     lateinit var iptvService: IptvService
 
-    suspend fun fetchContent(
-        limit: Int? = null,
-        onFetch: (LoadingState) -> Unit,
-    ) {
+    suspend fun fetchContent() {
         Logger.entry()
-        val categories = fetchSeriesCategories().let {
-            if (limit != null) it.subList(0, limit) else it
-        }
-        val total = categories.size
-
-        val seriesStreamListToStore = mutableListOf<SeriesStream>()
-        val categoriesToStore = mutableListOf<CategoryData>()
-
-        var errorMessage = ""
-        try {
-            categories.forEachIndexed { index, it ->
-                val list = fetchSeries(it)
-                if (list.isNotEmpty()) {
-                    categoriesToStore.add(
-                        it.apply {
-                            count = list.size
-                            firstStreamIcon = list.maxByOrNull {
-                                it.lastModified?.toIntOrNull() ?: 0
-                            }?.coverImageUrl
-                        }
-                    )
-                    seriesStreamListToStore.addAll(list)
-                }
-
-                onFetch(
-                    LoadingState(
-                        percent = (index.toFloat() / total * 100).toInt(),
-                        status = LoadingStatus.Ongoing,
-                    )
-                )
-                delay(REQUEST_DELAY)
-            }
-        } catch (e: Exception) {
-            Logger.error(e.message.toString())
-            e.printStackTrace()
-            errorMessage = e.message.toString()
-        }
-
-        if (seriesStreamListToStore.isNotEmpty() && categoriesToStore.isNotEmpty()) {
-            Logger.info("storing categories = [${categoriesToStore.size}], streams = [${seriesStreamListToStore.size}]")
-
-            categoryDataDao.replaceData(StreamType.Series, categoriesToStore)
-            seriesStreamsDao.replaceData(seriesStreamListToStore)
-        }
-
-        when {
-            categoriesToStore.isEmpty() || seriesStreamListToStore.isEmpty() -> onFetch(
-                LoadingState(
-                    status = LoadingStatus.Error,
-                    error = "Unable to update. Try again in a few min"
-                )
-            )
-
-            errorMessage.isNotEmpty() -> onFetch(
-                LoadingState(
-                    status = LoadingStatus.Error,
-                    error = "Partially updated. Try again to get full content."
-                )
-            )
-
-            else -> onFetch(
-                LoadingState(
-                    percent = 100,
-                    status = LoadingStatus.Complete
-                )
-            )
+        val categories = fetchSeriesCategories()
+        if (categories.isNotEmpty()) {
+            Logger.info("Updating categories = [${categories.size}]")
+            categoryDataDao.replaceData(StreamType.Series, categories)
         }
     }
 
@@ -117,11 +48,11 @@ constructor(
         emptyList()
     }
 
-    private suspend fun fetchSeries(category: CategoryData): List<SeriesStream> {
-        val series = iptvService.getSeries(username, password, category.categoryId)
-        Logger.debug("categoryId=${category.categoryId}, series.size=${series.size}")
+    suspend fun fetchSeries(categoryId: Int) {
+        val series = iptvService.getSeries(username, password, categoryId)
+        Logger.debug("categoryId=${categoryId}, series.size=${series.size}")
 
-        return series.map {
+        val seriesStreams = series.map {
             SeriesStream(
                 num = it.num,
                 name = it.name,
@@ -138,6 +69,7 @@ constructor(
                 backdropUrl = it.backdropPath.firstOrNull()
             )
         }
+        seriesStreamsDao.insertStreams(seriesStreams)
     }
 
     suspend fun getSeriesDataAndUpdate(streamId: Int) {

@@ -1,9 +1,7 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
-import com.joshgm3z.triplerocktv.core.repository.LoadingState
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.impl.helper.EPGFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.SeriesFetcher
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.OnlineDataFetcher
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
@@ -18,18 +16,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
-const val REQUEST_DELAY: Long = 100L
-
 class MediaOnlineRepositoryImpl
 @Inject constructor(
     scope: CoroutineScope,
     private val localDatastore: LocalDatastore,
     private val seriesFetcher: SeriesFetcher,
     private val onlineDataFetcher: OnlineDataFetcher,
-    private val epgFetcher: EPGFetcher,
 ) : MediaOnlineRepository {
     companion object {
-        private const val LIMIT = 5
         lateinit var username: String
         lateinit var password: String
     }
@@ -49,7 +43,6 @@ class MediaOnlineRepositoryImpl
             iptvService = getIptvService(it.webUrl)
             seriesFetcher.iptvService = iptvService!!
             onlineDataFetcher.iptvService = iptvService!!
-            epgFetcher.iptvService = iptvService!!
         }
         assert(iptvService != null)
     }
@@ -68,24 +61,10 @@ class MediaOnlineRepositoryImpl
         return retrofit.create(IptvService::class.java)
     }
 
-    override suspend fun startUpdate(
-        streamType: StreamType,
-        onFetch: (LoadingState) -> Unit,
-        onError: (String, String) -> Unit
-    ) {
-        when (streamType) {
-            StreamType.VideoOnDemand -> onlineDataFetcher.fetchContent(
-                streamType = streamType,
-                onFetch = onFetch,
-            )
-
-            StreamType.LiveTV -> onlineDataFetcher.fetchContent(
-                streamType = streamType,
-                onFetch = onFetch,
-            )
-
-            StreamType.Series -> seriesFetcher.fetchContent(onFetch = onFetch)
-        }
+    override suspend fun updateAllCategories() {
+        onlineDataFetcher.fetchContent(StreamType.VideoOnDemand)
+        onlineDataFetcher.fetchContent(StreamType.LiveTV)
+        seriesFetcher.fetchContent()
     }
 
     override suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {
@@ -115,5 +94,16 @@ class MediaOnlineRepositoryImpl
             password = password,
             streamId = streamId,
         )?.epgListings ?: emptyList()
+    }
+
+    override suspend fun fetchStreams(
+        streamType: StreamType,
+        categoryId: Int
+    ) {
+        if (iptvService == null) {
+            fetchIptvService()
+        }
+        if (streamType == StreamType.Series) seriesFetcher.fetchSeries(categoryId)
+        else onlineDataFetcher.fetchStreamDataList(categoryId, streamType)
     }
 }

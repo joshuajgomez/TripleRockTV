@@ -9,25 +9,9 @@ enum class StreamType {
     Series,
 }
 
-data class LoadingState(
-    val percent: Int = 0,
-    val status: LoadingStatus = LoadingStatus.Initial,
-    val error: String? = null,
-)
-
-enum class LoadingStatus {
-    Ongoing,
-    Complete,
-    Initial,
-    Error,
-}
-
 interface MediaOnlineRepository {
-    suspend fun startUpdate(
-        streamType: StreamType,
-        onFetch: (LoadingState) -> Unit,
-        onError: (String, String) -> Unit,
-    )
+
+    suspend fun updateAllCategories()
 
     suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata?
 
@@ -36,4 +20,6 @@ interface MediaOnlineRepository {
     suspend fun getSeriesDataAndUpdate(streamId: Int)
 
     suspend fun getShortEpgListing(streamId: Int): List<IptvEpgListing>
+
+    suspend fun fetchStreams(streamType: StreamType, categoryId: Int)
 }

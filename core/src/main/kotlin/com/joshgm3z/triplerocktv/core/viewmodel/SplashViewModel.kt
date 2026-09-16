@@ -8,6 +8,7 @@ import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.NetworkUtil
@@ -33,7 +34,7 @@ class SplashViewModel
 @Inject
 constructor(
     localDatastore: LocalDatastore,
-    repository: MediaLocalRepository,
+    onlineRepository: MediaOnlineRepository,
     loginRepository: LoginRepository,
     accessControlRepository: AccessControlRepository,
     networkUtil: NetworkUtil,
@@ -72,9 +73,10 @@ constructor(
                     userInfo.password
                 ) -> DestinationState.Login
 
-                repository.isContentEmpty() -> DestinationState.Updater
-
-                else -> DestinationState.Home
+                else -> {
+                    onlineRepository.updateAllCategories()
+                    DestinationState.Home
+                }
             }
         }
     }

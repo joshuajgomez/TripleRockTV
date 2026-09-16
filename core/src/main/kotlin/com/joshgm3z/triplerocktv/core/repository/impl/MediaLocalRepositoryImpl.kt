@@ -181,7 +181,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
-            && epgListingDao.getAllEpgListings().isEmpty()
 
     override suspend fun fetchFavorites(streamType: StreamType): List<StreamData> {
         return favoriteDao.getFavoritesOfType(streamType).mapNotNull {

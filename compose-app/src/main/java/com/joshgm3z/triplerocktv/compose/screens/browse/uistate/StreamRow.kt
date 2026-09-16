@@ -30,10 +30,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.joshgm3z.triplerocktv.compose.R
-import com.joshgm3z.triplerocktv.compose.screens.settings.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.GlidePic
+import com.joshgm3z.triplerocktv.compose.screens.common.cardCornerRadius
 import com.joshgm3z.triplerocktv.compose.screens.common.listSpacing
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream

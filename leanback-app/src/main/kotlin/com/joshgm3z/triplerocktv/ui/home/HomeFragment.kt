@@ -62,10 +62,9 @@ class HomeFragment : BrowseSupportFragment() {
         when (item) {
             is SettingItem -> when (item.title) {
                 "Sign out" -> HomeFragmentDirections.toConfirmSignOutDialog()
-                "Settings" -> HomeFragmentDirections.toSettings()
                 "Update app" -> HomeFragmentDirections.toSelfUpdateDialog()
 
-                else -> HomeFragmentDirections.toUpdater()
+                else -> HomeFragmentDirections.toSettings()
             }
 
             is HomeItem -> when (item.title) {
@@ -96,13 +95,6 @@ class HomeFragment : BrowseSupportFragment() {
                     rowsAdapter.add(ListRow(homeAdapter))
 
                     val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-                    settingsAdapter.add(
-                        SettingItem(
-                            "Sync media",
-                            R.drawable.icon_download,
-                            viewModel.lastUpdatedTime ?: ""
-                        )
-                    )
                     settingsAdapter.add(
                         SettingItem(
                             "Update app",

@@ -117,6 +117,7 @@ constructor(
                     count = repository.getStreamsCountOfCategory(categoryId, streamType)
                 )
             }
+            onlineRepository.fetchStreams(streamType, categoryId)
         }
     }
 

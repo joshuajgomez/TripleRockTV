@@ -1,11 +1,8 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
-import com.joshgm3z.triplerocktv.core.repository.LoadingState
-import com.joshgm3z.triplerocktv.core.repository.LoadingStatus
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.password
 import com.joshgm3z.triplerocktv.core.repository.impl.MediaOnlineRepositoryImpl.Companion.username
-import com.joshgm3z.triplerocktv.core.repository.impl.REQUEST_DELAY
 import com.joshgm3z.triplerocktv.core.repository.retrofit.IptvService
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
@@ -14,7 +11,6 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -26,70 +22,12 @@ constructor(
 ) {
     lateinit var iptvService: IptvService
 
-    suspend fun fetchContent(
-        streamType: StreamType,
-        onFetch: (LoadingState) -> Unit,
-    ) {
+    suspend fun fetchContent(streamType: StreamType) {
         Logger.entry()
         val categories = fetchCategories(streamType)
-
-        val streamDataListToStore = mutableListOf<StreamData>()
-        val categoriesToStore = mutableListOf<CategoryData>()
-
-        var errorMessage = ""
-        try {
-            categories.forEachIndexed { index, it ->
-                val list = fetchStreamDataList(it)
-                if (list.isNotEmpty()) {
-                    categoriesToStore.add(it.apply {
-                        count = list.size
-                        firstStreamIcon = list.maxByOrNull {
-                            it.added
-                        }?.streamIcon
-                    })
-                    streamDataListToStore.addAll(list)
-                }
-                onFetch(
-                    LoadingState(
-                        percent = (index.toFloat() / categories.size * 100).toInt(),
-                        status = LoadingStatus.Ongoing,
-                    )
-                )
-                delay(REQUEST_DELAY)
-            }
-        } catch (e: Exception) {
-            Logger.error(e.message.toString())
-            e.printStackTrace()
-            errorMessage = e.message.toString()
-        }
-
-        if (categoriesToStore.isNotEmpty() && streamDataListToStore.isNotEmpty()) {
-            Logger.info("storing categories = [${categoriesToStore.size}], streams = [${streamDataListToStore.size}]")
-
-            categoryDataDao.replaceData(streamType, categoriesToStore)
-            streamDataDao.replaceData(streamType, streamDataListToStore)
-        }
-        when {
-            categoriesToStore.isEmpty() || streamDataListToStore.isEmpty() -> onFetch(
-                LoadingState(
-                    status = LoadingStatus.Error,
-                    error = "Unable to update. Try again in a few min"
-                )
-            )
-
-            errorMessage.isNotEmpty() -> onFetch(
-                LoadingState(
-                    status = LoadingStatus.Error,
-                    error = "Partially updated. Try again to get full content."
-                )
-            )
-
-            else -> onFetch(
-                LoadingState(
-                    percent = 100,
-                    status = LoadingStatus.Complete
-                )
-            )
+        if (categories.isNotEmpty()) {
+            Logger.info("Updating categories = [${categories.size}]")
+            categoryDataDao.replaceData(streamType, categories)
         }
     }
 
@@ -115,26 +53,25 @@ constructor(
         }
     }
 
-
-    private suspend fun fetchStreamDataList(categoryData: CategoryData): List<StreamData> {
-        val streams = when (categoryData.streamType) {
+    suspend fun fetchStreamDataList(categoryId: Int, streamType: StreamType) {
+        val streams = when (streamType) {
             StreamType.VideoOnDemand -> iptvService.getVodStreams(
                 username,
                 password,
-                categoryData.categoryId
+                categoryId
             )
 
             StreamType.LiveTV -> iptvService.getLiveStreams(
                 username,
                 password,
-                categoryData.categoryId
+                categoryId
             )
 
             else -> emptyList()
         }
-        Logger.debug("streamType=${categoryData.streamType}, categoryId=${categoryData.categoryId}, streams.size=${streams.size}")
+        Logger.debug("streamType=${streamType}, categoryId=${categoryId}, streams.size=${streams.size}")
 
-        return streams.map {
+        val streamDataList = streams.map {
             StreamData(
                 num = it.num,
                 name = it.name,
@@ -143,12 +80,13 @@ constructor(
                 streamIcon = it.streamIcon,
                 categoryId = it.categoryId,
                 added = it.added,
-                streamType = categoryData.streamType,
-                extension = it.containerExtension ?: categoryData.streamType.defaultExtension(),
+                streamType = streamType,
+                extension = it.containerExtension ?: streamType.defaultExtension(),
                 rating = it.rating.parseToFloat(),
                 epgChannelId = it.epgChannelId,
             )
         }
+        streamDataDao.insertAll(streamDataList)
     }
 
     suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {

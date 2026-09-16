@@ -61,10 +61,6 @@ class SplashScreenFragment : Fragment() {
                     DestinationState.Login -> SplashScreenFragmentDirections
                         .toLogin()
 
-                    DestinationState.Updater -> SplashScreenFragmentDirections
-                        .toUpdater()
-                        .apply { autoUpdateAndExit = true }
-
                     is DestinationState.AccessDisabled -> SplashScreenFragmentDirections
                         .toAccessDisabled()
                         .apply { message = it.message }

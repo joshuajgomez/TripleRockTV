@@ -57,6 +57,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRowFragment()
+        title = args.categoryName
     }
 
     override fun onSaveInstanceState(outState: Bundle) {

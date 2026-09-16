@@ -15,7 +15,6 @@ import com.joshgm3z.triplerocktv.compose.screens.settings.AppUpdateNeededScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.AppUpdateScreen
 import com.joshgm3z.triplerocktv.compose.screens.settings.AccountDetailsScreen
 import com.joshgm3z.triplerocktv.compose.screens.LoginScreen
-import com.joshgm3z.triplerocktv.compose.screens.settings.MediaSyncScreen
 import com.joshgm3z.triplerocktv.compose.screens.player.PlayerScreen
 import com.joshgm3z.triplerocktv.compose.screens.SearchScreen
 import com.joshgm3z.triplerocktv.compose.screens.SplashScreen
@@ -149,17 +148,6 @@ fun TvNavHost() {
             })
         }
 
-        composable<NavMainDestination.MediaSync> {
-            MediaSyncScreen(
-                onSyncComplete = {
-                    /*navController.navigate(NavMainDestination.Home)*/
-                }, onBackPress = {
-                    navController.popBackStack()
-                },
-                showExitDialog = {
-                    navController.navigate(NavMainDestination.MediaSyncExitDialog)
-                })
-        }
         composable<NavMainDestination.Home> {
             HomeScreen {
                 navController.navigate(it)

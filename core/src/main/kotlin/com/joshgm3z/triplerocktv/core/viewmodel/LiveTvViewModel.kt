@@ -66,6 +66,7 @@ class LiveTvViewModel
             _uiState.value = repository.fetchStreamsOfCategory(
                 categoryId, StreamType.LiveTV
             ) as List<StreamData>
+            onlineRepository.fetchStreams(StreamType.LiveTV, categoryId)
         }
     }
 
