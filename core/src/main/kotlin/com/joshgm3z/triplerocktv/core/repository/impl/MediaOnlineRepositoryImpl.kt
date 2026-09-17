@@ -44,7 +44,6 @@ class MediaOnlineRepositoryImpl
             seriesFetcher.iptvService = iptvService!!
             onlineDataFetcher.iptvService = iptvService!!
         }
-        assert(iptvService != null)
     }
 
     private fun getIptvService(serverUrl: String): IptvService {

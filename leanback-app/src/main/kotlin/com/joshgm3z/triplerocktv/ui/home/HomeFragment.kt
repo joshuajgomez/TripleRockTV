@@ -61,8 +61,8 @@ class HomeFragment : BrowseSupportFragment() {
     private val itemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
         when (item) {
             is SettingItem -> when (item.title) {
-                "Sign out" -> HomeFragmentDirections.toConfirmSignOutDialog()
-                "Update app" -> HomeFragmentDirections.toSelfUpdateDialog()
+                "Sign out" -> HomeFragmentDirections.toSignOutDialog()
+                "Update app" -> HomeFragmentDirections.toAppUpdateDialog()
 
                 else -> HomeFragmentDirections.toSettings()
             }

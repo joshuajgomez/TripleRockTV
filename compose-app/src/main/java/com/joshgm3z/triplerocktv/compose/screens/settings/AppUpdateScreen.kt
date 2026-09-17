@@ -23,11 +23,11 @@ import com.joshgm3z.triplerocktv.compose.theme.subTextColor
 import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.viewmodel.ButtonAction
 import com.joshgm3z.triplerocktv.core.viewmodel.SelfUpdateUiState
-import com.joshgm3z.triplerocktv.core.viewmodel.SelfUpdateViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.AppUpdateViewModel
 
 @Composable
 fun AppUpdateScreen(
-    viewModel: SelfUpdateViewModel = hiltViewModel(),
+    viewModel: AppUpdateViewModel = hiltViewModel(),
     onBackClick: () -> Unit
 ) {
     viewModel.uiState.collectAsState().value.let {

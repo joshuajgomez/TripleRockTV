@@ -1,16 +1,15 @@
-package com.joshgm3z.triplerocktv.ui.selfupdate
+package com.joshgm3z.triplerocktv.ui.appupdate
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.text.HtmlCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.core.viewmodel.SelfUpdateViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.AppUpdateViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -18,11 +17,11 @@ import io.noties.markwon.Markwon
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class SelfUpdateDialog : DialogFragment() {
+class AppUpdateDialog : DialogFragment() {
 
     private lateinit var binding: LayoutDialogBinding
 
-    private val viewModel: SelfUpdateViewModel by viewModels()
+    private val viewModel: AppUpdateViewModel by viewModels()
 
     override fun onStart() {
         super.onStart()

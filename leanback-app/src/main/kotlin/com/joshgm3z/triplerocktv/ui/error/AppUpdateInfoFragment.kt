@@ -44,7 +44,7 @@ class AppUpdateInfoFragment : DialogFragment() {
 
         binding.bvPositive.text = "Check updates"
         binding.bvPositive.setOnClickListener {
-            findNavController().navigate(AppUpdateInfoFragmentDirections.toSelfUpdateDialog())
+            findNavController().navigate(AppUpdateInfoFragmentDirections.toAppUpdateDialog())
         }
 
         binding.bvNegative.setVisible(true)
