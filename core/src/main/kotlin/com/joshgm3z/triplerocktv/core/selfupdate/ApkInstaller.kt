@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.selfupdate
 
 import android.content.Context
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.io.File
@@ -10,9 +11,11 @@ class ApkInstaller
 @Inject constructor(
     @param:ApplicationContext
     private val context: Context,
+    private val firestoreLogger: FirestoreLogger,
 ) {
     fun installApk(apkFile: File) {
         Logger.debug("apkFile = [${apkFile.path}]")
+        firestoreLogger.require(apkFile.exists()) { "APK file does not exist: ${apkFile.path}" }
         if (apkFile.exists()) {
             val contentUri = androidx.core.content.FileProvider.getUriForFile(
                 context,

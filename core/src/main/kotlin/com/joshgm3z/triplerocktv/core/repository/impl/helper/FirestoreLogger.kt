@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -21,8 +22,15 @@ class FirestoreLogger
     }
 
     fun log(dataMap: Map<String, Any>) {
-        if (isDevBuild) sessionId?.let {
+        if (/*isDevBuild*/true) sessionId?.let {
             firestoreHelper.log(it, dataMap)
+        }
+    }
+
+    fun require(require: Boolean, message: () -> String = { "require failed" }) {
+        if (!require) {
+            Logger.error("require failed: ${message()}")
+            log(mapOf("require_failed" to message()))
         }
     }
 }

@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.BuildConfig
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.impl.isOlderThan
 import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
 import com.joshgm3z.triplerocktv.core.selfupdate.DownloadState
@@ -51,7 +52,8 @@ class AppUpdateViewModel
 @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fileDownloader: FileDownloader,
-    private val apkInstaller: ApkInstaller
+    private val apkInstaller: ApkInstaller,
+    private val firestoreLogger: FirestoreLogger,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(SelfUpdateUiState())
@@ -71,7 +73,13 @@ class AppUpdateViewModel
     fun onButtonClick() {
         when (_uiState.value.buttonAction) {
             ButtonAction.CheckAgain -> checkUpdates()
-            ButtonAction.Install -> downloadedFile?.let { apkInstaller.installApk(it) }
+            ButtonAction.Install -> {
+                firestoreLogger.require(downloadedFile != null) { "downloadedFile is null" }
+                downloadedFile?.let {
+                    apkInstaller.installApk(it)
+                }
+            }
+
             else -> downloadUpdate()
         }
     }
