@@ -73,17 +73,4 @@ class LoginViewModel
             )
         }
     }
-
-    fun onLogoutClick(onLogoutComplete: () -> Unit) {
-        _uiState.update {
-            it.copy(loading = true, errorMessage = null)
-        }
-        viewModelScope.launch(Dispatchers.IO) {
-            repository.tryLogout {
-                viewModelScope.launch(Dispatchers.Main) {
-                    onLogoutComplete()
-                }
-            }
-        }
-    }
 }

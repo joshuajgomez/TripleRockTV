@@ -47,7 +47,7 @@ enum class ButtonAction(val text: String) {
 }
 
 @HiltViewModel
-class SelfUpdateViewModel
+class AppUpdateViewModel
 @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val fileDownloader: FileDownloader,

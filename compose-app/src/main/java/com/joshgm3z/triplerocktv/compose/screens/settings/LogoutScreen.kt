@@ -14,11 +14,11 @@ import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkSurface
 import com.joshgm3z.triplerocktv.compose.screens.common.PrimaryButton
 import com.joshgm3z.triplerocktv.compose.screens.common.SecondaryButton
-import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
+import com.joshgm3z.triplerocktv.core.viewmodel.LogoutViewModel
 
 @Composable
 fun LogoutScreen(
-    viewModel: LoginViewModel = hiltViewModel(),
+    viewModel: LogoutViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {},
     onLogoutComplete: () -> Unit = {},
 ) {

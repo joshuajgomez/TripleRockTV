@@ -48,8 +48,8 @@
         android:name="com.joshgm3z.triplerocktv.ui.home.HomeFragment"
         android:label="HomeFragment">
         <action
-            android:id="@+id/toConfirmSignOutDialog"
-            app:destination="@id/signOutDialogFragment" />
+            android:id="@+id/toSignOutDialog"
+            app:destination="@id/signOutDialog" />
         <action
             android:id="@+id/toSettings"
             app:destination="@id/settingsFragment" />
@@ -57,8 +57,8 @@
             android:id="@+id/toBrowse"
             app:destination="@id/browseFragment" />
         <action
-            android:id="@+id/toSelfUpdateDialog"
-            app:destination="@id/selfUpdateDialog" />
+            android:id="@+id/toAppUpdateDialog"
+            app:destination="@id/appUpdateDialog" />
     </fragment>
 
     <fragment
@@ -204,24 +204,24 @@
             app:destination="@id/trackSelectorFragment" />
     </fragment>
 
-    <fragment
-        android:id="@+id/signOutDialogFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.confirm.ConfirmDialogFragment"
-        android:label="ConfirmDialogFragment">
+    <dialog
+        android:id="@+id/signOutDialog"
+        android:name="com.joshgm3z.triplerocktv.ui.confirm.SignOutDialog"
+        android:label="SignOutDialog">
         <action
-            android:id="@+id/toLogin"
-            app:destination="@id/loginFragment"
+            android:id="@+id/toSplash"
+            app:destination="@id/splashScreenFragment"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
-    </fragment>
+    </dialog>
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.joshgm3z.triplerocktv.ui.settings.SettingsFragment"
         android:label="SettingsFragment">
         <action
-            android:id="@+id/toConfirmSignOutDialog"
-            app:destination="@id/signOutDialogFragment" />
+            android:id="@+id/toSignOutDialog"
+            app:destination="@id/signOutDialog" />
     </fragment>
 
     <fragment
@@ -280,8 +280,8 @@
             android:defaultValue="Update to latest version to continue using the app"
             app:argType="string" />
         <action
-            android:id="@+id/toSelfUpdateDialog"
-            app:destination="@id/selfUpdateDialog" />
+            android:id="@+id/toAppUpdateDialog"
+            app:destination="@id/appUpdateDialog" />
     </dialog>
 
     <dialog
@@ -294,9 +294,9 @@
     </dialog>
 
     <dialog
-        android:id="@+id/selfUpdateDialog"
-        android:name="com.joshgm3z.triplerocktv.ui.selfupdate.SelfUpdateDialog"
-        android:label="SelfUpdateDialog" />
+        android:id="@+id/appUpdateDialog"
+        android:name="com.joshgm3z.triplerocktv.ui.appupdate.AppUpdateDialog"
+        android:label="AppUpdateDialog" />
 
     <fragment
         android:id="@+id/liveTvCatalogue"

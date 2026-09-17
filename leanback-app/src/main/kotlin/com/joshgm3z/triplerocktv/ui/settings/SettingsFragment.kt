@@ -232,7 +232,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
     override fun onGuidedActionClicked(action: GuidedAction) {
         Logger.debug("action = [${action.id}]")
         when (action.id) {
-            idSignout -> SettingsFragmentDirections.toConfirmSignOutDialog()
+            idSignout -> SettingsFragmentDirections.toSignOutDialog()
                 .let { findNavController().navigate(it) }
         }
     }
