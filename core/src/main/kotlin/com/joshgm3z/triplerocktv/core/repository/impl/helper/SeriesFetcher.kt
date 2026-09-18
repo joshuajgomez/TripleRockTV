@@ -77,7 +77,9 @@ constructor(
             iptvService.getSeriesDetails(seriesId = streamId).let { it ->
                 val seasons = if (it.seasons.isNotEmpty()) it.seasons.map { seasonData ->
                     Season(
-                        episodes = it.episodes[seasonData.seasonNumber] ?: emptyList(),
+                        episodes = it.episodes[seasonData.seasonNumber]
+                            ?.sortedBy { it.episode_num }
+                            ?: emptyList(),
                         number = seasonData.seasonNumber ?: -1,
                         name = seasonData.name ?: "",
                         coverImageUrl = seasonData.cover ?: "",
@@ -87,7 +89,9 @@ constructor(
                 } else if (it.episodes.isNotEmpty()) {
                     it.episodes.keys.map { seasonNumber ->
                         Season(
-                            episodes = it.episodes[seasonNumber]?.fixEpisodeNumbers()
+                            episodes = it.episodes[seasonNumber]
+                                ?.fixEpisodeNumbers()
+                                ?.sortedBy { it.episode_num }
                                 ?: emptyList(),
                             number = seasonNumber,
                             name = "Season $seasonNumber",
