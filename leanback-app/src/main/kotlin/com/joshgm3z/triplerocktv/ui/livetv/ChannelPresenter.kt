@@ -58,8 +58,9 @@ class ChannelPresenter
             true
         }
         glideUtil.loadImage(
-            streamData.streamIcon,
-            binding.ivLogo,
+            url = streamData.streamIcon,
+            imageView = binding.ivLogo,
+            centerCrop = false,
             error = R.drawable.baseline_ondemand_video_24
         )
     }

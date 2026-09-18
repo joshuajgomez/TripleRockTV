@@ -64,16 +64,17 @@ class GlideUtil
         imageView: ImageView,
         placeholder: Int? = null,
         error: Int? = null,
+        centerCrop: Boolean = true,
         onSuccess: () -> Unit = {},
     ) {
         url.isNullOrEmpty() && return
-        val builder = Glide.with(imageView.context)
+        var builder = Glide.with(imageView.context)
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
-        placeholder?.let { builder.placeholder(it) }
-        error?.let { builder.error(it) }
+        placeholder?.let { builder = builder.placeholder(it) }
+        error?.let { builder = builder.error(it) }
+        if (centerCrop) builder = builder.centerCrop()
         builder
             .listener(glideErrorListener(onSuccess))
-            .centerCrop()
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(imageView)
     }
