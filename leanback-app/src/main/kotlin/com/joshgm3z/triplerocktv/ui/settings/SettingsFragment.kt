@@ -43,9 +43,10 @@ class SettingsFragment : GuidedStepSupportFragment() {
         val idLogin = 13L
         val idStatus = 14L
 
-        val idAccountExpiry = 1L
-        val idAppVersion = 2L
-        val idSignout = 3L
+        val idSignout = 1L
+
+        val idAccountExpiry = 2L
+        val idAppVersion = 3L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -126,15 +127,12 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 .subActions(getCredentialSubActions()) // Attach the sub-actions here
                 .build()
         )
-        /*actions.add(
+        actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idBlur) // Main Action ID
-                .title("Enable blur effect")
-                .checkSetId(GuidedAction.CHECKBOX_CHECK_SET_ID)
-                .checked(false)
-                .description("Uncheck this if app seems slow due to blur")
+                .id(idSignout) // Main Action ID
+                .title("Sign out")
                 .build()
-        )*/
+        )
         actions.add(
             GuidedAction.Builder(requireContext())
                 .id(idAccountExpiry) // Main Action ID
@@ -151,12 +149,6 @@ class SettingsFragment : GuidedStepSupportFragment() {
                 .description(BuildConfig.VERSION_NAME)
                 .focusable(false)
                 .infoOnly(true)
-                .build()
-        )
-        actions.add(
-            GuidedAction.Builder(requireContext())
-                .id(idSignout) // Main Action ID
-                .title("Sign out")
                 .build()
         )
     }
