@@ -61,6 +61,7 @@ class StreamPresenter
             StreamType.LiveTV -> glideUtil.loadImage(
                 imageUri,
                 binding.ivIcon,
+                centerCrop = false,
                 error = R.drawable.ic_video_file
             )
 

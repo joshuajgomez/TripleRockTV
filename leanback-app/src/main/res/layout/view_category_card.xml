@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="150dp"
-    android:layout_height="85dp"
+    android:layout_height="90dp"
     android:background="@drawable/category_view_background"
     android:clipToOutline="true"
     android:focusable="true"
@@ -15,7 +15,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:duplicateParentState="true"
-        android:src="@drawable/ic_video_file"
+        android:src="@drawable/round_folder_24"
         android:tint="@color/color_foreground_high_selector" />
 
     <TextView
@@ -29,5 +29,5 @@
         android:maxLines="2"
         android:textColor="@color/color_foreground_high_selector"
         android:textStyle="bold"
-        tools:text="Category" />
+        tools:text="Category Category Category Category " />
 </LinearLayout>

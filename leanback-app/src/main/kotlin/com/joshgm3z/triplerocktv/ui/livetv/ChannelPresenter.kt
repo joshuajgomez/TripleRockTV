@@ -61,7 +61,8 @@ class ChannelPresenter
             url = streamData.streamIcon,
             imageView = binding.ivLogo,
             centerCrop = false,
-            error = R.drawable.baseline_ondemand_video_24
+            error = R.drawable.baseline_ondemand_video_24,
+            placeholder = R.drawable.baseline_ondemand_video_24,
         )
     }
 
