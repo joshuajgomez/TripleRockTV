@@ -49,8 +49,12 @@ jobs:
       - name: Set Environment Variables
         run: |
           echo "RELEASE_CODE=${{ github.run_number }}" >> $GITHUB_ENV
-          echo "RELEASE_TAG_VERSION=v${{ github.run_number }}" >> $GITHUB_ENV
           echo "SHORT_SHA=${GITHUB_SHA::7}" >> $GITHUB_ENV
+          if [[ "${{ github.ref_name }}" == "dev" ]]; then
+            echo "RELEASE_TAG_VERSION=dev${{ github.run_number }}" >> $GITHUB_ENV
+          else
+            echo "RELEASE_TAG_VERSION=v${{ github.run_number }}" >> $GITHUB_ENV
+          fi
 
           if [[ "${{ github.ref_name }}" == "dev" ]]; then
             echo "GRADLE_TASK=assembleDevRelease" >> $GITHUB_ENV
