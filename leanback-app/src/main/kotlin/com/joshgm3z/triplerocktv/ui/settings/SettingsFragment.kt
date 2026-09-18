@@ -36,17 +36,17 @@ class SettingsFragment : GuidedStepSupportFragment() {
     lateinit var firebaseLogger: FirebaseLogger
 
     companion object {
-        val idCredential = 0L
-        val idServerUrl = 10L
-        val idUsername = 11L
-        val idPassword = 12L
-        val idLogin = 13L
-        val idStatus = 14L
+        const val ID_CREDENTIAL = 0L
+        const val ID_SERVER_URL = 10L
+        const val ID_USERNAME = 11L
+        const val ID_PASSWORD = 12L
+        const val ID_LOGIN = 13L
+        const val ID_STATUS = 14L
 
-        val idSignout = 1L
+        const val ID_SIGN_OUT = 1L
 
-        val idAccountExpiry = 2L
-        val idAppVersion = 3L
+        const val ID_ACCOUNT_EXPIRY = 2L
+        const val ID_APP_VERSION = 3L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -70,22 +70,22 @@ class SettingsFragment : GuidedStepSupportFragment() {
             subAction.editTitle = text
             subAction.title = text
         }
-        setText(idServerUrl, userInfo.webUrl)
-        setText(idUsername, userInfo.username)
-        setText(idPassword, userInfo.password)
-        findActionById(idCredential)?.isEnabled = true
-        notifyActionChanged(findActionPositionById(idCredential))
-        findActionById(idAccountExpiry)?.description =
+        setText(ID_SERVER_URL, userInfo.webUrl)
+        setText(ID_USERNAME, userInfo.username)
+        setText(ID_PASSWORD, userInfo.password)
+        findActionById(ID_CREDENTIAL)?.isEnabled = true
+        notifyActionChanged(findActionPositionById(ID_CREDENTIAL))
+        findActionById(ID_ACCOUNT_EXPIRY)?.description =
             "Valid till ${userInfo.expiryDate.formatExpiryDate()}"
-        notifyActionChanged(findActionPositionById(idAccountExpiry))
+        notifyActionChanged(findActionPositionById(ID_ACCOUNT_EXPIRY))
     }
 
     private fun enableViews(enable: Boolean) {
         listOf(
-            idServerUrl,
-            idUsername,
-            idPassword,
-            idLogin,
+            ID_SERVER_URL,
+            ID_USERNAME,
+            ID_PASSWORD,
+            ID_LOGIN,
         ).forEach { getSubAction(it).isEnabled = enable }
     }
 
@@ -120,7 +120,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
     override fun onCreateActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idCredential) // Main Action ID
+                .id(ID_CREDENTIAL) // Main Action ID
                 .title("Sign in credentials")
                 .description("View and update credentials")
                 .enabled(false)
@@ -129,13 +129,13 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idSignout) // Main Action ID
+                .id(ID_SIGN_OUT) // Main Action ID
                 .title("Sign out")
                 .build()
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idAccountExpiry) // Main Action ID
+                .id(ID_ACCOUNT_EXPIRY) // Main Action ID
                 .title("IPTV account validity")
                 .description("Checking")
                 .focusable(false)
@@ -144,7 +144,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idAppVersion) // Main Action ID
+                .id(ID_APP_VERSION) // Main Action ID
                 .title("App version")
                 .description(BuildConfig.VERSION_NAME)
                 .focusable(false)
@@ -157,7 +157,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         val subActions = mutableListOf<GuidedAction>()
         subActions.add(
             GuidedAction.Builder(requireContext())
-                .id(idServerUrl)
+                .id(ID_SERVER_URL)
                 .title("")
                 .editTitle("")
                 .description("Server URL")
@@ -166,7 +166,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )
         subActions.add(
             GuidedAction.Builder(requireContext())
-                .id(idUsername)
+                .id(ID_USERNAME)
                 .title("")
                 .editTitle("")
                 .description("Username")
@@ -175,7 +175,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )
         subActions.add(
             GuidedAction.Builder(requireContext())
-                .id(idPassword)
+                .id(ID_PASSWORD)
                 .title("")
                 .editTitle("")
                 .description("Password")
@@ -185,14 +185,14 @@ class SettingsFragment : GuidedStepSupportFragment() {
         )
         subActions.add(
             GuidedAction.Builder(requireContext())
-                .id(idLogin)
+                .id(ID_LOGIN)
                 .title("Update")
                 .icon(R.drawable.ic_arrow_forward)
                 .build()
         )
         subActions.add(
             GuidedAction.Builder(requireContext())
-                .id(idStatus)
+                .id(ID_STATUS)
                 .title("")
                 .focusable(false) // Prevents user from selecting it
                 .infoOnly(true)   // Styles it as informational text
@@ -203,7 +203,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
     }
 
     private fun getSubAction(id: Long) =
-        findActionById(idCredential)?.subActions?.first { it.id == id }!!
+        findActionById(ID_CREDENTIAL)?.subActions?.first { it.id == id }!!
 
     @SuppressLint("NotifyDataSetChanged")
     private fun showStatus(
@@ -212,7 +212,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
         icon: Int? = null
     ) {
         Logger.debug("message = [${message}], description = [${description}], icon = [${icon}]")
-        val action = getSubAction(idStatus)
+        val action = getSubAction(ID_STATUS)
         action.title = message ?: ""
         action.description = description ?: ""
         action.icon = if (icon == null) null
@@ -224,7 +224,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
     override fun onGuidedActionClicked(action: GuidedAction) {
         Logger.debug("action = [${action.id}]")
         when (action.id) {
-            idSignout -> SettingsFragmentDirections.toSignOutDialog()
+            ID_SIGN_OUT -> SettingsFragmentDirections.toSignOutDialog()
                 .let { findNavController().navigate(it) }
         }
     }
@@ -232,15 +232,15 @@ class SettingsFragment : GuidedStepSupportFragment() {
     override fun onSubGuidedActionClicked(action: GuidedAction): Boolean {
         Logger.debug("action = [${action.id}]")
         when (action.id) {
-            idLogin -> {
-                val subActions = findActionById(idCredential)?.subActions
+            ID_LOGIN -> {
+                val subActions = findActionById(ID_CREDENTIAL)?.subActions
                 fun getSubActionText(id: Long): String {
                     return subActions?.find { it.id == id }?.editTitle?.toString() ?: ""
                 }
 
-                val serverUrl = getSubActionText(idServerUrl)
-                val username = getSubActionText(idUsername)
-                val password = getSubActionText(idPassword)
+                val serverUrl = getSubActionText(ID_SERVER_URL)
+                val username = getSubActionText(ID_USERNAME)
+                val password = getSubActionText(ID_PASSWORD)
                 // Handle login logic here
 
                 if (isInputValid()) viewModel.verifyCredentials(serverUrl, username, password)
@@ -254,17 +254,17 @@ class SettingsFragment : GuidedStepSupportFragment() {
             return getSubAction(id).editTitle?.toString() ?: ""
         }
 
-        val serverUrl = getSubActionText(idServerUrl)
+        val serverUrl = getSubActionText(ID_SERVER_URL)
         if (serverUrl.isEmpty() || serverUrl == "http://") {
-            selectedActionPosition = findActionPositionById(idServerUrl)
+            selectedActionPosition = findActionPositionById(ID_SERVER_URL)
             return false
         }
-        if (getSubActionText(idUsername).isEmpty()) {
-            selectedActionPosition = findActionPositionById(idUsername)
+        if (getSubActionText(ID_USERNAME).isEmpty()) {
+            selectedActionPosition = findActionPositionById(ID_USERNAME)
             return false
         }
-        if (getSubActionText(idPassword).isEmpty()) {
-            selectedActionPosition = findActionPositionById(idPassword)
+        if (getSubActionText(ID_PASSWORD).isEmpty()) {
+            selectedActionPosition = findActionPositionById(ID_PASSWORD)
             return false
         }
 
@@ -282,7 +282,7 @@ class SettingsFragment : GuidedStepSupportFragment() {
 
     private fun copyInputToTitle(action: GuidedAction?) {
         action ?: return
-        if (action.id == idServerUrl || action.id == idUsername || action.id == idPassword) {
+        if (action.id == ID_SERVER_URL || action.id == ID_USERNAME || action.id == ID_PASSWORD) {
             val userInput = action.editTitle.toString()
             if (userInput.isNullOrEmpty()) return
             action.title = userInput
