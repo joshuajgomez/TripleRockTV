@@ -63,10 +63,10 @@ class LiveTvViewModel
     private fun fetchStreams(categoryId: Int) {
         Logger.debug("categoryId = [${categoryId}]")
         viewModelScope.launch(Dispatchers.IO) {
+            onlineRepository.fetchStreams(StreamType.LiveTV, categoryId)
             _uiState.value = repository.fetchStreamsOfCategory(
                 categoryId, StreamType.LiveTV
             ) as List<StreamData>
-            onlineRepository.fetchStreams(StreamType.LiveTV, categoryId)
         }
     }
 
