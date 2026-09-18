@@ -27,7 +27,6 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="2"
-        android:textSize="13sp"
         android:textColor="@color/color_foreground_high_selector"
         android:textStyle="bold"
         tools:text="Category" />
