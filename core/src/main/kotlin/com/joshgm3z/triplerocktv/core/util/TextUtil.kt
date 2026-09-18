@@ -47,6 +47,9 @@ fun String?.ifNullOrEmpty(defaultValue: String?) =
 val isDevBuild
     get() = BuildConfig.FLAVOR != "online"
 
+val isDebugBuild
+    get() = BuildConfig.DEBUG
+
 fun String.orIfDebug(secretText: String) = if (isDevBuild) secretText else this
 
 @Suppress("KotlinConstantConditions")

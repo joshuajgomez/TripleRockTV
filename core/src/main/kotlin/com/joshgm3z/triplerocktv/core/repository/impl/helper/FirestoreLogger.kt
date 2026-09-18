@@ -2,7 +2,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl.helper
 
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.isDevBuild
+import com.joshgm3z.triplerocktv.core.util.isDebugBuild
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -22,7 +22,7 @@ class FirestoreLogger
     }
 
     fun log(dataMap: Map<String, Any>) {
-        if (/*isDevBuild*/true) sessionId?.let {
+        if (!isDebugBuild) sessionId?.let {
             firestoreHelper.log(it, dataMap)
         }
     }
