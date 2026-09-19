@@ -118,7 +118,7 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun tryLogout(onLogoutComplete: () -> Unit) {
+    override suspend fun tryLogout() {
         localDataStore.getUserInfo()?.let {
             firebaseLogger.logUserLogout(it.username)
             firestoreHelper.addDocumentWithId(
@@ -131,6 +131,5 @@ class LoginRepositoryImpl @Inject constructor(
         appDatabase.clearAllTables()
 
         delay(1000)
-        onLogoutComplete()
     }
 }

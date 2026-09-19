@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.viewmodel.MediaSyncViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentSearchBinding
@@ -31,6 +32,8 @@ class SearchFragment : Fragment() {
 
     private val viewModel: SearchViewModel by viewModels()
 
+    private val mediaSyncViewModel: MediaSyncViewModel by viewModels()
+
     @Inject
     lateinit var streamPresenter: StreamPresenter
 
@@ -42,6 +45,7 @@ class SearchFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         streamAdapter = StreamAdapter(glideUtil) { onSearchResultClick(it) }
+        mediaSyncViewModel.bindService(requireContext())
     }
 
     private fun onSearchResultClick(it: Any) {
@@ -95,6 +99,7 @@ class SearchFragment : Fragment() {
                         }
                         binding.tvStatus.setVisible(false)
                         binding.tvStreamsTitle.setVisible(true)
+                        binding.tvStreamsTitle.text = "Recently added"
                         streamAdapter.items = it.initialStreams
                         binding.rvSearchList.layoutAnimation =
                             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
@@ -126,6 +131,12 @@ class SearchFragment : Fragment() {
                 }
             }
         }
+
+        lifecycleScope.launch {
+            mediaSyncViewModel.syncState.collectLatest {
+                binding.tvSyncStatus.text = it
+            }
+        }
     }
 
     private fun initViews() {
@@ -138,5 +149,10 @@ class SearchFragment : Fragment() {
             }
         }
         binding.rvSearchList.adapter = streamAdapter
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaSyncViewModel.unbindService(requireContext())
     }
 }

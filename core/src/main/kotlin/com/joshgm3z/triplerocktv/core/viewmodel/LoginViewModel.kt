@@ -9,7 +9,6 @@ import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -27,7 +26,6 @@ data class UserInfo(
     val password: String,
     val webUrl: String,
     val expiryDate: String,
-    val lastContentUpdate: String,
     val sessionId: String,
 )
 

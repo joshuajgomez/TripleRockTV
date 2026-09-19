@@ -15,7 +15,6 @@ kotlinxCoroutinesTest = "1.10.2"
 kotlinxSerializationJson = "1.6.3"
 leanback = "1.2.0"
 mockk = "1.13.8"
-lifecycleRuntimeKtx = "2.10.0"
 navigation = "2.9.7"
 retrofit = "2.11.0"
 robolectric = "4.16.1"
@@ -24,8 +23,7 @@ datastoreCore = "1.2.0"
 activity = "1.12.3"
 constraintlayout = "2.2.1"
 legacySupportV4 = "1.0.0"
-lifecycleLivedataKtx = "2.10.0"
-lifecycleViewmodelKtx = "2.10.0"
+lifecycle = "2.10.0"
 annotation = "1.6.0"
 exoplayer = "1.3.1"
 truth = "1.1.5"
@@ -35,7 +33,6 @@ junitVersion = "4.13.2"
 espressoCore = "3.7.0"
 material = "1.10.0"
 composeBom = "2026.06.01"
-activityCompose = "1.13.0"
 paging_version = "3.3.0"
 pagingCommon = "3.5.0"
 
@@ -47,13 +44,10 @@ androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
 androidx-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
-androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version = "1.1.1" }
 androidx-compose-hilt-navigation = { group = "androidx.hilt", name = "hilt-navigation-compose", version = "1.2.0" }
 androidx-compose-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
-androidx-compose-material3-adaptive-navigation-suite = { group = "androidx.compose.material3", name = "material3-adaptive-navigation-suite" }
 
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
@@ -63,7 +57,6 @@ androidx-leanback = { module = "androidx.leanback:leanback", version.ref = "lean
 androidx-leanback-paging = { module = "androidx.leanback:leanback-paging", version = "1.1.0" }
 
 androidx-navigation-safeargs-plugin = { module = "androidx.navigation:navigation-safe-args-gradle-plugin", version.ref = "navigation" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
 
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "navigation" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
@@ -98,10 +91,13 @@ androidx-datastore-preferences = { module = "androidx.datastore:datastore-prefer
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 androidx-legacy-support-v4 = { group = "androidx.legacy", name = "legacy-support-v4", version.ref = "legacySupportV4" }
-androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycleLivedataKtx" }
-androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodelKtx" }
 androidx-annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-navigation-ui-ktx = { group = "androidx.navigation", name = "navigation-ui-ktx", version.ref = "navigation" }
+
+androidx-lifecycle-livedata-ktx = { group = "androidx.lifecycle", name = "lifecycle-livedata-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
 
 androidx-media3-exoplayer = { group = "androidx.media3", name = "media3-exoplayer", version.ref = "exoplayer" }
 androidx-media3-ui = { group = "androidx.media3", name = "media3-ui", version.ref = "exoplayer" }

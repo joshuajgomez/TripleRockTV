@@ -22,10 +22,9 @@ class LogoutViewModel
     fun onLogoutClick(onLogoutComplete: () -> Unit) {
         _isLoading.value = true
         viewModelScope.launch(Dispatchers.IO) {
-            repository.tryLogout {
-                viewModelScope.launch(Dispatchers.Main) {
-                    onLogoutComplete()
-                }
+            repository.tryLogout()
+            withContext(Dispatchers.Main) {
+                onLogoutComplete()
             }
         }
     }

@@ -93,6 +93,7 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.lifecycle.service)
 
     kapt(libs.hilt.compiler)
 

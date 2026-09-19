@@ -17,5 +17,5 @@ interface LoginRepository {
 
     suspend fun addIfNotExist()
 
-    suspend fun tryLogout(onLogoutComplete: () -> Unit) {}
+    suspend fun tryLogout()
 }

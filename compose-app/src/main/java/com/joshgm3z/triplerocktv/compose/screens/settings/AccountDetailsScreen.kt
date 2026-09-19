@@ -158,7 +158,6 @@ private fun PreviewAccountDetailsScreen() {
                     username = "jj",
                     password = "jj",
                     webUrl = "https://www.google.com",
-                    lastContentUpdate = "",
                     sessionId = ""
                 )
             )
