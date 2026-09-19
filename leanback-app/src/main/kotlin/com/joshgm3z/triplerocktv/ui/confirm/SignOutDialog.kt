@@ -11,6 +11,7 @@ import androidx.leanback.widget.GuidedAction
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.MediaSyncService
 import com.joshgm3z.triplerocktv.core.viewmodel.LogoutViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutDialogBinding
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -64,6 +65,7 @@ class SignOutDialog : DialogFragment() {
 
         binding.bvPositive.setOnClickListener {
             viewModel.onLogoutClick {
+                MediaSyncService.stop(requireContext())
                 findNavController().navigate(SignOutDialogDirections.toSplash())
             }
         }

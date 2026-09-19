@@ -1,10 +1,12 @@
 package com.joshgm3z.triplerocktv
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
+import com.joshgm3z.triplerocktv.core.MediaSyncService
 import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDevBuild

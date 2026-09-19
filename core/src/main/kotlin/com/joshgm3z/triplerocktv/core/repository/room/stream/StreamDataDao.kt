@@ -80,7 +80,7 @@ interface StreamDataDao {
     @Query("SELECT * FROM stream_data WHERE epgChannelId = :epgChannelId")
     fun fetchLiveStreamByEpgChannelId(epgChannelId: String): StreamData
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(streams: List<StreamData>)
 
     @Transaction

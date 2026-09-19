@@ -31,18 +31,22 @@ class KeyboardView @JvmOverloads constructor(
 
     init {
         binding.rvKeyboard.adapter = KeyboardAdapter {
+            if (!isEnabled) return@KeyboardAdapter
             text = text.plus(it)
         }
         binding.ivSpace.setOnClickListener {
+            if (!isEnabled) return@setOnClickListener
             if (text.trim().isEmpty()) return@setOnClickListener
             text = text.plus(" ")
         }
         binding.ivBackspace.setOnClickListener {
+            if (!isEnabled) return@setOnClickListener
             if (text.isNotEmpty()) {
                 text = text.dropLast(1)
             }
         }
         binding.ivClear.setOnClickListener {
+            if (!isEnabled) return@setOnClickListener
             text = ""
         }
     }

@@ -15,6 +15,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.MediaSyncService
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.selfupdate.ApkInstaller
 import com.joshgm3z.triplerocktv.core.selfupdate.FileDownloader
@@ -56,6 +57,8 @@ class HomeFragment : BrowseSupportFragment() {
 
         progressBarManager.show()
         badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector)
+
+        MediaSyncService.restart(requireContext())
     }
 
     private val itemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->

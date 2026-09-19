@@ -33,6 +33,7 @@ sealed class BrowseUiState {
         val recentPlayed: List<StreamData> = emptyList(),
         val favoritesFlow: Flow<List<StreamData>> = emptyFlow(),
         val recentPlayedFlow: Flow<List<StreamData>> = emptyFlow(),
+        val newlyAdded: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
     ) : BrowseUiState()
@@ -108,6 +109,7 @@ class BrowseViewModel @Inject constructor(
         val uiState = BrowseUiState.VideoOnDemandState(
             favoritesFlow = repository.favoritesFlow(StreamType.VideoOnDemand),
             recentPlayedFlow = recentsRepository.recentlyPlayedStreamDataFlow(StreamType.VideoOnDemand),
+            newlyAdded = repository.fetchNewlyAdded(StreamType.VideoOnDemand),
             categoryMap = mutableMapOf<String, List<CategoryData>>().apply {
                 listOf("English", "Malayalam", "Hindi", "Tamil").forEach { lang ->
                     val categories = repository.fetchCategoriesByTitleKey(

@@ -5,8 +5,6 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.R
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
-import com.joshgm3z.triplerocktv.core.util.relativeTime
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,13 +21,10 @@ data class HomeItem(
 class HomeViewModel
 @Inject constructor(
     private val repository: MediaLocalRepository,
-    private val localDatastore: LocalDatastore
 ) : ViewModel() {
 
     private val _homeListState = MutableStateFlow<List<HomeItem>>(emptyList())
     val homeListState = _homeListState.asStateFlow()
-
-    var lastUpdatedTime: String? = null
 
     init {
         fetchHomeData()
@@ -37,10 +32,6 @@ class HomeViewModel
 
     fun fetchHomeData() {
         viewModelScope.launch(Dispatchers.IO) {
-            localDatastore.getUserInfo()?.let {
-                if (it.lastContentUpdate == "") return@let
-                lastUpdatedTime = "Updated ${it.lastContentUpdate.toLong().relativeTime()}"
-            }
             val categories = arrayListOf<HomeItem>()
             repository.fetchCategories(StreamType.VideoOnDemand).let {
                 if (it.isNotEmpty()) categories.add(
@@ -65,12 +56,6 @@ class HomeViewModel
                         R.drawable.livetv_avd
                     )
                 )
-                /*if (it.isNotEmpty()) categories.add(
-                    HomeItem(
-                        "EPG",
-                        R.drawable.livetv_avd
-                    )
-                )*/
             }
 
             _homeListState.value = categories
