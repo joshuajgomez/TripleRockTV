@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Dark Transparent Circle Background -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="?attr/colorBackground" />
+            <size
+                android:width="48dp"
+                android:height="48dp" />
+        </shape>
+    </item>
+
+    <item
+        android:width="30dp"
+        android:height="30dp"
+        android:gravity="center">
+        <vector
+            android:width="24dp"
+            android:height="24dp"
+            android:autoMirrored="true"
+            android:viewportWidth="960"
+            android:viewportHeight="960">
+            <path
+                android:fillColor="?attr/colorForegroundPrimary"
+                android:pathData="M647,520L160,520L160,440L647,440L423,216L480,160L800,480L480,800L423,744L647,520Z" />
+        </vector>
+    </item>
+</layer-list>
