@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.leanback.widget.Presenter
@@ -69,6 +70,10 @@ class StreamPresenter
                 imageUri,
                 binding.posterImage
             )
+        }
+
+        binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+            binding.ivGo.setVisible(hasFocus)
         }
     }
 
