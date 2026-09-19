@@ -1,30 +1,22 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.paging.PagingDataAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.OnItemViewClickedListener
-import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.paging.PagingData
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.databinding.FragmentStreamCatalogueBinding
-import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
-import com.joshgm3z.triplerocktv.core.util.toTextTime
-import com.joshgm3z.triplerocktv.core.util.withPrefix
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
@@ -50,8 +42,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     lateinit var rowsAdapter: PagingDataAdapter<Any>
 
-    private lateinit var binding: FragmentStreamCatalogueBinding
-
     private val args: StreamCatalogueFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +55,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
     }
 
     private fun initRowFragment() {
-//        val gridFragment = VerticalGridSupportFragment()
         gridPresenter = VerticalGridPresenter(
             FocusHighlight.ZOOM_FACTOR_XSMALL,
             false
@@ -75,11 +64,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         rowsAdapter = PagingDataAdapter(streamPresenter, diffCallback)
         adapter = rowsAdapter
         onItemViewClickedListener = clickListener
-        setOnItemViewSelectedListener(selectionListener)
-
-        /*childFragmentManager.beginTransaction()
-            .replace(binding.flStreamRowContainer.id, gridFragment)
-            .commit()*/
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -105,51 +89,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         }
     }
 
-    private fun updateStreamData(streamData: StreamData) {
-        return
-        binding.includeDetails.tvTitle.text = streamData.name
-        binding.includeDetails.metadataView.rating = streamData.rating
-        binding.includeDetails.tvDescription.text = null
-        binding.includeDetails.tvGenre.text = null
-        binding.includeDetails.tvCast.text = null
-        binding.includeDetails.tvDirector.text = null
-        binding.includeDetails.metadataView.duration = null
-
-        lifecycleScope.launch {
-            val updatedMovieMetadata = streamData.movieMetadata
-                ?: viewModel.fetchMetadata(streamData.streamId)
-                ?: return@launch
-
-            updatedMovieMetadata.let {
-                binding.includeDetails.tvDescription.text = it.description
-                binding.includeDetails.tvCast.text = it.cast.withPrefix("Cast: ")
-                binding.includeDetails.tvDirector.text = it.director.withPrefix("Director: ")
-                binding.includeDetails.tvGenre.text = it.genre
-                binding.includeDetails.metadataView.duration = it.totalDurationMs.toTextTime()
-                /*glideUtil.loadImage(
-                    it.backPosterUrl,
-                    binding.ivBackdrop
-                )*/
-            }
-        }
-    }
-
-    private fun updateSeriesStream(seriesStream: SeriesStream) {
-        return
-        binding.includeDetails.tvTitle.text = seriesStream.name
-        binding.includeDetails.tvDescription.text = seriesStream.plot
-        binding.includeDetails.tvCast.text = seriesStream.cast.withPrefix("Cast: ")
-        binding.includeDetails.tvDirector.text = seriesStream.director.withPrefix("Director: ")
-        binding.includeDetails.tvGenre.text = seriesStream.genre
-        /*glideUtil.loadImage(
-            seriesStream.backdropUrl,
-            binding.ivBackdrop
-        )*/
-        binding.includeDetails.metadataView.rating = seriesStream.rating.parseToFloat()
-        binding.includeDetails.metadataView.noOfSeasons = seriesStream.seasons?.size
-        binding.includeDetails.metadataView.showMyList = seriesStream.favorite
-    }
-
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
         when (item) {
             is StreamData -> when (item.streamType) {
@@ -173,14 +112,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
             else -> return@OnItemViewClickedListener
         }.let {
             findNavController().navigate(it)
-        }
-    }
-
-    private val selectionListener = OnItemViewSelectedListener { _, item, _, _ ->
-        when (item) {
-            is StreamData -> updateStreamData(item)
-            is SeriesStream -> updateSeriesStream(item)
-            else -> return@OnItemViewSelectedListener
         }
     }
 

@@ -129,6 +129,8 @@ class DetailsFragment : Fragment() {
         binding.includeDetails.metadataView.noOfSeasons = uiState.noOfSeasons
 
         binding.includeDetails.tvTitle.text = uiState.title
+        binding.includeDetails.tvCategoryName.text = uiState.categoryName
+        binding.includeDetails.tvCategoryName.setVisible(true)
         binding.includeDetails.tvGenre.text(uiState.subtitle)
         binding.includeDetails.tvDescription.text(uiState.description)
         binding.includeDetails.tvCast.text(uiState.cast)

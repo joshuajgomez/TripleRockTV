@@ -29,6 +29,7 @@ import kotlin.collections.forEach
 data class DetailsUiState(
     val streamType: StreamType,
     val title: String,
+    val categoryName: String,
     val rating: Float? = null,
     val subtitle: String? = null,
     val episodeLabel: String? = null,
@@ -48,7 +49,6 @@ data class DetailsUiState(
 
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
-    localDatastore: LocalDatastore,
     savedStateHandle: SavedStateHandle,
     private val repository: MediaLocalRepository,
     private val onlineRepository: MediaOnlineRepository,
@@ -84,6 +84,7 @@ class DetailsViewModel @Inject constructor(
                 _uiState.value = DetailsUiState(
                     streamType = streamType,
                     title = it.name,
+                    categoryName = repository.getCategory(it.categoryId)?.categoryName ?: "",
                     rating = it.rating,
                 )
                 if (it.movieMetadata == null) searchMetadata(it)
@@ -106,11 +107,12 @@ class DetailsViewModel @Inject constructor(
     }
 
     private fun fetchSeries(seriesId: Int) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             repository.seriesStreamFlow(seriesId).collectLatest { seriesStream ->
                 _uiState.value = DetailsUiState(
                     streamType = StreamType.Series,
                     title = seriesStream.name,
+                    categoryName = repository.getCategory(seriesStream.categoryId)?.categoryName ?: "",
                     coverImage = seriesStream.backdropUrl.ifNullOrEmpty(
                         seriesStream.coverImageUrl
                     ),
