@@ -340,7 +340,8 @@ private val sampleUiState = DetailsUiState(
     showButtons = true,
     subtitle = "Drama, Thriller",
     favorite = true,
-    duration = "1h 2m"
+    duration = "1h 2m",
+    categoryName = "ENGLISH MOVIES (4K)",
 )
 
 @DarkPreview
@@ -368,6 +369,7 @@ private fun PreviewButtonContainer_Vod() {
                 streamType = StreamType.VideoOnDemand,
                 title = "Inception (2010)",
                 showButtons = true,
+                categoryName = "ENGLISH MOVIES (4K)",
             )
         )
     }
@@ -382,6 +384,7 @@ private fun PreviewButtonContainer_Series() {
                 streamType = StreamType.Series,
                 title = "Inception (2010)",
                 showButtons = true,
+                categoryName = "ENGLISH MOVIES (4K)",
             )
         )
     }
@@ -397,7 +400,8 @@ private fun PreviewButtonContainer_resume_remove() {
                 title = "Inception (2010)",
                 showButtons = true,
                 progressPercent = 50,
-                favorite = true
+                favorite = true,
+                categoryName = "ENGLISH MOVIES (4K)",
             )
         )
     }
