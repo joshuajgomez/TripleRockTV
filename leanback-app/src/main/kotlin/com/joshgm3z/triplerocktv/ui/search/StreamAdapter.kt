@@ -6,12 +6,10 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.util.setVisible
 import javax.inject.Inject
 
 class StreamAdapter
@@ -53,19 +51,11 @@ class StreamAdapter
             is SeriesStream -> item.coverImageUrl
             else -> "Unknown"
         }
-        val rating = when (item) {
-            is StreamData -> item.rating
-            is SeriesStream -> item.rating.parseToFloat()
-            else -> null
-        }
         val streamType = when (item) {
             is StreamData -> item.streamType
             is SeriesStream -> StreamType.Series
             else -> null
         }
-
-        binding.tvRating.text = rating.toString()
-        binding.tvRating.setVisible(rating != null && rating > 0)
 
         binding.streamTitle.text = title
         when (streamType) {
