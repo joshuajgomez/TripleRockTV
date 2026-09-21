@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.R
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentPlayerBinding
@@ -31,10 +32,12 @@ class PlaybackFragment : Fragment() {
         R.id.nav_graph
     )
 
-    @Inject
     lateinit var playerManager: PlayerManager
 
     private lateinit var binding: FragmentPlayerBinding
+
+    @Inject
+    lateinit var firestoreLogger: FirestoreLogger
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -47,30 +50,22 @@ class PlaybackFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        view.keepScreenOn = true
-        playerManager.init(
+        playerManager = PlayerManager(
+            lifecycleOwner = viewLifecycleOwner,
+            videoSupportFragment = childFragmentManager.findFragmentById(R.id.video_support_fragment)
+                    as VideoSupportFragment,
             context = requireContext(),
             view = view,
             playbackViewModel = viewModel,
             trackSelectorViewModel = trackViewModel,
-            videoSupportFragment = childFragmentManager.findFragmentById(R.id.video_support_fragment) as VideoSupportFragment,
             navigate = {
                 findNavController().navigate(it)
             },
             tvSkipForward = binding.tvSkipForward,
-            tvSkipBack = binding.tvSkipBack
+            tvSkipBack = binding.tvSkipBack,
+            firestoreLogger = firestoreLogger
         )
 
         playerManager.playVideo(navArgs<PlaybackFragmentArgs>().value.resume)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        playerManager.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        playerManager.onDestroy()
     }
 }

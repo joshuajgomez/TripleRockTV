@@ -10,28 +10,26 @@ fun errorListener(
     seekToDefaultPosition: () -> Unit = {},
     prepare: () -> Unit = {},
     onError: (String) -> Unit = {},
-    errorLog: (String) -> Unit = {}
 ) = object : Player.Listener {
     override fun onPlayerError(error: PlaybackException) {
         super.onPlayerError(error)
         Logger.error("error.errorCode = [${error.errorCode}]")
-        errorLog("error.errorCode = [${error.errorCode}]")
         val errorMessage = when (error.errorCode) {
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT ->
-                "Please check your internet connection"
+                "[${error.errorCode}] Please check your internet connection"
 
             PlaybackException.ERROR_CODE_DECODER_INIT_FAILED,
             PlaybackException.ERROR_CODE_DECODER_QUERY_FAILED,
             PlaybackException.ERROR_CODE_DECODING_FAILED ->
-                "Video format not supported on this device"
+                "[${error.errorCode}] Video format not supported on this device"
 
             PlaybackException.ERROR_CODE_REMOTE_ERROR,
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ->
-                "Could not reach the video stream"
+                "[${error.errorCode}] Could not reach the video stream"
 
             PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ->
-                "Unsupported format"
+                "[${error.errorCode}] Unsupported format"
 
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 seekToDefaultPosition()
