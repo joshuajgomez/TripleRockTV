@@ -58,19 +58,10 @@ class PlaybackFragment : Fragment() {
                 findNavController().navigate(it)
             },
             tvSkipForward = binding.tvSkipForward,
-            tvSkipBack = binding.tvSkipBack
+            tvSkipBack = binding.tvSkipBack,
+            lifecycleOwner = viewLifecycleOwner
         )
 
         playerManager.playVideo(navArgs<PlaybackFragmentArgs>().value.resume)
-    }
-
-    override fun onPause() {
-        super.onPause()
-        playerManager.onPause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        playerManager.onDestroy()
     }
 }
