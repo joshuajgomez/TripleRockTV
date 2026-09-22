@@ -102,7 +102,7 @@ class MediaOnlineRepositoryImpl
         if (iptvService == null) {
             fetchIptvService()
         }
-        if (streamType == StreamType.Series) seriesFetcher.fetchSeries(categoryId)
-        else onlineDataFetcher.fetchStreamDataList(categoryId, streamType)
+        if (streamType == StreamType.Series) seriesFetcher.updateSeriesOfCategory(categoryId)
+        else onlineDataFetcher.updateStreamDataList(categoryId, streamType)
     }
 }

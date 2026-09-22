@@ -15,7 +15,8 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface SeriesStreamsDao {
 
-    @Query("""
+    @Query(
+        """
     SELECT * FROM series_stream 
     WHERE name LIKE '%' || :streamName || '%' 
     ORDER BY 
@@ -29,7 +30,8 @@ interface SeriesStreamsDao {
         END, 
         name ASC 
     LIMIT :limit
-""")
+"""
+    )
     fun searchStreams(streamName: String, limit: Int = SEARCH_LIMIT): List<SeriesStream>
 
     @Query("SELECT * FROM series_stream WHERE seriesId = :seriesId")
@@ -54,15 +56,14 @@ interface SeriesStreamsDao {
     suspend fun insertStreams(streams: List<SeriesStream>)
 
     @Transaction
-    suspend fun replaceData(seriesStreamList: List<SeriesStream>) {
-        deleteAllStreams()
+    suspend fun replaceSeriesOfCategory(categoryId: Int, seriesStreamList: List<SeriesStream>) {
+        deleteAllSeriesOfCategory(categoryId)
         insertStreams(seriesStreamList)
     }
 
     @Update
     suspend fun update(stream: SeriesStream)
 
-    @Query("DELETE FROM series_stream")
-    suspend fun deleteAllStreams()
-
+    @Query("DELETE FROM series_stream WHERE categoryId = :categoryId")
+    suspend fun deleteAllSeriesOfCategory(categoryId: Int)
 }

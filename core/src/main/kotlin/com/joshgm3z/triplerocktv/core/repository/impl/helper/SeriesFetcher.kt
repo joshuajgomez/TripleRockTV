@@ -48,7 +48,7 @@ constructor(
         emptyList()
     }
 
-    suspend fun fetchSeries(categoryId: Int) {
+    suspend fun updateSeriesOfCategory(categoryId: Int) {
         val series = iptvService.getSeries(username, password, categoryId)
         Logger.debug("categoryId=${categoryId}, series.size=${series.size}")
 
@@ -69,7 +69,7 @@ constructor(
                 backdropUrl = it.backdropPath.firstOrNull()
             )
         }
-        seriesStreamsDao.insertStreams(seriesStreams)
+        seriesStreamsDao.replaceSeriesOfCategory(categoryId, seriesStreams)
     }
 
     suspend fun getSeriesDataAndUpdate(streamId: Int) {

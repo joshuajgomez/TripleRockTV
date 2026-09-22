@@ -84,16 +84,20 @@ interface StreamDataDao {
     suspend fun insertAll(streams: List<StreamData>)
 
     @Transaction
-    suspend fun replaceData(streamType: StreamType, streamDataList: List<StreamData>) {
-        deleteAllOfType(streamType)
+    suspend fun replaceStreamsOfCategory(
+        streamType: StreamType,
+        categoryId: Int,
+        streamDataList: List<StreamData>
+    ) {
+        deleteAllOfCategory(categoryId, streamType)
         insertAll(streamDataList)
     }
 
     @Update
     suspend fun update(streamData: StreamData)
 
-    @Query("DELETE FROM stream_data WHERE streamType = :streamType")
-    suspend fun deleteAllOfType(streamType: StreamType)
+    @Query("DELETE FROM stream_data WHERE streamType = :streamType AND categoryId = :categoryId")
+    suspend fun deleteAllOfCategory(categoryId: Int, streamType: StreamType)
 
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
