@@ -42,4 +42,8 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:visibility="visible" />
 
+    <include
+        android:id="@+id/layout_fragment_details"
+        layout="@layout/fragment_details" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

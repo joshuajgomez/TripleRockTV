@@ -39,7 +39,7 @@ class PlaybackViewModel @Inject constructor(
         ?: throw Exception("Missing nav arg streamType")
     private val seriesId = savedStateHandle.get<Int>("seriesId")
 
-    private val resume = savedStateHandle.get<Boolean>("resume")
+    val resume = savedStateHandle.get<Boolean>("resume")
         ?: throw Exception("Missing nav arg resume")
 
     init {
@@ -109,7 +109,7 @@ class PlaybackViewModel @Inject constructor(
                     )
                 }
             }
-        } ?: throw Exception("Stream id is null")
+        }
     }
 
     fun updateSelectedSubtitle(language: String, title: String, url: String?) {

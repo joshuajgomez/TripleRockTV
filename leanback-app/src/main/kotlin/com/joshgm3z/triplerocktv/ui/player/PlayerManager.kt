@@ -60,13 +60,14 @@ class PlayerManager(
     private val navigate: (NavDirections) -> Unit,
     private val tvSkipForward: TextView,
     private val tvSkipBack: TextView,
-    private val firestoreLogger: FirestoreLogger
+    private val firestoreLogger: FirestoreLogger,
+    private val onPlaybackStarted: () -> Unit,
 ) : DefaultLifecycleObserver {
 
     private var player: ExoPlayer = ExoPlayer.Builder(context).build().apply {
         addListener(errorListener {
             firestoreLogger.log(mapOf("playback_error" to it))
-            navigate(PlaybackFragmentDirections.toError(it))
+            navigate(PlayerFragmentDirections.toError(it))
         })
         addListener(playbackListener(tvSkipForward, tvSkipBack))
         addListener(trackSelectorViewModel.subtitleTrackListener)
@@ -151,7 +152,7 @@ class PlayerManager(
         }
     }
 
-    fun playVideo(resume: Boolean) {
+    fun playVideo(resume: Boolean = false) {
         lifecycleScope.launch {
             playbackViewModel.playbackUiState.collectLatest { state ->
                 state?.let { uiState ->
@@ -242,6 +243,12 @@ class PlayerManager(
                 }
             }
         }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            if (playbackState == Player.STATE_READY) {
+                onPlaybackStarted()
+            }
+        }
     }
 
     private fun View.setVisibleForDuration(
@@ -293,13 +300,13 @@ class PlayerManager(
                     ccAction -> {
                         videoTitle?.let {
                             trackSelectorViewModel.loadTracksOfType(TrackType.Subtitle)
-                            navigate(PlaybackFragmentDirections.toTrackSelector(it))
+                            navigate(PlayerFragmentDirections.toTrackSelector(it))
                         }
                     }
 
                     audioAction -> {
                         trackSelectorViewModel.loadTracksOfType(TrackType.Audio)
-                        navigate(PlaybackFragmentDirections.toTrackSelector(""))
+                        navigate(PlayerFragmentDirections.toTrackSelector(""))
                     }
 
                     rewindAction -> skipBackward()

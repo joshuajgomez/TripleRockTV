@@ -146,7 +146,7 @@ class BrowseFragment : BrowseSupportFragment() {
                 }
 
                 is StreamData -> when (item.streamType) {
-                    StreamType.VideoOnDemand -> BrowseFragmentDirections.toDetails().apply {
+                    StreamType.VideoOnDemand -> BrowseFragmentDirections.toPlayback().apply {
                         streamType = item.streamType
                         streamId = item.streamId
                     }
