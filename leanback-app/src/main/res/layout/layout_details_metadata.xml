@@ -11,10 +11,12 @@
         android:id="@+id/tv_category_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableStart="@drawable/outline_arrow_forward_ios_24"
+        android:drawableStart="@drawable/round_folder_14"
         android:drawablePadding="3dp"
+        android:drawableTint="?attr/colorForegroundLow"
         android:textColor="?attr/colorForegroundLow"
-        android:textStyle="bold"
+        android:textFontWeight="500"
+        android:textSize="@dimen/text_size_small"
         android:visibility="invisible"
         tools:text="ENGLISH MOVIES (4K)"
         tools:visibility="visible" />
@@ -39,7 +41,6 @@
         android:id="@+id/tv_genre"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:color="?attr/colorForegroundPrimary"
         tools:text="Comedy" />
 
