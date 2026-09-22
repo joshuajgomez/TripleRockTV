@@ -13,23 +13,22 @@ fun errorListener(
 ) = object : Player.Listener {
     override fun onPlayerError(error: PlaybackException) {
         super.onPlayerError(error)
-        Logger.error("error.errorCode = [${error.errorCode}]")
         val errorMessage = when (error.errorCode) {
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_FAILED,
             PlaybackException.ERROR_CODE_IO_NETWORK_CONNECTION_TIMEOUT ->
-                "[${error.errorCode}] Please check your internet connection"
+                "Please check your internet connection"
 
             PlaybackException.ERROR_CODE_DECODER_INIT_FAILED,
             PlaybackException.ERROR_CODE_DECODER_QUERY_FAILED,
             PlaybackException.ERROR_CODE_DECODING_FAILED ->
-                "[${error.errorCode}] Video format not supported on this device"
+                "Video format not supported on this device"
 
             PlaybackException.ERROR_CODE_REMOTE_ERROR,
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ->
-                "[${error.errorCode}] Could not reach the video stream"
+                "Could not reach the video stream"
 
             PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ->
-                "[${error.errorCode}] Unsupported format"
+                "Video format not supported by app"
 
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 seekToDefaultPosition()
@@ -37,9 +36,11 @@ fun errorListener(
                 return // Try to recover for live streams
             }
 
-            else -> "Error playing video: ${error.localizedMessage} [${error.errorCode}]"
+            else -> "Error playing video: ${error.localizedMessage}"
         }
 
-        onError(errorMessage)
+        val errorText = "[${error.errorCode}] $errorMessage"
+        Logger.error(errorText)
+        onError(errorText)
     }
 }
