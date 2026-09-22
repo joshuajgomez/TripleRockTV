@@ -29,6 +29,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.errorListener
 import com.joshgm3z.triplerocktv.core.util.loadSubtitle
 import com.joshgm3z.triplerocktv.core.util.remindPeriodically
@@ -176,6 +177,7 @@ class PlayerManager(
     }
 
     private fun prepareMedia(resume: Boolean, state: PlaybackUiState) {
+        Logger.debug("resume = [${resume}], state = [${state}]")
         val mediaItemBuilder = MediaItem.Builder().setUri(state.videoUrl)
 
         if (state.playbackItem is StreamData) {
@@ -199,6 +201,7 @@ class PlayerManager(
 
         lifecycleScope.launch {
             player.apply {
+                Logger.debug("Playing video")
                 setMediaItem(mediaItemBuilder.build())
                 prepare()
 

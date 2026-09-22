@@ -53,7 +53,7 @@ constructor(
         }
     }
 
-    suspend fun fetchStreamDataList(categoryId: Int, streamType: StreamType) {
+    suspend fun updateStreamDataList(categoryId: Int, streamType: StreamType) {
         val streams = when (streamType) {
             StreamType.VideoOnDemand -> iptvService.getVodStreams(
                 username,
@@ -86,7 +86,7 @@ constructor(
                 epgChannelId = it.epgChannelId,
             )
         }
-        streamDataDao.insertAll(streamDataList)
+        streamDataDao.replaceStreamsOfCategory(streamType, categoryId, streamDataList)
     }
 
     suspend fun getMovieDataAndUpdate(streamId: Int): MovieMetadata? {
