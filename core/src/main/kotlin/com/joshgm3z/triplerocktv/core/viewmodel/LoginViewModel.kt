@@ -6,20 +6,23 @@ import com.google.firebase.Firebase
 import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
+import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.orIfDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-data class LoginUiState(
-    var loading: Boolean = false,
-    var errorMessage: String? = null,
-    var loginSuccess: Boolean = false,
-)
+sealed class LoginUiState {
+    class Initial(val username: String, val password: String, val webUrl: String) : LoginUiState()
+    object Loading : LoginUiState()
+    data class Error(val message: String) : LoginUiState()
+    object LoginSuccess : LoginUiState()
+}
 
 data class UserInfo(
     val username: String,
@@ -33,10 +36,22 @@ data class UserInfo(
 class LoginViewModel
 @Inject constructor(
     private val repository: LoginRepository,
+    private val localDatastore: LocalDatastore,
     private val firebaseLogger: FirebaseLogger,
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow(LoginUiState())
+    private val _uiState = MutableStateFlow<LoginUiState>(LoginUiState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            val userInfo = localDatastore.getUserInfo()
+            _uiState.value = LoginUiState.Initial(
+                username = userInfo?.username ?: "".orIfDebug(Secrets.username),
+                password = userInfo?.password ?: "".orIfDebug(Secrets.password),
+                webUrl = userInfo?.webUrl ?: "http://".orIfDebug(Secrets.webUrl)
+            )
+        }
+    }
 
     fun onLoginClick(
         webUrl: String,
@@ -44,9 +59,7 @@ class LoginViewModel
         password: String
     ) {
         Logger.entry()
-        _uiState.update {
-            it.copy(loading = true, errorMessage = null)
-        }
+        _uiState.value = LoginUiState.Loading
         viewModelScope.launch {
             repository.tryLogin(
                 webUrl = webUrl,
@@ -57,16 +70,12 @@ class LoginViewModel
                     firebaseLogger.logUserLogin(username)
                     Firebase.analytics.setUserId(username)
                     Firebase.crashlytics.setUserId(username)
-                    _uiState.update {
-                        it.copy(loginSuccess = true, loading = false)
-                    }
+                    _uiState.value = LoginUiState.LoginSuccess
                 },
                 onError = { error ->
                     Logger.warn("Login failed")
                     firebaseLogger.logUserLoginFail(username)
-                    _uiState.update {
-                        it.copy(errorMessage = error, loading = false)
-                    }
+                    _uiState.value = LoginUiState.Error(error)
                 },
             )
         }

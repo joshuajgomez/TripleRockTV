@@ -12,10 +12,9 @@ import androidx.leanback.widget.GuidedActionsStylist
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
-import com.joshgm3z.triplerocktv.util.orIfDebug
+import com.joshgm3z.triplerocktv.core.viewmodel.LoginUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
@@ -33,39 +32,54 @@ class LoginFragment : GuidedStepSupportFragment() {
     lateinit var firebaseLogger: FirebaseLogger
 
     companion object {
-        val idServerUrl = 0L
-        val idUsername = 1L
-        val idPassword = 2L
-        val idLogin = 3L
-        val idStatus = 4L
-        val defaultValueServerUrl = "http://".orIfDebug(Secrets.webUrl)
-        val defaultValueUsername = "".orIfDebug(Secrets.username)
-        val defaultValuePassword = "".orIfDebug(Secrets.password)
+        const val ID_SERVER_URL = 0L
+        const val ID_USERNAME = 1L
+        const val ID_PASSWORD = 2L
+        const val ID_BUTTON = 3L
+        const val ID_STATUS = 4L
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
             loginViewModel.uiState.collectLatest {
-                when {
-                    it.loading -> showLoading()
-                    it.loginSuccess -> showLoginSuccess()
-                    !it.errorMessage.isNullOrEmpty() -> showLoginFailed(it.errorMessage)
+                when (it) {
+                    is LoginUiState.Initial -> showInitialData(it)
+                    is LoginUiState.Loading -> showLoading()
+                    is LoginUiState.LoginSuccess -> showLoginSuccess()
+                    is LoginUiState.Error -> showLoginFailed(it.message)
                 }
             }
         }
-        copyInputToTitle(findActionById(idServerUrl))
-        copyInputToTitle(findActionById(idUsername))
-        copyInputToTitle(findActionById(idPassword))
+    }
+
+    fun showInitialData(uiState: LoginUiState.Initial) {
+        showStatus(null)
+        enableViews(true)
+
+        fun setField(id: Long, text: String) {
+            val action = findActionById(id)
+            action == null && return
+            action.title = text
+            action.editTitle = text
+            val position = findActionPositionById(action.id)
+            if (position != -1) {
+                notifyActionChanged(position)
+            }
+        }
+
+        setField(ID_USERNAME, uiState.username)
+        setField(ID_PASSWORD, uiState.password)
+        setField(ID_SERVER_URL, uiState.webUrl)
     }
 
 
     private fun enableViews(enable: Boolean) {
         listOf(
-            findActionById(idServerUrl),
-            findActionById(idUsername),
-            findActionById(idPassword),
-            findActionById(idLogin),
+            findActionById(ID_SERVER_URL),
+            findActionById(ID_USERNAME),
+            findActionById(ID_PASSWORD),
+            findActionById(ID_BUTTON),
         ).forEach {
             if (it == null) return@forEach
             it.isEnabled = enable
@@ -98,7 +112,7 @@ class LoginFragment : GuidedStepSupportFragment() {
     override fun onCreateGuidance(savedInstanceState: Bundle?): GuidanceStylist.Guidance {
         return GuidanceStylist.Guidance(
             "Sign in", // Title
-            "Sign in using your IPTV credentials", // Description
+            "Sign in with your IPTV credentials", // Description
             "", // Breadcrumb
             ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector) // Icon
         )
@@ -107,27 +121,24 @@ class LoginFragment : GuidedStepSupportFragment() {
     override fun onCreateActions(actions: MutableList<GuidedAction>, savedInstanceState: Bundle?) {
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idServerUrl)
+                .id(ID_SERVER_URL)
                 .title("Server URL")
-                .editTitle(defaultValueServerUrl)
                 .description("Enter the server URL")
                 .editable(true)
                 .build()
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idUsername)
+                .id(ID_USERNAME)
                 .title("Username")
-                .editTitle(defaultValueUsername)
                 .description("Enter your username")
                 .editable(true)
                 .build()
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idPassword)
+                .id(ID_PASSWORD)
                 .title("Password")
-                .editTitle(defaultValuePassword)
                 .description("Enter your password")
                 .editable(true)
                 .inputType(InputType.TYPE_TEXT_VARIATION_PASSWORD)
@@ -135,14 +146,14 @@ class LoginFragment : GuidedStepSupportFragment() {
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idLogin)
+                .id(ID_BUTTON)
                 .title("Sign in")
                 .icon(R.drawable.ic_arrow_forward)
                 .build()
         )
         actions.add(
             GuidedAction.Builder(requireContext())
-                .id(idStatus)
+                .id(ID_STATUS)
                 .title("")
                 .focusable(false) // Prevents user from selecting it
                 .infoOnly(true)   // Styles it as informational text
@@ -156,19 +167,19 @@ class LoginFragment : GuidedStepSupportFragment() {
         description: String? = null,
         icon: Int? = null
     ) {
-        val action = findActionById(idStatus) ?: return
+        val action = findActionById(ID_STATUS) ?: return
         action.title = message ?: ""
         action.description = description ?: ""
         action.icon = if (icon == null) null
         else ContextCompat.getDrawable(requireContext(), icon)
-        notifyActionChanged(findActionPositionById(idStatus))
+        notifyActionChanged(findActionPositionById(ID_STATUS))
     }
 
     override fun onGuidedActionClicked(action: GuidedAction) {
-        if (action.id == idLogin) {
-            val serverUrl = findActionById(idServerUrl)?.editTitle?.trim().toString()
-            val username = findActionById(idUsername)?.editTitle?.trim().toString()
-            val password = findActionById(idPassword)?.editTitle?.trim().toString()
+        if (action.id == ID_BUTTON) {
+            val serverUrl = findActionById(ID_SERVER_URL)?.editTitle?.trim().toString()
+            val username = findActionById(ID_USERNAME)?.editTitle?.trim().toString()
+            val password = findActionById(ID_PASSWORD)?.editTitle?.trim().toString()
             // Handle login logic here
 
             if (isInputValid()) loginViewModel.onLoginClick(serverUrl, username, password)
@@ -176,17 +187,17 @@ class LoginFragment : GuidedStepSupportFragment() {
     }
 
     private fun isInputValid(): Boolean {
-        val serverUrlEt = findActionById(idServerUrl)?.editTitle?.trim()
+        val serverUrlEt = findActionById(ID_SERVER_URL)?.editTitle?.trim()
         if (serverUrlEt.isNullOrEmpty() || serverUrlEt.toString() == "http://") {
-            selectedActionPosition = findActionPositionById(idServerUrl)
+            selectedActionPosition = findActionPositionById(ID_SERVER_URL)
             return false
         }
-        if (findActionById(idUsername)?.editTitle?.trim().isNullOrEmpty()) {
-            selectedActionPosition = findActionPositionById(idUsername)
+        if (findActionById(ID_USERNAME)?.editTitle?.trim().isNullOrEmpty()) {
+            selectedActionPosition = findActionPositionById(ID_USERNAME)
             return false
         }
-        if (findActionById(idPassword)?.editTitle?.trim().isNullOrEmpty()) {
-            selectedActionPosition = findActionPositionById(idPassword)
+        if (findActionById(ID_PASSWORD)?.editTitle?.trim().isNullOrEmpty()) {
+            selectedActionPosition = findActionPositionById(ID_PASSWORD)
             return false
         }
 
@@ -204,7 +215,7 @@ class LoginFragment : GuidedStepSupportFragment() {
 
     private fun copyInputToTitle(action: GuidedAction?) {
         action ?: return
-        if (listOf(idServerUrl, idUsername, idPassword).contains(action.id)) {
+        if (listOf(ID_SERVER_URL, ID_USERNAME, ID_PASSWORD).contains(action.id)) {
             val userInput = action.editTitle?.toString()
             if (userInput.isNullOrEmpty()) return
             action.title = userInput
@@ -220,9 +231,9 @@ class LoginFragment : GuidedStepSupportFragment() {
         copyInputToTitle(action)
         // Return ACTION_NEXT to move to next field, or action.id to stay
         return when (action.id) {
-            idServerUrl -> idUsername
-            idUsername -> idPassword
-            idPassword -> idLogin
+            ID_SERVER_URL -> ID_USERNAME
+            ID_USERNAME -> ID_PASSWORD
+            ID_PASSWORD -> ID_BUTTON
             else -> -1
         }
     }
