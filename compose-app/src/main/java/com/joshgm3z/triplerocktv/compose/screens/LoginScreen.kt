@@ -32,6 +32,7 @@ import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.core.viewmodel.LoginViewModel
 import com.joshgm3z.triplerocktv.core.util.orIfDebug
+import com.joshgm3z.triplerocktv.core.viewmodel.LoginUiState
 
 @Composable
 fun LoginScreen(
@@ -47,15 +48,15 @@ fun LoginScreen(
                     password
                 )
             },
-            loading = uiState.loading,
-            status = when {
-                uiState.loginSuccess -> "Login successful!"
-                uiState.errorMessage != null -> uiState.errorMessage
+            loading = uiState == LoginUiState.Loading,
+            status = when(uiState) {
+                is LoginUiState.LoginSuccess -> "Login successful!"
+                is LoginUiState.Error -> uiState.message
                 else -> null
             }
         )
-        LaunchedEffect(uiState.loginSuccess) {
-            if (uiState.loginSuccess) {
+        LaunchedEffect(uiState == LoginUiState.LoginSuccess) {
+            if (uiState == LoginUiState.Loading) {
                 onLoginSuccess()
             }
         }
