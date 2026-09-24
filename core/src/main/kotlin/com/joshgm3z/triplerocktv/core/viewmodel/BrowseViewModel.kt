@@ -155,4 +155,13 @@ class BrowseViewModel @Inject constructor(
         return if (categoriesEmpty) BrowseUiState.Empty(StreamType.LiveTV)
         else uiState
     }
+
+    fun removeFromRecentlyPlayed(
+        streamId: Int,
+        streamType: StreamType
+    ) {
+        viewModelScope.launch {
+            recentsRepository.removeRecentlyPlayed(streamId, streamType)
+        }
+    }
 }

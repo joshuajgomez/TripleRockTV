@@ -1,13 +1,16 @@
 package com.joshgm3z.triplerocktv.ui.browse
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.ViewRecentStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -18,6 +21,12 @@ class RecentStreamPresenter
 @Inject constructor(
     private val glideUtil: GlideUtil,
 ) : Presenter() {
+
+    var longPressListener: ((
+        streamId: Int,
+        streamType: StreamType,
+        anchorView: View
+    ) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewRecentStreamCardBinding.inflate(
@@ -50,6 +59,23 @@ class RecentStreamPresenter
             glideUtil.loadImage(imageUri, posterImage)
             progressBar.progress = progress
             progressBar.setVisible(progress > 0)
+
+            root.setOnLongClickListener {
+                when (item) {
+                    is StreamData -> longPressListener?.invoke(
+                        item.streamId,
+                        item.streamType,
+                        root
+                    )
+
+                    is SeriesStream -> longPressListener?.invoke(
+                        item.seriesId,
+                        StreamType.Series,
+                        root
+                    )
+                }
+                true
+            }
         }
     }
 

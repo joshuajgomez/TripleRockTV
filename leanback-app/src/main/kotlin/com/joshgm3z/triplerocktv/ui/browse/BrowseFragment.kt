@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.ui.browse
 
 import android.os.Bundle
 import android.view.View
+import android.widget.PopupMenu
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
@@ -167,6 +168,7 @@ class BrowseFragment : BrowseSupportFragment() {
                 else -> return@OnItemViewClickedListener
             }.let { findNavController().navigate(it) }
         }
+        recentStreamPresenter.longPressListener = ::showPopupMenu
     }
 
     private fun showVoDState(uiState: BrowseUiState.VideoOnDemandState) {
@@ -335,6 +337,32 @@ class BrowseFragment : BrowseSupportFragment() {
                     requireActivity().setBackground(bitmap)
                 }
         }
+    }
+
+    private fun showPopupMenu(
+        streamId: Int,
+        streamType: StreamType,
+        anchorView: View
+    ) {
+        val popup = PopupMenu(requireContext(), anchorView)
+
+        val removeFromRecents = "Remove from recently played"
+        popup.menu.add(removeFromRecents)
+        val dismiss = "Dismiss"
+        popup.menu.add(dismiss)
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.title) {
+                removeFromRecents -> {
+                    viewModel.removeFromRecentlyPlayed(streamId, streamType)
+                    true
+                }
+
+                dismiss -> true
+                else -> false
+            }
+        }
+        popup.show()
     }
 
     override fun onResume() {

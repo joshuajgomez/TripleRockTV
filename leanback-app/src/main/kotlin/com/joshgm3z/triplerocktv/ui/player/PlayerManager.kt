@@ -216,6 +216,7 @@ class PlayerManager(
     }
 
     override fun onPause(owner: LifecycleOwner) {
+        playbackViewModel.updateLastPlayedPosition(player.currentPosition)
         player.pause()
     }
 

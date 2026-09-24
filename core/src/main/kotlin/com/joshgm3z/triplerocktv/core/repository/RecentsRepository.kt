@@ -21,4 +21,6 @@ interface RecentsRepository {
         seriesId: Int? = null,
         timeStamp: Long = System.currentTimeMillis()
     )
+
+    suspend fun removeRecentlyPlayed(streamId: Int, streamType: StreamType)
 }

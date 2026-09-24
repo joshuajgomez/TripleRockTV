@@ -109,7 +109,7 @@ class PlaybackViewModel @Inject constructor(
                     )
                 }
             }
-        } ?: throw Exception("Stream id is null")
+        }
     }
 
     fun updateSelectedSubtitle(language: String, title: String, url: String?) {

@@ -29,8 +29,8 @@ interface RecentlyPlayedDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(recentlyPlayed: RecentlyPlayed)
 
-    @Query("DELETE FROM recent_played WHERE id = :id")
-    fun delete(id: Int)
+    @Query("DELETE FROM recent_played WHERE id = :id AND streamType = :streamType")
+    suspend fun delete(id: Int, streamType: StreamType)
 
     @Query("DELETE FROM recent_played")
     fun deleteAll()

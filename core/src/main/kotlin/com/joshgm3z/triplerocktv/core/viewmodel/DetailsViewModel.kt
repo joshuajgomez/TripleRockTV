@@ -7,7 +7,6 @@ import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.parseToFloat
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
@@ -170,10 +169,4 @@ class DetailsViewModel @Inject constructor(
             onlineRepository.getSeriesDataAndUpdate(seriesStream.seriesId)
         }
     }
-}
-
-fun String.trimMovieName(): String {
-    return replace(Regex("[\\(\\[].*"), "")
-        // Removes extra whitespace
-        .trim()
 }

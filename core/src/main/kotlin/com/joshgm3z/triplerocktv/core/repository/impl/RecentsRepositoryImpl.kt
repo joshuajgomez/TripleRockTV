@@ -135,4 +135,11 @@ class RecentsRepositoryImpl
             added = timeStamp,
         )
     )
+
+    override suspend fun removeRecentlyPlayed(
+        streamId: Int,
+        streamType: StreamType
+    ) {
+        recentlyPlayedDao.delete(streamId, streamType)
+    }
 }

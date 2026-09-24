@@ -20,6 +20,12 @@ class StreamPresenter
     private val glideUtil: GlideUtil,
 ) : Presenter() {
 
+    var longPressListener: ((
+        streamId: Int,
+        streamType: StreamType,
+        anchorView: View
+    ) -> Unit)? = null
+
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewStreamCardBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -71,6 +77,22 @@ class StreamPresenter
 
         binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
             binding.ivGo.setVisible(hasFocus)
+        }
+        binding.root.setOnLongClickListener {
+            when (item) {
+                is StreamData -> longPressListener?.invoke(
+                    item.streamId,
+                    item.streamType,
+                    binding.root
+                )
+
+                is SeriesStream -> longPressListener?.invoke(
+                    item.seriesId,
+                    StreamType.Series,
+                    binding.root
+                )
+            }
+            true
         }
     }
 
