@@ -234,7 +234,7 @@ class BrowseFragment : BrowseSupportFragment() {
         rowsAdapter.clear()
 
         val recentsHeader = HeaderItem(0L, "Recently played")
-        val recentsListRowAdapter = ArrayObjectAdapter(streamPresenter)
+        val recentsListRowAdapter = ArrayObjectAdapter(recentStreamPresenter)
         rowsAdapter.add(ListRow(recentsHeader, recentsListRowAdapter))
 
         lifecycleScope.launch {

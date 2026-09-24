@@ -54,9 +54,20 @@ class RecentStreamPresenter
             is Episode -> item.progressPercent()
             else -> 0
         }
+        val streamType = when (item) {
+            is StreamData -> item.streamType
+            is Episode -> StreamType.Series
+            else -> null
+        }
         ViewRecentStreamCardBinding.bind(viewHolder.view).apply {
             streamTitle.text = title
-            glideUtil.loadImage(imageUri, posterImage)
+            if (streamType == StreamType.LiveTV) glideUtil.loadImage(
+                url = imageUri,
+                imageView = ivIcon,
+                centerCrop = false,
+                error = R.drawable.ic_video_file
+            )
+            else glideUtil.loadImage(imageUri, posterImage)
             progressBar.progress = progress
             progressBar.setVisible(progress > 0)
 
