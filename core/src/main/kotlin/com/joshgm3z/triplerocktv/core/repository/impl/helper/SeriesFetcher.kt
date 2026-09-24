@@ -49,7 +49,13 @@ constructor(
     }
 
     suspend fun updateSeriesOfCategory(categoryId: Int) {
-        val series = iptvService.getSeries(username, password, categoryId)
+        Logger.warn("categoryId = [$categoryId]")
+        val series = try {
+            iptvService.getSeries(username, password, categoryId)
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            emptyList()
+        }
         Logger.debug("categoryId=${categoryId}, series.size=${series.size}")
 
         val seriesStreams = series.map {
@@ -69,6 +75,7 @@ constructor(
                 backdropUrl = it.backdropPath.firstOrNull()
             )
         }
+        if (seriesStreams.isEmpty()) return
         seriesStreamsDao.replaceSeriesOfCategory(categoryId, seriesStreams)
     }
 

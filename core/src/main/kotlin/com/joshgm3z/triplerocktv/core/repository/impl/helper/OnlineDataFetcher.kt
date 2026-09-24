@@ -54,20 +54,26 @@ constructor(
     }
 
     suspend fun updateStreamDataList(categoryId: Int, streamType: StreamType) {
-        val streams = when (streamType) {
-            StreamType.VideoOnDemand -> iptvService.getVodStreams(
-                username,
-                password,
-                categoryId
-            )
+        Logger.warn("categoryId = [$categoryId], streamType = [$streamType]")
+        val streams = try {
+            when (streamType) {
+                StreamType.VideoOnDemand -> iptvService.getVodStreams(
+                    username,
+                    password,
+                    categoryId
+                )
 
-            StreamType.LiveTV -> iptvService.getLiveStreams(
-                username,
-                password,
-                categoryId
-            )
+                StreamType.LiveTV -> iptvService.getLiveStreams(
+                    username,
+                    password,
+                    categoryId
+                )
 
-            else -> emptyList()
+                else -> emptyList()
+            }
+        } catch (e: Exception) {
+            Logger.error(e.message.toString())
+            emptyList()
         }
         Logger.debug("streamType=${streamType}, categoryId=${categoryId}, streams.size=${streams.size}")
 
@@ -86,6 +92,7 @@ constructor(
                 epgChannelId = it.epgChannelId,
             )
         }
+        if (streamDataList.isEmpty()) return
         streamDataDao.replaceStreamsOfCategory(streamType, categoryId, streamDataList)
     }
 
