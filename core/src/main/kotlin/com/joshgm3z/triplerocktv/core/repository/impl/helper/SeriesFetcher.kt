@@ -70,7 +70,7 @@ constructor(
                 director = it.director,
                 genre = it.genre,
                 releaseDate = it.releaseDate,
-                lastModified = it.lastModified,
+                lastModified = it.lastModified?.toLong() ?: 0L,
                 rating = it.rating,
                 backdropUrl = it.backdropPath.firstOrNull()
             )

@@ -22,7 +22,7 @@ data class StreamData(
     val streamTypeText: String = "",
     val streamIcon: String? = "",
     val categoryId: Int = 0,
-    val added: String = "",
+    val added: Long = 0L,
     val rating: Float = 0f,
     val extension: String = "",
     val epgChannelId: String? = null,
@@ -51,7 +51,7 @@ data class StreamData(
             streamTypeText = "movie",
             streamIcon = "https://image.tmdb.org/t/p/w600_and_h900_bestv2/lNVHB85FUDZqLzvug3k6FA07RIr.jpg",
             categoryId = 122,
-            added = "1609012046",
+            added = 1609012046L,
             streamType = StreamType.VideoOnDemand,
             rating = 1.5f,
             extension = "mp4"

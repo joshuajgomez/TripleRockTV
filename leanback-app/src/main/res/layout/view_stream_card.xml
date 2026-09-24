@@ -47,4 +47,18 @@
         android:src="@drawable/circle_go_icon"
         android:visibility="gone"
         tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/tv_new"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:background="?attr/colorForegroundPrimary"
+        android:paddingHorizontal="6dp"
+        android:paddingBottom="1dp"
+        android:text="New"
+        android:textColor="?attr/colorBackground"
+        android:textFontWeight="600"
+        android:visibility="gone"
+        tools:visibility="visible" />
 </FrameLayout>

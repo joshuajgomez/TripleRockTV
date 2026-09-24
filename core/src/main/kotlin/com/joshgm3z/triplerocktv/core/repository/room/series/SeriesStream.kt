@@ -18,7 +18,7 @@ data class SeriesStream(
     val director: String? = null,
     val genre: String? = null,
     val releaseDate: String? = null,
-    val lastModified: String? = null,
+    val lastModified: Long = 0L,
     val rating: String? = null,
     val categoryId: Int = 0,
 

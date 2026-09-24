@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.core.repository.impl
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
@@ -41,6 +42,9 @@ class MediaLocalRepositoryImplTest {
     @MockK(relaxed = true)
     lateinit var recentlyPlayedDao: RecentlyPlayedDao
 
+    @MockK(relaxed = true)
+    lateinit var firestoreLogger: FirestoreLogger
+
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
@@ -51,7 +55,8 @@ class MediaLocalRepositoryImplTest {
             streamDataDao,
             categoryDataDao,
             favoriteDao,
-            recentlyPlayedDao
+            recentlyPlayedDao,
+            firestoreLogger
         )
     }
 

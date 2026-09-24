@@ -10,6 +10,7 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.util.isRecent
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
@@ -30,36 +31,42 @@ class StreamPresenter
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val binding = ViewStreamCardBinding.bind(viewHolder.view)
-        val title = when (item) {
+
+        when (item) {
             is StreamData -> item.name
             is SeriesStream -> item.name
             else -> null
-        }
-        val imageUri = when (item) {
-            is StreamData -> item.streamIcon
-            is SeriesStream -> item.coverImageUrl
-            else -> null
-        }
-        val streamType = when (item) {
-            is StreamData -> item.streamType
-            is SeriesStream -> StreamType.Series
-            else -> null
+        }.let {
+            binding.streamTitle.text = it
         }
 
-        binding.streamTitle.text = title
+        when (item) {
+            is StreamData -> when (item.streamType) {
+                StreamType.LiveTV -> glideUtil.loadImage(
+                    item.streamIcon,
+                    binding.ivIcon,
+                    centerCrop = false,
+                    error = R.drawable.ic_video_file
+                )
 
-        when (streamType) {
-            StreamType.LiveTV -> glideUtil.loadImage(
-                imageUri,
-                binding.ivIcon,
-                centerCrop = false,
-                error = R.drawable.ic_video_file
-            )
+                else -> glideUtil.loadImage(
+                    item.streamIcon,
+                    binding.posterImage
+                )
+            }
 
-            else -> glideUtil.loadImage(
-                imageUri,
+            is SeriesStream -> glideUtil.loadImage(
+                item.coverImageUrl,
                 binding.posterImage
             )
+        }
+
+        when (item) {
+            is StreamData -> item.added.isRecent()
+            is SeriesStream -> item.lastModified.isRecent()
+            else -> null
+        }.let {
+            binding.tvNew.setVisible(it)
         }
 
         binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->

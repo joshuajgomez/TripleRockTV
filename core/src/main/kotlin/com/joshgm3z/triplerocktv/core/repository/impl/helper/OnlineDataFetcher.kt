@@ -85,7 +85,7 @@ constructor(
                 streamId = it.streamId,
                 streamIcon = it.streamIcon,
                 categoryId = it.categoryId,
-                added = it.added,
+                added = it.added.toLong(),
                 streamType = streamType,
                 extension = it.containerExtension ?: streamType.defaultExtension(),
                 rating = it.rating.parseToFloat(),

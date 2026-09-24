@@ -5,10 +5,13 @@ import java.time.Instant
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
+import java.util.concurrent.TimeUnit
 
 fun Long.relativeTime(now: Instant = Instant.now()): String {
-    println("target time = $this")
-    val target = Instant.ofEpochMilli(this)
+    // Heuristic: If the value is less than 100 billion, it's likely seconds.
+    // (100 billion milliseconds is only ~3 years after 1970).
+    val timestampMillis = if (this < 100_000_000_000L) this * 1000L else this
+    val target = Instant.ofEpochMilli(timestampMillis)
     val duration = Duration.between(target, now)
 
     val seconds = duration.seconds
@@ -69,4 +72,15 @@ fun getTimeFrames(): List<ZonedDateTime> {
 fun ZonedDateTime.toTextTime(format: String = "EEE, MMM dd, hh:mm a"): String {
     val formatter = DateTimeFormatter.ofPattern(format, Locale.ENGLISH)
     return format(formatter)
+}
+
+fun Long.isRecent(days: Long = 5): Boolean {
+    val threeDaysInMillis = TimeUnit.DAYS.toMillis(days)
+    val now = System.currentTimeMillis()
+
+    // Normalize to milliseconds
+    val iptvTimeMillis = this * 1000L
+    val diff = now - iptvTimeMillis
+
+    return diff in 0..threeDaysInMillis
 }

@@ -4,8 +4,10 @@ import com.joshgm3z.triplerocktv.core.repository.AccessControlRepository
 import com.joshgm3z.triplerocktv.core.repository.AccessState
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
+import com.joshgm3z.triplerocktv.core.repository.MediaOnlineRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
+import com.joshgm3z.triplerocktv.core.util.NetworkUtil
 import io.mockk.coEvery
 import io.mockk.mockk
 import kotlinx.coroutines.Dispatchers
@@ -26,10 +28,10 @@ import kotlin.test.assertIs
 class SplashViewModelTest {
 
     private val localDatastore: LocalDatastore = mockk()
-    private val repository: MediaLocalRepository = mockk()
+    private val networkUtil: NetworkUtil = mockk()
+    private val onlineRepository: MediaOnlineRepository = mockk()
     private val accessControlRepository: AccessControlRepository = mockk()
     private val loginRepository: LoginRepository = mockk()
-    private val firebaseConfig: FirebaseConfig = mockk()
 
     private val testDispatcher = StandardTestDispatcher()
 
@@ -55,10 +57,10 @@ class SplashViewModelTest {
 
         viewModel = SplashViewModel(
             localDatastore,
-            repository,
+            onlineRepository,
             loginRepository,
             accessControlRepository,
-            firebaseConfig
+            networkUtil
         )
         // Act
         advanceUntilIdle() // Wait for init block coroutine to finish
