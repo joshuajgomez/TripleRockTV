@@ -180,7 +180,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun isContentEmpty(): Boolean = categoryDataDao.getAll().isEmpty()
+    override suspend fun isContentEmpty(): Boolean = streamDataDao.getTotalCount() == 0
+            || seriesStreamsDao.getTotalCount() == 0
 
     override suspend fun fetchFavorites(streamType: StreamType): List<StreamData> {
         return favoriteDao.getFavoritesOfType(streamType).mapNotNull {
@@ -247,15 +248,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamDataDao.updateSubtitleLanguage(streamId, language, title)
         url?.let {
             streamDataDao.updateSubtitleUrl(streamId, it)
-        }
-    }
-
-    override suspend fun numberOfFiles(type: StreamType): Int {
-        return when (type) {
-            StreamType.VideoOnDemand,
-            StreamType.LiveTV -> streamDataDao.getAll(type).size
-
-            StreamType.Series -> seriesStreamsDao.getAll().size
         }
     }
 

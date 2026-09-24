@@ -62,12 +62,6 @@ constructor(
         return data?.get(LAST_MEDIA_SYNC)?.toLongOrNull() ?: 0L
     }
 
-    suspend fun onMediaSyncComplete(complete: () -> Unit) {
-        dataStore.data.collectLatest { data ->
-            if (data.contains(LAST_MEDIA_SYNC)) complete()
-        }
-    }
-
     suspend fun clearAllData() {
         dataStore.edit { it.clear() }
     }

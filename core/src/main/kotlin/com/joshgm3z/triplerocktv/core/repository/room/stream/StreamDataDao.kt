@@ -49,6 +49,9 @@ interface StreamDataDao {
         streamType: StreamType
     ): Int
 
+    @Query("SELECT COUNT(*) FROM series_stream")
+    suspend fun getTotalCount(): Int
+
     @Query("SELECT * FROM stream_data WHERE streamType = :streamType")
     fun getAll(streamType: StreamType): List<StreamData>
 

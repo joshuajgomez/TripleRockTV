@@ -66,7 +66,5 @@ interface MediaLocalRepository {
 
     suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
 
-    suspend fun numberOfFiles(type: StreamType): Int
-
     suspend fun getStreamsCountOfCategory(categoryId: Int, streamType: StreamType): Int
 }

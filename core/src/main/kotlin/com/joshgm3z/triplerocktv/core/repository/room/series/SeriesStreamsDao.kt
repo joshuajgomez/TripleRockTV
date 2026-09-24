@@ -52,6 +52,9 @@ interface SeriesStreamsDao {
     @Query("SELECT COUNT(*) FROM series_stream WHERE categoryId = :categoryId")
     suspend fun getCount(categoryId: Int): Int
 
+    @Query("SELECT COUNT(*) FROM stream_data")
+    suspend fun getTotalCount(): Int
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertStreams(streams: List<SeriesStream>)
 

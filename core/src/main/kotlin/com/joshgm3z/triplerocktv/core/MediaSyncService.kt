@@ -40,6 +40,7 @@ class MediaSyncService : LifecycleService() {
     private val binder = LocalBinder()
 
     override fun onBind(intent: Intent): IBinder {
+        super.onBind(intent)
         Logger.entry
         return binder
     }
@@ -48,6 +49,12 @@ class MediaSyncService : LifecycleService() {
         super.onCreate()
         Logger.entry
         lifecycleScope.launch {
+            // In case room is cleared due to db migration, need to fetch new content
+            if (localRepository.isContentEmpty()) {
+                Logger.warn("Content is empty, resetting LastContentUpdate time")
+                localDatastore.notifyLastContentUpdate(0)
+            }
+
             if (alreadyUpdatedToday()) {
                 Logger.debug("Already updated today, skipping sync")
                 return@launch
