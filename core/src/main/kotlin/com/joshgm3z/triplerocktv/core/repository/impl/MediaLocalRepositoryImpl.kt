@@ -4,7 +4,6 @@ import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
@@ -17,9 +16,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
-import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
@@ -63,8 +60,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         StreamType.Series -> seriesStreamsDao.getAllOfCategory(categoryId)
         else -> streamDataDao.getAllFromCategoryAndType(categoryId, streamType).map {
             it.apply {
-                favorite = favoriteDao.isFavorite(streamId).first()
-                recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+                favorite = favoriteDao.favoriteFlow(streamId).first()
+                recentlyPlayed = recentlyPlayedDao.recentlyPlayedFlow(streamId).first()
             }
         }
     }.apply {
@@ -81,7 +78,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
             streams.map { stream ->
                 stream.apply {
                     favorite = favorites.firstOrNull { it.id == stream.streamId } != null
-                    recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+                    recentlyPlayed = recentlyPlayedDao.recentlyPlayedFlow(streamId).first()
                 }
             }
         }
@@ -107,8 +104,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamId: Int,
         streamType: StreamType,
     ): StreamData = streamDataDao.getByStreamId(streamId)!!.apply {
-        favorite = favoriteDao.isFavorite(streamId).first()
-        recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId).first()
+        favorite = favoriteDao.favoriteFlow(streamId).first()
+        recentlyPlayed = recentlyPlayedDao.recentlyPlayedFlow(streamId).first()
     }
 
     override suspend fun fetchEpisode(
@@ -119,7 +116,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         seriesStream?.seasons?.forEach { season ->
             season.episodes.forEach { episode ->
                 if (episode.id == episodeId) return episode.apply {
-                    recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episodeId).first()
+                    recentlyPlayed = recentlyPlayedDao.recentlyPlayedFlow(episodeId).first()
                 }
             }
         }
@@ -132,8 +129,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
     ): Flow<StreamData> = when (streamType) {
         StreamType.VideoOnDemand -> combine(
             streamDataDao.streamDataFlow(streamId),
-            recentlyPlayedDao.getRecentlyPlayedById(streamId),
-            favoriteDao.isFavorite(streamId)
+            recentlyPlayedDao.recentlyPlayedFlow(streamId),
+            favoriteDao.favoriteFlow(streamId)
         ) { streamData, recentPlayed, isFavorite ->
             firestoreLogger.log(
                 mapOf(
@@ -164,8 +161,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
 
     override fun seriesStreamFlow(seriesId: Int): Flow<SeriesStream> = combine(
         seriesStreamsDao.seriesStreamFlow(seriesId),
-        recentlyPlayedDao.getRecentlyPlayedBySeriesId(seriesId),
-        favoriteDao.isFavorite(seriesId)
+        recentlyPlayedDao.recentlyPlayedSeriesFlow(seriesId),
+        favoriteDao.favoriteFlow(seriesId)
     ) { seriesStream, recentPlayed, isFavorite ->
         seriesStream.apply {
             favorite = isFavorite
@@ -173,7 +170,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
             seasons?.forEach { season ->
                 season.episodes.forEach { episode ->
                     episode.recentlyPlayed = recentlyPlayedDao
-                        .getRecentlyPlayedById(episode.id)
+                        .recentlyPlayedFlow(episode.id)
                         .first()
                 }
             }
@@ -255,6 +252,27 @@ class MediaLocalRepositoryImpl @Inject constructor(
         return when (streamType) {
             StreamType.Series -> seriesStreamsDao.getCount(categoryId)
             else -> streamDataDao.getCount(categoryId, streamType)
+        }
+    }
+
+    override suspend fun updateTotalDuration(
+        streamId: Int,
+        streamType: StreamType,
+        duration: Long
+    ) {
+        Logger.debug("streamId=$streamId, streamType=$streamType, duration=$duration")
+        when (streamType) {
+            StreamType.VideoOnDemand -> streamDataDao.getByStreamId(streamId)?.let { streamData ->
+                streamDataDao.update(
+                    streamData.copy(
+                        movieMetadata = streamData.movieMetadata?.copy(
+                            totalDurationMs = duration
+                        )
+                    )
+                )
+            }
+
+            else -> {}
         }
     }
 }
