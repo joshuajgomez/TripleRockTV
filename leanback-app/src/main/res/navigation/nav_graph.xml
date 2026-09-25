@@ -176,7 +176,7 @@
 
     <fragment
         android:id="@+id/playbackFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.player.PlaybackFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.player.PlayerFragment"
         android:label="PlaybackFragment">
         <argument
             android:name="streamId"

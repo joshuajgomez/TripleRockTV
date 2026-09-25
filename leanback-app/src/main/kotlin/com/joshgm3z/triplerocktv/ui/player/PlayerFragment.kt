@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
@@ -24,7 +23,7 @@ import javax.inject.Inject
  */
 @UnstableApi
 @AndroidEntryPoint
-class PlaybackFragment : Fragment() {
+class PlayerFragment : Fragment() {
 
     private val viewModel: PlaybackViewModel by viewModels()
 
@@ -66,6 +65,6 @@ class PlaybackFragment : Fragment() {
             firestoreLogger = firestoreLogger
         )
 
-        playerManager.playVideo(navArgs<PlaybackFragmentArgs>().value.resume)
+        playerManager.playVideo()
     }
 }

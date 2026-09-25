@@ -6,7 +6,9 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.RecentsRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -39,7 +41,7 @@ class PlaybackViewModel @Inject constructor(
         ?: throw Exception("Missing nav arg streamType")
     private val seriesId = savedStateHandle.get<Int>("seriesId")
 
-    private val resume = savedStateHandle.get<Boolean>("resume")
+    val resume = savedStateHandle.get<Boolean>("resume")
         ?: throw Exception("Missing nav arg resume")
 
     init {
@@ -116,6 +118,18 @@ class PlaybackViewModel @Inject constructor(
         Logger.debug("url = [${url}], language = [${language}]")
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateSelectedSubtitle(streamId, language, title, url)
+        }
+    }
+
+    fun updateTotalDuration(duration: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            when (val playbackItem = _playbackUiState.value?.playbackItem) {
+                is StreamData -> {
+                    val totalDurationMs = playbackItem.movieMetadata?.totalDurationMs
+                    if (totalDurationMs == null || totalDurationMs == 0L)
+                        repository.updateTotalDuration(streamId, streamType, duration)
+                }
+            }
         }
     }
 }

@@ -7,7 +7,6 @@ import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
 import com.joshgm3z.triplerocktv.core.repository.StreamType
-import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "favorite")
@@ -33,7 +32,7 @@ interface FavoriteDao {
     fun getFavorites(): List<Favorite>
 
     @Query("SELECT EXISTS(SELECT 1 FROM favorite WHERE id = :id)")
-    fun isFavorite(id: Int): Flow<Boolean>
+    fun favoriteFlow(id: Int): Flow<Boolean>
 
     @Query(
         "SELECT * FROM favorite " +

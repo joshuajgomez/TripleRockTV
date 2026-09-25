@@ -66,7 +66,7 @@ class PlayerManager(
     private var player: ExoPlayer = ExoPlayer.Builder(context).build().apply {
         addListener(errorListener {
             firestoreLogger.log(mapOf("playback_error" to it))
-            navigate(PlaybackFragmentDirections.toError(it))
+            navigate(PlayerFragmentDirections.toError(it))
         })
         addListener(playbackListener(tvSkipForward, tvSkipBack))
         addListener(trackSelectorViewModel.subtitleTrackListener)
@@ -151,12 +151,12 @@ class PlayerManager(
         }
     }
 
-    fun playVideo(resume: Boolean) {
+    fun playVideo() {
         lifecycleScope.launch {
             playbackViewModel.playbackUiState.collectLatest { state ->
                 state?.let { uiState ->
                     setupMetadata(uiState)
-                    prepareMedia(resume, uiState)
+                    prepareMedia(playbackViewModel.resume, uiState)
                 }
             }
         }
@@ -243,6 +243,16 @@ class PlayerManager(
                 }
             }
         }
+
+        override fun onPlaybackStateChanged(playbackState: Int) {
+            super.onPlaybackStateChanged(playbackState)
+            if (playbackState == Player.STATE_READY) {
+                val duration = player.duration
+                if (duration != androidx.media3.common.C.TIME_UNSET) {
+                    playbackViewModel.updateTotalDuration(duration)
+                }
+            }
+        }
     }
 
     private fun View.setVisibleForDuration(
@@ -294,13 +304,13 @@ class PlayerManager(
                     ccAction -> {
                         videoTitle?.let {
                             trackSelectorViewModel.loadTracksOfType(TrackType.Subtitle)
-                            navigate(PlaybackFragmentDirections.toTrackSelector(it))
+                            navigate(PlayerFragmentDirections.toTrackSelector(it))
                         }
                     }
 
                     audioAction -> {
                         trackSelectorViewModel.loadTracksOfType(TrackType.Audio)
-                        navigate(PlaybackFragmentDirections.toTrackSelector(""))
+                        navigate(PlayerFragmentDirections.toTrackSelector(""))
                     }
 
                     rewindAction -> skipBackward()
