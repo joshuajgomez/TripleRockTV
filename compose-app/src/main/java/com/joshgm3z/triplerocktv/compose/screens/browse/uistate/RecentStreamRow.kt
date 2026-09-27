@@ -164,7 +164,7 @@ fun PreviewRecentStreamRow() {
                 ).apply {
                     recentlyPlayed = RecentlyPlayed(
                         id = it.streamId,
-                        playedDuration = 60 * 1000L,
+                        playedDurationMs = 60 * 1000L,
                         streamType = StreamType.VideoOnDemand,
                         added = 0L
                     )

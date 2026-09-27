@@ -53,8 +53,8 @@ constructor(
         }
     }
 
-    suspend fun updateStreamDataList(categoryId: Int, streamType: StreamType) {
-        Logger.warn("categoryId = [$categoryId], streamType = [$streamType]")
+    suspend fun updateStreamDataList(categoryId: Int, streamType: StreamType, log: Boolean = true) {
+        if (log) Logger.debug("categoryId = [$categoryId], streamType = [$streamType]")
         val streams = try {
             when (streamType) {
                 StreamType.VideoOnDemand -> iptvService.getVodStreams(
@@ -75,7 +75,7 @@ constructor(
             Logger.error(e.message.toString())
             emptyList()
         }
-        Logger.debug("streamType=${streamType}, categoryId=${categoryId}, streams.size=${streams.size}")
+        if (log) Logger.debug("streamType=${streamType}, categoryId=${categoryId}, streams.size=${streams.size}")
 
         val streamDataList = streams.map {
             StreamData(

@@ -97,12 +97,13 @@ class MediaOnlineRepositoryImpl
 
     override suspend fun fetchStreams(
         streamType: StreamType,
-        categoryId: Int
+        categoryId: Int,
+        log: Boolean,
     ) {
         if (iptvService == null) {
             fetchIptvService()
         }
-        if (streamType == StreamType.Series) seriesFetcher.updateSeriesOfCategory(categoryId)
-        else onlineDataFetcher.updateStreamDataList(categoryId, streamType)
+        if (streamType == StreamType.Series) seriesFetcher.updateSeriesOfCategory(categoryId, log)
+        else onlineDataFetcher.updateStreamDataList(categoryId, streamType, log)
     }
 }

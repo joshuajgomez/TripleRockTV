@@ -61,7 +61,7 @@ class PlaybackViewModel @Inject constructor(
                     PlaybackUiState(
                         playbackItem = result,
                         videoUrl = result.videoUrl(userInfo),
-                        resumePosition = if (resume) result.recentlyPlayed?.playedDuration
+                        resumePosition = if (resume) result.recentlyPlayed?.playedDurationMs
                         else null
                     )
                 }
@@ -79,7 +79,7 @@ class PlaybackViewModel @Inject constructor(
                     PlaybackUiState(
                         playbackItem = episode!!,
                         videoUrl = episode.videoUrl(userInfo),
-                        resumePosition = if (resume) episode.recentlyPlayed?.playedDuration
+                        resumePosition = if (resume) episode.recentlyPlayed?.playedDurationMs
                         else null
                     )
                 }

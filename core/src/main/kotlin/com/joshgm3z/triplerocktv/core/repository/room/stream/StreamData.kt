@@ -28,8 +28,6 @@ data class StreamData(
     val epgChannelId: String? = null,
 
     val streamType: StreamType,
-    // to delete
-    val timeAddedToList: Long = 0,
     val subtitleUrl: String? = null,
     val subtitleTitle: String? = null,
     val subtitleLanguage: String? = null,
@@ -61,31 +59,31 @@ data class StreamData(
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
-    fun progressPercent(): Int = when {
-        recentlyPlayed == null -> 0
-        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0
-        else -> ((recentlyPlayed!!.playedDuration.toDouble()
-                / (movieMetadata?.totalDurationMs ?: 0L)) * 100).toInt()
-    }
-
-    fun timeRemaining(): Long = when {
-        recentlyPlayed == null -> 0L
-        (movieMetadata?.totalDurationMs ?: 0L) == 0L -> 0L
-        else -> ((movieMetadata?.totalDurationMs ?: 0L) - recentlyPlayed!!.playedDuration)
+    fun progressPercent(): Int {
+        val played = recentlyPlayed?.playedDurationMs ?: return 0
+        val total = movieMetadata?.totalDurationMs ?: 0L
+        if (total <= 0L) return 0
+        return ((played.toDouble() / total) * 100)
+            .toInt()
+            .coerceIn(1, 100)
     }
 
     override fun toString(): String {
-        return "\nStreamData(streamId=$streamId, num=$num, name='$name', streamTypeText='$streamTypeText', streamIcon=$streamIcon, categoryId=$categoryId, added='$added', rating=$rating, extension='$extension', epgChannelId=$epgChannelId, streamType=$streamType, timeAddedToList=$timeAddedToList, subtitleUrl=$subtitleUrl, subtitleTitle=$subtitleTitle, subtitleLanguage=$subtitleLanguage, " +
-                "\n\tmovieMetadata=$movieMetadata, " +
-                "\n\trecentlyPlayed=$recentlyPlayed, favorite=$favorite, startedWatching=$startedWatching)"
+        return "\nStreamData(streamId=$streamId, num=$num, name='$name', streamTypeText='$streamTypeText', streamIcon=$streamIcon, " +
+                "\n\t\tcategoryId=$categoryId, added='$added', rating=$rating, extension='$extension', epgChannelId=$epgChannelId, " +
+                "\n\t\tstreamType=$streamType, subtitleUrl=$subtitleUrl, subtitleTitle=$subtitleTitle, subtitleLanguage=$subtitleLanguage, " +
+                "\n\tmovieMetadata=$movieMetadata," +
+                "\n\trecentlyPlayed=$recentlyPlayed," +
+                "\n\tfavorite=$favorite, progressPercent()=${progressPercent()}"
     }
 
-    val startedWatching: Boolean
-        get() = recentlyPlayed != null
-                && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
-                && movieMetadata?.totalDurationMs != 0L
-                && timeRemaining() > MIN_DURATION_LEFT
-
+    override fun equals(other: Any?): Boolean {
+        val new = other as StreamData
+        return streamId == new.streamId
+                && movieMetadata == new.movieMetadata
+                && favorite == new.favorite
+                && recentlyPlayed?.playedDurationMs == new.recentlyPlayed?.playedDurationMs
+    }
 }
 
 data class MovieMetadata(
@@ -96,4 +94,10 @@ data class MovieMetadata(
     val director: String? = null,
     val actors: String? = null,
     val genre: String? = null,
-)
+) {
+    override fun toString(): String {
+        return "MovieMetadata(description=${description?.take(15)}..., backPosterUrl=$backPosterUrl, " +
+                "totalDurationMs=$totalDurationMs, cast=$cast, director=$director, actors=$actors, " +
+                "genre=$genre)"
+    }
+}

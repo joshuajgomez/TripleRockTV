@@ -3,8 +3,6 @@ package com.joshgm3z.triplerocktv.core.repository.data
 import androidx.room.Ignore
 import com.google.gson.annotations.SerializedName
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
-import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_DURATION_LEFT
-import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATION
 import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.UserInfo
 
@@ -77,16 +75,21 @@ data class Episode(
 
     fun totalDurationMs(): Long = episodeInfo?.duration_secs?.times(1000L) ?: 0L
 
-    fun progressPercent(): Int = when {
-        recentlyPlayed == null -> 0
-        totalDurationMs() == 0L -> 0
-        else -> ((recentlyPlayed!!.playedDuration.toDouble() / totalDurationMs()) * 100).toInt()
+    fun progressPercent(): Int {
+        val played = recentlyPlayed?.playedDurationMs ?: return 0
+        val total = totalDurationMs()
+
+        if (total <= 0L) return 0
+
+        return ((played.toDouble() / total) * 100)
+            .toInt()
+            .coerceIn(1, 100)
     }
 
     fun timeRemaining(): Long = when {
         recentlyPlayed == null -> 0
         totalDurationMs() == 0L -> 0L
-        else -> (totalDurationMs() - recentlyPlayed!!.playedDuration)
+        else -> (totalDurationMs() - recentlyPlayed!!.playedDurationMs)
     }
 
     fun timeRemainingText(): String = when {
@@ -94,11 +97,12 @@ data class Episode(
         else -> timeRemaining().toTextTime().let { "$it left" }
     }
 
-    val startedWatching: Boolean
-        get() = recentlyPlayed != null
-                && recentlyPlayed!!.playedDuration > MIN_PLAYBACK_DURATION
-                && totalDurationMs() != 0L
-                && timeRemaining() > MIN_DURATION_LEFT
+    override fun equals(other: Any?): Boolean {
+        val new = other as Episode
+        return id == new.id
+                && episodeInfo == new.episodeInfo
+                && recentlyPlayed?.playedDurationMs == new.recentlyPlayed?.playedDurationMs
+    }
 }
 
 data class EpisodeInfo(
@@ -109,4 +113,15 @@ data class EpisodeInfo(
     val movie_image: String? = null,
     val rating: String? = null,
     val season: String? = null,
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        val new = other as EpisodeInfo
+        return releasedate == new.releasedate
+                && plot == new.plot
+                && duration_secs == new.duration_secs
+                && duration == new.duration
+                && movie_image == new.movie_image
+                && rating == new.rating
+                && season == new.season
+    }
+}

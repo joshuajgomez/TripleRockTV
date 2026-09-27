@@ -21,5 +21,5 @@ interface MediaOnlineRepository {
 
     suspend fun getShortEpgListing(streamId: Int): List<IptvEpgListing>
 
-    suspend fun fetchStreams(streamType: StreamType, categoryId: Int)
+    suspend fun fetchStreams(streamType: StreamType, categoryId: Int, log: Boolean = true)
 }

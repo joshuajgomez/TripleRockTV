@@ -7,6 +7,6 @@
 
     <path
         android:fillColor="?attr/colorForegroundHigh"
-        android:pathData="M1,4v16l13,-8.5z" />
+        android:pathData="M3,5.92v12.15c0,0.87 0.96,1.4 1.7,0.95l9.88,-6.08c0.69,-0.42 0.69,-1.43 0,-1.85L4.7,5c-0.74,-0.45 -1.7,0.08 -1.7,0.92z" />
 
 </vector>

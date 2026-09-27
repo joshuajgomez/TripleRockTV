@@ -162,10 +162,10 @@ class DetailsFragment : Fragment() {
     private fun handleBlur(imageUrl: String?) {
         imageUrl ?: return
         backgroundImageUrl = imageUrl
-        glideUtil.getBitmap(uri = imageUrl, dimMode = DimMode.None) { bitmap ->
-            if (!isVisible) return@getBitmap
-            binding.ivBackdrop.setImageBitmap(bitmap)
-        }
+        glideUtil.loadImage(
+            url = imageUrl,
+            imageView = binding.ivBackdrop
+        )
     }
 
     override fun onResume() {

@@ -23,23 +23,6 @@ class RecentsRepositoryImpl
     private val onlineRepository: MediaOnlineRepository,
 ) : RecentsRepository {
 
-    override suspend fun fetchRecentlyPlayedStreamData(
-        streamType: StreamType
-    ): List<StreamData> {
-        return recentlyPlayedDao.getRecentlyPlayedOfType(streamType).mapNotNull {
-            val streamData = streamDataDao.getByStreamId(it.id) ?: return@mapNotNull null
-            when {
-                streamData.movieMetadata != null -> streamData
-                else -> {
-                    onlineRepository.getMovieDataAndUpdate(it.id)
-                    streamDataDao.getByStreamId(it.id) ?: return@mapNotNull null
-                }
-            }.apply {
-                recentlyPlayed = it
-            }
-        }
-    }
-
     override fun recentlyPlayedStreamDataFlow(streamType: StreamType): Flow<List<StreamData>> {
         return recentlyPlayedDao.recentlyPlayedFlowOfType(streamType).map {
             it.mapNotNull { recentlyPlayed ->
@@ -61,27 +44,6 @@ class RecentsRepositoryImpl
                 }
             }
         }
-    }
-
-    override suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream> {
-        return recentlyPlayedDao
-            .getRecentlyPlayedByType(StreamType.Series)
-            .mapNotNull { recentlyPlayed ->
-                val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
-                val seriesStream =
-                    seriesStreamsDao.getBySeriesId(seriesId) ?: return@mapNotNull null
-                val series = with(seriesStream) {
-                    when {
-                        !seasons.isNullOrEmpty() -> this
-                        else -> {
-                            onlineRepository.getSeriesDataAndUpdate(seriesId)
-                            seriesStreamsDao.getBySeriesId(seriesId) ?: return@mapNotNull null
-                        }
-                    }
-                }
-                series.lastPlayedEpisodeId = recentlyPlayed.id
-                if (series.hasStartedLastEpisode(recentlyPlayed)) series else null
-            }
     }
 
     override fun recentlyPlayedSeriesFlow(): Flow<List<SeriesStream>> {
@@ -113,7 +75,7 @@ class RecentsRepositoryImpl
             season.episodes.forEach { episode ->
                 if (episode.id == lastPlayedEpisodeId) {
                     episode.recentlyPlayed = recent
-                    return episode.startedWatching // Uses the logic defined in Episode class
+                    return episode.progressPercent() > 0
                 }
             }
         }
@@ -130,7 +92,7 @@ class RecentsRepositoryImpl
         RecentlyPlayed(
             id = streamId,
             seriesId = seriesId,
-            playedDuration = positionMs,
+            playedDurationMs = positionMs,
             streamType = streamType,
             added = timeStamp,
         )

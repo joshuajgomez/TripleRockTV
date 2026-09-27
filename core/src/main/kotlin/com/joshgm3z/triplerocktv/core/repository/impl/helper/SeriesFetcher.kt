@@ -48,15 +48,15 @@ constructor(
         emptyList()
     }
 
-    suspend fun updateSeriesOfCategory(categoryId: Int) {
-        Logger.warn("categoryId = [$categoryId]")
+    suspend fun updateSeriesOfCategory(categoryId: Int, log: Boolean = true) {
+        if (log) Logger.warn("categoryId = [$categoryId]")
         val series = try {
             iptvService.getSeries(username, password, categoryId)
         } catch (e: Exception) {
             Logger.error(e.message.toString())
             emptyList()
         }
-        Logger.debug("categoryId=${categoryId}, series.size=${series.size}")
+        if (log) Logger.debug("categoryId=${categoryId}, series.size=${series.size}")
 
         val seriesStreams = series.map {
             SeriesStream(

@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
+import androidx.lifecycle.distinctUntilChanged
 import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -20,8 +21,10 @@ import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
@@ -132,29 +135,20 @@ class MediaLocalRepositoryImpl @Inject constructor(
             recentlyPlayedDao.recentlyPlayedFlow(streamId),
             favoriteDao.favoriteFlow(streamId)
         ) { streamData, recentPlayed, isFavorite ->
-            firestoreLogger.log(
-                mapOf(
-                    "event" to "streamDataFlow",
-                    "streamName" to streamData.name,
-                    "streamId" to streamId,
-                    "streamType" to streamType.name,
-                    "totalDurationMs" to (streamData.movieMetadata?.totalDurationMs ?: "null"),
-                    "recentPlayed" to (recentPlayed ?: "null"),
-                    "isFavorite" to isFavorite
-                )
-            )
-
-            Logger.debug(
-                "combine: " +
-                        "\n\tstreamData.name=[${streamData.name}], " +
-                        "\n\trecentPlayed = [${recentPlayed}], " +
-                        "\n\tisFavorite = [${isFavorite}]"
-            )
-            streamData.apply {
+            streamData.copy().apply {
                 recentlyPlayed = recentPlayed
                 favorite = isFavorite
             }
-        }
+        }.distinctUntilChanged()
+            .onEach { data ->
+                firestoreLogger.log(
+                    mapOf(
+                        "event" to "streamDataFlow",
+                        "streamData" to data
+                    )
+                )
+                Logger.debug("streamData=[$data]")
+            }
 
         else -> streamDataDao.streamDataFlow(streamId)
     }
@@ -164,7 +158,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         recentlyPlayedDao.recentlyPlayedSeriesFlow(seriesId),
         favoriteDao.favoriteFlow(seriesId)
     ) { seriesStream, recentPlayed, isFavorite ->
-        seriesStream.apply {
+        seriesStream.copy().apply {
             favorite = isFavorite
             recentPlayed?.let { lastPlayedEpisodeId = it.id }
             seasons?.forEach { season ->
@@ -175,7 +169,16 @@ class MediaLocalRepositoryImpl @Inject constructor(
                 }
             }
         }
-    }
+    }.distinctUntilChanged()
+        .onEach { data ->
+            firestoreLogger.log(
+                mapOf(
+                    "event" to "seriesStreamFlow",
+                    "seriesStream" to data
+                )
+            )
+            Logger.debug("seriesStream=[$data]")
+        }
 
     override suspend fun isContentEmpty(): Boolean = streamDataDao.getTotalCount() == 0
             || seriesStreamsDao.getTotalCount() == 0
@@ -197,8 +200,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
     }
 
     override suspend fun fetchNewlyAdded(streamType: StreamType): List<StreamData> {
-        return if (streamType == StreamType.VideoOnDemand) streamDataDao.getNewlyAdded10()
-        else emptyList()
+        return streamDataDao.getNewlyAddedOfType(streamType)
     }
 
     override suspend fun fetchFavoritesSeries(): List<SeriesStream> {

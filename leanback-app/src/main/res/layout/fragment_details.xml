@@ -7,30 +7,31 @@
     android:background="@color/color_background"
     android:padding="20dp">
 
+    <include
+        android:id="@+id/include_details"
+        layout="@layout/layout_details_metadata"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/iv_backdrop"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_backdrop"
-        android:layout_width="650dp"
+        android:layout_width="600dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
         android:visibility="visible"
         app:layout_constraintDimensionRatio="16:9"
-        app:layout_constraintEnd_toStartOf="@id/include_details"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/include_details"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/RoundedRectangle"
         tools:src="@drawable/backdrop_office"
         tools:visibility="visible" />
-
-    <include
-        android:id="@+id/include_details"
-        layout="@layout/layout_details_metadata"
-        android:layout_width="250dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/iv_backdrop"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/ll_button_container"
@@ -40,7 +41,7 @@
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@id/iv_backdrop"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@id/iv_backdrop"
         app:layout_constraintTop_toBottomOf="@id/iv_backdrop">
 
         <com.joshgm3z.triplerocktv.ui.common.TileButtonView
@@ -76,7 +77,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:drawable="@drawable/outline_video_template_14"
+            android:drawable="@drawable/outline_folder_open_24"
             android:text="More episodes"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -86,8 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:drawable="@drawable/baseline_playlist_add_14"
-            android:text="Add to favorites"
+            android:drawable="@drawable/outline_favorite_24"
+            android:text="Add favorite"
             android:visibility="gone"
             tools:visibility="visible" />
 
@@ -96,8 +97,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:drawable="@drawable/baseline_playlist_add_check_14"
-            android:text="Remove from favorites"
+            android:drawable="@drawable/baseline_favorite_24"
+            android:text="Remove favorite"
             android:visibility="gone"
             tools:visibility="visible" />
 

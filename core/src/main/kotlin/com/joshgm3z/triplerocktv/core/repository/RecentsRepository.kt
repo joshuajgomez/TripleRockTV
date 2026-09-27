@@ -6,11 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface RecentsRepository {
 
-    suspend fun fetchRecentlyPlayedStreamData(streamType: StreamType): List<StreamData>
-
     fun recentlyPlayedStreamDataFlow(streamType: StreamType): Flow<List<StreamData>>
-
-    suspend fun fetchRecentlyPlayedSeries(): List<SeriesStream>
 
     fun recentlyPlayedSeriesFlow(): Flow<List<SeriesStream>>
 

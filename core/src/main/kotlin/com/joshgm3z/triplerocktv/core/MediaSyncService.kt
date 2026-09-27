@@ -71,7 +71,7 @@ class MediaSyncService : LifecycleService() {
                     categories.forEachIndexed { index, category ->
                         syncProgressMap[streamType] = (index + 1) * 100 / size
                         updateState()
-                        onlineRepository.fetchStreams(streamType, category.categoryId)
+                        onlineRepository.fetchStreams(streamType, category.categoryId, false)
                     }
                 }
             }

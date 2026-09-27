@@ -105,8 +105,8 @@ interface StreamDataDao {
     @Query("DELETE FROM stream_data")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM stream_data ORDER BY added DESC LIMIT 10")
-    suspend fun getNewlyAdded10(): List<StreamData>
+    @Query("SELECT * FROM stream_data  WHERE streamType = :streamType ORDER BY added DESC LIMIT :limit")
+    suspend fun getNewlyAddedOfType(streamType: StreamType, limit: Int = 10): List<StreamData>
 
     @Query("UPDATE stream_data SET subtitleUrl = :url WHERE streamId = :streamId")
     suspend fun updateSubtitleUrl(streamId: Int, url: String)

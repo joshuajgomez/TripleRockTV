@@ -29,6 +29,14 @@ data class SeriesStream(
 
     @Ignore
     var favorite: Boolean = false
+
+    override fun equals(other: Any?): Boolean {
+        val new = other as SeriesStream
+        return seriesId == new.seriesId
+                && seasons == new.seasons
+                && favorite == new.favorite
+                && lastPlayedEpisodeId == new.lastPlayedEpisodeId
+    }
 }
 
 data class Season(
@@ -38,4 +46,10 @@ data class Season(
     val coverImageUrl: String,
     val overview: String,
     val voteAverage: Float,
-)
+) {
+    override fun equals(other: Any?): Boolean {
+        val new = other as Season
+        return number == new.number
+                && episodes == new.episodes
+    }
+}

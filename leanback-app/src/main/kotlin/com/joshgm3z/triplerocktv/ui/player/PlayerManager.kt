@@ -206,8 +206,8 @@ class PlayerManager(
                 prepare()
 
                 val lastPos = when (val item = state.playbackItem) {
-                    is Episode -> if (resume && item.startedWatching) item.recentlyPlayed?.playedDuration else null
-                    is StreamData -> if (resume && item.startedWatching) item.recentlyPlayed?.playedDuration else null
+                    is Episode -> if (resume) item.recentlyPlayed?.playedDurationMs else null
+                    is StreamData -> if (resume) item.recentlyPlayed?.playedDurationMs else null
                     else -> null
                 }
                 lastPos?.let { seekTo(it) }

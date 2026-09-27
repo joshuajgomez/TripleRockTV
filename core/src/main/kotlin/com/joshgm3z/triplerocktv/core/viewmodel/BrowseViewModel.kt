@@ -36,7 +36,12 @@ sealed class BrowseUiState {
         val newlyAdded: List<StreamData> = emptyList(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
-    ) : BrowseUiState()
+    ) : BrowseUiState() {
+        override fun toString(): String {
+            return "VideoOnDemandState(favorites.size=${favorites.size}, recentPlayed.size=${recentPlayed.size}, " +
+                    "newlyAdded.size=${newlyAdded.size}, categoryMap.size=${categoryMap.size})"
+        }
+    }
 
     data class LiveTvState(
         val recentPlayed: List<StreamData> = emptyList(),
@@ -45,7 +50,12 @@ sealed class BrowseUiState {
         val recentPlayedFlow: Flow<List<StreamData>> = emptyFlow(),
         val categoryMap: Map<String, List<CategoryData>> = emptyMap(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
-    ) : BrowseUiState()
+    ) : BrowseUiState() {
+        override fun toString(): String {
+            return "LiveTvState(recentPlayed.size=${recentPlayed.size}, favorites.size=${favorites.size}, " +
+                    "categoryMap.size=${categoryMap.size})"
+        }
+    }
 
     data class SeriesStreamState(
         val recentPlayedEpisodes: List<SeriesStream> = emptyList(),
@@ -53,7 +63,12 @@ sealed class BrowseUiState {
         val favoritesFlow: Flow<List<SeriesStream>> = emptyFlow(),
         val recentPlayedEpisodesFlow: Flow<List<SeriesStream>> = emptyFlow(),
         val pagingCategoryData: Flow<PagingData<CategoryData>> = emptyFlow(),
-    ) : BrowseUiState()
+    ) : BrowseUiState(){
+        override fun toString(): String {
+            return "SeriesStreamState(recentPlayedEpisodes.size=${recentPlayedEpisodes.size}, " +
+                    "favorites.size=${favorites.size})"
+        }
+    }
 }
 
 private val pagingConfig = PagingConfig(

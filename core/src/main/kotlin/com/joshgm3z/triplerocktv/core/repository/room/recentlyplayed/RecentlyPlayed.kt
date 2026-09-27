@@ -17,10 +17,10 @@ class RecentlyPlayed(
     val seriesId: Int? = null,
     val streamType: StreamType,
     val added: Long,
-    val playedDuration: Long,
+    val playedDurationMs: Long,
 ) {
     override fun toString(): String {
-        return "RecentlyPlayed(id=$id, streamType=$streamType, added=$added, seriesId=$seriesId, playedDuration=$playedDuration)"
+        return "RecentlyPlayed(id=$id, streamType=$streamType, added=$added, seriesId=$seriesId, playedDurationMs=$playedDurationMs)"
     }
 }
 
@@ -45,13 +45,10 @@ interface RecentlyPlayedDao {
     fun recentlyPlayedSeriesFlow(seriesId: Int): Flow<RecentlyPlayed?>
 
     @Query("SELECT * FROM recent_played WHERE streamType = :type ORDER BY added DESC LIMIT 5")
-    fun getRecentlyPlayedOfType(type: StreamType): List<RecentlyPlayed>
-
-    @Query("SELECT * FROM recent_played WHERE streamType = :type ORDER BY added DESC LIMIT 5")
     fun recentlyPlayedFlowOfType(type: StreamType): Flow<List<RecentlyPlayed>>
 
     @Query(
-        "SELECT * FROM recent_played WHERE playedDuration > :minPlaybackDuration " +
+        "SELECT * FROM recent_played WHERE playedDurationMs > :minPlaybackDuration " +
                 "AND streamType = :streamType " +
                 "ORDER BY added DESC LIMIT :count"
     )
