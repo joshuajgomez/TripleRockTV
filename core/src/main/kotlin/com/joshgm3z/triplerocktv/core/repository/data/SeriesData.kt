@@ -75,11 +75,11 @@ data class Episode(
 
     fun totalDurationMs(): Long = episodeInfo?.duration_secs?.times(1000L) ?: 0L
 
-    fun progressPercent(): Int {
-        val played = recentlyPlayed?.playedDurationMs ?: return 0
+    fun progressPercent(): Int? {
+        val played = recentlyPlayed?.playedDurationMs ?: return null
         val total = totalDurationMs()
 
-        if (total <= 0L) return 0
+        if (total <= 0L) return null
 
         return ((played.toDouble() / total) * 100)
             .toInt()

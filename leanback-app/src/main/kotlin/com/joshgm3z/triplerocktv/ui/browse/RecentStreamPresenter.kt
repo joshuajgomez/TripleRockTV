@@ -68,8 +68,8 @@ class RecentStreamPresenter
                 error = R.drawable.ic_video_file
             )
             else glideUtil.loadImage(imageUri, posterImage)
-            progressBar.progress = progress
-            progressBar.setVisible(progress > 0)
+            progressBar.progress = progress ?: 0
+            progressBar.setVisible(progress != null)
 
             root.setOnLongClickListener {
                 when (item) {

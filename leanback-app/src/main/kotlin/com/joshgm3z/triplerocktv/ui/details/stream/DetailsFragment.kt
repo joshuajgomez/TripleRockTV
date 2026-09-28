@@ -121,7 +121,6 @@ class DetailsFragment : Fragment() {
             binding.bvPlay.text = "Play $it"
         }
         handleBlur(uiState.coverImage)
-        binding.bvResume.progress = uiState.progressPercent ?: 0
 
         binding.includeDetails.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
         binding.includeDetails.metadataView.rating = uiState.rating
@@ -138,6 +137,7 @@ class DetailsFragment : Fragment() {
 
         // button visibility
         if (!uiState.showButtons) return
+        binding.bvResume.progress = uiState.progressPercent ?: 0
         binding.bvResume.setVisible(uiState.progressPercent != null)
         binding.bvStartOver.setVisible(uiState.progressPercent != null)
         binding.bvPlay.setVisible(uiState.progressPercent == null)

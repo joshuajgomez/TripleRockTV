@@ -55,9 +55,11 @@ class EpisodeAdapter
         binding.metadataView.rating = episode.episodeInfo?.rating.parseToFloat()
 
         val progressPercent = episode.progressPercent()
-        binding.pbEpisodeProgress.progress = progressPercent
-        binding.pbEpisodeProgress.setVisible(progressPercent > 0)
-        if (progressPercent > 0) binding.metadataView.timeLeft = episode.timeRemainingText()
+        progressPercent?.let {
+            binding.pbEpisodeProgress.progress = it
+            binding.metadataView.timeLeft = episode.timeRemainingText()
+        }
+        binding.pbEpisodeProgress.setVisible(progressPercent != null)
         binding.metadataView.episodeLabel = "S${episode.season.asTwoDigit()}E${episode.episode_num}"
 
         glideUtil.loadImage(

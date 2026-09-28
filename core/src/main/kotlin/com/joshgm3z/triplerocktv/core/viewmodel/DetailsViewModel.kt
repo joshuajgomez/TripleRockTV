@@ -95,7 +95,7 @@ class DetailsViewModel @Inject constructor(
                         description = it.movieMetadata.description.withPrefix(""),
                         cast = it.movieMetadata.cast.withPrefix("Cast: "),
                         director = it.movieMetadata.director.withPrefix("Director: "),
-                        progressPercent = if (it.progressPercent() > 0) it.progressPercent() else null,
+                        progressPercent = it.progressPercent(),
                         favorite = it.favorite,
                         coverImage = it.movieMetadata.backPosterUrl.ifNullOrEmpty(it.streamIcon),
                         subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
@@ -111,7 +111,8 @@ class DetailsViewModel @Inject constructor(
                 _uiState.value = DetailsUiState(
                     streamType = StreamType.Series,
                     title = seriesStream.name,
-                    categoryName = repository.getCategory(seriesStream.categoryId)?.categoryName ?: "",
+                    categoryName = repository.getCategory(seriesStream.categoryId)?.categoryName
+                        ?: "",
                     coverImage = seriesStream.backdropUrl.ifNullOrEmpty(
                         seriesStream.coverImageUrl
                     ),
@@ -130,7 +131,7 @@ class DetailsViewModel @Inject constructor(
                         cast = seriesStream.cast.withPrefix("Cast: "),
                         director = seriesStream.director.withPrefix("Director: "),
                         duration = episodeToPlay.totalDurationMs().toTextTime(),
-                        progressPercent = if (episodeToPlay.progressPercent() > 0) episodeToPlay.progressPercent() else null,
+                        progressPercent = episodeToPlay.progressPercent(),
                         showMoreEpisodesButton = true,
                         favorite = seriesStream.favorite,
                         noOfSeasons = seriesStream.seasons.size

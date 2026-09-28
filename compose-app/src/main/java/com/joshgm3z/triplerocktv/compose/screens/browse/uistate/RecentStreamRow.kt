@@ -130,7 +130,7 @@ fun RecentStreamItem(
             )
             Spacer(Modifier.size(3.dp))
             LinearProgressIndicator(
-                progress = { progress / 100f },
+                progress = { (progress ?: 0) / 100f },
                 modifier = Modifier.height(4.dp),
                 drawStopIndicator = {}
             )

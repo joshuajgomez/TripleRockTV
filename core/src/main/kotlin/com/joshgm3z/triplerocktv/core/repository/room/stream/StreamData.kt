@@ -59,10 +59,10 @@ data class StreamData(
     fun videoUrl(userInfo: UserInfo) =
         "${userInfo.webUrl}/$streamTypeText/${userInfo.username}/${userInfo.password}/$streamId.$extension"
 
-    fun progressPercent(): Int {
-        val played = recentlyPlayed?.playedDurationMs ?: return 0
-        val total = movieMetadata?.totalDurationMs ?: 0L
-        if (total <= 0L) return 0
+    fun progressPercent(): Int? {
+        val played = recentlyPlayed?.playedDurationMs ?: return null
+        val total = movieMetadata?.totalDurationMs ?: return null
+        if (total <= 0L) return null
         return ((played.toDouble() / total) * 100)
             .toInt()
             .coerceIn(1, 100)

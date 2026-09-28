@@ -75,7 +75,7 @@ class RecentsRepositoryImpl
             season.episodes.forEach { episode ->
                 if (episode.id == lastPlayedEpisodeId) {
                     episode.recentlyPlayed = recent
-                    return episode.progressPercent() > 0
+                    return episode.progressPercent() != null
                 }
             }
         }
