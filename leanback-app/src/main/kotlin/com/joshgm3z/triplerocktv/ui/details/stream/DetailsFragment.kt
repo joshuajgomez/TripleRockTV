@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
@@ -120,7 +121,12 @@ class DetailsFragment : Fragment() {
             binding.bvResume.text = "Resume $it"
             binding.bvPlay.text = "Play $it"
         }
-        handleBlur(uiState.coverImage)
+//        handleBlur(uiState.coverImage)
+        glideUtil.loadImage(
+            url = uiState.coverImage,
+            error = R.drawable.backdrop_placeholder,
+            imageView = binding.ivBackdrop
+        )
 
         binding.includeDetails.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
         binding.includeDetails.metadataView.rating = uiState.rating

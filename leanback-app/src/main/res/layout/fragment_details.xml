@@ -30,7 +30,7 @@
         app:layout_constraintStart_toEndOf="@id/include_details"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/RoundedRectangle"
-        tools:src="@drawable/backdrop_office"
+        tools:src="@drawable/backdrop_placeholder"
         tools:visibility="visible" />
 
     <LinearLayout

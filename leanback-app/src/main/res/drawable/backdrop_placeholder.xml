@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <layer-list>
+            <item>
+                <shape android:shape="rectangle">
+                    <solid android:alpha="0.05" android:color="?attr/colorSurfaceLow" />
+                    <size android:width="600dp" android:height="400dp" />
+                </shape>
+            </item>
+            <item android:drawable="@drawable/outline_perm_media_24" android:gravity="center" />
+        </layer-list>
+    </item>
+</selector>
