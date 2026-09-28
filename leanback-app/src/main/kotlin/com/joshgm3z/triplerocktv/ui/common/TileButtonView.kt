@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.common
 
 import android.content.Context
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -56,11 +57,16 @@ class TileButtonView @JvmOverloads constructor(
             binding.tvTitle.text = value
         }
 
+    var drawable: Drawable
+        get() = binding.ivIcon.drawable
+        set(value) {
+            binding.ivIcon.setImageDrawable(value)
+        }
+
     var progress: Int
         get() = binding.progressBar.progress
         set(value) {
             binding.progressBar.progress = value
-            binding.progressBar.setVisible(value > 0)
         }
 
     override fun setEnabled(enabled: Boolean) {

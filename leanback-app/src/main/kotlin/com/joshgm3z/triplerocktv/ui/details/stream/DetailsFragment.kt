@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,7 +17,6 @@ import com.joshgm3z.triplerocktv.core.viewmodel.DetailsUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.DetailsViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentDetailsBinding
 import com.joshgm3z.triplerocktv.ui.common.DelayedTextView
-import com.joshgm3z.triplerocktv.util.DimMode
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
@@ -39,9 +39,9 @@ class DetailsFragment : Fragment() {
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
-    private var backgroundImageUrl: String? = null
-
     private var selectedEpisodeId = -1
+
+    private var initialUiUpdated = false
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -98,8 +98,6 @@ class DetailsFragment : Fragment() {
                 findNavController().navigate(this)
             }
         }
-        binding.bvAddMyList.setOnClickListener { viewModel.updateMyList(true) }
-        binding.bvRemoveMyList.setOnClickListener { viewModel.updateMyList(false) }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -121,7 +119,7 @@ class DetailsFragment : Fragment() {
             binding.bvResume.text = "Resume $it"
             binding.bvPlay.text = "Play $it"
         }
-        glideUtil.loadImage(
+        if (!initialUiUpdated) glideUtil.loadImage(
             url = uiState.coverImage,
             error = R.drawable.backdrop_placeholder,
             imageView = binding.ivBackdrop
@@ -148,16 +146,26 @@ class DetailsFragment : Fragment() {
         binding.bvResume.setVisible(uiState.progressPercent != null)
         binding.bvStartOver.setVisible(uiState.progressPercent != null)
         binding.bvPlay.setVisible(uiState.progressPercent == null)
-        binding.bvRemoveMyList.setVisible(uiState.favorite)
-        binding.bvAddMyList.setVisible(!uiState.favorite)
         binding.bvMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
+        binding.bvAddMyList.text = if (uiState.favorite) "Remove favorite" else "Add favorite"
+        when {
+            uiState.favorite -> R.drawable.baseline_favorite_24
+            else -> R.drawable.outline_favorite_24
+        }.let {
+            ContextCompat.getDrawable(requireContext(), it)
+        }?.let { drawable ->
+            binding.bvAddMyList.drawable = drawable
+        }
+        binding.bvAddMyList.setOnClickListener { viewModel.updateMyList(!uiState.favorite) }
+        binding.bvAddMyList.setVisible(true)
 
         // handle focus
-        if (uiState.progressPercent != null) {
+        if (!initialUiUpdated) if (uiState.progressPercent != null) {
             binding.bvResume.requestFocus()
         } else {
             binding.bvPlay.requestFocus()
         }
+        initialUiUpdated = true
     }
 
     private fun DelayedTextView.text(value: String?) {
