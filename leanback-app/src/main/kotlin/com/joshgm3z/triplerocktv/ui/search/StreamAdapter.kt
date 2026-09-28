@@ -33,6 +33,10 @@ class StreamAdapter
         val binding = ViewStreamCardBinding.inflate(
             LayoutInflater.from(parent.context), parent, false
         )
+        val layoutParams = binding.root.layoutParams as ViewGroup.MarginLayoutParams
+        val margin = binding.root.context.resources.getDimensionPixelSize(R.dimen.card_margin)
+        layoutParams.setMargins(0, 0, margin, margin)
+        binding.root.layoutParams = layoutParams
         return ViewHolder(binding.root)
     }
 

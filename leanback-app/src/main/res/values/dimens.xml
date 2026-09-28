@@ -22,4 +22,5 @@
     <dimen name="stroke_width">0.3dp</dimen>
     <dimen name="WIDTH_30_MIN">100dp</dimen>
     <dimen name="program_gap">1dp</dimen>
+    <dimen name="card_margin">5dp</dimen>
 </resources>
