@@ -121,7 +121,6 @@ class DetailsFragment : Fragment() {
             binding.bvResume.text = "Resume $it"
             binding.bvPlay.text = "Play $it"
         }
-//        handleBlur(uiState.coverImage)
         glideUtil.loadImage(
             url = uiState.coverImage,
             error = R.drawable.backdrop_placeholder,
@@ -139,7 +138,9 @@ class DetailsFragment : Fragment() {
         binding.includeDetails.tvGenre.text(uiState.subtitle)
         binding.includeDetails.tvDescription.text(uiState.description)
         binding.includeDetails.tvCast.text(uiState.cast)
+        binding.includeDetails.tvCastLabel.setVisible(!uiState.cast.isNullOrEmpty())
         binding.includeDetails.tvDirector.text(uiState.director)
+        binding.includeDetails.tvDirectorLabel.setVisible(!uiState.director.isNullOrEmpty())
 
         // button visibility
         if (!uiState.showButtons) return
@@ -165,17 +166,4 @@ class DetailsFragment : Fragment() {
         setVisible(!value.isEmpty())
     }
 
-    private fun handleBlur(imageUrl: String?) {
-        imageUrl ?: return
-        backgroundImageUrl = imageUrl
-        glideUtil.loadImage(
-            url = imageUrl,
-            imageView = binding.ivBackdrop
-        )
-    }
-
-    override fun onResume() {
-        super.onResume()
-        handleBlur(backgroundImageUrl)
-    }
 }

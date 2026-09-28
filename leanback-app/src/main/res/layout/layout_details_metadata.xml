@@ -55,22 +55,42 @@
         app:placeholderHeight="100dp"
         tools:text="@string/sample_long_description" />
 
+    <TextView
+        android:id="@+id/tv_cast_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:alpha="0.8"
+        android:text="Cast"
+        android:textColor="?attr/colorForegroundMid"
+        android:textSize="12sp" />
+
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_cast"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         android:lines="2"
+        android:textSize="10sp"
         app:color="?attr/colorForegroundLow"
         tools:text="Cast: John Gotti, John Gotti, John Gotti, John Gotti, " />
+
+    <TextView
+        android:id="@+id/tv_director_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:alpha="0.8"
+        android:text="Director"
+        android:textColor="?attr/colorForegroundMid"
+        android:textSize="12sp" />
 
     <com.joshgm3z.triplerocktv.ui.common.DelayedTextView
         android:id="@+id/tv_director"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:textSize="10sp"
         app:color="?attr/colorForegroundLow"
         app:placeholderWidth="180dp"
-        tools:text="Director: John Gotti, John Gotti, John Gotti, John Gotti, " />
+        tools:text="John Gotti, John Gotti, John Gotti, John Gotti, " />
 
 </LinearLayout>
