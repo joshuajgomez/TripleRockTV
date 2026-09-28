@@ -174,4 +174,8 @@ class DetailsFragment : Fragment() {
         setVisible(!value.isEmpty())
     }
 
+    override fun onPause() {
+        super.onPause()
+        initialUiUpdated = false
+    }
 }

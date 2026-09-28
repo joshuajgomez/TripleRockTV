@@ -4,12 +4,9 @@ import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.LinearLayout
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.withStyledAttributes
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.databinding.ViewButtonBinding
 import com.joshgm3z.triplerocktv.databinding.ViewTileButtonBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 
@@ -46,10 +43,13 @@ class TileButtonView @JvmOverloads constructor(
                 }
             }
         }
-        binding.root.onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
-            binding.progressBar.setVisible(hasFocus && progress > 0)
+        onFocusChangeListener = OnFocusChangeListener { _, hasFocus ->
+            this.hasFocus = hasFocus
+            setProgressVisibility()
         }
     }
+
+    private var hasFocus = false
 
     var text: String
         get() = binding.tvTitle.text.toString()
@@ -63,11 +63,17 @@ class TileButtonView @JvmOverloads constructor(
             binding.ivIcon.setImageDrawable(value)
         }
 
-    var progress: Int
-        get() = binding.progressBar.progress
+    var progress: Int = 0
         set(value) {
-            binding.progressBar.progress = value
+            field = value
+            setProgressVisibility()
         }
+
+    private fun setProgressVisibility() {
+        val visible = hasFocus && progress > 0
+        binding.progressBar.setVisible(visible)
+        binding.progressBar.progress = progress
+    }
 
     override fun setEnabled(enabled: Boolean) {
         super.setEnabled(enabled)
