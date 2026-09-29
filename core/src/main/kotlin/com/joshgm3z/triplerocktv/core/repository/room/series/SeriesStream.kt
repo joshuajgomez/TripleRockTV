@@ -37,6 +37,10 @@ data class SeriesStream(
                 && favorite == new.favorite
                 && lastPlayedEpisodeId == new.lastPlayedEpisodeId
     }
+
+    override fun toString(): String {
+        return "SeriesStream(seriesId=$seriesId, num=$num, name='$name', coverImageUrl=$coverImageUrl, backdropUrl=$backdropUrl, plot=${plot?.take(15)}..., cast=$cast, director=$director, genre=$genre, releaseDate=$releaseDate, lastModified=$lastModified, rating=$rating, categoryId=$categoryId, seasons=$seasons)"
+    }
 }
 
 data class Season(
@@ -51,5 +55,9 @@ data class Season(
         val new = other as Season
         return number == new.number
                 && episodes == new.episodes
+    }
+
+    override fun toString(): String {
+        return "\nSeason(episodes.size=${episodes.size}, number=$number, name='$name', coverImageUrl='$coverImageUrl', overview='$overview', voteAverage=$voteAverage)"
     }
 }
