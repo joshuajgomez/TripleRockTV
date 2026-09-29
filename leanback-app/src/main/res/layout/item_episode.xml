@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="400dp"
     android:layout_height="wrap_content"
     android:background="@drawable/focusable_border_bg"
     android:paddingHorizontal="@dimen/series_selector_horizontal_edge_padding"
@@ -48,11 +48,12 @@
 
     <TextView
         android:id="@+id/tv_episode_title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:textColor="?attr/colorForegroundHigh"
         android:text="@string/sample_movie_name"
+        android:textColor="?attr/colorForegroundHigh"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/iv_episode_poster"
         app:layout_constraintTop_toTopOf="@+id/iv_episode_poster" />
 
@@ -69,8 +70,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:maxLines="3"
-        android:textColor="?attr/colorForegroundMid"
         android:text="@string/sample_long_description"
+        android:textColor="?attr/colorForegroundMid"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tv_episode_title"
         app:layout_constraintTop_toBottomOf="@+id/metadata_view" />

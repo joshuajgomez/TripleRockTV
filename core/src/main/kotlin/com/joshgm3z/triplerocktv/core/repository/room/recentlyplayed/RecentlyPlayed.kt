@@ -41,7 +41,10 @@ interface RecentlyPlayedDao {
     @Query("SELECT * FROM recent_played WHERE id = :id")
     fun recentlyPlayedFlow(id: Int): Flow<RecentlyPlayed?>
 
-    @Query("SELECT * FROM recent_played WHERE seriesId = :seriesId")
+    @Query("SELECT * FROM recent_played WHERE id = :id")
+    suspend fun getRecentlyPlayedById(id: Int): RecentlyPlayed?
+
+    @Query("SELECT * FROM recent_played WHERE seriesId = :seriesId ORDER BY added DESC LIMIT 1")
     fun recentlyPlayedSeriesFlow(seriesId: Int): Flow<RecentlyPlayed?>
 
     @Query("SELECT * FROM recent_played WHERE streamType = :type ORDER BY added DESC LIMIT 5")

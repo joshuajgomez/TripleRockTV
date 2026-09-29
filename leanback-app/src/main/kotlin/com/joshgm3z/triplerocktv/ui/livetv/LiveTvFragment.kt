@@ -27,7 +27,7 @@ import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
-import com.joshgm3z.triplerocktv.ui.common.diffCallback2
+import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -149,7 +149,7 @@ class LiveTvFragment : Fragment() {
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 it?.let { streams ->
-                    rowsAdapter.setItems(streams, diffCallback2)
+                    rowsAdapter.setItems(streams, diffCallback)
 
                     delay(100)
                     viewModel.selectedStreamId?.let { selectedStreamId ->

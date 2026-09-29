@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 data class SeriesSelectorUiState(
     val selectedSeasonNumber: Int? = null,
-    val selectedEpisodeNumber: Int? = null,
+    val selectedEpisodeIndex: Int? = null,
     val seasons: List<Season> = emptyList(),
     val episodes: List<Episode> = emptyList(),
 )
@@ -38,9 +38,12 @@ class EpisodeSelectorViewModel
     private val _uiState = MutableStateFlow(SeriesSelectorUiState())
     val uiState = _uiState.asStateFlow()
 
+    private var defaultCoverImageUrl: String? = null
+
     init {
         viewModelScope.launch {
             val seriesStream = repository.seriesStreamFlow(seriesId).first()
+            defaultCoverImageUrl = seriesStream.coverImageUrl
             seriesStream.seasons?.filter {
                 it.episodes.isNotEmpty()
             }?.let { seasons ->
@@ -50,8 +53,8 @@ class EpisodeSelectorViewModel
                     it.copy(
                         seasons = seasons,
                         selectedSeasonNumber = selectedSeasonNumber,
-                        selectedEpisodeNumber = episodes.first { it.id == initialSelectedEpisodeId }.episode_num,
-                        episodes = episodes.replaceMissingPoster(seriesStream.coverImageUrl)
+                        selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
+                        episodes = episodes.replaceMissingPoster(defaultCoverImageUrl)
                     )
                 }
             }
@@ -62,8 +65,11 @@ class EpisodeSelectorViewModel
         _uiState.update { it ->
             it.copy(
                 selectedSeasonNumber = seasonNumber,
-                selectedEpisodeNumber = null,
-                episodes = it.seasons.first { it.number == seasonNumber }.episodes
+                selectedEpisodeIndex = null,
+                episodes = it.seasons
+                    .first { it.number == seasonNumber }
+                    .episodes
+                    .replaceMissingPoster(defaultCoverImageUrl)
             )
         }
     }

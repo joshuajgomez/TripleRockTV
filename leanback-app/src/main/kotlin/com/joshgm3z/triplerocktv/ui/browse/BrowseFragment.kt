@@ -33,7 +33,7 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.BrowseViewModel
-import com.joshgm3z.triplerocktv.ui.common.diffCallback2
+import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.ui.common.diffCategoryCallback
 import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
@@ -180,7 +180,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.recentPlayedFlow.collectLatest {
-                recentsListRowAdapter.setItems(it, diffCallback2)
+                recentsListRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -190,7 +190,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                listRowAdapter.setItems(it, diffCallback2)
+                listRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -239,7 +239,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.recentPlayedFlow.collectLatest {
-                recentsListRowAdapter.setItems(it, diffCallback2)
+                recentsListRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -249,7 +249,7 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                listRowAdapter.setItems(it, diffCallback2)
+                listRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -295,7 +295,7 @@ class BrowseFragment : BrowseSupportFragment() {
                     episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
                     it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
                 }
-                recentsListRowAdapter.setItems(episodes, diffCallback2)
+                recentsListRowAdapter.setItems(episodes, diffCallback)
             }
         }
 
@@ -304,7 +304,7 @@ class BrowseFragment : BrowseSupportFragment() {
         rowsAdapter.add(ListRow(favHeader, favListRowAdapter))
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                favListRowAdapter.setItems(it, diffCallback2)
+                favListRowAdapter.setItems(it, diffCallback)
             }
         }
 
