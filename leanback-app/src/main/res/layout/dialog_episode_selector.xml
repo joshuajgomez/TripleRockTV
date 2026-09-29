@@ -8,27 +8,26 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_season_chips"
-        android:layout_width="match_parent"
+        android:layout_width="108dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="@dimen/series_selector_horizontal_edge_padding"
-        android:layout_marginVertical="@dimen/series_selector_vertical_edge_padding"
-        android:orientation="horizontal"
+        android:layout_marginStart="30dp"
+        android:orientation="vertical"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/episode_grid_container"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="4"
         tools:listitem="@layout/item_text_chip" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_episodes"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/episode_grid_container"
+        android:name="com.joshgm3z.triplerocktv.ui.details.series.EpisodeGridFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_season_chips"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_episode" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/rv_season_chips"
+        app:layout_constraintTop_toTopOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

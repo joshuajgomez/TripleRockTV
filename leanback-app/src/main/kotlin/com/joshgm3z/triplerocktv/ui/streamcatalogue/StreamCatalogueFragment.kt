@@ -20,7 +20,7 @@ import com.joshgm3z.triplerocktv.core.util.ScreenName
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.CatalogueViewModel
 import com.joshgm3z.triplerocktv.util.GlideUtil
-import com.joshgm3z.triplerocktv.ui.common.diffCallback
+import com.joshgm3z.triplerocktv.ui.common.diffItemCallback
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -61,7 +61,7 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
         ).apply {
             numberOfColumns = 5
         }
-        rowsAdapter = PagingDataAdapter(streamPresenter, diffCallback)
+        rowsAdapter = PagingDataAdapter(streamPresenter, diffItemCallback)
         adapter = rowsAdapter
         onItemViewClickedListener = clickListener
     }

@@ -84,7 +84,7 @@ class MetadataView @JvmOverloads constructor(
 
         addMetadata(episodeLabel, episodeLabel != null)
         addMetadata(genre)
-        addMetadata(rating.toString(), rating.isNonZero(), R.drawable.baseline_star_24)
+        addMetadata(rating.toString(), rating.isNonZero(), R.drawable.baseline_star_14)
         addMetadata(duration)
         addMetadata("Favorite", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
@@ -107,7 +107,7 @@ class MetadataView @JvmOverloads constructor(
 
         val tv = TextView(context)
         tv.text = text
-        tv.textSize = 12f
+        tv.textSize = 11f
         tv.alpha = 0.8f
         tv.setTextColor(context.getColorFromAttr(R.attr.colorForegroundMid))
 

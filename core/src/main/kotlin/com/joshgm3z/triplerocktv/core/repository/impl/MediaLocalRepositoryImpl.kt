@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.core.repository.impl
 
-import androidx.lifecycle.distinctUntilChanged
 import androidx.paging.PagingSource
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
@@ -163,9 +162,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
             recentPlayed?.let { lastPlayedEpisodeId = it.id }
             seasons?.forEach { season ->
                 season.episodes.forEach { episode ->
-                    episode.recentlyPlayed = recentlyPlayedDao
-                        .recentlyPlayedFlow(episode.id)
-                        .first()
+                    episode.recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(episode.id)
                 }
             }
         }

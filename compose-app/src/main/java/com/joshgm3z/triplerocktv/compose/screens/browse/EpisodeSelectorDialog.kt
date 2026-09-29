@@ -87,7 +87,7 @@ fun EpisodeSelectorDialogContent(
                 itemsIndexed(uiState.episodes) { index, item ->
                     EpisodeCard(
                         episode = item,
-                        selected = uiState.selectedEpisodeNumber == item.episode_num
+                        selected = uiState.selectedEpisodeIndex == index
                     ) {
                         onEpisodeClick(item)
                     }
@@ -236,7 +236,7 @@ private fun PreviewEpisodeCard() {
 }
 
 private val sampleUiState = SeriesSelectorUiState(
-    selectedEpisodeNumber = 2,
+    selectedEpisodeIndex = 2,
     selectedSeasonNumber = 2,
     seasons = listOf(
         Season(
