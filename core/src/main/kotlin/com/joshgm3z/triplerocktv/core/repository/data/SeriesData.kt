@@ -103,6 +103,10 @@ data class Episode(
                 && episodeInfo == new.episodeInfo
                 && recentlyPlayed?.playedDurationMs == new.recentlyPlayed?.playedDurationMs
     }
+
+    override fun toString(): String {
+        return "\nEpisode(id=$id, episode_num=$episode_num, title='$title', container_extension='$container_extension', season=$season, added='$added', episodeInfo=$episodeInfo)"
+    }
 }
 
 data class EpisodeInfo(
@@ -123,5 +127,9 @@ data class EpisodeInfo(
                 && movie_image == new.movie_image
                 && rating == new.rating
                 && season == new.season
+    }
+
+    override fun toString(): String {
+        return "EpisodeInfo(releasedate=$releasedate, plot=${plot?.take(15)}..., duration_secs=$duration_secs, duration=$duration, movie_image=$movie_image, rating=$rating, season=$season)"
     }
 }

@@ -80,20 +80,22 @@ constructor(
     }
 
     suspend fun getSeriesDataAndUpdate(streamId: Int) {
+        Logger.debug("streamId = [${streamId}]")
         try {
             iptvService.getSeriesDetails(seriesId = streamId).let { it ->
-                val seasons = if (it.seasons.isNotEmpty()) it.seasons.map { seasonData ->
-                    Season(
-                        episodes = it.episodes[seasonData.seasonNumber]
-                            ?.sortedBy { it.episode_num }
-                            ?: emptyList(),
-                        number = seasonData.seasonNumber ?: -1,
-                        name = seasonData.name ?: "",
-                        coverImageUrl = seasonData.cover ?: "",
-                        voteAverage = seasonData.voteAverage ?: 0f,
-                        overview = seasonData.overview ?: "",
-                    )
-                } else if (it.episodes.isNotEmpty()) {
+                val seasons = if (it.seasons.isNotEmpty() && it.seasons.size == it.episodes.size)
+                    it.seasons.map { seasonData ->
+                        Season(
+                            episodes = it.episodes[seasonData.seasonNumber]
+                                ?.sortedBy { it.episode_num }
+                                ?: emptyList(),
+                            number = seasonData.seasonNumber ?: -1,
+                            name = seasonData.name ?: "",
+                            coverImageUrl = seasonData.cover ?: "",
+                            voteAverage = seasonData.voteAverage ?: 0f,
+                            overview = seasonData.overview ?: "",
+                        )
+                    } else if (it.episodes.isNotEmpty()) {
                     it.episodes.keys.map { seasonNumber ->
                         Season(
                             episodes = it.episodes[seasonNumber]
