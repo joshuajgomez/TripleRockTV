@@ -153,8 +153,8 @@ class DetailsFragment : Fragment() {
         binding.bvMoreEpisodes.setVisible(uiState.showMoreEpisodesButton)
         binding.bvAddMyList.text = if (uiState.favorite) "Remove favorite" else "Add favorite"
         when {
-            uiState.favorite -> R.drawable.baseline_favorite_24
-            else -> R.drawable.outline_favorite_24
+            uiState.favorite -> R.drawable.baseline_star_24
+            else -> R.drawable.outline_star_outline_24
         }.let {
             ContextCompat.getDrawable(requireContext(), it)
         }?.let { drawable ->
