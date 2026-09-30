@@ -162,7 +162,7 @@ class DetailsViewModel @Inject constructor(
         return allEpisodes.first()
     }
 
-    private fun Episode.label(): String = "S$season: E$episode_num"
+    private fun Episode.label(): String = "S$season:E$episode_num"
 
     private fun searchSeriesMetadata(seriesStream: SeriesStream) {
         Logger.debug("seriesStream = [${seriesStream}]")
