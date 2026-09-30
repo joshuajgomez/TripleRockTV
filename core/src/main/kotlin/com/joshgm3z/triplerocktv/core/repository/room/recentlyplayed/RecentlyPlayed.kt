@@ -51,6 +51,19 @@ interface RecentlyPlayedDao {
     fun recentlyPlayedFlowOfType(type: StreamType): Flow<List<RecentlyPlayed>>
 
     @Query(
+        """
+        SELECT * FROM recent_played
+        WHERE streamType = :type
+        AND seriesId IS NOT NULL 
+        GROUP BY seriesId 
+        HAVING added = MAX(added)
+        ORDER BY added DESC
+        LIMIT 5
+        """
+    )
+    fun recentlyPlayedSeriesFlow(type: StreamType = StreamType.Series): Flow<List<RecentlyPlayed>>
+
+    @Query(
         "SELECT * FROM recent_played WHERE playedDurationMs > :minPlaybackDuration " +
                 "AND streamType = :streamType " +
                 "ORDER BY added DESC LIMIT :count"

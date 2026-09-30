@@ -47,7 +47,7 @@ class RecentsRepositoryImpl
     }
 
     override fun recentlyPlayedSeriesFlow(): Flow<List<SeriesStream>> {
-        return recentlyPlayedDao.recentlyPlayedFlowOfType(StreamType.Series).map {
+        return recentlyPlayedDao.recentlyPlayedSeriesFlow().map {
             it.mapNotNull { recentlyPlayed ->
                 val seriesId = recentlyPlayed.seriesId ?: return@mapNotNull null
                 val seriesStream = withContext(Dispatchers.IO) {
