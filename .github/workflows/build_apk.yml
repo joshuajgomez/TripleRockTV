@@ -66,8 +66,16 @@ jobs:
             echo "IS_PRERELEASE=false" >> $GITHUB_ENV
           fi
 
-      - name: Build Release APK (online flavor)
+      - name: Build Release APK
         run: ./gradlew ${{ env.GRADLE_TASK }} -PversionNameOverride=${{ env.RELEASE_TAG_VERSION }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
+
+      - name: Build Release Bundle AAB (online flavor)
+        if: github.ref_name != 'dev'
+        run: |
+          ./gradlew bundleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG_VERSION }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
+          mkdir -p release_artifacts
+          cp leanback-app/build/outputs/bundle/onlineRelease/*.aab release_artifacts/3RockTV-leanback-app.aab
+          cp compose-app/build/outputs/bundle/onlineRelease/*.aab release_artifacts/3RockTV-compose-app.aab
 
       - name: Clear Existing Release and Tag
         if: github.event_name != 'pull_request'
@@ -101,6 +109,9 @@ jobs:
           files: |
             release_artifacts/3RockTV-leanback-app.apk
             release_artifacts/3RockTV-compose-app.apk
+            release_artifacts/3RockTV-leanback-app.aab
+            release_artifacts/3RockTV-compose-app.aab
+          fail_on_unmatched_files: false
           body: |
             **Release note:**
             > ${{ steps.last_commit.outputs.msg }} `${{ env.SHORT_SHA }}`
