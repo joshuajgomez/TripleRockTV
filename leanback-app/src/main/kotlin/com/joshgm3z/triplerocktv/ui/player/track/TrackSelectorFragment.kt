@@ -8,13 +8,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.SubtitleData
 import com.joshgm3z.triplerocktv.databinding.LayoutTrackSelectorBinding
-import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.core.util.languageName
 import com.joshgm3z.triplerocktv.core.viewmodel.ListState
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackInfo
@@ -30,8 +27,7 @@ class TrackSelectorFragment : DialogFragment(),
 
     private val viewModel: TrackSelectorViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
-    private var _binding: LayoutTrackSelectorBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: LayoutTrackSelectorBinding
 
     private lateinit var adapter: TrackListAdapter
 
@@ -51,7 +47,7 @@ class TrackSelectorFragment : DialogFragment(),
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = LayoutTrackSelectorBinding.inflate(inflater)
+        binding = LayoutTrackSelectorBinding.inflate(inflater)
         adapter = TrackListAdapter().apply {
             binding.rvTrackList.adapter = this
             binding.rvTrackList.layoutManager = LinearLayoutManager(context)
@@ -129,11 +125,6 @@ class TrackSelectorFragment : DialogFragment(),
                 ?.findViewByPosition(list.indexOfFirst { it.isSelected })
                 ?.requestFocus()
         }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 
     override fun onTrackClicked(trackInfo: TrackInfo) {

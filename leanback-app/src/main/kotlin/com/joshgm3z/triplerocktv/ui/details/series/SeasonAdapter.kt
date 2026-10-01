@@ -5,8 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
-import com.joshgm3z.triplerocktv.core.util.Logger
-import com.joshgm3z.triplerocktv.databinding.ItemTextChipBinding
+import com.joshgm3z.triplerocktv.databinding.ItemSeasonChipBinding
 
 class SeasonAdapter(
     private val onSeasonClick: (Season) -> Unit
@@ -35,7 +34,7 @@ class SeasonAdapter(
         parent: ViewGroup,
         viewType: Int
     ): SeasonViewHolder {
-        val binding = ItemTextChipBinding.inflate(
+        val binding = ItemSeasonChipBinding.inflate(
             LayoutInflater.from(parent.context),
             parent, false
         )
@@ -46,7 +45,7 @@ class SeasonAdapter(
         holder: SeasonViewHolder,
         position: Int
     ) {
-        val binding = ItemTextChipBinding.bind(holder.itemView)
+        val binding = ItemSeasonChipBinding.bind(holder.itemView)
         val season = seasons[position]
         binding.tvText.text = "Season ${season.number}"
         binding.root.setOnClickListener {
