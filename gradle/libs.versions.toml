@@ -74,6 +74,7 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 
 kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+markwon-core = { module = "io.noties.markwon:core", version = "4.6.2" }
 mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
