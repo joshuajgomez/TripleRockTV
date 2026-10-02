@@ -44,6 +44,7 @@ class StreamPresenter
             else -> null
         }.let {
             binding.streamTitle.text = it
+            binding.tvOverlayStreamTitle.text = it
         }
 
         when (item) {
@@ -76,7 +77,8 @@ class StreamPresenter
         }
 
         binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            binding.ivGo.setVisible(hasFocus)
+            binding.llOverlay.setVisible(hasFocus)
+            binding.streamTitle.setVisible(!hasFocus)
         }
         binding.root.setOnLongClickListener {
             when (item) {

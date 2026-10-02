@@ -53,6 +53,7 @@ class StreamAdapter
             else -> null
         }.let {
             binding.streamTitle.text = it
+            binding.tvOverlayStreamTitle.text = it
         }
 
         when (item) {
@@ -85,7 +86,8 @@ class StreamAdapter
         }
 
         binding.root.onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
-            binding.ivGo.setVisible(hasFocus)
+            binding.llOverlay.setVisible(hasFocus)
+            binding.streamTitle.setVisible(!hasFocus)
         }
 
         binding.root.setOnClickListener { onClick(item) }

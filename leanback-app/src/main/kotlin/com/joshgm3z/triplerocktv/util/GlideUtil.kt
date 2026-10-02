@@ -66,15 +66,24 @@ class GlideUtil
         error: Int? = null,
         centerCrop: Boolean = true,
         onSuccess: () -> Unit = {},
+        onError: () -> Unit = {
+            Logger.warn("Glide failed to load image: \"$url\"")
+            error?.let {
+                imageView.setImageResource(it)
+            }
+        },
     ) {
-        url.isNullOrEmpty() && return
+        if (url.isNullOrEmpty()) {
+            onError()
+            return
+        }
         var builder = Glide.with(imageView.context)
             .load(url.alternateUri(serverUrl).orSampleIfDemo())
         placeholder?.let { builder = builder.placeholder(it) }
         error?.let { builder = builder.error(it) }
         if (centerCrop) builder = builder.centerCrop()
         builder
-            .listener(glideErrorListener(onSuccess))
+            .listener(glideErrorListener(onSuccess, onError))
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(imageView)
     }
@@ -124,7 +133,8 @@ class GlideUtil
     }
 
     private fun glideErrorListener(
-        onSuccess: () -> Unit
+        onSuccess: () -> Unit,
+        onError: () -> Unit,
     ) = object : RequestListener<Drawable> {
         override fun onLoadFailed(
             e: GlideException?,
@@ -136,6 +146,7 @@ class GlideUtil
                 Logger.error("Glide failed to load image: $model")
                 firebaseLogger.logGlideError(model)
             }
+            onError()
             return false
         }
 

@@ -123,11 +123,6 @@ class DetailsFragment : Fragment() {
             binding.bvResume.text = "Resume $it"
             binding.bvPlay.text = "Play $it"
         }
-        if (!initialUiUpdated) glideUtil.loadImage(
-            url = uiState.coverImage,
-            error = R.drawable.backdrop_placeholder,
-            imageView = binding.ivBackdrop
-        )
 
         binding.includeDetails.metadataView.subtitleDownloaded = uiState.subtitleDownloaded
         binding.includeDetails.metadataView.rating = uiState.rating
@@ -146,6 +141,12 @@ class DetailsFragment : Fragment() {
 
         // button visibility
         if (!uiState.showButtons) return
+
+        if (!initialUiUpdated) glideUtil.loadImage(
+            url = uiState.coverImage,
+            error = R.drawable.backdrop_placeholder,
+            imageView = binding.ivBackdrop
+        )
         binding.bvResume.progress = uiState.progressPercent ?: 0
         binding.bvResume.setVisible(uiState.progressPercent != null)
         binding.bvStartOver.setVisible(uiState.progressPercent != null)
