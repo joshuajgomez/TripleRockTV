@@ -6,27 +6,25 @@
     android:layout_height="@dimen/episode_selector_dialog_height"
     android:background="@drawable/dialog_background">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_season_chips"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_season_list"
+        android:name="androidx.leanback.app.VerticalGridSupportFragment"
         android:layout_width="108dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:orientation="vertical"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/episode_grid_container"
+        app:layout_constraintEnd_toStartOf="@id/fcv_episodes_list"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:itemCount="4"
-        tools:listitem="@layout/item_season_chip" />
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <FrameLayout
-        android:id="@+id/episode_grid_container"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_episodes_list"
+        android:name="androidx.leanback.app.VerticalGridSupportFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/rv_season_chips"
+        app:layout_constraintStart_toEndOf="@id/fcv_season_list"
         app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
