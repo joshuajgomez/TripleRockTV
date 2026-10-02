@@ -70,7 +70,7 @@ jobs:
         run: ./gradlew ${{ env.GRADLE_TASK }} -PversionNameOverride=${{ env.RELEASE_TAG_VERSION }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
 
       - name: Build Release Bundle AAB (online flavor)
-        if: github.ref_name != 'dev'
+        if: github.ref_name == 'master'
         run: |
           ./gradlew bundleOnlineRelease -PversionNameOverride=${{ env.RELEASE_TAG_VERSION }} -PversionCodeOverride=${{ env.RELEASE_CODE }}
           mkdir -p release_artifacts
