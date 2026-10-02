@@ -20,9 +20,8 @@
         tools:itemCount="4"
         tools:listitem="@layout/item_season_chip" />
 
-    <androidx.fragment.app.FragmentContainerView
+    <FrameLayout
         android:id="@+id/episode_grid_container"
-        android:name="com.joshgm3z.triplerocktv.ui.details.series.EpisodeGridFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
