@@ -27,7 +27,7 @@ android {
 
     signingConfigs {
         create("release") {
-            storeFile = file("../security/3rocktv_keystore")
+            storeFile = file("../security/default_keystore")
             storePassword = System.getenv("KEYSTORE_PASSWORD") //
             keyAlias = System.getenv("KEY_ALIAS")
             keyPassword = System.getenv("KEY_PASSWORD")
