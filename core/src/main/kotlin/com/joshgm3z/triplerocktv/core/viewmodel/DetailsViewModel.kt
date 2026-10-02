@@ -91,7 +91,7 @@ class DetailsViewModel @Inject constructor(
                     uiState?.copy(
                         showButtons = true,
                         duration = it.movieMetadata.totalDurationMs.toTextTime(),
-                        subtitle = it.movieMetadata.genre,
+                        subtitle = it.movieMetadata.genre ?: "",
                         description = it.movieMetadata.description.withPrefix(""),
                         cast = it.movieMetadata.cast.withPrefix(""),
                         director = it.movieMetadata.director.withPrefix(""),
