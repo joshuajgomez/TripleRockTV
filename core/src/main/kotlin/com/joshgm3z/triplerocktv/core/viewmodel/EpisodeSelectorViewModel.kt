@@ -18,7 +18,6 @@ data class SeriesSelectorUiState(
     val selectedSeasonNumber: Int? = null,
     val selectedEpisodeIndex: Int? = null,
     val seasons: List<Season> = emptyList(),
-    val episodes: List<Episode> = emptyList(),
 )
 
 @HiltViewModel
@@ -38,6 +37,9 @@ class EpisodeSelectorViewModel
     private val _uiState = MutableStateFlow(SeriesSelectorUiState())
     val uiState = _uiState.asStateFlow()
 
+    private val _episodesFlow = MutableStateFlow<List<Episode>>(emptyList())
+    val episodesFlow = _episodesFlow.asStateFlow()
+
     private var defaultCoverImageUrl: String? = null
 
     init {
@@ -47,14 +49,15 @@ class EpisodeSelectorViewModel
             seriesStream.seasons?.filter {
                 it.episodes.isNotEmpty()
             }?.let { seasons ->
+                val selectedSeasonNumber = seasons.getSeasonNumber(initialSelectedEpisodeId)
+                val episodes = seasons.getEpisodesOfSeason(selectedSeasonNumber)
+
+                _episodesFlow.value = episodes
                 _uiState.update { it ->
-                    val selectedSeasonNumber = seasons.getSeasonNumber(initialSelectedEpisodeId)
-                    val episodes = seasons.first { it.number == selectedSeasonNumber }.episodes
                     it.copy(
                         seasons = seasons,
                         selectedSeasonNumber = selectedSeasonNumber,
                         selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
-                        episodes = episodes.replaceMissingPoster(defaultCoverImageUrl)
                     )
                 }
             }
@@ -62,17 +65,13 @@ class EpisodeSelectorViewModel
     }
 
     fun onSeasonSelected(seasonNumber: Int) {
-        _uiState.update { it ->
-            it.copy(
-                selectedSeasonNumber = seasonNumber,
-                selectedEpisodeIndex = null,
-                episodes = it.seasons
-                    .first { it.number == seasonNumber }
-                    .episodes
-                    .replaceMissingPoster(defaultCoverImageUrl)
-            )
-        }
+        _episodesFlow.value = _uiState.value.seasons.getEpisodesOfSeason(seasonNumber)
     }
+
+    private fun List<Season>.getEpisodesOfSeason(seasonNumber: Int) = this
+        .first { it.number == seasonNumber }
+        .episodes
+        .replaceMissingPoster(defaultCoverImageUrl)
 
     private fun List<Season>.getSeasonNumber(episodeId: Int): Int {
         forEach { season ->
