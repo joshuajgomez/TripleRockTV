@@ -1,7 +1,9 @@
 package com.joshgm3z.triplerocktv.ui.details.series
 
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.VerticalGridSupportFragment
@@ -46,6 +48,8 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         viewModel.onSeasonSelected(it.number)
     }
 
+    private lateinit var episodeAdapter: ArrayObjectAdapter
+
     override fun onStart() {
         super.onStart()
         dialog?.window?.setLayout(
@@ -54,10 +58,35 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         )
     }
 
+    private fun initEpisodeAdapter() {
+        val gridFragment = VerticalGridSupportFragment()
+        val gridPresenter = VerticalGridPresenter(
+            FocusHighlight.ZOOM_FACTOR_XSMALL,
+            false
+        ).apply {
+            numberOfColumns = 1
+        }
+        gridFragment.setGridPresenter(gridPresenter)
+
+        episodeAdapter = ArrayObjectAdapter(EpisodePresenter(glideUtil))
+        gridFragment.adapter = episodeAdapter
+        gridFragment.onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
+            val episode = item as? Episode
+            if (episode != null) {
+                navigateToPlayback(episode.id)
+            }
+        }
+
+        childFragmentManager.beginTransaction()
+            .replace(binding.episodeGridContainer.id, gridFragment)
+            .commit()
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         dialog?.window?.setBackgroundDrawableResource(android.R.color.transparent)
         binding = DialogEpisodeSelectorBinding.bind(view)
+        initEpisodeAdapter()
 
         binding.rvSeasonChips.adapter = seasonAdapter
 
@@ -73,6 +102,15 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         val seasonIndex = uiState.seasons.indexOfFirst { it.number == uiState.selectedSeasonNumber }
         binding.rvSeasonChips.scrollToPosition(seasonIndex)
         if (seasonAdapter.seasons.isEmpty()) seasonAdapter.seasons = uiState.seasons
+
+        episodeAdapter.clear()
+        episodeAdapter.setItems(uiState.episodes, diffCallback)
+        uiState.selectedEpisodeIndex?.let {
+            val gridView = view?.findViewById<VerticalGridView>(
+                androidx.leanback.R.id.browse_grid
+            )
+            gridView?.selectedPosition = it
+        }
     }
 
     fun navigateToPlayback(episodeId: Int) {
@@ -81,61 +119,6 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
             this.streamId = episodeId
             this.streamType = StreamType.Series
             findNavController().navigate(this)
-        }
-    }
-}
-
-@AndroidEntryPoint
-class EpisodeGridFragment : VerticalGridSupportFragment() {
-
-    private val viewModel: EpisodeSelectorViewModel by viewModels({ requireParentFragment() })
-
-    @Inject
-    lateinit var glideUtil: GlideUtil
-
-    private lateinit var mAdapter: ArrayObjectAdapter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        val gridPresenter = VerticalGridPresenter(
-            FocusHighlight.ZOOM_FACTOR_XSMALL,
-            false
-        ).apply {
-            numberOfColumns = 1
-        }
-        setGridPresenter(gridPresenter)
-
-        mAdapter = ArrayObjectAdapter(EpisodePresenter(glideUtil))
-        adapter = mAdapter
-
-        setupEventListeners()
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.uiState.collectLatest { uiState ->
-                mAdapter.clear()
-                mAdapter.setItems(uiState.episodes, diffCallback)
-
-                uiState.selectedEpisodeIndex?.let {
-                    val gridView =
-                        view.findViewById<VerticalGridView>(androidx.leanback.R.id.browse_grid)
-                    gridView?.selectedPosition = it
-                }
-            }
-        }
-    }
-
-    private fun setupEventListeners() {
-        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
-            val episode = item as? Episode
-            if (episode != null) {
-                val parent = parentFragment as? EpisodeSelectorDialog
-                parent?.navigateToPlayback(episode.id)
-            }
         }
     }
 }
