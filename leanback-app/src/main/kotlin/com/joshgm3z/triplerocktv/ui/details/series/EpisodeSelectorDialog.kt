@@ -24,6 +24,7 @@ import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -51,6 +52,9 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
     private lateinit var seasonsGridFragment: VerticalGridSupportFragment
 
     private lateinit var episodesGridFragment: VerticalGridSupportFragment
+
+    private val seasons: List<Season>
+        get() = viewModel.uiState.value.seasons
 
     override fun onStart() {
         super.onStart()
@@ -96,9 +100,18 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         seasonsGridFragment.setGridPresenter(gridPresenter)
         seasonsGridFragment.adapter = seasonArrayObjectAdapter
         seasonsGridFragment.onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
+            binding.fcvEpisodesList.requestFocus()
+        }
+        seasonsGridFragment.setOnItemViewSelectedListener { _, item, _, _ ->
             val season = item as? Season
-            if (season != null) {
-                viewModel.onSeasonSelected(season.number)
+            viewModel.selectedSeasonNumber.value = season?.number
+        }
+        lifecycleScope.launch {
+            viewModel.selectedSeasonNumber.debounce(50).collectLatest {
+                seasonPresenter.selectedSeasonNumber = it
+                binding.fcvSeasonList.post {
+                    seasonArrayObjectAdapter.notifyItemRangeChanged(0, seasons.size)
+                }
             }
         }
     }
@@ -118,7 +131,6 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         lifecycleScope.launch {
             viewModel.episodesFlow.collectLatest {
                 episodeAdapter.setItems(it, diffCallback)
-                binding.fcvEpisodesList.requestFocus()
             }
         }
     }
@@ -135,6 +147,7 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         uiState.selectedEpisodeIndex?.let {
             episodesGridFragment.setSelectedPosition(it)
         }
+        binding.fcvEpisodesList.requestFocus()
     }
 
     fun navigateToPlayback(episodeId: Int) {

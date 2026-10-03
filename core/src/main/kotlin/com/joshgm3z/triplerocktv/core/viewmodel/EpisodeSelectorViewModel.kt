@@ -7,8 +7,11 @@ import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
 import com.joshgm3z.triplerocktv.core.repository.room.series.Season
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,6 +23,7 @@ data class SeriesSelectorUiState(
     val seasons: List<Season> = emptyList(),
 )
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class EpisodeSelectorViewModel
 @Inject constructor(
@@ -42,6 +46,8 @@ class EpisodeSelectorViewModel
 
     private var defaultCoverImageUrl: String? = null
 
+    val selectedSeasonNumber = MutableStateFlow<Int?>(null)
+
     init {
         viewModelScope.launch {
             val seriesStream = repository.seriesStreamFlow(seriesId).first()
@@ -62,10 +68,14 @@ class EpisodeSelectorViewModel
                 }
             }
         }
-    }
-
-    fun onSeasonSelected(seasonNumber: Int) {
-        _episodesFlow.value = _uiState.value.seasons.getEpisodesOfSeason(seasonNumber)
+        viewModelScope.launch {
+            selectedSeasonNumber.debounce(200).collectLatest {
+                it?.let { selectedSeasonNumber ->
+                    _episodesFlow.value =
+                        _uiState.value.seasons.getEpisodesOfSeason(selectedSeasonNumber)
+                }
+            }
+        }
     }
 
     private fun List<Season>.getEpisodesOfSeason(seasonNumber: Int) = this
