@@ -2,6 +2,7 @@
 
 package com.joshgm3z.triplerocktv.util
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.ColorStateList
 import android.util.TypedValue
@@ -23,6 +24,7 @@ fun Context.getColorFromAttr(
     return ContextCompat.getColor(this, typedValue.resourceId)
 }
 
+@SuppressLint("SupportAnnotationUsage")
 @ColorInt
 fun Context.getColorStateListFromAttr(
     @AttrRes attrColor: Int
