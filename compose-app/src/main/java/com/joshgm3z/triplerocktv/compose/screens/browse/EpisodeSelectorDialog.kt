@@ -51,6 +51,8 @@ import com.joshgm3z.triplerocktv.core.util.asTwoDigit
 import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.core.viewmodel.EpisodeSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SeriesSelectorUiState
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
 
 @Composable
 fun EpisodeSelectorDialog(
@@ -62,7 +64,11 @@ fun EpisodeSelectorDialog(
     EpisodeSelectorDialogContent(
         uiState = uiState,
         onBackPress = onBackPress,
-        onSeasonClick = { viewModel.onSeasonSelected(it.number) },
+        onSeasonClick = {
+            viewModel.selectedSeasonNumberFlow.value = it.number
+        },
+        episodesFlow = viewModel.episodesFlow,
+        selectedSeasonNumber = viewModel.selectedSeasonNumberFlow.collectAsState().value,
         onEpisodeClick = { navigateToPlayer(it.id, viewModel.seriesId) }
     )
 }
@@ -71,6 +77,8 @@ fun EpisodeSelectorDialog(
 @Composable
 fun EpisodeSelectorDialogContent(
     uiState: SeriesSelectorUiState,
+    selectedSeasonNumber: Int?,
+    episodesFlow: Flow<List<Episode>>,
     onBackPress: () -> Unit = {},
     onSeasonClick: (Season) -> Unit = {},
     onEpisodeClick: (Episode) -> Unit = {},
@@ -82,18 +90,20 @@ fun EpisodeSelectorDialogContent(
         dragHandle = null,
     ) {
         Box {
-            LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                listSpacing(125.dp)
-                itemsIndexed(uiState.episodes) { index, item ->
-                    EpisodeCard(
-                        episode = item,
-                        selected = uiState.selectedEpisodeIndex == index
-                    ) {
-                        onEpisodeClick(item)
+            episodesFlow.collectAsState(initial = emptyList()).value.let { episodes ->
+                LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                    listSpacing(125.dp)
+                    itemsIndexed(episodes) { index, item ->
+                        EpisodeCard(
+                            episode = item,
+                            selected = uiState.selectedEpisodeIndex == index
+                        ) {
+                            onEpisodeClick(item)
+                        }
+                        CustomHorizontalDivider(index, episodes.size)
                     }
-                    CustomHorizontalDivider(index, uiState.episodes.size)
+                    listSpacing()
                 }
-                listSpacing()
             }
             Column(
                 modifier = Modifier
@@ -107,7 +117,7 @@ fun EpisodeSelectorDialogContent(
                     items(uiState.seasons) {
                         SeasonChip(
                             season = it,
-                            selected = uiState.selectedSeasonNumber == it.number
+                            selected = selectedSeasonNumber == it.number
                         ) {
                             onSeasonClick(it)
                         }
@@ -204,12 +214,89 @@ fun Topbar(onBackPress: () -> Unit) {
     }
 }
 
+private val episodes = listOf(
+    Episode(
+        id = 1,
+        episode_num = 1,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+    Episode(
+        id = 1,
+        episode_num = 2,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+    Episode(
+        id = 1,
+        episode_num = 3,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+    Episode(
+        id = 1,
+        episode_num = 4,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+    Episode(
+        id = 1,
+        episode_num = 5,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+    Episode(
+        id = 1,
+        episode_num = 6,
+        title = "Episode 1",
+        container_extension = "",
+        season = 1,
+        episodeInfo = EpisodeInfo(
+            plot = "This is a long plot explaining many thing one by one, or in order whatever works",
+            rating = "3.5f"
+        ),
+        added = ""
+    ),
+)
+
 @DarkPreview
 @Composable
 private fun PreviewEpisodeSelectorDialog() {
     DarkSurface {
         EpisodeSelectorDialogContent(
-            uiState = sampleUiState
+            uiState = sampleUiState,
+            episodesFlow = flowOf(episodes),
+            selectedSeasonNumber = 0
         )
     }
 }
@@ -237,7 +324,6 @@ private fun PreviewEpisodeCard() {
 
 private val sampleUiState = SeriesSelectorUiState(
     selectedEpisodeIndex = 2,
-    selectedSeasonNumber = 2,
     seasons = listOf(
         Season(
             number = 1,
@@ -288,78 +374,4 @@ private val sampleUiState = SeriesSelectorUiState(
             voteAverage = 3f
         ),
     ),
-    episodes = listOf(
-        Episode(
-            id = 1,
-            episode_num = 1,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-        Episode(
-            id = 1,
-            episode_num = 2,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-        Episode(
-            id = 1,
-            episode_num = 3,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-        Episode(
-            id = 1,
-            episode_num = 4,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-        Episode(
-            id = 1,
-            episode_num = 5,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-        Episode(
-            id = 1,
-            episode_num = 6,
-            title = "Episode 1",
-            container_extension = "",
-            season = 1,
-            episodeInfo = EpisodeInfo(
-                plot = "This is a long plot explaining many thing one by one, or in order whatever works",
-                rating = "3.5f"
-            ),
-            added = ""
-        ),
-    )
 )
