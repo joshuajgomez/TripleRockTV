@@ -18,7 +18,6 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SeriesSelectorUiState(
-    val selectedSeasonNumber: Int? = null,
     val selectedEpisodeIndex: Int? = null,
     val seasons: List<Season> = emptyList(),
 )
@@ -46,7 +45,7 @@ class EpisodeSelectorViewModel
 
     private var defaultCoverImageUrl: String? = null
 
-    val selectedSeasonNumber = MutableStateFlow<Int?>(null)
+    val selectedSeasonNumberFlow = MutableStateFlow<Int?>(null)
 
     init {
         viewModelScope.launch {
@@ -58,18 +57,18 @@ class EpisodeSelectorViewModel
                 val selectedSeasonNumber = seasons.getSeasonNumber(initialSelectedEpisodeId)
                 val episodes = seasons.getEpisodesOfSeason(selectedSeasonNumber)
 
+                selectedSeasonNumberFlow.value = selectedSeasonNumber
                 _episodesFlow.value = episodes
                 _uiState.update { it ->
                     it.copy(
                         seasons = seasons,
-                        selectedSeasonNumber = selectedSeasonNumber,
                         selectedEpisodeIndex = episodes.indexOfFirst { it.id == initialSelectedEpisodeId },
                     )
                 }
             }
         }
         viewModelScope.launch {
-            selectedSeasonNumber.debounce(200).collectLatest {
+            selectedSeasonNumberFlow.debounce(200).collectLatest {
                 it?.let { selectedSeasonNumber ->
                     _episodesFlow.value =
                         _uiState.value.seasons.getEpisodesOfSeason(selectedSeasonNumber)

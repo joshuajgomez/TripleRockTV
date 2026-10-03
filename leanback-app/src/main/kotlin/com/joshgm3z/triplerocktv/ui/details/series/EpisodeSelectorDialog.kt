@@ -104,10 +104,10 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
         }
         seasonsGridFragment.setOnItemViewSelectedListener { _, item, _, _ ->
             val season = item as? Season
-            viewModel.selectedSeasonNumber.value = season?.number
+            viewModel.selectedSeasonNumberFlow.value = season?.number
         }
         lifecycleScope.launch {
-            viewModel.selectedSeasonNumber.debounce(50).collectLatest {
+            viewModel.selectedSeasonNumberFlow.debounce(50).collectLatest {
                 seasonPresenter.selectedSeasonNumber = it
                 binding.fcvSeasonList.post {
                     seasonArrayObjectAdapter.notifyItemRangeChanged(0, seasons.size)
@@ -136,12 +136,9 @@ class EpisodeSelectorDialog : DialogFragment(R.layout.dialog_episode_selector) {
     }
 
     private fun updateUI(uiState: SeriesSelectorUiState) {
-        seasonPresenter.selectedSeasonNumber = uiState.selectedSeasonNumber
         seasonArrayObjectAdapter.setItems(uiState.seasons, diffCallback)
-        uiState.selectedSeasonNumber?.let {
-            val seasonIndex = uiState.seasons.indexOfFirst {
-                it.number == uiState.selectedSeasonNumber
-            }
+        viewModel.selectedSeasonNumberFlow.value.let { seasonNumber ->
+            val seasonIndex = uiState.seasons.indexOfFirst { it.number == seasonNumber }
             seasonsGridFragment.setSelectedPosition(seasonIndex)
         }
         uiState.selectedEpisodeIndex?.let {
