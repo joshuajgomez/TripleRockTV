@@ -109,6 +109,9 @@
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
+        <action
+            android:id="@+id/toLiveTvCatalogue"
+            app:destination="@id/liveTvCatalogue" />
     </fragment>
 
     <fragment

@@ -58,10 +58,10 @@ class SearchFragment : Fragment() {
                     streamType = it.streamType
                 }
 
-                else -> SearchFragmentDirections.toPlayback().apply {
+                else -> SearchFragmentDirections.toLiveTvCatalogue().apply {
                     text = it.name
-                    streamId = it.streamId
-                    streamType = it.streamType
+                    categoryId = it.categoryId
+                    selectedStreamId = it.streamId
                 }
             }
 
