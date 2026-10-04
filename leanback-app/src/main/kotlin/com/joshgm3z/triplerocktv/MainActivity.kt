@@ -7,7 +7,6 @@ import androidx.activity.viewModels
 import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.MediaSyncService
-import com.joshgm3z.triplerocktv.core.repository.m3u8.PlaylistRepository
 import com.joshgm3z.triplerocktv.core.util.FirebaseConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
@@ -28,19 +27,10 @@ class MainActivity : FragmentActivity() {
     @Inject
     lateinit var firebaseConfig: FirebaseConfig
 
-    @Inject
-    lateinit var playlistRepository: PlaylistRepository
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        lifecycleScope.launch {
-            val samplePlaylist = "https://iptv-org.github.io/iptv/index.m3u"
-            val channels = playlistRepository.getChannels(samplePlaylist)
-            Logger.debug("channels = [$channels]")
-        }
 
         binding.tvDemoMarker.apply {
             if (isDevBuild) {
