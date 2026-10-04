@@ -17,10 +17,13 @@ class PlaylistViewModel @Inject constructor(
     private val _channels = MutableStateFlow<List<M3uChannel>>(emptyList())
     val channels = _channels.asStateFlow()
 
+    val selectedChannel = MutableStateFlow<M3uChannel?>(null)
+
     init {
         val samplePlaylist = "https://iptv-org.github.io/iptv/index.m3u"
         viewModelScope.launch {
             _channels.value = playlistRepository.getChannels(samplePlaylist)
         }
     }
+
 }

@@ -8,6 +8,7 @@ import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.DiffCallback
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3uChannel
@@ -18,7 +19,7 @@ import javax.inject.Inject
 import kotlin.getValue
 
 @AndroidEntryPoint
-class PlaylistRowSupportFragment : VerticalGridSupportFragment() {
+class PlaylistRowFragment : VerticalGridSupportFragment() {
 
     private val playlistViewModel by viewModels<PlaylistViewModel>({ requireParentFragment() })
 
@@ -62,11 +63,17 @@ class PlaylistRowSupportFragment : VerticalGridSupportFragment() {
             FocusHighlight.ZOOM_FACTOR_XSMALL,
             false
         ).apply {
-            numberOfColumns = 5
+            numberOfColumns = 1
         }
         rowsAdapter = ArrayObjectAdapter(playlistPresenter)
         adapter = rowsAdapter
         onItemViewClickedListener = clickListener
+        setOnItemViewSelectedListener(selectedListener)
+    }
+
+    private val selectedListener = OnItemViewSelectedListener { _, item, _, _ ->
+        val m3uChannel = item as? M3uChannel
+        playlistViewModel.selectedChannel.value = m3uChannel
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
