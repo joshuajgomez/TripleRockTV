@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
 import androidx.leanback.media.PlaybackTransportControlGlue
@@ -15,6 +16,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -25,7 +27,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class PlaylistVideoFragment : VideoSupportFragment() {
 
-    private val playlistViewModel by viewModels<PlaylistViewModel>({ requireParentFragment() })
+    private val playlistViewModel: PlaylistViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(requireContext()).build()

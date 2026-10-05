@@ -323,8 +323,13 @@
         android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistFragment"
         android:label="PlaylistFragment">
         <action
-            android:id="@+id/toPlayback"
-            app:destination="@id/playbackFragment" />
+            android:id="@+id/toPlaylistPlayer"
+            app:destination="@id/playlistPlayer" />
     </fragment>
+
+    <fragment
+        android:id="@+id/playlistPlayer"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistVideoFragment"
+        android:label="PlaylistVideoFragment" />
 
 </navigation>
