@@ -11,7 +11,11 @@ import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3uChannel
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.getColorFromAttr
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -30,6 +34,7 @@ class PlaylistRowFragment : VerticalGridSupportFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requireActivity().setBackground(requireContext().getBackgroundColor())
         initRowFragment()
     }
 
