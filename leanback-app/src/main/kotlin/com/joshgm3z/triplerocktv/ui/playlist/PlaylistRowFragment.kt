@@ -3,6 +3,7 @@ package com.joshgm3z.triplerocktv.ui.playlist
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.viewModels
+import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.VerticalGridSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.DiffCallback
@@ -11,6 +12,7 @@ import androidx.leanback.widget.OnItemViewClickedListener
 import androidx.leanback.widget.OnItemViewSelectedListener
 import androidx.leanback.widget.VerticalGridPresenter
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3uChannel
 import com.joshgm3z.triplerocktv.util.getBackgroundColor
@@ -25,7 +27,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class PlaylistRowFragment : VerticalGridSupportFragment() {
 
-    private val playlistViewModel by viewModels<PlaylistViewModel>({ requireParentFragment() })
+    private val playlistViewModel: PlaylistViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     @Inject
     lateinit var playlistPresenter: PlaylistPresenter
@@ -82,8 +84,7 @@ class PlaylistRowFragment : VerticalGridSupportFragment() {
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->
-        val m3uChannel = item as M3uChannel
-        val direction = PlaylistFragmentDirections.toPlayback()
-//        findNavController().navigate(direction)
+        val direction = PlaylistFragmentDirections.toPlaylistPlayer()
+        findNavController().navigate(direction)
     }
 }
