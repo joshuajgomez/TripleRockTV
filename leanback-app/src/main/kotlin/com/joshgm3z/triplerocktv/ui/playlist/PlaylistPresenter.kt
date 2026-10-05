@@ -3,7 +3,6 @@ package com.joshgm3z.triplerocktv.ui.playlist
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.leanback.widget.Presenter
-import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3uChannel
 import com.joshgm3z.triplerocktv.databinding.ViewPlaylistCardBinding
@@ -38,8 +37,5 @@ class PlaylistPresenter
         )
     }
 
-    override fun onUnbindViewHolder(holder: ViewHolder) {
-        val binding = ViewPlaylistCardBinding.bind(holder.view)
-        Glide.with(binding.ivIcon.context).clear(binding.ivIcon)
-    }
+    override fun onUnbindViewHolder(holder: ViewHolder) {}
 }
