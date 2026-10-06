@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.playlist
+package com.joshgm3z.triplerocktv.ui.playlist.m3u8
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class PlaylistViewModel @Inject constructor(
+class M3u8ViewModel @Inject constructor(
     playlistRepository: PlaylistRepository
 ) : ViewModel() {
     private val _channels = MutableStateFlow<List<M3uChannel>>(emptyList())

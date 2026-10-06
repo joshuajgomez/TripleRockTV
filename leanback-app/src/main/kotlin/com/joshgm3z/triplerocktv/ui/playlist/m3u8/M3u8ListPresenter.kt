@@ -1,4 +1,4 @@
-package com.joshgm3z.triplerocktv.ui.playlist
+package com.joshgm3z.triplerocktv.ui.playlist.m3u8
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,7 +9,7 @@ import com.joshgm3z.triplerocktv.databinding.ViewPlaylistCardBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
 
-class PlaylistPresenter
+class M3u8ListPresenter
 @Inject constructor(
     private val glideUtil: GlideUtil
 ) : Presenter() {
