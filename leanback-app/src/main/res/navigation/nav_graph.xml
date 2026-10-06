@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/playlistFragment">
+    app:startDestination="@id/m3u8Fragment">
 
     <fragment
         android:id="@+id/splashScreenFragment"
@@ -319,17 +319,17 @@
     </fragment>
 
     <fragment
-        android:id="@+id/playlistFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistFragment"
-        android:label="PlaylistFragment">
+        android:id="@+id/m3u8Fragment"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.m3u8.M3u8Fragment"
+        android:label="M3u8Fragment">
         <action
-            android:id="@+id/toPlaylistPlayer"
-            app:destination="@id/playlistPlayer" />
+            android:id="@+id/toM3u8Player"
+            app:destination="@id/m3u8Player" />
     </fragment>
 
     <fragment
-        android:id="@+id/playlistPlayer"
-        android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistVideoFragment"
-        android:label="PlaylistVideoFragment" />
+        android:id="@+id/m3u8Player"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.m3u8.M3u8VideoFragment"
+        android:label="M3u8VideoFragment" />
 
 </navigation>

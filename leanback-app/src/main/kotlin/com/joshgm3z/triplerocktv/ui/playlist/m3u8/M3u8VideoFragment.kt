@@ -1,9 +1,8 @@
-package com.joshgm3z.triplerocktv.ui.playlist
+package com.joshgm3z.triplerocktv.ui.playlist.m3u8
 
 import android.os.Bundle
 import android.view.View
 import androidx.annotation.OptIn
-import androidx.fragment.app.viewModels
 import androidx.hilt.navigation.fragment.hiltNavGraphViewModels
 import androidx.leanback.app.VideoSupportFragment
 import androidx.leanback.app.VideoSupportFragmentGlueHost
@@ -16,7 +15,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.leanback.LeanbackPlayerAdapter
 import com.joshgm3z.triplerocktv.R
-import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
@@ -25,9 +23,9 @@ import kotlin.getValue
 
 @UnstableApi
 @AndroidEntryPoint
-class PlaylistVideoFragment : VideoSupportFragment() {
+class M3u8VideoFragment : VideoSupportFragment() {
 
-    private val playlistViewModel: PlaylistViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val m3U8ViewModel: M3u8ViewModel by hiltNavGraphViewModels(R.id.nav_graph)
 
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(requireContext()).build()
@@ -69,7 +67,7 @@ class PlaylistVideoFragment : VideoSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            playlistViewModel.selectedChannel.debounce(100).collectLatest {
+            m3U8ViewModel.selectedChannel.debounce(100).collectLatest {
                 it?.url?.let { url ->
                     playVideo(url)
                 }

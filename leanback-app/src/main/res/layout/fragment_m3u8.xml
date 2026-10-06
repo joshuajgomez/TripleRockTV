@@ -6,7 +6,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/playlist_fragment_container"
-        android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistRowFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.m3u8.M3u8RowFragment"
         android:layout_width="350dp"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -14,7 +14,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/playlist_player"
-        android:name="com.joshgm3z.triplerocktv.ui.playlist.PlaylistVideoFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.m3u8.M3u8VideoFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
