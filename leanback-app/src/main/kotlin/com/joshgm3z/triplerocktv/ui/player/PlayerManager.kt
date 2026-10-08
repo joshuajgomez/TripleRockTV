@@ -3,7 +3,6 @@ package com.joshgm3z.triplerocktv.ui.player
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
@@ -39,13 +38,11 @@ import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
-import com.joshgm3z.triplerocktv.util.setVisible
+import com.joshgm3z.triplerocktv.ui.home.SkipFeedbackHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlin.math.abs
 
 private const val FAST_FORWARD_DURATION_SHORT = 10000
 
@@ -58,9 +55,8 @@ class PlayerManager(
     private val playbackViewModel: PlaybackViewModel,
     private val trackSelectorViewModel: TrackSelectorViewModel,
     private val navigate: (NavDirections) -> Unit,
-    private val tvSkipForward: TextView,
-    private val tvSkipBack: TextView,
-    private val firestoreLogger: FirestoreLogger
+    private val firestoreLogger: FirestoreLogger,
+    private val skipFeedbackHandler: SkipFeedbackHandler,
 ) : DefaultLifecycleObserver {
 
     private var player: ExoPlayer = ExoPlayer.Builder(context).build().apply {
@@ -68,7 +64,7 @@ class PlayerManager(
             firestoreLogger.log(mapOf("playback_error" to it))
             navigate(PlayerFragmentDirections.toError(it))
         })
-        addListener(playbackListener(tvSkipForward, tvSkipBack))
+        addListener(playbackListener())
         addListener(trackSelectorViewModel.subtitleTrackListener)
     }
     private var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
@@ -224,7 +220,7 @@ class PlayerManager(
         player.release()
     }
 
-    private fun playbackListener(tvForward: TextView, tvBack: TextView) = object : Player.Listener {
+    private fun playbackListener() = object : Player.Listener {
         override fun onCues(cueGroup: CueGroup) {
             subtitleView.setCues(cueGroup.cues)
         }
@@ -236,11 +232,7 @@ class PlayerManager(
         ) {
             if (reason == Player.DISCONTINUITY_REASON_SEEK) {
                 val diff = newPos.positionMs - oldPos.positionMs
-                val roundedSec = ((abs(diff) / 1000 + 5) / 10) * 10
-                if (roundedSec in 10..80) {
-                    if (diff > 0) tvForward.setVisibleForDuration("+${roundedSec}s")
-                    else tvBack.setVisibleForDuration("-${roundedSec}s")
-                }
+                skipFeedbackHandler.accumulateSkip(diff)
             }
         }
 
@@ -252,20 +244,6 @@ class PlayerManager(
                     playbackViewModel.updateTotalDuration(duration)
                 }
             }
-        }
-    }
-
-    private fun View.setVisibleForDuration(
-        text: String,
-        duration: Long = 800L
-    ) {
-        val view = this as TextView
-        view.setVisible(true)
-        view.text = text
-        viewVisibilityUpdateJob?.cancel()
-        viewVisibilityUpdateJob = lifecycleScope.launch {
-            delay(duration)
-            view.setVisible(false)
         }
     }
 
