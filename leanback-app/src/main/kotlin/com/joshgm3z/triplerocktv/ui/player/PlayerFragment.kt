@@ -12,10 +12,12 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import dagger.hilt.android.AndroidEntryPoint
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.viewmodel.PlaybackViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentPlayerBinding
+import com.joshgm3z.triplerocktv.ui.home.SkipFeedbackHandler
 import javax.inject.Inject
 
 /**
@@ -60,9 +62,12 @@ class PlayerFragment : Fragment() {
             navigate = {
                 findNavController().navigate(it)
             },
-            tvSkipForward = binding.tvSkipForward,
-            tvSkipBack = binding.tvSkipBack,
-            firestoreLogger = firestoreLogger
+            firestoreLogger = firestoreLogger,
+            skipFeedbackHandler = SkipFeedbackHandler(
+                scope = viewLifecycleOwner.lifecycleScope,
+                tvSkipForward = binding.tvSkipForward,
+                tvSkipBack = binding.tvSkipBack,
+            )
         )
 
         playerManager.playVideo()
