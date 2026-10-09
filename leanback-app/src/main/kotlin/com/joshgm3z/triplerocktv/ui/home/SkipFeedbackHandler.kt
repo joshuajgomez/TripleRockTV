@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import android.widget.TextView
+import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.util.setVisible
 import kotlinx.coroutines.CoroutineScope
@@ -9,10 +10,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.abs
 
+private const val VIEW_TIMEOUT = 800L
+private const val MIN_DURATION = 10
+private const val MAX_DURATION = 130
+
 class SkipFeedbackHandler(
     private val scope: CoroutineScope,
     private val tvSkipForward: TextView,
     private val tvSkipBack: TextView,
+    private val firestoreLogger: FirestoreLogger
 ) {
     private var job: Job? = null
     private var durationCache = 0L
@@ -28,14 +34,23 @@ class SkipFeedbackHandler(
 
         // Calculate rounded seconds (e.g., 10, 20, 30...)
         val roundedSec = ((abs(diff) / 1000 + 5) / 10) * 10
-        if (roundedSec !in 10..130) return
+        if (roundedSec !in MIN_DURATION..MAX_DURATION) {
+            firestoreLogger.log(
+                mapOf(
+                    "event" to "skip_feedback_ignored",
+                    "roundedSec" to roundedSec
+                )
+            )
+            Logger.debug("Ignored skip feedback: $roundedSec seconds")
+            return
+        }
 
         job?.cancel()
         durationCache += roundedSec
 
         job = scope.launch {
             showText(durationCache)
-            delay(800L)
+            delay(VIEW_TIMEOUT)
             durationCache = 0
             clearText()
         }
