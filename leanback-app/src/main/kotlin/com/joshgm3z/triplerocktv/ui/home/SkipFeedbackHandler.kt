@@ -1,6 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.home
 
 import android.widget.TextView
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -57,8 +58,9 @@ class SkipFeedbackHandler(
     }
 
     private fun showText(duration: Long) {
-        tvSkipForward.text = "+${duration}s"
-        tvSkipBack.text = "-${duration}s"
+        val context = tvSkipForward.context
+        tvSkipForward.text = context.getString(R.string.skip_forward_text, duration)
+        tvSkipBack.text = context.getString(R.string.skip_back_text, duration)
 
         tvSkipForward.setVisible(isForward)
         tvSkipBack.setVisible(!isForward)

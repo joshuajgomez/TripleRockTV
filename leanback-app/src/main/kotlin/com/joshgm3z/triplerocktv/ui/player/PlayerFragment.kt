@@ -67,6 +67,7 @@ class PlayerFragment : Fragment() {
                 scope = viewLifecycleOwner.lifecycleScope,
                 tvSkipForward = binding.tvSkipForward,
                 tvSkipBack = binding.tvSkipBack,
+                firestoreLogger = firestoreLogger
             )
         )
 
