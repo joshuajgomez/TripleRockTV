@@ -99,7 +99,7 @@ class LiveTvFragment : Fragment() {
             requireActivity(),
             adapter
         ) {
-            override fun onCreatePrimaryActions(primaryActionsAdapter: ArrayObjectAdapter?) {}
+            override fun onCreatePrimaryActions(primaryActionsAdapter: ArrayObjectAdapter) {}
         }.apply {
             isControlsOverlayAutoHideEnabled = false
         }
@@ -134,7 +134,7 @@ class LiveTvFragment : Fragment() {
 
     private val selectionListener = OnItemViewSelectedListener { _, item, _, _ ->
         val streamData = item as? StreamData ?: return@OnItemViewSelectedListener
-        viewModel.onStreamDataFocused(streamData)
+        viewModel.focusedStreamData.value = streamData
     }
 
     private fun playVideo(videoUrl: String) {

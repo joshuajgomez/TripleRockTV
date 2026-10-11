@@ -11,8 +11,10 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -29,6 +31,7 @@ data class Program(
     val isNowPlaying: Boolean = false,
 )
 
+@OptIn(FlowPreview::class)
 @HiltViewModel
 class LiveTvViewModel
 @Inject constructor(
@@ -51,10 +54,19 @@ class LiveTvViewModel
 
     private lateinit var userInfo: UserInfo
 
+    val focusedStreamData: MutableStateFlow<StreamData?> = MutableStateFlow(null)
+
     init {
         viewModelScope.launch {
             localDatastore.getUserInfo()?.let {
                 userInfo = it
+            }
+        }
+        viewModelScope.launch {
+            focusedStreamData.debounce(100).collect {
+                it?.let { streamData ->
+                    onStreamDataFocused(streamData)
+                }
             }
         }
         fetchStreams(categoryId)
@@ -70,22 +82,20 @@ class LiveTvViewModel
         }
     }
 
-    fun onStreamDataFocused(streamData: StreamData) {
-        viewModelScope.launch {
-            val listings = onlineRepository.getShortEpgListing(streamData.streamId)
-            _programUiState.value = ProgramUiState(
-                videoToPlay = streamData.videoUrl(userInfo),
-                programs = listings.map {
-                    Program(
-                        title = it.titleDecoded(),
-                        description = it.descriptionDecoded(),
-                        start = it.startTimestampFormatted(),
-                        stop = it.stopTimestampFormatted(),
-                        isNowPlaying = it.isNowPlaying()
-                    )
-                }
-            )
-        }
+    private suspend fun onStreamDataFocused(streamData: StreamData) {
+        val listings = onlineRepository.getShortEpgListing(streamData.streamId)
+        _programUiState.value = ProgramUiState(
+            videoToPlay = streamData.videoUrl(userInfo),
+            programs = listings.map {
+                Program(
+                    title = it.titleDecoded(),
+                    description = it.descriptionDecoded(),
+                    start = it.startTimestampFormatted(),
+                    stop = it.stopTimestampFormatted(),
+                    isNowPlaying = it.isNowPlaying()
+                )
+            }
+        )
     }
 
     suspend fun updateMyList(
