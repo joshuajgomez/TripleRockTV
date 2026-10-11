@@ -39,6 +39,21 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/tv_playback_error"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="center"
+        android:paddingHorizontal="150dp"
+        android:textColor="?attr/colorForegroundMid"
+        android:textSize="@dimen/text_size_small"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/video_support_fragment"
+        app:layout_constraintEnd_toEndOf="@+id/video_support_fragment"
+        app:layout_constraintStart_toStartOf="@+id/video_support_fragment"
+        app:layout_constraintTop_toTopOf="@id/video_support_fragment"
+        tools:text="[3000] Video not supported on this device" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_programs"
         android:layout_width="0dp"

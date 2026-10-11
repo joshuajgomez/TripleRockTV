@@ -25,6 +25,7 @@ import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.errorListener
 import com.joshgm3z.triplerocktv.core.viewmodel.LiveTvViewModel
 import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
 import com.joshgm3z.triplerocktv.ui.common.diffCallback
@@ -52,7 +53,12 @@ class LiveTvFragment : Fragment() {
     private val programAdapter = ProgramAdapter()
 
     private val player: ExoPlayer by lazy {
-        ExoPlayer.Builder(requireContext()).build()
+        ExoPlayer.Builder(requireContext()).build().apply {
+            addListener(errorListener(onError = {
+                binding.tvPlaybackError.text = it
+                binding.tvPlaybackError.setVisible(true)
+            }))
+        }
     }
 
     private lateinit var transportControlGlue: PlaybackTransportControlGlue<LeanbackPlayerAdapter>
@@ -165,6 +171,7 @@ class LiveTvFragment : Fragment() {
                 if (it == null) return@collectLatest
 
                 it.videoToPlay?.let { videoUrl ->
+                    binding.tvPlaybackError.setVisible(false)
                     playVideo(videoUrl)
                 }
                 it.programs.let { programs ->
