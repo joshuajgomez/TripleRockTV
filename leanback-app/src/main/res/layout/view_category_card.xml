@@ -28,6 +28,6 @@
         android:ellipsize="end"
         android:maxLines="2"
         android:textColor="@color/color_foreground_high_selector"
-        android:textStyle="bold"
+        android:textFontWeight="500"
         tools:text="Category Category Category Category " />
 </LinearLayout>

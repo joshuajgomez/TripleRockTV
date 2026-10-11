@@ -77,7 +77,7 @@
         android:background="@drawable/program_background"
         android:gravity="center"
         android:text="No program info"
-        android:textColor="?attr/colorForegroundMid"
+        android:textColor="?attr/colorForegroundLow"
         android:visibility="gone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@id/video_support_fragment"

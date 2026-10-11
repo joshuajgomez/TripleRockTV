@@ -3,16 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="?attr/colorSurfaceLow"
+    android:background="@drawable/category_view_background"
     android:clickable="true"
     android:focusable="true"
-    android:foreground="@drawable/focusable_border_fg"
     android:padding="5dp">
 
     <ImageView
         android:id="@+id/iv_logo"
         android:layout_width="40dp"
         android:layout_height="40dp"
+        android:duplicateParentState="true"
         android:src="@drawable/baseline_ondemand_video_24"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,10 +23,12 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="5dp"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/colorForegroundHigh"
+        android:textColor="@color/color_foreground_high_selector"
+        android:textFontWeight="500"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/barrier"
         app:layout_constraintStart_toEndOf="@+id/iv_logo"
