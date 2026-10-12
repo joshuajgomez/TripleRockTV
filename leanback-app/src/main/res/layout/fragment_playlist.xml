@@ -6,7 +6,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/playlist_fragment_container"
-        android:name="com.joshgm3z.triplerocktv.ui.playlist.main.PlaylistRowFragment"
+        android:name="com.joshgm3z.triplerocktv.ui.playlist.main.PlaylistFragment"
         android:layout_width="350dp"
         android:layout_height="match_parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,8 +1,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="300dp"
+    android:layout_width="200dp"
     android:layout_height="100dp"
-    android:background="@drawable/category_view_background"
+    android:background="@drawable/rounded_card_background"
     android:clickable="true"
     android:clipToOutline="true"
     android:focusable="true"
@@ -19,11 +19,11 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="iptv.org"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="@color/color_foreground_high_selector"
         android:textFontWeight="500"
-        android:textSize="20sp"
-        android:text="iptv.org" />
+        android:textSize="20sp" />
 
     <TextView
         android:id="@+id/tv_playlist_name"
@@ -34,8 +34,8 @@
         android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
+        android:text="added 2 days ago"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@color/color_foreground_mid_selector"
-        android:text="added 2 days ago" />
+        android:textColor="@color/color_foreground_mid_selector" />
 
 </LinearLayout>
