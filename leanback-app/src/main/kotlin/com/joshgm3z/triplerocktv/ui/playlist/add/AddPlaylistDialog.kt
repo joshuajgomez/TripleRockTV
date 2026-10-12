@@ -5,6 +5,7 @@ import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistViewModel
@@ -21,6 +22,8 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
 
     private val viewModel: AddPlaylistViewModel by viewModels()
 
+    private val args: AddPlaylistDialogArgs by navArgs()
+
     override fun onStart() {
         super.onStart()
         val resources = requireContext().resources
@@ -34,6 +37,11 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = LayoutAddPlaylistDialogBinding.bind(view)
+
+        binding.etPlaylistUsername.setVisible(args.isXtream)
+        binding.etPlaylistPassword.setVisible(args.isXtream)
+        binding.tvTitle.text = if (args.isXtream) "Add Xtream playlist" else "Add M3u8 playlist"
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 when (it) {

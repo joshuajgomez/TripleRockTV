@@ -65,7 +65,7 @@ class PlaylistFragment : BrowseSupportFragment() {
                 when (item) {
                     is XtreamCode -> PlaylistFragmentDirections.toSplash()
                     is M3u8Playlist -> PlaylistFragmentDirections.toM3u8Fragment(item.url)
-                    is SettingItem -> PlaylistFragmentDirections.toAddPlaylistDialog()
+                    is SettingItem -> PlaylistFragmentDirections.toChoosePlaylistDialog()
                     else -> return@OnItemViewClickedListener
                 }.let {
                     findNavController().navigate(it)

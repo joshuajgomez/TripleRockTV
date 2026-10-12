@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="@dimen/add_playlist_popup_width"
+    android:layout_height="@dimen/add_playlist_popup_height"
+    android:background="@drawable/dialog_background"
+    android:orientation="vertical"
+    android:paddingHorizontal="35dp"
+    android:paddingTop="60dp"
+    android:paddingBottom="30dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Choose type of playlist"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_xtream"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Xtream playlist" />
+
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_m3u8"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="M3u8 playlist" />
+</LinearLayout>
