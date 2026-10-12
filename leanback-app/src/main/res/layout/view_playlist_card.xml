@@ -1,21 +1,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
-    android:layout_height="60dp"
-    android:background="@drawable/bg_rounded_card"
+    android:layout_height="100dp"
+    android:background="@drawable/category_view_background"
     android:clickable="true"
     android:clipToOutline="true"
     android:focusable="true"
-    android:foreground="@drawable/focusable_border_fg"
-    android:gravity="center_vertical"
-    android:orientation="horizontal"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
     android:padding="10dp">
-
-    <ImageView
-        android:id="@+id/iv_icon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:src="@drawable/baseline_ondemand_video_24" />
 
     <TextView
         android:id="@+id/tv_program_name"
@@ -23,10 +16,26 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="5dp"
+        android:duplicateParentState="true"
         android:ellipsize="end"
         android:maxLines="1"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?attr/colorForegroundHigh"
-        tools:text="Some movie with long name(2025) " />
+        android:textColor="@color/color_foreground_high_selector"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        android:text="iptv.org" />
+
+    <TextView
+        android:id="@+id/tv_playlist_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="5dp"
+        android:duplicateParentState="true"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="@color/color_foreground_mid_selector"
+        android:text="added 2 days ago" />
 
 </LinearLayout>
