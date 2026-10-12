@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
+import androidx.leanback.widget.DiffCallback
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
@@ -30,6 +31,7 @@ import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeFragment : BrowseSupportFragment() {
+
     private val viewModel: HomeViewModel by viewModels()
 
     @Inject
@@ -48,6 +50,10 @@ class HomeFragment : BrowseSupportFragment() {
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
+    private val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
+
+    private val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -59,6 +65,9 @@ class HomeFragment : BrowseSupportFragment() {
         badgeDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.logo_vd_vector)
 
         MediaSyncService.restart(requireContext())
+
+        rowsAdapter.add(ListRow(homeAdapter))
+        rowsAdapter.add(ListRow(settingsAdapter))
     }
 
     private val itemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
@@ -91,22 +100,13 @@ class HomeFragment : BrowseSupportFragment() {
                     if (it.isEmpty()) return@collectLatest
 
                     progressBarManager.hide()
-                    rowsAdapter.clear()
-
-                    val homeAdapter = ArrayObjectAdapter(HomeItemPresenter())
-                    homeAdapter.addAll(0, it)
-                    rowsAdapter.add(ListRow(homeAdapter))
-
-                    val settingsAdapter = ArrayObjectAdapter(SettingsItemPresenter())
-                    settingsAdapter.add(
-                        SettingItem(
-                            "Update app",
-                            R.drawable.outline_deployed_code_update_24
-                        )
+                    homeAdapter.setItems(it, diffCallback)
+                    val settings = listOf(
+                        SettingItem("Update app", R.drawable.outline_deployed_code_update_24),
+                        SettingItem("Settings", R.drawable.ic_settings),
+                        SettingItem("Sign out", R.drawable.icon_logout)
                     )
-                    settingsAdapter.add(SettingItem("Settings", R.drawable.ic_settings))
-                    settingsAdapter.add(SettingItem("Sign out", R.drawable.icon_logout))
-                    rowsAdapter.add(ListRow(settingsAdapter))
+                    settingsAdapter.setItems(settings, diffCallback)
                 }
             }
         }
@@ -116,5 +116,23 @@ class HomeFragment : BrowseSupportFragment() {
         super.onResume()
         firebaseLogger.logScreenView(ScreenName.Home)
         viewModel.fetchHomeData()
+    }
+}
+
+private val diffCallback: DiffCallback<Any> = object : DiffCallback<Any>() {
+    override fun areItemsTheSame(item1: Any, item2: Any): Boolean {
+        return if (item1 is HomeItem && item2 is HomeItem) {
+            item1.title == item2.title
+        } else if (item1 is SettingItem && item2 is SettingItem) {
+            item1.title == item2.title
+        } else false
+    }
+
+    override fun areContentsTheSame(item1: Any, item2: Any): Boolean {
+        return if (item1 is HomeItem && item2 is HomeItem) {
+            item1 == item2
+        } else if (item1 is SettingItem && item2 is SettingItem) {
+            item1 == item2
+        } else false
     }
 }
