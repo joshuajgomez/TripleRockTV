@@ -70,6 +70,14 @@ class LoginRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun verifyM3u8Url(
+        webUrl: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit
+    ) {
+
+    }
+
     override suspend fun validLogin(
         webUrl: String,
         username: String,

@@ -9,6 +9,12 @@ interface LoginRepository {
         onError: (String) -> Unit,
     )
 
+    suspend fun verifyM3u8Url(
+        webUrl: String,
+        onSuccess: () -> Unit,
+        onError: (String) -> Unit,
+    )
+
     suspend fun validLogin(
         webUrl: String,
         username: String,

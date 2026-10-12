@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/add_playlist_popup_width"
+    android:layout_height="@dimen/add_playlist_popup_height"
+    android:background="@drawable/dialog_background"
+    android:paddingHorizontal="35dp"
+    android:paddingTop="60dp"
+    android:paddingBottom="30dp">
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Xtream playlist"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_server_url"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@drawable/rounded_link_2_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="?attr/colorForegroundMid"
+        android:hint="Server URL"
+        android:textColor="?attr/colorForegroundMid"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_title" />
+
+    <EditText
+        android:id="@+id/et_playlist_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@drawable/rounded_person_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="?attr/colorForegroundMid"
+        android:hint="Username"
+        android:textColor="?attr/colorForegroundMid"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_server_url" />
+
+    <EditText
+        android:id="@+id/et_playlist_password"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:drawableStart="@drawable/rounded_password_24"
+        android:drawablePadding="10dp"
+        android:drawableTint="?attr/colorForegroundMid"
+        android:hint="Password"
+        android:textColor="?attr/colorForegroundMid"
+        android:textFontWeight="500"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/et_playlist_username" />
+
+    <TextView
+        android:id="@+id/tv_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:textColor="?attr/colorForegroundFault"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@+id/bv_sign_in"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="Error signing in" />
+
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_sign_in"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Sign in"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+</androidx.constraintlayout.widget.ConstraintLayout>

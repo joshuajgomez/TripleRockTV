@@ -75,4 +75,11 @@ class FirebaseLogger
             }
         )
     }
+
+    fun logM3u8UrlVerification(webUrl: String) {
+        logCustomEvent(
+            "m3u8_url_verification",
+            mapOf("m3u8_url_verification_web_url" to webUrl)
+        )
+    }
 }
