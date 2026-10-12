@@ -7,11 +7,13 @@ import com.google.firebase.analytics.analytics
 import com.google.firebase.crashlytics.crashlytics
 import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
+import com.joshgm3z.triplerocktv.core.repository.m3u8.M3u8PlaylistRepository
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.orIfDebug
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -26,18 +28,11 @@ sealed class AddPlaylistUiState {
     object LoginSuccess : AddPlaylistUiState()
 }
 
-data class UserInfo2(
-    val username: String,
-    val password: String,
-    val webUrl: String,
-    val expiryDate: String,
-    val sessionId: String,
-)
-
 @HiltViewModel
 class AddPlaylistViewModel
 @Inject constructor(
     private val repository: LoginRepository,
+    private val m3u8PlaylistRepository: M3u8PlaylistRepository,
     private val localDatastore: LocalDatastore,
     private val firebaseLogger: FirebaseLogger,
 ) : ViewModel() {
@@ -88,18 +83,16 @@ class AddPlaylistViewModel
         Logger.entry()
         _uiState.value = AddPlaylistUiState.Loading("Verifying")
         viewModelScope.launch {
-            repository.verifyM3u8Url(
-                webUrl = webUrl,
-                onSuccess = {
-                    Logger.debug("M3u8 URL verified")
-                    firebaseLogger.logM3u8UrlVerification(webUrl)
-                    _uiState.value = AddPlaylistUiState.LoginSuccess
-                },
-                onError = { error ->
-                    Logger.warn("M3u8 URL verification failed")
-                    _uiState.value = AddPlaylistUiState.Error(error)
-                },
-            )
+            delay(1000)
+            val valid = m3u8PlaylistRepository.isUrlValid(webUrl)
+            _uiState.value = if (valid) {
+                Logger.debug("M3u8 URL verified")
+                firebaseLogger.logM3u8UrlVerification(webUrl)
+                AddPlaylistUiState.LoginSuccess
+            } else {
+                Logger.warn("M3u8 URL verification failed")
+                AddPlaylistUiState.Error("Invalid url")
+            }
         }
     }
 }

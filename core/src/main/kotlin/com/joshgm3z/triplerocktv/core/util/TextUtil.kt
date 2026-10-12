@@ -1,6 +1,5 @@
 package com.joshgm3z.triplerocktv.core.util
 
-import com.google.firebase.firestore.model.Values.timestamp
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import java.text.NumberFormat
 import java.text.SimpleDateFormat

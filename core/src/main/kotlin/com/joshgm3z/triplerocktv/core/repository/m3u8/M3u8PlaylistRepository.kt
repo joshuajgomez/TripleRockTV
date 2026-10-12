@@ -1,6 +1,9 @@
 package com.joshgm3z.triplerocktv.core.repository.m3u8
 
-import com.joshgm3z.triplerocktv.core.repository.retrofit.OpenSubtitlesService
+import com.joshgm3z.triplerocktv.core.repository.impl.getName
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistDao
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
@@ -19,10 +22,31 @@ data class M3uChannel(
     }
 }
 
-class PlaylistRepository
-@Inject constructor() {
+class M3u8PlaylistRepository
+@Inject constructor(
+    private val playlistDao: PlaylistDao
+) {
 
     private val propertyRegex = """([a-zA-Z0-9_-]+)="([^"]+)"""".toRegex()
+
+    suspend fun isUrlValid(playlistUrl: String): Boolean {
+        val m3uService = getM3u8Service(playlistUrl)
+        val response = m3uService.downloadPlaylist(playlistUrl)
+        return response.isSuccessful.apply {
+            if (this) {
+                withContext(Dispatchers.IO) {
+                    playlistDao.insert(
+                        Playlist(
+                            playlistName = playlistUrl.getName(),
+                            url = playlistUrl,
+                            type = PlaylistType.M3u8,
+                            added = System.currentTimeMillis(),
+                        )
+                    )
+                }
+            }
+        }
+    }
 
     suspend fun getChannels(playlistUrl: String): List<M3uChannel> = withContext(Dispatchers.IO) {
         val m3uService = getM3u8Service(playlistUrl)

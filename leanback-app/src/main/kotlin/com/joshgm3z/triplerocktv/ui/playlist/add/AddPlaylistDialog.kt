@@ -5,8 +5,10 @@ import android.view.View
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutAddPlaylistDialogBinding
@@ -24,6 +26,9 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
 
     private val args: AddPlaylistDialogArgs by navArgs()
 
+    val isXtream: Boolean
+        get() = args.playlistType == PlaylistType.Xtream
+
     override fun onStart() {
         super.onStart()
         val resources = requireContext().resources
@@ -38,9 +43,9 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
         super.onViewCreated(view, savedInstanceState)
         binding = LayoutAddPlaylistDialogBinding.bind(view)
 
-        binding.etPlaylistUsername.setVisible(args.isXtream)
-        binding.etPlaylistPassword.setVisible(args.isXtream)
-        binding.tvTitle.text = if (args.isXtream) "Add Xtream playlist" else "Add M3u8 playlist"
+        binding.etPlaylistUsername.setVisible(isXtream)
+        binding.etPlaylistPassword.setVisible(isXtream)
+        binding.tvTitle.text = if (isXtream) "Add Xtream playlist" else "Add M3u8 playlist"
 
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
@@ -54,9 +59,14 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
         }
         binding.bvSignIn.setOnClickListener {
             val serverUrl = binding.etServerUrl.text.toString()
-            val username = binding.etPlaylistUsername.text.toString()
-            val password = binding.etPlaylistPassword.text.toString()
-            viewModel.verifyXtreamLogin(serverUrl, username, password)
+
+            if (isXtream) {
+                val username = binding.etPlaylistUsername.text.toString()
+                val password = binding.etPlaylistPassword.text.toString()
+                viewModel.verifyXtreamLogin(serverUrl, username, password)
+            } else {
+                viewModel.verifyM3u8Url(serverUrl)
+            }
         }
     }
 
@@ -69,6 +79,7 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
 
     private fun showSuccess() {
         binding.bvSignIn.text = "Signed in"
+        findNavController().popBackStack()
     }
 
     private fun showLoading(uiState: AddPlaylistUiState.Loading) {

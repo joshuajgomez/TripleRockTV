@@ -7,6 +7,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutAddPlaylistDialogBinding
@@ -36,13 +37,13 @@ class ChoosePlaylistDialog : DialogFragment(R.layout.layout_choose_playlist_dial
         binding = LayoutChoosePlaylistDialogBinding.bind(view)
         binding.bvXtream.setOnClickListener {
             ChoosePlaylistDialogDirections.toAddPlaylistDialog().apply {
-                isXtream = true
+                playlistType = PlaylistType.Xtream
                 findNavController().navigate(this)
             }
         }
         binding.bvM3u8.setOnClickListener {
             ChoosePlaylistDialogDirections.toAddPlaylistDialog().apply {
-                isXtream = false
+                playlistType = PlaylistType.M3u8
                 findNavController().navigate(this)
             }
         }

@@ -9,6 +9,8 @@ import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.IptvEpgListing
 import com.joshgm3z.triplerocktv.core.repository.room.favorite.Favorite
 import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistDao
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayed
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
@@ -25,8 +27,9 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
         SearchHint::class,
         Favorite::class,
         RecentlyPlayed::class,
+        Playlist::class,
     ],
-    version = 32
+    version = 33
 )
 @TypeConverters(SeasonConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -37,4 +40,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun searchHintDao(): SearchHintDao
     abstract fun favoriteDao(): FavoriteDao
     abstract fun recentlyPlayedDao(): RecentlyPlayedDao
+    abstract fun playlistDao(): PlaylistDao
 }

@@ -8,6 +8,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.epg.EpgListingDao
 import com.joshgm3z.triplerocktv.core.repository.room.favorite.FavoriteDao
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistDao
 import com.joshgm3z.triplerocktv.core.repository.room.recentlyplayed.RecentlyPlayedDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import dagger.Module
@@ -66,5 +67,10 @@ class DatabaseModule {
     @Provides
     fun provideRecentlyPlayedDao(appDatabase: AppDatabase): RecentlyPlayedDao {
         return appDatabase.recentlyPlayedDao()
+    }
+
+    @Provides
+    fun providePlaylistDao(appDatabase: AppDatabase): PlaylistDao {
+        return appDatabase.playlistDao()
     }
 }

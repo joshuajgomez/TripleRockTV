@@ -5,6 +5,8 @@ import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreHelper
 import com.joshgm3z.triplerocktv.core.repository.retrofit.XtreamService
 import com.joshgm3z.triplerocktv.core.repository.room.AppDatabase
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import kotlinx.coroutines.delay
@@ -19,6 +21,7 @@ class LoginRepositoryImpl @Inject constructor(
     private val appDatabase: AppDatabase,
     private val firestoreHelper: FirestoreHelper,
     private val firebaseLogger: FirebaseLogger,
+    private val playlistRepository: PlaylistRepositoryImpl,
 ) : LoginRepository {
     override suspend fun tryLogin(
         webUrl: String,
@@ -56,6 +59,14 @@ class LoginRepositoryImpl @Inject constructor(
                         password,
                         sessionId
                     )
+                    playlistRepository.addPlaylist(
+                        Playlist(
+                            playlistName = webUrl.getName(),
+                            url = webUrl,
+                            type = PlaylistType.Xtream,
+                            added = System.currentTimeMillis(),
+                        )
+                    )
                     delay(1000)
                     onSuccess()
                 } else {
@@ -68,14 +79,6 @@ class LoginRepositoryImpl @Inject constructor(
             delay(1000)
             onError("Connection failed: ${e.localizedMessage ?: "Unknown error"}")
         }
-    }
-
-    override suspend fun verifyM3u8Url(
-        webUrl: String,
-        onSuccess: () -> Unit,
-        onError: (String) -> Unit
-    ) {
-
     }
 
     override suspend fun validLogin(
@@ -140,4 +143,12 @@ class LoginRepositoryImpl @Inject constructor(
 
         delay(1000)
     }
+}
+
+fun String.getName(): String {
+    return this.removePrefix("http://")
+        .removePrefix("https://")
+        .removePrefix("www.")
+        .substringBefore(":")
+        .substringBefore("/")
 }

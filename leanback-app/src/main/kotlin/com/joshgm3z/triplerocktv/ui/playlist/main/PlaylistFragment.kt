@@ -2,32 +2,28 @@ package com.joshgm3z.triplerocktv.ui.playlist.main
 
 import android.os.Bundle
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.leanback.app.BrowseSupportFragment
 import androidx.leanback.widget.ArrayObjectAdapter
 import androidx.leanback.widget.FocusHighlight
 import androidx.leanback.widget.ListRow
 import androidx.leanback.widget.ListRowPresenter
 import androidx.leanback.widget.OnItemViewClickedListener
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.joshgm3z.triplerocktv.R
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.ui.home.SettingItem
 import com.joshgm3z.triplerocktv.ui.home.SettingsItemPresenter
 import dagger.hilt.android.AndroidEntryPoint
-
-data class M3u8Playlist(
-    val url: String,
-    val addedMs: Long,
-)
-
-data class XtreamCode(
-    val url: String,
-    val username: String,
-    val password: String,
-    val addedMs: Long,
-)
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class PlaylistFragment : BrowseSupportFragment() {
+
+    private val viewModel by viewModels<PlaylistViewModel>()
 
     private val playlistAdapter = ArrayObjectAdapter(PlaylistPresenter())
 
@@ -63,8 +59,11 @@ class PlaylistFragment : BrowseSupportFragment() {
         onItemViewClickedListener =
             OnItemViewClickedListener { _, item, _, _ ->
                 when (item) {
-                    is XtreamCode -> PlaylistFragmentDirections.toSplash()
-                    is M3u8Playlist -> PlaylistFragmentDirections.toM3u8Fragment(item.url)
+                    is Playlist -> when (item.type) {
+                        PlaylistType.Xtream -> PlaylistFragmentDirections.toSplash()
+                        else -> PlaylistFragmentDirections.toM3u8Fragment(item.url)
+                    }
+
                     is SettingItem -> PlaylistFragmentDirections.toChoosePlaylistDialog()
                     else -> return@OnItemViewClickedListener
                 }.let {
@@ -75,20 +74,10 @@ class PlaylistFragment : BrowseSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val list = listOf(
-            M3u8Playlist(
-                "https://iptv-org.github.io/iptv/index.m3u",
-                System.currentTimeMillis()
-            ),
-            /*M3u8Playlist(
-                "https://iptv-org.github.io/iptv/index.m3u",
-                System.currentTimeMillis()
-            ),
-            M3u8Playlist(
-                "https://iptv-org.github.io/iptv/index.m3u",
-                System.currentTimeMillis()
-            ),*/
-        )
-        playlistAdapter.setItems(list, null)
+        lifecycleScope.launch {
+            viewModel.playlistsState.collectLatest { playlists ->
+                playlistAdapter.setItems(playlists, null)
+            }
+        }
     }
 }

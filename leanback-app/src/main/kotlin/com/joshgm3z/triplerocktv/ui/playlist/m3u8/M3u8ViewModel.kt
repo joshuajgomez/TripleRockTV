@@ -4,7 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3uChannel
-import com.joshgm3z.triplerocktv.core.repository.m3u8.PlaylistRepository
+import com.joshgm3z.triplerocktv.core.repository.m3u8.M3u8PlaylistRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -14,7 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class M3u8ViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
-    playlistRepository: PlaylistRepository,
+    repository: M3u8PlaylistRepository,
 ) : ViewModel() {
     private val _channels = MutableStateFlow<List<M3uChannel>>(emptyList())
     val channels = _channels.asStateFlow()
@@ -26,8 +26,7 @@ class M3u8ViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _channels.value = playlistRepository.getChannels(playlistUrl)
+            _channels.value = repository.getChannels(playlistUrl)
         }
     }
-
 }

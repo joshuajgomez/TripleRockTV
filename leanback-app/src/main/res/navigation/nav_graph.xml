@@ -366,9 +366,9 @@
         android:name="com.joshgm3z.triplerocktv.ui.playlist.add.AddPlaylistDialog"
         android:label="AddPlaylistDialog">
         <argument
-            android:name="isXtream"
-            android:defaultValue="true"
-            app:argType="boolean" />
+            android:name="playlistType"
+            android:defaultValue="Xtream"
+            app:argType="com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType" />
     </dialog>
 
 </navigation>
