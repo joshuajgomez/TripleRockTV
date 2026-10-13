@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.Firebase
@@ -9,6 +10,7 @@ import com.joshgm3z.triplerocktv.core.repository.LoginRepository
 import com.joshgm3z.triplerocktv.core.repository.impl.LocalDatastore
 import com.joshgm3z.triplerocktv.core.repository.m3u8.M3u8PlaylistRepository
 import com.joshgm3z.triplerocktv.core.repository.retrofit.Secrets
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.orIfDebug
@@ -19,34 +21,43 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-sealed class AddPlaylistUiState {
-    class Initial(val username: String, val password: String, val webUrl: String) :
-        AddPlaylistUiState()
+sealed class AddPlaylistUiState(val buttonText: String) {
+    class Initial(
+        val username: String,
+        val password: String,
+        val webUrl: String
+    ) : AddPlaylistUiState("Sign In")
 
-    class Loading(val message: String) : AddPlaylistUiState()
-    data class Error(val message: String) : AddPlaylistUiState()
-    object LoginSuccess : AddPlaylistUiState()
+    object Loading : AddPlaylistUiState("Verifying")
+    class Error(val message: String) : AddPlaylistUiState("Sign in")
+    object LoginSuccess : AddPlaylistUiState("Verified")
 }
 
 @HiltViewModel
 class AddPlaylistViewModel
 @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: LoginRepository,
     private val m3u8PlaylistRepository: M3u8PlaylistRepository,
-    private val localDatastore: LocalDatastore,
     private val firebaseLogger: FirebaseLogger,
 ) : ViewModel() {
+
+    private val playlistType = savedStateHandle.get<PlaylistType>("playlistType")
+        ?: throw IllegalArgumentException("playlistType is required")
+
     private val _uiState =
-        MutableStateFlow<AddPlaylistUiState>(AddPlaylistUiState.Loading("Sign in"))
+        MutableStateFlow<AddPlaylistUiState>(AddPlaylistUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val userInfo = localDatastore.getUserInfo()
+            val defaultUrl = if (playlistType == PlaylistType.Xtream) Secrets.xtreamUrl
+            else Secrets.m3u8Url
+
             _uiState.value = AddPlaylistUiState.Initial(
-                username = userInfo?.username ?: "".orIfDebug(Secrets.username),
-                password = userInfo?.password ?: "".orIfDebug(Secrets.password),
-                webUrl = userInfo?.webUrl ?: "http://".orIfDebug(Secrets.webUrl)
+                username = "".orIfDebug(Secrets.username),
+                password = "".orIfDebug(Secrets.password),
+                webUrl = "http://".orIfDebug(defaultUrl)
             )
         }
     }
@@ -57,7 +68,7 @@ class AddPlaylistViewModel
         password: String
     ) {
         Logger.entry()
-        _uiState.value = AddPlaylistUiState.Loading("Signing in")
+        _uiState.value = AddPlaylistUiState.Loading
         viewModelScope.launch {
             repository.tryLogin(
                 webUrl = webUrl,
@@ -81,7 +92,7 @@ class AddPlaylistViewModel
 
     fun verifyM3u8Url(webUrl: String) {
         Logger.entry()
-        _uiState.value = AddPlaylistUiState.Loading("Verifying")
+        _uiState.value = AddPlaylistUiState.Loading
         viewModelScope.launch {
             delay(1000)
             val valid = m3u8PlaylistRepository.isUrlValid(webUrl)

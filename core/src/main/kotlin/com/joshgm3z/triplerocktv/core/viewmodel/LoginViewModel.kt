@@ -48,7 +48,7 @@ class LoginViewModel
             _uiState.value = LoginUiState.Initial(
                 username = userInfo?.username ?: "".orIfDebug(Secrets.username),
                 password = userInfo?.password ?: "".orIfDebug(Secrets.password),
-                webUrl = userInfo?.webUrl ?: "http://".orIfDebug(Secrets.webUrl)
+                webUrl = userInfo?.webUrl ?: "http://".orIfDebug(Secrets.xtreamUrl)
             )
         }
     }

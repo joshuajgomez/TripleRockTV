@@ -2,7 +2,9 @@ package com.joshgm3z.triplerocktv.ui.playlist.main
 
 import android.view.LayoutInflater
 import androidx.leanback.widget.Presenter
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
+import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.util.relativeTime
 import com.joshgm3z.triplerocktv.core.util.toTextTime
 import com.joshgm3z.triplerocktv.databinding.ViewPlaylistCardBinding
@@ -22,6 +24,12 @@ class PlaylistPresenter : Presenter() {
         val playlist = item as Playlist
         binding.tvTitle.text = playlist.playlistName
         binding.tvSubtitle.text = playlist.added.relativeTime()
+
+        binding.tvTypeChip.text = playlist.type.name
+        binding.tvTypeChip.setBackgroundResource(
+            if (playlist.type == PlaylistType.Xtream) R.drawable.xtream_chip
+            else R.drawable.m3u8_chip
+        )
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {

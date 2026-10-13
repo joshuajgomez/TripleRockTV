@@ -14,6 +14,7 @@ import com.joshgm3z.triplerocktv.core.viewmodel.AddPlaylistViewModel
 import com.joshgm3z.triplerocktv.databinding.LayoutAddPlaylistDialogBinding
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -49,6 +50,7 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
 
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
+                binding.bvSignIn.text = it.buttonText
                 when (it) {
                     is AddPlaylistUiState.Initial -> showInitialData(it)
                     is AddPlaylistUiState.Loading -> showLoading(it)
@@ -73,19 +75,19 @@ class AddPlaylistDialog : DialogFragment(R.layout.layout_add_playlist_dialog) {
     private fun showError(message: String) {
         binding.bvSignIn.isEnabled = true
         binding.tvStatus.text = message
-        binding.bvSignIn.text = "Sign in"
         binding.tvStatus.setVisible(true)
     }
 
     private fun showSuccess() {
-        binding.bvSignIn.text = "Signed in"
-        findNavController().popBackStack()
+        lifecycleScope.launch {
+            delay(1000)
+            findNavController().popBackStack()
+        }
     }
 
     private fun showLoading(uiState: AddPlaylistUiState.Loading) {
         binding.bvSignIn.isEnabled = false
         binding.tvStatus.setVisible(false)
-        binding.bvSignIn.text = uiState.message
     }
 
     private fun showInitialData(uiState: AddPlaylistUiState.Initial) {

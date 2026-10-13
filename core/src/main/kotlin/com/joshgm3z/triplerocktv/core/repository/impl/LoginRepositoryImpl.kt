@@ -9,7 +9,9 @@ import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
 import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.withContext
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Inject
@@ -59,14 +61,16 @@ class LoginRepositoryImpl @Inject constructor(
                         password,
                         sessionId
                     )
-                    playlistRepository.addPlaylist(
-                        Playlist(
-                            playlistName = webUrl.getName(),
-                            url = webUrl,
-                            type = PlaylistType.Xtream,
-                            added = System.currentTimeMillis(),
+                    withContext(Dispatchers.IO) {
+                        playlistRepository.addPlaylist(
+                            Playlist(
+                                playlistName = webUrl.getName(),
+                                url = webUrl,
+                                type = PlaylistType.Xtream,
+                                added = System.currentTimeMillis(),
+                            )
                         )
-                    )
+                    }
                     delay(1000)
                     onSuccess()
                 } else {
