@@ -23,9 +23,9 @@ class PlaylistPresenter : Presenter() {
         val binding = ViewPlaylistCardBinding.bind(viewHolder.view)
         val playlist = item as Playlist
         binding.tvTitle.text = playlist.playlistName
-        binding.tvSubtitle.text = playlist.added.relativeTime()
+        binding.tvSubtitle.text = "added ${playlist.added.relativeTime()}"
 
-        binding.tvTypeChip.text = playlist.type.name
+        binding.tvTypeChip.text = playlist.type.name.uppercase()
         binding.tvTypeChip.setBackgroundResource(
             if (playlist.type == PlaylistType.Xtream) R.drawable.xtream_chip
             else R.drawable.m3u8_chip

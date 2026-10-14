@@ -73,7 +73,7 @@ private fun LoginScreenContent(
     loading: Boolean = false,
     status: String? = null,
 ) {
-    var serverUrl by remember { mutableStateOf("https://".orIfDebug(Secrets.webUrl)) }
+    var serverUrl by remember { mutableStateOf("https://".orIfDebug(Secrets.xtreamUrl)) }
     var username by remember { mutableStateOf("".orIfDebug(Secrets.username)) }
     var password by remember { mutableStateOf("".orIfDebug(Secrets.password)) }
     Column(

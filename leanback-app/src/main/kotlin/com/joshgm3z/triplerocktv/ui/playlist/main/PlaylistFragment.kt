@@ -16,6 +16,8 @@ import com.joshgm3z.triplerocktv.core.repository.room.playlist.Playlist
 import com.joshgm3z.triplerocktv.core.repository.room.playlist.PlaylistType
 import com.joshgm3z.triplerocktv.ui.home.SettingItem
 import com.joshgm3z.triplerocktv.ui.home.SettingsItemPresenter
+import com.joshgm3z.triplerocktv.util.getBackgroundColor
+import com.joshgm3z.triplerocktv.util.setBackground
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
@@ -38,6 +40,8 @@ class PlaylistFragment : BrowseSupportFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        requireActivity().setBackground(requireContext().getBackgroundColor())
+
         headersState = HEADERS_DISABLED
         adapter = rowsAdapter
         setupRows()
