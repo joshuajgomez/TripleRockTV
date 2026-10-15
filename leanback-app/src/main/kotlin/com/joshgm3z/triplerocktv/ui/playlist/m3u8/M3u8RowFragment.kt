@@ -25,7 +25,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class M3u8RowFragment : VerticalGridSupportFragment() {
 
-    private val m3U8ViewModel: M3u8ViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val viewModel: M3u8ViewModel by hiltNavGraphViewModels(R.id.m3u8Fragment)
 
     @Inject
     lateinit var m3U8ListPresenter: M3u8ListPresenter
@@ -57,7 +57,7 @@ class M3u8RowFragment : VerticalGridSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            m3U8ViewModel.channels.collectLatest {
+            viewModel.channels.collectLatest {
                 rowsAdapter.setItems(it, diffCallback)
             }
         }
@@ -78,7 +78,7 @@ class M3u8RowFragment : VerticalGridSupportFragment() {
 
     private val selectedListener = OnItemViewSelectedListener { _, item, _, _ ->
         val m3uChannel = item as? M3uChannel
-        m3U8ViewModel.selectedChannel.value = m3uChannel
+        viewModel.selectedChannel.value = m3uChannel
     }
 
     private val clickListener = OnItemViewClickedListener { _, item, _, _ ->

@@ -25,7 +25,7 @@ import kotlin.getValue
 @AndroidEntryPoint
 class M3u8VideoFragment : VideoSupportFragment() {
 
-    private val m3U8ViewModel: M3u8ViewModel by hiltNavGraphViewModels(R.id.nav_graph)
+    private val viewModel: M3u8ViewModel by hiltNavGraphViewModels(R.id.m3u8Fragment)
 
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(requireContext()).build()
@@ -67,7 +67,7 @@ class M3u8VideoFragment : VideoSupportFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         lifecycleScope.launch {
-            m3U8ViewModel.selectedChannel.debounce(100).collectLatest {
+            viewModel.selectedChannel.debounce(100).collectLatest {
                 it?.url?.let { url ->
                     playVideo(url)
                 }
