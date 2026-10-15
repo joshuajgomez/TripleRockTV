@@ -56,6 +56,7 @@ class M3u8RowFragment : VerticalGridSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        view.requestFocus()
         lifecycleScope.launch {
             viewModel.channels.collectLatest {
                 rowsAdapter.setItems(it, diffCallback)

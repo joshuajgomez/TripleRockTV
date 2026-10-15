@@ -17,6 +17,7 @@
         android:name="com.joshgm3z.triplerocktv.ui.playlist.m3u8.M3u8VideoFragment"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:descendantFocusability="blocksDescendants"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/playlist_fragment_container"
