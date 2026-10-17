@@ -81,11 +81,11 @@ fun PlayerScreen(
             updateLastPlayedPosition = {
                 viewModel.updateLastPlayedPosition(it)
             },
-            onError = {
+            onError = { title, message ->
                 navController.navigate(
                     NavMainDestination.Error(
-                        message = "Error playing video",
-                        summary = it
+                        message = title,
+                        summary = message
                     )
                 )
             },
@@ -111,7 +111,7 @@ private fun PlaybackScreenContent(
     videoUrl: String,
     resumePosition: Long? = null,
     updateLastPlayedPosition: (Long) -> Unit = {},
-    onError: (String) -> Unit = {},
+    onError: (String, String) -> Unit = { _, _ -> },
     onCaptionsClicked: () -> Unit = {},
     onBackPress: () -> Unit = {},
     updateSelectedSubtitle: (language: String, title: String, url: String?) -> Unit = { _, _, _ -> },

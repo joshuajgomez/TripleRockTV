@@ -60,9 +60,9 @@ class PlayerManager(
 ) : DefaultLifecycleObserver {
 
     private var player: ExoPlayer = ExoPlayer.Builder(context).build().apply {
-        addListener(errorListener {
-            firestoreLogger.log(mapOf("playback_error" to it))
-            navigate(PlayerFragmentDirections.toError(it))
+        addListener(errorListener { title, message ->
+            firestoreLogger.log(mapOf("playback_error" to title))
+            navigate(PlayerFragmentDirections.toError(title, message))
         })
         addListener(playbackListener())
         addListener(trackSelectorViewModel.subtitleTrackListener)

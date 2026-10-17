@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorBackground"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/rounded_error_24" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:maxEms="20"
+        android:textAlignment="center"
+        android:textColor="?attr/colorForegroundMid"
+        android:textFontWeight="500"
+        android:textSize="20sp"
+        tools:text="Cannot play this video" />
+
+    <TextView
+        android:id="@+id/tv_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:maxEms="20"
+        android:textAlignment="center"
+        android:textColor="?attr/colorForegroundLow"
+        tools:text="Error code 3000" />
+
+    <com.joshgm3z.triplerocktv.ui.common.ButtonView
+        android:id="@+id/bv_dismiss"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Dismiss" />
+</LinearLayout>
