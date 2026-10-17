@@ -27,19 +27,16 @@ fun errorListener(
             PlaybackException.ERROR_CODE_IO_BAD_HTTP_STATUS ->
                 "Could not reach the video stream"
 
-            PlaybackException.ERROR_CODE_PARSING_CONTAINER_UNSUPPORTED ->
-                "Video format not supported by app"
-
             PlaybackException.ERROR_CODE_BEHIND_LIVE_WINDOW -> {
                 seekToDefaultPosition()
                 prepare()
                 return // Try to recover for live streams
             }
 
-            else -> "Error playing video: ${error.localizedMessage}"
+            else -> error.localizedMessage
         }
 
-        val errorText = "[${error.errorCode}] $errorMessage"
+        val errorText = "${error.errorCode}: $errorMessage"
         Logger.error(errorText)
         onError(errorText)
     }
