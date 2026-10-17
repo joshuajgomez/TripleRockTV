@@ -126,7 +126,7 @@ fun SearchScreenContent(
 
             when (uiState) {
                 is SearchUiState.Initial -> {
-                    items(
+                    /*items(
                         items = uiState.hints,
                         span = { GridItemSpan(maxLineSpan) }
                     ) {
@@ -134,7 +134,7 @@ fun SearchScreenContent(
                             text = it
                             onSearchInputChange(it)
                         }
-                    }
+                    }*/
                     item(span = { GridItemSpan(maxLineSpan) }) {
                         if (uiState.initialStreams.isNotEmpty()) SectionTitle(
                             title = "Recently added",
@@ -357,13 +357,13 @@ private fun PreviewSearchScreen_Initial() {
     DarkSurface {
         SearchScreenContent(
             uiState = SearchUiState.Initial(
-                hints = listOf(
+                /*hints = listOf(
                     "Search hint 1",
                     "Search hint 2",
                     "Search hint 3",
                     "Search hint 4",
                     "Search hint 5",
-                ),
+                ),*/
                 initialStreams = sampleVodList.subList(0, 6)
             )
         )

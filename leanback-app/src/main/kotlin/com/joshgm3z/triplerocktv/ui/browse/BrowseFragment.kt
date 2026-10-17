@@ -92,8 +92,7 @@ class BrowseFragment : BrowseSupportFragment() {
                     is BrowseUiState.VideoOnDemandState -> showVoDState(it)
                     is BrowseUiState.LiveTvState -> showLiveTvState(it)
                     is BrowseUiState.SeriesStreamState -> showSeriesStreamState(it)
-                    is BrowseUiState.Error -> BrowseFragmentDirections.toError(it.message)
-                    else -> BrowseFragmentDirections.toError("Empty content")
+                    else -> return@collectLatest
                 }
             }
         }

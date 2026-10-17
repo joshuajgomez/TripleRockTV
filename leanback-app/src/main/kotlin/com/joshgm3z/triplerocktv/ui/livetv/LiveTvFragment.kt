@@ -54,8 +54,8 @@ class LiveTvFragment : Fragment() {
 
     private val player: ExoPlayer by lazy {
         ExoPlayer.Builder(requireContext()).build().apply {
-            addListener(errorListener(onError = {
-                binding.tvPlaybackError.text = it
+            addListener(errorListener(onError = { title, message ->
+                binding.tvPlaybackError.text = title
                 binding.tvPlaybackError.setVisible(true)
             }))
         }

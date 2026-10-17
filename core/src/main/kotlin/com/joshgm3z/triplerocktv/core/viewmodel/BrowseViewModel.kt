@@ -26,7 +26,6 @@ import javax.inject.Inject
 sealed class BrowseUiState {
     data class Empty(val streamType: StreamType) : BrowseUiState()
     data object Loading : BrowseUiState()
-    data class Error(val message: String) : BrowseUiState()
 
     data class VideoOnDemandState(
         val favorites: List<StreamData> = emptyList(),

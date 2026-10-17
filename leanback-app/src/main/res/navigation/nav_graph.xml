@@ -31,11 +31,6 @@
             app:popUpTo="@id/splashScreenFragment"
             app:popUpToInclusive="true" />
         <action
-            android:id="@+id/toError"
-            app:destination="@id/errorFragment"
-            app:popUpTo="@id/splashScreenFragment"
-            app:popUpToInclusive="true" />
-        <action
             android:id="@+id/toNetworkError"
             app:destination="@id/networkErrorFragment"
             app:popUpTo="@id/splashScreenFragment"
@@ -68,9 +63,6 @@
         <argument
             android:name="streamType"
             app:argType="com.joshgm3z.triplerocktv.core.repository.StreamType" />
-        <action
-            android:id="@+id/toError"
-            app:destination="@id/errorFragment" />
         <action
             android:id="@+id/toStreamCatalogue"
             app:destination="@id/streamsCatalogue" />
@@ -231,6 +223,9 @@
         android:id="@+id/errorFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.ErrorFragment"
         android:label="ErrorFragment">
+        <argument
+            android:name="title"
+            app:argType="string" />
         <argument
             android:name="message"
             app:argType="string" />

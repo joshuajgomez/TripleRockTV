@@ -24,7 +24,6 @@ sealed class DestinationState {
     object Updater : DestinationState()
     object Home : DestinationState()
     object NetworkError : DestinationState()
-    class Error(val message: String) : DestinationState()
     class AccessDisabled(val message: String) : DestinationState()
     class AppUpdateNeeded(val message: String) : DestinationState()
 }

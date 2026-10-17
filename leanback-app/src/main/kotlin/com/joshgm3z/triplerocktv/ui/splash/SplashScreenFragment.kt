@@ -69,9 +69,6 @@ class SplashScreenFragment : Fragment() {
                         .toAppUpdateInfo()
                         .apply { message = it.message }
 
-                    is DestinationState.Error -> SplashScreenFragmentDirections
-                        .toError(it.message)
-
                     is DestinationState.NetworkError -> SplashScreenFragmentDirections
                         .toNetworkError()
 

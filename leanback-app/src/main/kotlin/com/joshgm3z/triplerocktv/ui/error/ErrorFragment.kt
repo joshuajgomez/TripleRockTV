@@ -2,31 +2,31 @@ package com.joshgm3z.triplerocktv.ui.error
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.leanback.R
-import androidx.leanback.app.ErrorSupportFragment
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class ErrorFragment : ErrorSupportFragment() {
+class ErrorFragment : Fragment(R.layout.fragment_error) {
 
-    val args: ErrorFragmentArgs by navArgs()
+    private val args: ErrorFragmentArgs by navArgs()
 
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.lb_ic_sad_cloud)
-        message = args.message
-        buttonText = "Dismiss"
-
-        buttonClickListener = View.OnClickListener {
-            parentFragmentManager.popBackStack()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentErrorBinding.bind(view)
+        binding.tvTitle.text = args.title
+        binding.tvMessage.text = args.message
+        binding.bvDismiss.setOnClickListener {
+            findNavController().popBackStack()
         }
     }
 
