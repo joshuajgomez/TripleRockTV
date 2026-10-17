@@ -11,13 +11,13 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 sealed class SearchUiState {
     class Initial(
-        val hints: List<String>,
         val initialStreams: List<StreamData>
     ) : SearchUiState()
 
@@ -41,15 +41,22 @@ constructor(
 
     private var initialState: SearchUiState.Initial? = null
 
+    private val _hintsState = MutableStateFlow<List<String>>(emptyList())
+    val hintsState = _hintsState.asStateFlow()
+
     private var job: Job? = null
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             initialState = SearchUiState.Initial(
-                hints = repository.getSearchTextList(),
                 initialStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
             )
             resetUiState()
+        }
+        viewModelScope.launch {
+            repository.searchHintsFlow().collectLatest {
+                _hintsState.value = it
+            }
         }
     }
 

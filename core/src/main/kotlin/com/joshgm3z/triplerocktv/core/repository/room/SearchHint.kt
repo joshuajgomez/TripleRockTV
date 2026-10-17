@@ -7,6 +7,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.PrimaryKey
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Entity(indices = [Index(value = ["text"], unique = true)])
 data class SearchHint(
@@ -16,13 +17,13 @@ data class SearchHint(
 )
 
 @Dao
-abstract class SearchHintDao {
+interface SearchHintDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    abstract fun insert(searchHint: SearchHint)
+    fun insert(searchHint: SearchHint)
 
     @Query("SELECT * FROM SearchHint ORDER BY id DESC LIMIT :limit")
-    abstract fun getSearchHints(limit: Int = 5): List<SearchHint>
+    fun searchHintsFlow(limit: Int = 5): Flow<List<SearchHint>>
 
     @Query("DELETE FROM SearchHint")
-    abstract fun deleteAll()
+    fun deleteAll()
 }

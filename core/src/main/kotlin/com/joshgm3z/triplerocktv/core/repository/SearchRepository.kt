@@ -2,6 +2,7 @@ package com.joshgm3z.triplerocktv.core.repository
 
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import kotlinx.coroutines.flow.Flow
 
 const val SEARCH_LIMIT = 10
 
@@ -12,5 +13,5 @@ interface SearchRepository {
 
     suspend fun addSearchText(searchText: String)
 
-    suspend fun getSearchTextList(): List<String>
+    fun searchHintsFlow(): Flow<List<String>>
 }

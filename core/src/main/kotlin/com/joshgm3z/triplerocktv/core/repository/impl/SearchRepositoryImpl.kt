@@ -9,6 +9,8 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStreamsDao
 import com.joshgm3z.triplerocktv.core.util.Logger
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
@@ -34,7 +36,7 @@ class SearchRepositoryImpl @Inject constructor(
         searchHintDao.insert(SearchHint(text = searchText))
     }
 
-    override suspend fun getSearchTextList(): List<String> {
-        return searchHintDao.getSearchHints().map { it.text }
+    override fun searchHintsFlow(): Flow<List<String>> {
+        return searchHintDao.searchHintsFlow().map { it -> it.map { it.text } }
     }
 }

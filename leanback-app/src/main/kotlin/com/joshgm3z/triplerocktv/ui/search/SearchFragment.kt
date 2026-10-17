@@ -1,9 +1,7 @@
 package com.joshgm3z.triplerocktv.ui.search
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -26,7 +24,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class SearchFragment : Fragment() {
+class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private lateinit var binding: FragmentSearchBinding
 
@@ -78,25 +76,15 @@ class SearchFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentSearchBinding.inflate(inflater, container, false)
-        return binding.root
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding = FragmentSearchBinding.bind(view)
         initViews()
+
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 when (it) {
                     is SearchUiState.Initial -> {
-                        binding.rvHints.adapter = SimpleTextAdapter(it.hints) { text ->
-                            binding.keyboardView.text = text
-                        }
                         binding.tvStatus.setVisible(false)
                         binding.tvStreamsTitle.setVisible(true)
                         binding.tvStreamsTitle.text = "Recently added"
@@ -135,6 +123,14 @@ class SearchFragment : Fragment() {
         lifecycleScope.launch {
             mediaSyncViewModel.syncState.collectLatest {
                 binding.tvSyncStatus.text = it
+            }
+        }
+
+        lifecycleScope.launch {
+            viewModel.hintsState.collectLatest {
+                binding.rvHints.adapter = SimpleTextAdapter(it) { text ->
+                    binding.keyboardView.text = text
+                }
             }
         }
     }
