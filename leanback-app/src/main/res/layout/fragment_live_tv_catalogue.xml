@@ -39,20 +39,41 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_playback_error"
+    <LinearLayout
+        android:id="@+id/ll_error_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:background="?attr/colorSurfaceLow"
         android:gravity="center"
-        android:paddingHorizontal="150dp"
-        android:textColor="?attr/colorForegroundMid"
-        android:textSize="@dimen/text_size_small"
+        android:orientation="vertical"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@id/video_support_fragment"
         app:layout_constraintEnd_toEndOf="@+id/video_support_fragment"
         app:layout_constraintStart_toStartOf="@+id/video_support_fragment"
-        app:layout_constraintTop_toTopOf="@id/video_support_fragment"
-        tools:text="[3000] Video not supported on this device" />
+        app:layout_constraintTop_toTopOf="@id/video_support_fragment">
+
+        <TextView
+            android:id="@+id/tv_playback_error"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="150dp"
+            android:textAlignment="center"
+            android:textColor="?attr/colorForegroundMid"
+            android:textFontWeight="500"
+            android:textSize="@dimen/text_size_small"
+            tools:text="Video not supported on this device" />
+
+        <TextView
+            android:id="@+id/tv_playback_error_message"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="150dp"
+            android:textAlignment="center"
+            android:textColor="?attr/colorForegroundLow"
+            android:textSize="@dimen/text_size_small"
+            tools:text="Error code 3000" />
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_programs"

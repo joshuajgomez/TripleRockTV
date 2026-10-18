@@ -56,7 +56,8 @@ class LiveTvFragment : Fragment() {
         ExoPlayer.Builder(requireContext()).build().apply {
             addListener(errorListener(onError = { title, message ->
                 binding.tvPlaybackError.text = title
-                binding.tvPlaybackError.setVisible(true)
+                binding.tvPlaybackErrorMessage.text = message
+                binding.llErrorContainer.setVisible(true)
             }))
         }
     }
@@ -171,7 +172,7 @@ class LiveTvFragment : Fragment() {
                 if (it == null) return@collectLatest
 
                 it.videoToPlay?.let { videoUrl ->
-                    binding.tvPlaybackError.setVisible(false)
+                    binding.llErrorContainer.setVisible(false)
                     playVideo(videoUrl)
                 }
                 it.programs.let { programs ->

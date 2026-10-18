@@ -198,15 +198,15 @@ class PlayerManager(
         lifecycleScope.launch {
             player.apply {
                 Logger.debug("Playing video")
-                setMediaItem(mediaItemBuilder.build())
-                prepare()
-
                 val lastPos = when (val item = state.playbackItem) {
                     is Episode -> if (resume) item.recentlyPlayed?.playedDurationMs else null
                     is StreamData -> if (resume) item.recentlyPlayed?.playedDurationMs else null
                     else -> null
                 }
-                lastPos?.let { seekTo(it) }
+
+                if (lastPos != null) setMediaItem(mediaItemBuilder.build(), lastPos)
+                else setMediaItem(mediaItemBuilder.build())
+                prepare()
             }
         }
     }
