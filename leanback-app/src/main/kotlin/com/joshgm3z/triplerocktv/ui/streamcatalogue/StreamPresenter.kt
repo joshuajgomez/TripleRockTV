@@ -11,6 +11,7 @@ import com.joshgm3z.triplerocktv.databinding.ViewStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.util.isRecent
+import com.joshgm3z.triplerocktv.ui.browse.emptyItem
 import com.joshgm3z.triplerocktv.util.setVisible
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import javax.inject.Inject
@@ -37,6 +38,16 @@ class StreamPresenter
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
         val binding = ViewStreamCardBinding.bind(viewHolder.view)
+        if (item is Int && item == emptyItem) {
+            binding.streamTitle.text = "Add favorites to see it listed here"
+            val color = binding.root.context.getColor(
+                com.joshgm3z.triplerocktv.core.R.color.color_foreground_low
+            )
+            binding.streamTitle.setTextColor(color)
+            binding.ivIcon.setVisible(false)
+            binding.root.focusable = View.NOT_FOCUSABLE
+            return
+        }
 
         when (item) {
             is StreamData -> item.name

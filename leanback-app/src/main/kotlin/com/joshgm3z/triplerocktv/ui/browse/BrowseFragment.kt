@@ -179,7 +179,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.recentPlayedFlow.collectLatest {
-                recentsListRowAdapter.setItems(it, diffCallback)
+                if (it.isEmpty()) recentsListRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else recentsListRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -189,7 +190,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                listRowAdapter.setItems(it, diffCallback)
+                if (it.isEmpty()) listRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else listRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -238,7 +240,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.recentPlayedFlow.collectLatest {
-                recentsListRowAdapter.setItems(it, diffCallback)
+                if (it.isEmpty()) recentsListRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else recentsListRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -248,7 +251,8 @@ class BrowseFragment : BrowseSupportFragment() {
 
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                listRowAdapter.setItems(it, diffCallback)
+                if (it.isEmpty()) listRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else listRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -294,7 +298,8 @@ class BrowseFragment : BrowseSupportFragment() {
                     episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
                     it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
                 }
-                recentsListRowAdapter.setItems(episodes, diffCallback)
+                if (episodes.isEmpty()) recentsListRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else recentsListRowAdapter.setItems(episodes, diffCallback)
             }
         }
 
@@ -303,7 +308,8 @@ class BrowseFragment : BrowseSupportFragment() {
         rowsAdapter.add(ListRow(favHeader, favListRowAdapter))
         lifecycleScope.launch {
             uiState.favoritesFlow.collectLatest {
-                favListRowAdapter.setItems(it, diffCallback)
+                if (it.isEmpty()) favListRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                else favListRowAdapter.setItems(it, diffCallback)
             }
         }
 
@@ -372,3 +378,5 @@ class BrowseFragment : BrowseSupportFragment() {
         )
     }
 }
+
+const val emptyItem = 100

@@ -39,6 +39,19 @@ class RecentStreamPresenter
     }
 
     override fun onBindViewHolder(viewHolder: ViewHolder, item: Any?) {
+        val binding = ViewRecentStreamCardBinding.bind(viewHolder.view)
+        if (item is Int && item == emptyItem) {
+            binding.tvResume.setVisible(false)
+            binding.streamTitle.text = "Start watching to see recently played items here"
+            val color = binding.root.context.getColor(
+                com.joshgm3z.triplerocktv.core.R.color.color_foreground_low
+            )
+            binding.streamTitle.setTextColor(color)
+            binding.ivIcon.setVisible(false)
+            binding.root.focusable = View.NOT_FOCUSABLE
+            return
+        }
+
         val title = when (item) {
             is StreamData -> item.name
             is Episode -> item.title
@@ -59,7 +72,7 @@ class RecentStreamPresenter
             is Episode -> StreamType.Series
             else -> null
         }
-        ViewRecentStreamCardBinding.bind(viewHolder.view).apply {
+        binding.apply {
             streamTitle.text = title
             if (streamType == StreamType.LiveTV) glideUtil.loadImage(
                 url = imageUri,
@@ -91,7 +104,8 @@ class RecentStreamPresenter
     }
 
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
-        val imageView = viewHolder.view.findViewById<ImageView>(R.id.poster_image)
-        Glide.with(imageView.context).clear(imageView)
+        val binding = ViewRecentStreamCardBinding.bind(viewHolder.view)
+        Glide.with(binding.root.context).clear(binding.posterImage)
+        binding.progressBar.setVisible(false)
     }
 }
