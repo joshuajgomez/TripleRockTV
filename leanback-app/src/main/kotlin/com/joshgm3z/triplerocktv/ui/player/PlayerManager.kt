@@ -40,7 +40,6 @@ import com.joshgm3z.triplerocktv.core.viewmodel.TrackSelectorViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.TrackType
 import com.joshgm3z.triplerocktv.ui.home.SkipFeedbackHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
@@ -62,7 +61,10 @@ class PlayerManager(
     private var player: ExoPlayer = ExoPlayer.Builder(context).build().apply {
         addListener(errorListener { title, message ->
             firestoreLogger.log(mapOf("playback_error" to title))
-            navigate(PlayerFragmentDirections.toError(title, message))
+            val toError = PlayerFragmentDirections.toError()
+            toError.title = title
+            toError.message = message
+            navigate(toError)
         })
         addListener(playbackListener())
         addListener(trackSelectorViewModel.subtitleTrackListener)
@@ -77,8 +79,6 @@ class PlayerManager(
     }
 
     private var videoTitle: String? = null
-
-    private var viewVisibilityUpdateJob: Job? = null
 
     private val lifecycleScope: CoroutineScope = lifecycleOwner.lifecycleScope
 
