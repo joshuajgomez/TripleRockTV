@@ -18,15 +18,11 @@ class SearchRepositoryImpl @Inject constructor(
     private val streamDataDao: StreamDataDao,
     private val seriesStreamsDao: SeriesStreamsDao,
 ) : SearchRepository {
-    override suspend fun searchStreamByName(
-        name: String,
-        streamType: StreamType
-    ): List<StreamData> = when (streamType) {
-        StreamType.VideoOnDemand, StreamType.LiveTV -> streamDataDao.searchByName(name)
-        else -> emptyList()
-    }.apply {
-        Logger.info("searchStreamByName($name, $streamType): $this")
-    }
+
+    override suspend fun searchStreamByName(name: String): List<StreamData> =
+        streamDataDao.searchByName(name).apply {
+            Logger.info("searchStreamByName($name): $this")
+        }
 
     override suspend fun searchSeriesByName(name: String): List<SeriesStream> {
         return seriesStreamsDao.searchStreams(name)

@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 const val SEARCH_LIMIT = 10
 
 interface SearchRepository {
-    suspend fun searchStreamByName(name: String, streamType: StreamType): List<StreamData>
+    suspend fun searchStreamByName(name: String): List<StreamData>
 
     suspend fun searchSeriesByName(name: String): List<SeriesStream>
 

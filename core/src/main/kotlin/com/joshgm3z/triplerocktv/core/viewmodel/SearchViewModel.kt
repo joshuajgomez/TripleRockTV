@@ -76,13 +76,8 @@ constructor(
         _uiState.value = SearchUiState.Loading
 
         val job = viewModelScope.launch(Dispatchers.IO) {
-            val searchResult = repository.searchStreamByName(
-                text,
-                StreamType.VideoOnDemand
-            ) + repository.searchStreamByName(
-                text,
-                StreamType.LiveTV
-            ) + repository.searchSeriesByName(text)
+            val searchResult = repository.searchStreamByName(text) +
+                    repository.searchSeriesByName(text)
 
             _uiState.value = if (searchResult.isEmpty()) SearchUiState.NoResult
             else SearchUiState.Result(list = searchResult)
