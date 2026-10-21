@@ -8,6 +8,16 @@
     android:focusable="true"
     android:foreground="@drawable/focusable_border_fg">
 
+    <TextView
+        android:id="@+id/tv_recent_empty_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginHorizontal="20dp"
+        android:text="Start watching to see recently played items here"
+        android:textColor="?attr/colorForegroundLow"
+        android:visibility="gone" />
+
     <ImageView
         android:id="@+id/iv_icon"
         android:layout_width="50dp"
@@ -24,12 +34,13 @@
         tools:src="@drawable/avatar_movie" />
 
     <LinearLayout
+        android:id="@+id/ll_dark_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@drawable/gradient_scrim"
-        android:paddingBottom="5dp"
         android:gravity="bottom"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingBottom="5dp">
 
         <TextView
             android:id="@+id/tv_resume"

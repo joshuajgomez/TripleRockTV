@@ -42,7 +42,8 @@ class RecentStreamPresenter
         val binding = ViewRecentStreamCardBinding.bind(viewHolder.view)
         if (item is Int && item == emptyItem) {
             binding.tvResume.setVisible(false)
-            binding.streamTitle.text = "Start watching to see recently played items here"
+            binding.llDarkOverlay.setVisible(false)
+            binding.tvRecentEmptyText.setVisible(true)
             val color = binding.root.context.getColor(
                 com.joshgm3z.triplerocktv.core.R.color.color_foreground_low
             )
