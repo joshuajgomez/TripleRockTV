@@ -4,6 +4,7 @@ import android.widget.TextView
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.impl.helper.FirestoreLogger
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.secondsToTextTime
 import com.joshgm3z.triplerocktv.util.setVisible
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -22,14 +23,14 @@ class SkipFeedbackHandler(
     private val firestoreLogger: FirestoreLogger
 ) {
     private var job: Job? = null
-    private var durationCache = 0L
+    private var durationSecCache = 0L
     private var isForward = true
 
     fun accumulateSkip(diff: Long) {
         // Reset cache if direction changes
         val currentIsForward = diff > 0
         if (isForward != currentIsForward) {
-            durationCache = 0
+            durationSecCache = 0
         }
         isForward = currentIsForward
 
@@ -47,20 +48,26 @@ class SkipFeedbackHandler(
         }
 
         job?.cancel()
-        durationCache += roundedSec
+        durationSecCache += roundedSec
 
         job = scope.launch {
-            showText(durationCache)
+            showText(durationSecCache)
             delay(VIEW_TIMEOUT)
-            durationCache = 0
+            durationSecCache = 0
             clearText()
         }
     }
 
     private fun showText(duration: Long) {
         val context = tvSkipForward.context
-        tvSkipForward.text = context.getString(R.string.skip_forward_text, duration)
-        tvSkipBack.text = context.getString(R.string.skip_back_text, duration)
+        tvSkipForward.text = context.getString(
+            R.string.skip_forward_text,
+            duration.secondsToTextTime()
+        )
+        tvSkipBack.text = context.getString(
+            R.string.skip_back_text,
+            duration.secondsToTextTime()
+        )
 
         tvSkipForward.setVisible(isForward)
         tvSkipBack.setVisible(!isForward)

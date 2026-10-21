@@ -40,6 +40,18 @@ fun Long.toTextTime(): String {
     }.trim()
 }
 
+fun Long.secondsToTextTime(): String {
+    val totalSeconds = this
+    val hours = totalSeconds / 3600
+    val minutes = (totalSeconds % 3600) / 60
+    val seconds = totalSeconds % 60
+    return buildString {
+        if (hours > 0) append("${hours}h ")
+        if (minutes > 0 || hours > 0) append("${minutes}m ")
+        if (seconds > 0 || minutes > 0 || hours > 0) append("${seconds}s")
+    }.trim()
+}
+
 fun String?.ifNullOrEmpty(defaultValue: String?) =
     if (isNullOrEmpty()) defaultValue else this
 
