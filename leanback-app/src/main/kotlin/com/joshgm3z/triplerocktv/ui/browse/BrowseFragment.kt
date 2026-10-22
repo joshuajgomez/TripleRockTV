@@ -112,6 +112,7 @@ class BrowseFragment : BrowseSupportFragment() {
     }
 
     private fun setupEventListeners() {
+        recentStreamPresenter.longPressListener = ::showPopupMenu
         setOnSearchClickedListener {
             findNavController().navigate(BrowseFragmentDirections.toSearch())
         }
@@ -167,7 +168,6 @@ class BrowseFragment : BrowseSupportFragment() {
                 else -> return@OnItemViewClickedListener
             }.let { findNavController().navigate(it) }
         }
-        recentStreamPresenter.longPressListener = ::showPopupMenu
     }
 
     private fun showVoDState(uiState: BrowseUiState.VideoOnDemandState) {
@@ -353,8 +353,6 @@ class BrowseFragment : BrowseSupportFragment() {
 
         val removeFromRecents = "Remove from recently played"
         popup.menu.add(removeFromRecents)
-        val dismiss = "Dismiss"
-        popup.menu.add(dismiss)
 
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.title) {
@@ -363,7 +361,6 @@ class BrowseFragment : BrowseSupportFragment() {
                     true
                 }
 
-                dismiss -> true
                 else -> false
             }
         }

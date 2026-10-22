@@ -93,8 +93,8 @@ class RecentStreamPresenter
                         root
                     )
 
-                    is SeriesStream -> longPressListener?.invoke(
-                        item.seriesId,
+                    is Episode -> longPressListener?.invoke(
+                        item.id,
                         StreamType.Series,
                         root
                     )
