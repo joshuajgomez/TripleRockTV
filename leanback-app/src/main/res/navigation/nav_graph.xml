@@ -231,6 +231,15 @@
             android:name="message"
             android:defaultValue="Error code 2000"
             app:argType="string" />
+        <argument
+            android:name="goToSplashOnDismiss"
+            android:defaultValue="false"
+            app:argType="boolean" />
+        <action
+            android:id="@+id/toSplash"
+            app:destination="@id/splashScreenFragment"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 
     <fragment

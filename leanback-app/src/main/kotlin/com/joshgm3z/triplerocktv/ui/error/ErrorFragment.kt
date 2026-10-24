@@ -25,9 +25,14 @@ class ErrorFragment : Fragment(R.layout.fragment_error) {
         val binding = FragmentErrorBinding.bind(view)
         binding.tvTitle.text = args.title
         binding.tvMessage.text = args.message
-        binding.bvDismiss.requestFocus()
+
         binding.bvDismiss.setOnClickListener {
-            findNavController().popBackStack()
+            if (!args.goToSplashOnDismiss) findNavController().popBackStack()
+            else findNavController().navigate(ErrorFragmentDirections.toSplash())
+        }
+
+        binding.bvDismiss.post {
+            binding.bvDismiss.requestFocus()
         }
     }
 
