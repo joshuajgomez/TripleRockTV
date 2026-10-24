@@ -1,6 +1,7 @@
 <resources>
 
     <style name="Theme.TripleRockTV.Leanback" parent="Theme.Leanback">
+        <item name="android:colorControlActivated">@color/color_foreground_primary</item>
         <item name="playbackProgressPrimaryColor">@color/color_foreground_primary</item>
         <item name="android:itemBackground">@color/color_surface_low</item>
         <item name="android:textColor">@color/color_foreground_high</item>
