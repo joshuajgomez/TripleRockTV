@@ -317,7 +317,7 @@
             app:argType="integer" />
         <argument
             android:name="selectedStreamId"
-            android:defaultValue="166605"
+            android:defaultValue="-1"
             app:argType="integer" />
         <action
             android:id="@+id/toPlayback"

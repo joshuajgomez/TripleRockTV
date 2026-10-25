@@ -125,7 +125,7 @@ class BrowseFragment : BrowseSupportFragment() {
             }
         }
 
-        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, row ->
+        onItemViewClickedListener = OnItemViewClickedListener { _, item, _, _ ->
             // Handle item click if needed
             when (item) {
 
