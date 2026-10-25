@@ -254,23 +254,6 @@
     </fragment>
 
     <dialog
-        android:id="@+id/loadingErrorFragment"
-        android:name="com.joshgm3z.triplerocktv.ui.error.LoadingErrorDialog"
-        android:label="LoadingErrorFragment">
-        <argument
-            android:name="title"
-            app:argType="string" />
-        <argument
-            android:name="summary"
-            app:argType="string" />
-        <action
-            android:id="@+id/toSplash"
-            app:destination="@id/splashScreenFragment"
-            app:popUpTo="@id/nav_graph"
-            app:popUpToInclusive="true" />
-    </dialog>
-
-    <dialog
         android:id="@+id/accessDisabledFragment"
         android:name="com.joshgm3z.triplerocktv.ui.error.AccessDisabledFragment"
         android:label="AccessDisabledFragment">

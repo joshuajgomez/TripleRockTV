@@ -2,35 +2,43 @@ package com.joshgm3z.triplerocktv.ui.error
 
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
-import androidx.leanback.R
-import androidx.leanback.app.ErrorSupportFragment
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.util.FirebaseLogger
 import com.joshgm3z.triplerocktv.core.util.ScreenName
+import com.joshgm3z.triplerocktv.databinding.FragmentErrorBinding
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class NetworkErrorFragment : ErrorSupportFragment() {
+class NetworkErrorFragment : Fragment(R.layout.fragment_error) {
 
     @Inject
     lateinit var firebaseLogger: FirebaseLogger
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        imageDrawable = ContextCompat.getDrawable(requireContext(), R.drawable.lb_ic_sad_cloud)
-        message = "Internet not connected. Please check you internet and try again"
-        buttonText = "Try again"
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentErrorBinding.bind(view)
 
-        buttonClickListener = View.OnClickListener {
+        binding.tvTitle.text = "Internet not connected"
+        binding.tvMessage.text = "Please check your connection and try again"
+        binding.bvDismiss.text = "Try again"
+
+        binding.bvDismiss.setOnClickListener {
             findNavController().navigate(NetworkErrorFragmentDirections.toSplash())
+        }
+
+        binding.bvDismiss.post {
+            binding.bvDismiss.requestFocus()
         }
     }
 
     override fun onResume() {
         super.onResume()
-        firebaseLogger.logScreenView(ScreenName.Error, mapOf("error_message" to "internet not connected"))
+        firebaseLogger.logScreenView(
+            ScreenName.Error,
+            mapOf("error_message" to "internet not connected")
+        )
     }
 }
