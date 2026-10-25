@@ -26,7 +26,7 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
         Favorite::class,
         RecentlyPlayed::class,
     ],
-    version = 32
+    version = 34
 )
 @TypeConverters(SeasonConverter::class)
 abstract class AppDatabase : RoomDatabase() {

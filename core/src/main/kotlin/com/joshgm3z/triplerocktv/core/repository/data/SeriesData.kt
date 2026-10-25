@@ -87,9 +87,9 @@ data class Episode(
     }
 
     fun timeRemaining(): Long = when {
-        recentlyPlayed == null -> 0
+        recentlyPlayed?.playedDurationMs == null -> 0
         totalDurationMs() == 0L -> 0L
-        else -> (totalDurationMs() - recentlyPlayed!!.playedDurationMs)
+        else -> (totalDurationMs() - recentlyPlayed!!.playedDurationMs!!)
     }
 
     fun timeRemainingText(): String = when {

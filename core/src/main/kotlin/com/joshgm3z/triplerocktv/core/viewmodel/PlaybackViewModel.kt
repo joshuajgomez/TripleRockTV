@@ -117,7 +117,7 @@ class PlaybackViewModel @Inject constructor(
     fun updateSelectedSubtitle(language: String, title: String, url: String?) {
         Logger.debug("url = [${url}], language = [${language}]")
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateSelectedSubtitle(streamId, language, title, url)
+            recentsRepository.updateSelectedSubtitle(streamId, language, title, url)
         }
     }
 

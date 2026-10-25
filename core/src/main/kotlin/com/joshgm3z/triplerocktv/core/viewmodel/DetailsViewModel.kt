@@ -98,7 +98,7 @@ class DetailsViewModel @Inject constructor(
                         progressPercent = it.progressPercent(),
                         favorite = it.favorite,
                         coverImage = it.movieMetadata.backPosterUrl.ifNullOrEmpty(it.streamIcon),
-                        subtitleDownloaded = !it.subtitleUrl.isNullOrEmpty()
+                        subtitleDownloaded = !it.recentlyPlayed?.subtitleUrl.isNullOrEmpty()
                     )
                 }
             }

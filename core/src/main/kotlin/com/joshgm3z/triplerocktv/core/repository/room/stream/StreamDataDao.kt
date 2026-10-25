@@ -108,10 +108,4 @@ interface StreamDataDao {
     @Query("SELECT * FROM stream_data  WHERE streamType = :streamType ORDER BY added DESC LIMIT :limit")
     suspend fun getNewlyAddedOfType(streamType: StreamType, limit: Int = 10): List<StreamData>
 
-    @Query("UPDATE stream_data SET subtitleUrl = :url WHERE streamId = :streamId")
-    suspend fun updateSubtitleUrl(streamId: Int, url: String)
-
-    @Query("UPDATE stream_data SET subtitleLanguage = :language, subtitleTitle = :title WHERE streamId = :streamId")
-    suspend fun updateSubtitleLanguage(streamId: Int, language: String, title: String)
-
 }

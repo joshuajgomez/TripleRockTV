@@ -19,4 +19,7 @@ interface RecentsRepository {
     )
 
     suspend fun removeRecentlyPlayed(streamId: Int, streamType: StreamType)
+
+    suspend fun updateSelectedSubtitle(streamId: Int, language: String, title: String, url: String?)
+
 }

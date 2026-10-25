@@ -28,9 +28,6 @@ data class StreamData(
     val epgChannelId: String? = null,
 
     val streamType: StreamType,
-    val subtitleUrl: String? = null,
-    val subtitleTitle: String? = null,
-    val subtitleLanguage: String? = null,
 
     @Embedded
     val movieMetadata: MovieMetadata? = null
@@ -71,7 +68,7 @@ data class StreamData(
     override fun toString(): String {
         return "\nStreamData(streamId=$streamId, num=$num, name='$name', streamTypeText='$streamTypeText', streamIcon=$streamIcon, " +
                 "\n\t\tcategoryId=$categoryId, added='$added', rating=$rating, extension='$extension', epgChannelId=$epgChannelId, " +
-                "\n\t\tstreamType=$streamType, subtitleUrl=$subtitleUrl, subtitleTitle=$subtitleTitle, subtitleLanguage=$subtitleLanguage, " +
+                "\n\t\tstreamType=$streamType" +
                 "\n\tmovieMetadata=$movieMetadata," +
                 "\n\trecentlyPlayed=$recentlyPlayed," +
                 "\n\tfavorite=$favorite, progressPercent()=${progressPercent()}"

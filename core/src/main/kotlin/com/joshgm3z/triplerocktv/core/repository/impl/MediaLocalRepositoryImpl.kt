@@ -235,18 +235,6 @@ class MediaLocalRepositoryImpl @Inject constructor(
         false
     }
 
-    override suspend fun updateSelectedSubtitle(
-        streamId: Int,
-        language: String,
-        title: String,
-        url: String?
-    ) {
-        streamDataDao.updateSubtitleLanguage(streamId, language, title)
-        url?.let {
-            streamDataDao.updateSubtitleUrl(streamId, it)
-        }
-    }
-
     override suspend fun getStreamsCountOfCategory(categoryId: Int, streamType: StreamType): Int {
         return when (streamType) {
             StreamType.Series -> seriesStreamsDao.getCount(categoryId)

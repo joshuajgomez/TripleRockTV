@@ -178,17 +178,19 @@ class PlayerManager(
 
         if (state.playbackItem is StreamData) {
             val stream = state.playbackItem as StreamData
-            stream.subtitleLanguage?.takeIf { it.isNotEmpty() }?.let { lang ->
+            stream.recentlyPlayed?.subtitleLanguage?.takeIf { it.isNotEmpty() }?.let { lang ->
                 player.trackSelectionParameters = player
                     .trackSelectionParameters
                     .buildUpon()
                     .setPreferredTextLanguage(lang)
                     .build()
             }
-            stream.subtitleUrl?.takeIf { it.isNotEmpty() }?.let { url ->
+            stream.recentlyPlayed?.subtitleUrl?.takeIf { it.isNotEmpty() }?.let { url ->
                 val subConfig = MediaItem.SubtitleConfiguration.Builder(url.toUri())
                     .setMimeType("application/x-subrip")
-                    .setLanguage(stream.subtitleLanguage)
+                    .setLanguage(stream.recentlyPlayed?.subtitleLanguage)
+                    .setId("online")
+                    .setLabel(stream.recentlyPlayed?.subtitleTitle)
                     .setSelectionFlags(SELECTION_FLAG_DEFAULT)
                     .build()
                 mediaItemBuilder.setSubtitleConfigurations(listOf(subConfig))

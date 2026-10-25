@@ -88,20 +88,42 @@ class RecentsRepositoryImpl
         streamType: StreamType,
         seriesId: Int?,
         timeStamp: Long
-    ) = recentlyPlayedDao.insert(
-        RecentlyPlayed(
-            id = streamId,
-            seriesId = seriesId,
-            playedDurationMs = positionMs,
-            streamType = streamType,
-            added = timeStamp,
+    ) {
+        val recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId)
+            ?: RecentlyPlayed(id = streamId)
+
+        recentlyPlayedDao.insert(
+            recentlyPlayed.copy(
+                seriesId = seriesId,
+                playedDurationMs = positionMs,
+                streamType = streamType,
+                added = timeStamp,
+            )
         )
-    )
+    }
 
     override suspend fun removeRecentlyPlayed(
         streamId: Int,
         streamType: StreamType
     ) {
         recentlyPlayedDao.delete(streamId, streamType)
+    }
+
+    override suspend fun updateSelectedSubtitle(
+        streamId: Int,
+        language: String,
+        title: String,
+        url: String?
+    ) {
+        val recentlyPlayed = recentlyPlayedDao.getRecentlyPlayedById(streamId)
+            ?: RecentlyPlayed(id = streamId)
+
+        recentlyPlayedDao.insert(
+            recentlyPlayed.copy(
+                subtitleLanguage = language,
+                subtitleTitle = title,
+                subtitleUrl = url
+            )
+        )
     }
 }

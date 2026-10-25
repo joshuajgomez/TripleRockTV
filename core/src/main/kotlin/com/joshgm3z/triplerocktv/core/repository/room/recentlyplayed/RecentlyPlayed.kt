@@ -11,16 +11,23 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.MIN_PLAYBACK_DURATI
 import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "recent_played")
-class RecentlyPlayed(
+data class RecentlyPlayed(
     @PrimaryKey
     val id: Int,
     val seriesId: Int? = null,
-    val streamType: StreamType,
-    val added: Long,
-    val playedDurationMs: Long,
+    val streamType: StreamType? = null,
+    val added: Long? = null,
+    val playedDurationMs: Long? = null,
+    var subtitleUrl: String? = null,
+    var subtitleLanguage: String? = null,
+    var subtitleTitle: String? = null,
 ) {
     override fun toString(): String {
-        return "RecentlyPlayed(id=$id, streamType=$streamType, added=$added, seriesId=$seriesId, playedDurationMs=$playedDurationMs)"
+        return "\nRecentlyPlayed(" +
+                "\nid=$id, seriesId=$seriesId, streamType=$streamType, added=$added, " +
+                "\nplayedDurationMs=$playedDurationMs, " +
+                "\nsubtitleTitle=$subtitleTitle, subtitleLanguage=$subtitleLanguage, " +
+                "\nsubtitleUrl=$subtitleUrl)"
     }
 }
 
@@ -73,4 +80,12 @@ interface RecentlyPlayedDao {
         minPlaybackDuration: Long = MIN_PLAYBACK_DURATION,
         count: Int = 5
     ): List<RecentlyPlayed>
+
+
+    @Query("UPDATE recent_played SET subtitleUrl = :url WHERE id = :streamId")
+    suspend fun setSubtitleUrl(streamId: Int, url: String)
+
+    @Query("UPDATE recent_played SET subtitleLanguage = :language, subtitleTitle = :title WHERE id = :streamId")
+    suspend fun setSubtitleLanguage(streamId: Int, language: String, title: String)
+
 }
