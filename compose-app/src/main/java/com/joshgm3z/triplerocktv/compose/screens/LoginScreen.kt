@@ -56,7 +56,7 @@ fun LoginScreen(
             }
         )
         LaunchedEffect(uiState == LoginUiState.LoginSuccess) {
-            if (uiState == LoginUiState.Loading) {
+            if (uiState == LoginUiState.LoginSuccess) {
                 onLoginSuccess()
             }
         }

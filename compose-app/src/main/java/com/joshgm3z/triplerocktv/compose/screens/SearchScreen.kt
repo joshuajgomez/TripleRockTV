@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -30,6 +31,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -42,9 +44,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.browse.headerGradientBrush
 import com.joshgm3z.triplerocktv.compose.screens.browse.uistate.SectionTitle
@@ -66,18 +71,29 @@ import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.sampleLiveTvList
 import com.joshgm3z.triplerocktv.core.util.sampleSeriesList
 import com.joshgm3z.triplerocktv.core.util.sampleVodList
+import com.joshgm3z.triplerocktv.core.viewmodel.MediaSyncViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 
 @Composable
 fun SearchScreen(
     viewModel: SearchViewModel = hiltViewModel(),
+    mediaSyncViewModel: MediaSyncViewModel = hiltViewModel(),
     navigate: (NavMainDestination) -> Unit = {},
     onBackClick: () -> Unit
 ) {
     val focusRequester = remember { FocusRequester() }
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
+    }
+    val context = LocalContext.current
+    DisposableEffect(Unit) {
+        mediaSyncViewModel.bindService(context)
+        onDispose {
+            mediaSyncViewModel.unbindService(context)
+        }
     }
     val uiState by viewModel.uiState.collectAsState()
     SearchScreenContent(
@@ -87,6 +103,7 @@ fun SearchScreen(
             viewModel.saveSearchHint(streamName)
             navigate(NavMainDestination.Details(streamId, streamType))
         },
+        syncStateFlow = mediaSyncViewModel.syncState,
         onBackClick = onBackClick
     )
 }
@@ -100,7 +117,8 @@ fun SearchScreenContent(
         streamName: String,
         streamType: StreamType
     ) -> Unit = { _, _, _ -> },
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    syncStateFlow: StateFlow<String> = MutableStateFlow("")
 ) {
     val scrollState = rememberLazyGridState()
     val isScrolled by remember {
@@ -122,7 +140,7 @@ fun SearchScreenContent(
                 .fillMaxSize()
                 .padding(horizontal = appHorizontalPadding)
         ) {
-            gridSpacing(appTopPadding + 70.dp)
+            gridSpacing(appTopPadding + 75.dp)
 
             when (uiState) {
                 is SearchUiState.Initial -> {
@@ -216,6 +234,7 @@ fun SearchScreenContent(
                 text = it
                 onSearchInputChange(it)
             },
+            syncStateFlow = syncStateFlow,
             onBackClick = onBackClick
         )
     }
@@ -265,59 +284,73 @@ fun TopPart(
     showBackground: Boolean = true,
     onSearchInputChange: (String) -> Unit = {},
     onBackClick: () -> Unit = {},
+    syncStateFlow: StateFlow<String>,
 ) {
     val modifier = if (!showBackground) Modifier
     else Modifier.background(brush = headerGradientBrush())
-    Row(
+    Column(
         modifier = modifier.padding(
             start = 10.dp, end = 10.dp,
             top = appTopPadding(), bottom = 10.dp
         ),
-        verticalAlignment = Alignment.CenterVertically
     ) {
         Row(
-            modifier = Modifier
-                .clip(RoundedCornerShape(30.dp))
-                .background(color = cardColor())
-                .fillMaxWidth()
-                .weight(1f),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CloseButton { onBackClick() }
-            TextField(
-                value = text,
-                onValueChange = {
-                    onSearchInputChange(it)
-                },
-                placeholder = {
-                    Text(
-                        text = "Search anything",
-                        color = subTextColor()
-                    )
-                },
-                colors = TextFieldDefaults.colors().copy(
-                    unfocusedContainerColor = Color.Transparent,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    unfocusedTextColor = textColor(),
-                    focusedTextColor = textColor(),
-                ),
+            Row(
                 modifier = Modifier
+                    .clip(RoundedCornerShape(30.dp))
+                    .background(color = cardColor())
                     .fillMaxWidth()
-                    .weight(1f)
-            )
-            IconButton(
-                onClick = { onSearchInputChange("") },
-                modifier = Modifier.clip(CircleShape)
+                    .weight(1f),
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.Default.Clear,
-                    contentDescription = null,
-                    tint = subTextColor()
+                CloseButton { onBackClick() }
+                TextField(
+                    value = text,
+                    onValueChange = {
+                        onSearchInputChange(it)
+                    },
+                    placeholder = {
+                        Text(
+                            text = "Search anything",
+                            color = subTextColor()
+                        )
+                    },
+                    colors = TextFieldDefaults.colors().copy(
+                        unfocusedContainerColor = Color.Transparent,
+                        focusedContainerColor = Color.Transparent,
+                        unfocusedIndicatorColor = Color.Transparent,
+                        focusedIndicatorColor = Color.Transparent,
+                        unfocusedTextColor = textColor(),
+                        focusedTextColor = textColor(),
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                 )
+                IconButton(
+                    onClick = { onSearchInputChange("") },
+                    modifier = Modifier.clip(CircleShape)
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Clear,
+                        contentDescription = null,
+                        tint = subTextColor()
+                    )
+                }
             }
         }
+
+        val synState = syncStateFlow.collectAsState().value
+        if (synState.isNotEmpty()) Text(
+            text = synState,
+            color = subTextColor(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(end = 10.dp),
+            textAlign = TextAlign.End
+        )
     }
 }
 
@@ -365,7 +398,7 @@ private fun PreviewSearchScreen_Initial() {
                     "Search hint 5",
                 ),*/
                 initialStreams = sampleVodList.subList(0, 6)
-            )
+            ),
         )
     }
 }

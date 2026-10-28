@@ -104,7 +104,7 @@ fun TvNavHost() {
     ) {
         composable<NavMainDestination.Login> {
             LoginScreen(onLoginSuccess = {
-                navController.navigate(NavMainDestination.Home)
+                navController.navigate(NavMainDestination.Splash)
             })
         }
         composable<NavMainDestination.Splash> {

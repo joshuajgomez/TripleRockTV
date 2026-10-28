@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -32,9 +31,6 @@ fun BrowseScreen(
             uiState = uiState,
             onStreamClick = { streamId, streamType ->
                 navigateMain(NavMainDestination.Details(streamId, streamType))
-            },
-            onSyncClick = {
-                navigateMain(NavMainDestination.MediaSync)
             },
             onCategoryClick = {
                 navigateMain(
@@ -63,13 +59,9 @@ private fun BrowseScreenContent(
     onStreamClick: (Int, StreamType) -> Unit = { _, _ -> },
     onCategoryClick: (CategoryData) -> Unit = {},
     onLiveCategoryClick: (categoryId: Int, selectedStreamId: Int?) -> Unit = { _, _ -> },
-    onSyncClick: () -> Unit = {},
 ) {
     when (uiState) {
-        is BrowseUiState.Empty -> MediaSyncShortcut(
-            onSyncClick = onSyncClick,
-            streamType = uiState.streamType
-        )
+        is BrowseUiState.Empty -> EmptyContent()
 
         is BrowseUiState.VideoOnDemandState -> VodUiState(
             uiState = uiState,

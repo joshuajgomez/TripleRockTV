@@ -24,6 +24,7 @@ import com.joshgm3z.triplerocktv.compose.theme.textColor
 import com.joshgm3z.triplerocktv.core.viewmodel.ButtonAction
 import com.joshgm3z.triplerocktv.core.viewmodel.SelfUpdateUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.AppUpdateViewModel
+import dev.jeziellago.compose.markdowntext.MarkdownText
 
 @Composable
 fun AppUpdateScreen(
@@ -70,10 +71,10 @@ fun ColumnScope.UpdateContent(
         color = textColor(),
     )
     Spacer(Modifier.size(10.dp))
-    Text(
-        text = uiState.subtitle ?: "",
+    MarkdownText(
+        markdown = uiState.subtitle ?: "",
         style = typography.bodyLarge,
-        color = subTextColor(),
+        syntaxHighlightColor = subTextColor(),
     )
     AnimatedVisibility(
         visible = !uiState.enableButtons,
@@ -107,8 +108,8 @@ private fun PreviewAppUpdateScreen() {
     DarkSurface {
         AppUpdateScreenContent(
             SelfUpdateUiState(
-                title = "Update available",
-                subtitle = "New version 1.0.0 is available for download",
+                title = "New version v234 available",
+                subtitle = "**Release note:**\n> Move subtitle to RecentlyPlayed.kt `39a0838`\n",
                 enableButtons = false,
                 buttonAction = ButtonAction.UpdateNow
             )

@@ -13,6 +13,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Folder
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -67,24 +70,23 @@ fun CategoryItem(
     Column(
         modifier = modifier
             .width(185.dp)
-            .height(80.dp)
+            .height(82.dp)
             .clip(RoundedCornerShape(8.dp))
             .background(color = cardColor())
             .clickable(true) { onClick() }
             .padding(10.dp),
     ) {
+        Icon(
+            imageVector = Icons.Default.Folder,
+            contentDescription = null,
+            modifier = Modifier.size(20.dp)
+        )
+        Spacer(Modifier.size(5.dp))
         Text(
             text = categoryData.categoryName,
             style = typography.titleSmall,
             color = textColor(),
             maxLines = 2,
-        )
-        Spacer(Modifier.size(1.dp))
-        Text(
-            text = "${categoryData.count.withComma()} items",
-            style = typography.bodyMedium,
-            color = subTextColor(),
-            maxLines = 1,
         )
     }
 }

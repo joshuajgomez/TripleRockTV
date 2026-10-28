@@ -13,9 +13,11 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -24,6 +26,7 @@ import androidx.navigation.compose.rememberNavController
 import com.joshgm3z.triplerocktv.compose.NavMainDestination
 import com.joshgm3z.triplerocktv.compose.screens.common.DarkPreview
 import com.joshgm3z.triplerocktv.compose.theme.TripleRockTvTheme
+import com.joshgm3z.triplerocktv.core.MediaSyncService
 
 sealed class BottomItem(
     val route: NavHomeDestination,
@@ -41,6 +44,11 @@ fun HomeScreen(navigateMain: (NavMainDestination) -> Unit = {}) {
     val navHomeController = rememberNavController()
     val navBackStackEntry by navHomeController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
+
+    val context = LocalContext.current
+    LaunchedEffect(Unit) {
+        MediaSyncService.restart(context)
+    }
 
     Scaffold(
         content = { paddingValues ->

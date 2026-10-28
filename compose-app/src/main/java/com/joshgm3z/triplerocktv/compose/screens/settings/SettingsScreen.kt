@@ -142,16 +142,6 @@ data class SettingCategory(
 
 val settingsList = listOf(
     SettingCategory(
-        "Content", listOf(
-            SettingData(
-                NavMainDestination.MediaSync,
-                "Media sync",
-                "Sync your media content",
-                Icons.Default.CloudSync
-            ),
-        )
-    ),
-    SettingCategory(
         "App", listOf(
             SettingData(
                 NavMainDestination.AppUpdate(),
