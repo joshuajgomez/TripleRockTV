@@ -5,14 +5,15 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
+import com.joshgm3z.triplerocktv.core.util.Logger
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -50,6 +51,7 @@ constructor(
         viewModelScope.launch(Dispatchers.IO) {
             initialState = SearchUiState.Initial(
                 initialStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
+                    .addStreamCategoryNames()
             )
             resetUiState()
         }
@@ -76,15 +78,27 @@ constructor(
         _uiState.value = SearchUiState.Loading
 
         val job = viewModelScope.launch(Dispatchers.IO) {
-            val searchResult = repository.searchStreamByName(text) +
-                    repository.searchSeriesByName(text)
-
+            val searchResult = repository.searchStreamByName(text).addStreamCategoryNames() +
+                    repository.searchSeriesByName(text).addSeriesCategoryNames()
+            Logger.debug("searchResult = [$searchResult]")
             _uiState.value = if (searchResult.isEmpty()) SearchUiState.NoResult
             else SearchUiState.Result(list = searchResult)
         }
         this.job = job
         job.invokeOnCompletion {
             this.job = null
+        }
+    }
+
+    private suspend fun List<StreamData>.addStreamCategoryNames(): List<StreamData> = map {
+        it.apply {
+            categoryName = mediaLocalRepository.getCategory(categoryId)?.categoryName
+        }
+    }
+
+    private suspend fun List<SeriesStream>.addSeriesCategoryNames(): List<SeriesStream> = map {
+        it.apply {
+            categoryName = mediaLocalRepository.getCategory(categoryId)?.categoryName
         }
     }
 

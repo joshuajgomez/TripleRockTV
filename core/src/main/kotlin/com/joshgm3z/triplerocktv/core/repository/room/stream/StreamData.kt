@@ -38,6 +38,9 @@ data class StreamData(
     @Ignore
     var favorite: Boolean = false
 
+    @Ignore
+    var categoryName: String? = null
+
     companion object {
         fun sample(): StreamData = StreamData(
             streamId = 20642,
@@ -71,6 +74,7 @@ data class StreamData(
                 "\n\t\tstreamType=$streamType" +
                 "\n\tmovieMetadata=$movieMetadata," +
                 "\n\trecentlyPlayed=$recentlyPlayed," +
+                "\n\tcategoryName=$categoryName," +
                 "\n\tfavorite=$favorite, progressPercent()=${progressPercent()}"
     }
 

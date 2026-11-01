@@ -30,6 +30,9 @@ data class SeriesStream(
     @Ignore
     var favorite: Boolean = false
 
+    @Ignore
+    var categoryName: String? = null
+
     override fun equals(other: Any?): Boolean {
         val new = other as SeriesStream
         return seriesId == new.seriesId

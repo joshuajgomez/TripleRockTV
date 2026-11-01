@@ -57,6 +57,15 @@ class StreamAdapter
         }
 
         when (item) {
+            is StreamData -> item.categoryName
+            is SeriesStream -> item.categoryName
+            else -> null
+        }?.let {
+            binding.tvOverlayStreamSubtitle.text = it
+            binding.tvOverlayStreamSubtitle.setVisible(true)
+        }
+
+        when (item) {
             is StreamData -> when (item.streamType) {
                 StreamType.LiveTV -> glideUtil.loadImage(
                     item.streamIcon,
