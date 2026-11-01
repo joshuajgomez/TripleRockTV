@@ -22,12 +22,6 @@ class MetadataView @JvmOverloads constructor(
             updateMetadata()
         }
 
-    var showMyList: Boolean = false
-        set(value) {
-            field = value
-            updateMetadata()
-        }
-
     var genre: String? = null
         set(value) {
             field = value
@@ -74,7 +68,6 @@ class MetadataView @JvmOverloads constructor(
         if (isInEditMode) {
             rating = 3.5f
             duration = "1h 45m"
-            showMyList = true
         }
     }
 
@@ -86,7 +79,6 @@ class MetadataView @JvmOverloads constructor(
         addMetadata(genre)
         addMetadata(rating.toString(), rating.isNonZero(), R.drawable.baseline_star_14)
         addMetadata(duration)
-        addMetadata("Favorite", showMyList, R.drawable.baseline_playlist_add_check_14)
         addMetadata("$episodeCount episodes", episodeCount.isNonZero())
         addMetadata(
             if (noOfSeasons == 1) "1 season" else "$noOfSeasons seasons",

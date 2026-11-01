@@ -102,8 +102,8 @@ class HomeFragment : BrowseSupportFragment() {
                     progressBarManager.hide()
                     homeAdapter.setItems(it, diffCallback)
                     val settings = listOf(
-                        SettingItem("Update app", R.drawable.outline_deployed_code_update_24),
-                        SettingItem("Settings", R.drawable.ic_settings),
+                        SettingItem("Update app", R.drawable.rounded_autorenew_24),
+                        SettingItem("Settings", R.drawable.round_settings_24),
                         SettingItem("Sign out", R.drawable.icon_logout)
                     )
                     settingsAdapter.setItems(settings, diffCallback)

@@ -253,18 +253,18 @@ class PlayerManager(
         object : PlaybackTransportControlGlue<LeanbackPlayerAdapter>(context, adapter) {
 
             private val fastForwardAction = PlaybackControlsRow.FastForwardAction(context).apply {
-                icon = ContextCompat.getDrawable(context, R.drawable.forward_10s)
+                icon = ContextCompat.getDrawable(context, R.drawable.rounded_forward_10_24)
             }
             private val rewindAction = PlaybackControlsRow.RewindAction(context).apply {
-                icon = ContextCompat.getDrawable(context, R.drawable.replay_10s)
+                icon = ContextCompat.getDrawable(context, R.drawable.rounded_replay_10_24)
             }
 
             init {
                 ccAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                    icon = ContextCompat.getDrawable(context, R.drawable.ic_cc)
+                    icon = ContextCompat.getDrawable(context, R.drawable.baseline_closed_caption_24)
                 }
                 audioAction = PlaybackControlsRow.ClosedCaptioningAction(context).apply {
-                    icon = ContextCompat.getDrawable(context, R.drawable.ic_audio)
+                    icon = ContextCompat.getDrawable(context, R.drawable.baseline_mic_24)
                 }
             }
 

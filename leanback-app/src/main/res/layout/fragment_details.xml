@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:drawable="@drawable/baseline_replay_14"
+            android:drawable="@drawable/rounded_replay_24"
             android:text="Start over"
             android:visibility="gone"
             tools:visibility="visible" />
@@ -87,18 +87,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:drawable="@drawable/outline_favorite_24"
+            android:drawable="@drawable/outline_star_outline_24"
             android:text="Add favorite"
-            android:visibility="gone"
-            tools:visibility="visible" />
-
-        <com.joshgm3z.triplerocktv.ui.common.TileButtonView
-            android:id="@+id/bv_remove_my_list"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:drawable="@drawable/baseline_favorite_24"
-            android:text="Remove favorite"
             android:visibility="gone"
             tools:visibility="visible" />
 

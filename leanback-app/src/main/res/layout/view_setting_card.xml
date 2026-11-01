@@ -14,7 +14,7 @@
         android:layout_width="25dp"
         android:layout_height="25dp"
         android:duplicateParentState="true"
-        android:src="@drawable/ic_settings"
+        android:src="@drawable/round_settings_24"
         android:tint="@color/color_foreground_high_selector" />
 
     <TextView
