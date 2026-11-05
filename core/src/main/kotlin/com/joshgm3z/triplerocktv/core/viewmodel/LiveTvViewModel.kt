@@ -13,8 +13,14 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,8 +52,13 @@ class LiveTvViewModel
 
     var selectedStreamId = savedStateHandle.get<Int>("selectedStreamId")
 
-    private val _uiState = MutableStateFlow<List<StreamData>?>(null)
-    val uiState = _uiState.asStateFlow()
+    val streamListState: StateFlow<List<StreamData>?> = repository
+        .fetchLiveStreamsOfCategoryFlow(categoryId)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = null
+        )
 
     private val _programUiState = MutableStateFlow<ProgramUiState?>(null)
     val programUiState = _programUiState.asStateFlow()
@@ -69,16 +80,8 @@ class LiveTvViewModel
                 }
             }
         }
-        fetchStreams(categoryId)
-    }
-
-    private fun fetchStreams(categoryId: Int) {
-        Logger.debug("categoryId = [${categoryId}]")
         viewModelScope.launch(Dispatchers.IO) {
             onlineRepository.fetchStreams(StreamType.LiveTV, categoryId)
-            _uiState.value = repository.fetchStreamsOfCategory(
-                categoryId, StreamType.LiveTV
-            ) as List<StreamData>
         }
     }
 
@@ -98,14 +101,16 @@ class LiveTvViewModel
         )
     }
 
-    suspend fun updateMyList(
+    fun updateMyList(
         streamData: StreamData,
         add: Boolean
-    ): Boolean {
-        return repository.updateFavorites(
-            streamData.streamId,
-            StreamType.LiveTV,
-            add
-        )
+    ) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateFavorites(
+                streamData.streamId,
+                StreamType.LiveTV,
+                add
+            )
+        }
     }
 }

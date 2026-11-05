@@ -31,11 +31,9 @@ import com.joshgm3z.triplerocktv.databinding.FragmentLiveTvCatalogueBinding
 import com.joshgm3z.triplerocktv.ui.common.diffCallback
 import com.joshgm3z.triplerocktv.util.setVisible
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @UnstableApi
@@ -154,16 +152,16 @@ class LiveTvFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         view.keepScreenOn = true
         lifecycleScope.launch {
-            viewModel.uiState.collectLatest {
-                it?.let { streams ->
-                    rowsAdapter.setItems(streams, diffCallback)
+            viewModel.streamListState.collectLatest { streams ->
+                streams ?: return@collectLatest
 
-                    delay(100)
-                    viewModel.selectedStreamId?.let { selectedStreamId ->
-                        streams
-                            .indexOfFirst { stream -> stream.streamId == selectedStreamId }
-                            .let { index -> if (index != -1) selectStream(index) }
-                    }
+                rowsAdapter.setItems(streams, diffCallback)
+                delay(100)
+                viewModel.selectedStreamId?.let { selectedStreamId ->
+                    streams
+                        .indexOfFirst { stream -> stream.streamId == selectedStreamId }
+                        .let { index -> if (index != -1) selectStream(index) }
+                    viewModel.selectedStreamId = null
                 }
             }
         }
@@ -183,8 +181,14 @@ class LiveTvFragment : Fragment() {
             }
         }
         channelPresenter.setFavorite = { streamData, add ->
-            withContext(Dispatchers.IO) {
-                viewModel.updateMyList(streamData, add)
+            viewModel.updateMyList(streamData, add)
+        }
+
+        channelPresenter.launchSearchFragment = {
+            viewModel.selectedStreamId = it.streamId
+            LiveTvFragmentDirections.toSearch().apply {
+                initialSearchText = it.name
+                findNavController().navigate(this)
             }
         }
     }

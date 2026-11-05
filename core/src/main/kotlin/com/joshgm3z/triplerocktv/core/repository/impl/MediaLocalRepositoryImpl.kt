@@ -78,8 +78,8 @@ class MediaLocalRepositoryImpl @Inject constructor(
             favoriteDao.getFavoritesOfTypeFlow(StreamType.LiveTV)
         ) { streams, favorites ->
             streams.map { stream ->
-                stream.apply {
-                    favorite = favorites.firstOrNull { it.id == stream.streamId } != null
+                stream.copy().apply {
+                    favorite = favorites.any { it.id == stream.streamId }
                     recentlyPlayed = recentlyPlayedDao.recentlyPlayedFlow(streamId).first()
                 }
             }
@@ -221,6 +221,7 @@ class MediaLocalRepositoryImpl @Inject constructor(
         streamType: StreamType,
         add: Boolean
     ): Boolean = try {
+        Logger.debug("streamId = [${streamId}], streamType = [${streamType}], add = [${add}]")
         if (add) favoriteDao.insert(
             Favorite(
                 streamId,

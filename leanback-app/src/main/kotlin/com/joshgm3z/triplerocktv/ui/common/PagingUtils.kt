@@ -19,9 +19,9 @@ val diffCallback = object : DiffCallback<Any>() {
 
     override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =
         if (oldItem is StreamData && newItem is StreamData) {
-            oldItem.streamId == newItem.streamId
+            oldItem.streamId == newItem.streamId && oldItem.favorite == newItem.favorite
         } else if (oldItem is SeriesStream && newItem is SeriesStream) {
-            oldItem.seriesId == newItem.seriesId
+            oldItem.seriesId == newItem.seriesId && oldItem.favorite == newItem.favorite
         } else false
 }
 
@@ -35,9 +35,9 @@ val diffItemCallback = object : DiffUtil.ItemCallback<Any>() {
 
     override fun areContentsTheSame(oldItem: Any, newItem: Any): Boolean =
         if (oldItem is StreamData && newItem is StreamData) {
-            oldItem.streamId == newItem.streamId
+            oldItem.streamId == newItem.streamId && oldItem.favorite == newItem.favorite
         } else if (oldItem is SeriesStream && newItem is SeriesStream) {
-            oldItem.seriesId == newItem.seriesId
+            oldItem.seriesId == newItem.seriesId && oldItem.favorite == newItem.favorite
         } else false
 }
 

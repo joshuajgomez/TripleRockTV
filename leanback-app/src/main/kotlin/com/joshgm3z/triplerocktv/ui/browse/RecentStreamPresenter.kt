@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import androidx.core.view.isNotEmpty
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
@@ -118,10 +119,10 @@ class RecentStreamPresenter
         val popup = PopupMenu(anchorView.context, anchorView)
 
         val removeFromRecents = "Remove from recently played"
-        popup.menu.add(removeFromRecents)
+        if (removeRecentlyPlayed != null) popup.menu.add(removeFromRecents)
 
         val searchSimilar = "Search similar titles"
-        popup.menu.add(searchSimilar)
+        if (launchSearchFragment != null) popup.menu.add(searchSimilar)
 
         popup.setOnMenuItemClickListener { menuItem ->
             when (menuItem.title) {
@@ -138,6 +139,6 @@ class RecentStreamPresenter
                 else -> false
             }
         }
-        popup.show()
+        if (popup.menu.isNotEmpty()) popup.show()
     }
 }

@@ -35,7 +35,6 @@ data class IptvEpgListing(
         val now = Instant.now().epochSecond // IPTV timestamps are usually in seconds
 
         val bool = now in start..stop
-        Logger.debug("isNowPlaying = [$bool], start = [$start], stop = [$stop], now = [$now], title = [${titleDecoded()}]")
         return bool
     }
 }

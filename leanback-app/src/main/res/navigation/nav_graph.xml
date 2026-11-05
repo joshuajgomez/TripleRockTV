@@ -312,6 +312,9 @@
         <action
             android:id="@+id/toPlayback"
             app:destination="@id/playbackFragment" />
+        <action
+            android:id="@+id/toSearch"
+            app:destination="@id/searchFragment" />
     </fragment>
 
 </navigation>

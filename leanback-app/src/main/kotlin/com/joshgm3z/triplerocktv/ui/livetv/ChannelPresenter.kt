@@ -1,27 +1,26 @@
 package com.joshgm3z.triplerocktv.ui.livetv
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.isVisible
+import android.widget.PopupMenu
+import androidx.core.view.isNotEmpty
 import androidx.leanback.widget.Presenter
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.databinding.ViewChannelBinding
 import com.joshgm3z.triplerocktv.util.GlideUtil
 import com.joshgm3z.triplerocktv.util.setVisible
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ChannelPresenter
 @Inject constructor(
     private val glideUtil: GlideUtil,
-    private val scope: CoroutineScope
 ) : Presenter() {
 
-    var setFavorite: (suspend (StreamData, Boolean) -> Boolean)? = null
+    var setFavorite: ((StreamData, Boolean) -> Unit)? = null
+
+    var launchSearchFragment: ((StreamData) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewChannelBinding.inflate(
@@ -41,20 +40,9 @@ class ChannelPresenter
 
         binding.tvProgramName.text = streamData.name
         binding.ivStar.setVisible(streamData.favorite)
-        if (setFavorite != null) binding.root.setOnLongClickListener {
-            scope.launch {
-                val add = !binding.ivStar.isVisible
-                val success = setFavorite?.invoke(streamData, !binding.ivStar.isVisible) ?: false
-                val message = when (success) {
-                    true -> when (add) {
-                        true -> "Added to favorites"
-                        else -> "Removed from favorites"
-                    }
 
-                    else -> "Error updating favorites"
-                }
-                binding.updateFavIconAfterDelay(if (success) add else !add, message)
-            }
+        binding.root.setOnLongClickListener {
+            showPopupMenu(streamData, binding.root)
             true
         }
         glideUtil.loadImage(
@@ -66,38 +54,52 @@ class ChannelPresenter
         )
     }
 
-    fun ViewChannelBinding.updateFavIconAfterDelay(showFavIcon: Boolean, message: String) {
-        scope.launch(Dispatchers.Main) {
-            // Prepare the view
-            tvAddedToFavorites.text = message
-            tvAddedToFavorites.alpha = 0f
-            tvAddedToFavorites.setVisible(true)
-            ivStar.setVisible(false)
-
-            // Fade In
-            tvAddedToFavorites.animate()
-                .alpha(1f)
-                .setDuration(300)
-                .start()
-
-            delay(1500)
-
-            // Fade Out
-            tvAddedToFavorites.animate()
-                .alpha(0f)
-                .setDuration(300)
-                .withEndAction {
-                    tvAddedToFavorites.setVisible(false)
-                    ivStar.setVisible(showFavIcon)
-                    // Reset alpha for next time
-                    ivStar.alpha = 1f
-                }
-                .start()
-        }
-    }
-
     override fun onUnbindViewHolder(viewHolder: ViewHolder) {
         val binding = ViewChannelBinding.bind(viewHolder.view)
         binding.ivLogo.setImageDrawable(null)
+    }
+
+    private fun showPopupMenu(
+        streamData: StreamData,
+        anchorView: View
+    ) {
+        val popup = PopupMenu(anchorView.context, anchorView)
+
+        val makeFavorite = "Add favorite"
+        val removeFavorite = "Remove favorite"
+        if (setFavorite != null) {
+            if (streamData.favorite) {
+                popup.menu.add(removeFavorite)
+            } else {
+                popup.menu.add(makeFavorite)
+            }
+        }
+
+        val searchSimilar = "Search similar titles"
+        if (launchSearchFragment != null) {
+            popup.menu.add(searchSimilar)
+        }
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.title) {
+                searchSimilar -> {
+                    launchSearchFragment?.invoke(streamData)
+                    true
+                }
+
+                makeFavorite -> {
+                    setFavorite?.invoke(streamData, true)
+                    true
+                }
+
+                removeFavorite -> {
+                    setFavorite?.invoke(streamData, false)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        if (popup.menu.isNotEmpty()) popup.show()
     }
 }
