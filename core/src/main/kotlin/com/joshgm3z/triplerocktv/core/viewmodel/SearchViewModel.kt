@@ -1,5 +1,6 @@
 package com.joshgm3z.triplerocktv.core.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
@@ -33,6 +34,7 @@ sealed class SearchUiState {
 class SearchViewModel
 @Inject
 constructor(
+    savedStateHandle: SavedStateHandle,
     private val repository: SearchRepository,
     private val mediaLocalRepository: MediaLocalRepository
 ) : ViewModel() {
@@ -46,6 +48,9 @@ constructor(
     val hintsState = _hintsState.asStateFlow()
 
     private var job: Job? = null
+
+    val initialSearchText = savedStateHandle.get<String>("initialSearchText")
+        .takeIf { !it.isNullOrEmpty() }
 
     init {
         viewModelScope.launch(Dispatchers.IO) {

@@ -68,6 +68,12 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        streamPresenter.launchSearchFragment = {
+            StreamCatalogueFragmentDirections.toSearch().apply {
+                initialSearchText = it
+                findNavController().navigate(this)
+            }
+        }
         lifecycleScope.launch {
             viewModel.uiState.collectLatest {
                 when (it) {

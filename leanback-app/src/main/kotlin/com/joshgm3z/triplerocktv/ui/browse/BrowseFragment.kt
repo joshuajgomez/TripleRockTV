@@ -112,7 +112,22 @@ class BrowseFragment : BrowseSupportFragment() {
     }
 
     private fun setupEventListeners() {
-        recentStreamPresenter.longPressListener = ::showPopupMenu
+        recentStreamPresenter.launchSearchFragment = {
+            BrowseFragmentDirections.toSearch().apply {
+                initialSearchText = it
+                findNavController().navigate(this)
+            }
+        }
+        recentStreamPresenter.removeRecentlyPlayed = { streamId, streamType ->
+            viewModel.removeFromRecentlyPlayed(streamId, streamType)
+        }
+        streamPresenter.launchSearchFragment = {
+            BrowseFragmentDirections.toSearch().apply {
+                initialSearchText = it
+                findNavController().navigate(this)
+            }
+        }
+
         setOnSearchClickedListener {
             findNavController().navigate(BrowseFragmentDirections.toSearch())
         }
@@ -298,7 +313,10 @@ class BrowseFragment : BrowseSupportFragment() {
                     episodeToSeriesMap[it.lastPlayedEpisodeId!!] = it.seriesId
                     it.seasons?.findEpisode(it.lastPlayedEpisodeId!!)
                 }
-                if (episodes.isEmpty()) recentsListRowAdapter.setItems(listOf(emptyItem), diffCallback)
+                if (episodes.isEmpty()) recentsListRowAdapter.setItems(
+                    listOf(emptyItem),
+                    diffCallback
+                )
                 else recentsListRowAdapter.setItems(episodes, diffCallback)
             }
         }
@@ -342,29 +360,6 @@ class BrowseFragment : BrowseSupportFragment() {
                     requireActivity().setBackground(bitmap)
                 }
         }
-    }
-
-    private fun showPopupMenu(
-        streamId: Int,
-        streamType: StreamType,
-        anchorView: View
-    ) {
-        val popup = PopupMenu(requireContext(), anchorView)
-
-        val removeFromRecents = "Remove from recently played"
-        popup.menu.add(removeFromRecents)
-
-        popup.setOnMenuItemClickListener { menuItem ->
-            when (menuItem.title) {
-                removeFromRecents -> {
-                    viewModel.removeFromRecentlyPlayed(streamId, streamType)
-                    true
-                }
-
-                else -> false
-            }
-        }
-        popup.show()
     }
 
     override fun onResume() {

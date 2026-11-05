@@ -11,6 +11,7 @@ import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
+import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.viewmodel.MediaSyncViewModel
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchUiState
 import com.joshgm3z.triplerocktv.core.viewmodel.SearchViewModel
@@ -136,6 +137,11 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
     }
 
     private fun initViews() {
+        binding.root.post {
+            viewModel.initialSearchText?.let {
+                binding.keyboardView.text = it
+            }
+        }
         binding.rvSearchList.isFocusable = false
         binding.rvHints.isFocusable = false
         binding.keyboardView.listener = object : KeyboardViewListener {

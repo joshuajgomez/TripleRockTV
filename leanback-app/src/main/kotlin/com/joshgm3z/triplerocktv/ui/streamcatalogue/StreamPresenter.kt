@@ -1,8 +1,10 @@
 package com.joshgm3z.triplerocktv.ui.streamcatalogue
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
@@ -21,11 +23,7 @@ class StreamPresenter
     private val glideUtil: GlideUtil,
 ) : Presenter() {
 
-    var longPressListener: ((
-        streamId: Int,
-        streamType: StreamType,
-        anchorView: View
-    ) -> Unit)? = null
+    var launchSearchFragment: ((String) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewStreamCardBinding.inflate(
@@ -102,14 +100,16 @@ class StreamPresenter
         }
         binding.root.setOnLongClickListener {
             when (item) {
-                is StreamData -> longPressListener?.invoke(
+                is StreamData -> showPopupMenu(
                     item.streamId,
+                    item.name,
                     item.streamType,
                     binding.root
                 )
 
-                is SeriesStream -> longPressListener?.invoke(
+                is SeriesStream -> showPopupMenu(
                     item.seriesId,
+                    item.name,
                     StreamType.Series,
                     binding.root
                 )
@@ -125,4 +125,27 @@ class StreamPresenter
         binding.ivIcon.setImageResource(R.drawable.ic_video_file)
     }
 
+    private fun showPopupMenu(
+        streamId: Int,
+        streamName: String,
+        streamType: StreamType,
+        anchorView: View
+    ) {
+        val popup = PopupMenu(anchorView.context, anchorView)
+
+        val searchSimilar = "Search similar titles"
+        popup.menu.add(searchSimilar)
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.title) {
+                searchSimilar -> {
+                    launchSearchFragment?.invoke(streamName)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popup.show()
+    }
 }

@@ -3,14 +3,13 @@ package com.joshgm3z.triplerocktv.ui.browse
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.leanback.widget.Presenter
 import com.bumptech.glide.Glide
 import com.joshgm3z.triplerocktv.R
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.databinding.ViewRecentStreamCardBinding
 import com.joshgm3z.triplerocktv.core.repository.data.Episode
-import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.ifNullOrEmpty
 import com.joshgm3z.triplerocktv.util.setVisible
@@ -22,11 +21,9 @@ class RecentStreamPresenter
     private val glideUtil: GlideUtil,
 ) : Presenter() {
 
-    var longPressListener: ((
-        streamId: Int,
-        streamType: StreamType,
-        anchorView: View
-    ) -> Unit)? = null
+    var launchSearchFragment: ((String) -> Unit)? = null
+
+    var removeRecentlyPlayed: ((Int, StreamType) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup): ViewHolder {
         val binding = ViewRecentStreamCardBinding.inflate(
@@ -87,14 +84,16 @@ class RecentStreamPresenter
 
             root.setOnLongClickListener {
                 when (item) {
-                    is StreamData -> longPressListener?.invoke(
+                    is StreamData -> showPopupMenu(
                         item.streamId,
+                        item.name,
                         item.streamType,
                         root
                     )
 
-                    is Episode -> longPressListener?.invoke(
+                    is Episode -> showPopupMenu(
                         item.id,
+                        item.title,
                         StreamType.Series,
                         root
                     )
@@ -108,5 +107,37 @@ class RecentStreamPresenter
         val binding = ViewRecentStreamCardBinding.bind(viewHolder.view)
         Glide.with(binding.root.context).clear(binding.posterImage)
         binding.progressBar.setVisible(false)
+    }
+
+    private fun showPopupMenu(
+        streamId: Int,
+        streamName: String,
+        streamType: StreamType,
+        anchorView: View
+    ) {
+        val popup = PopupMenu(anchorView.context, anchorView)
+
+        val removeFromRecents = "Remove from recently played"
+        popup.menu.add(removeFromRecents)
+
+        val searchSimilar = "Search similar titles"
+        popup.menu.add(searchSimilar)
+
+        popup.setOnMenuItemClickListener { menuItem ->
+            when (menuItem.title) {
+                removeFromRecents -> {
+                    removeRecentlyPlayed?.invoke(streamId, streamType)
+                    true
+                }
+
+                searchSimilar -> {
+                    launchSearchFragment?.invoke(streamName)
+                    true
+                }
+
+                else -> false
+            }
+        }
+        popup.show()
     }
 }
