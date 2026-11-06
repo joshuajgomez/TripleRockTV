@@ -49,7 +49,7 @@ constructor(
 
     private var job: Job? = null
 
-    var initialSearchText = savedStateHandle.get<String>("initialSearchText")
+    val initialSearchText = savedStateHandle.get<String>("initialSearchText")
         .takeIf { !it.isNullOrEmpty() }
 
     init {
@@ -58,7 +58,9 @@ constructor(
                 initialStreams = mediaLocalRepository.fetchNewlyAdded(StreamType.VideoOnDemand)
                     .addStreamCategoryNames()
             )
-            resetUiState()
+            initialSearchText?.let {
+                onSearchInputChange(it)
+            } ?: resetUiState()
         }
         viewModelScope.launch {
             repository.searchHintsFlow().collectLatest {

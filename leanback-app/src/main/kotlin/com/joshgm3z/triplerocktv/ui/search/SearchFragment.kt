@@ -93,13 +93,6 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
                         binding.rvSearchList.layoutAnimation =
                             AnimationUtils.loadLayoutAnimation(context, R.anim.layout_fall_down)
                         binding.rvSearchList.scheduleLayoutAnimation()
-
-                        binding.root.post {
-                            viewModel.initialSearchText?.let { initialSearchText ->
-                                binding.keyboardView.text = initialSearchText
-                            }
-                            viewModel.initialSearchText = null
-                        }
                     }
 
                     is SearchUiState.Loading -> {
