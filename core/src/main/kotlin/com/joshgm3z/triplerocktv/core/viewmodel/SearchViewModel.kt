@@ -49,7 +49,7 @@ constructor(
 
     private var job: Job? = null
 
-    val initialSearchText = savedStateHandle.get<String>("initialSearchText")
+    var initialSearchText = savedStateHandle.get<String>("initialSearchText")
         .takeIf { !it.isNullOrEmpty() }
 
     init {
