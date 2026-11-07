@@ -13,6 +13,7 @@ import com.joshgm3z.triplerocktv.core.util.Logger
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -66,6 +67,8 @@ class AppUpdateViewModel
 
     private var downloadedFile: File? = null
 
+    private var updateListenerJob: Job? = null
+
     init {
         checkUpdates()
     }
@@ -91,31 +94,34 @@ class AppUpdateViewModel
                 enableButtons = false
             )
         }
-
-        viewModelScope.launch(Dispatchers.IO) {
-            delay(1000)
-            val releaseInfo = fileDownloader.getLatestApkReleaseName(apkTagUrl)
-            Logger.debug("releaseInfo = [$releaseInfo]")
-            _uiState.update {
-                if (BuildConfig.VERSION_NAME.isOlderThan(releaseInfo?.name)) {
-                    it.copy(
-                        title = "New version ${releaseInfo?.name} available",
-                        subtitle = releaseInfo?.description,
-                        enableButtons = true,
-                        buttonAction = ButtonAction.UpdateNow
-                    )
-                } else {
-                    it.copy(
-                        title = "App is up to date",
-                        enableButtons = true,
-                        buttonAction = ButtonAction.CheckAgain
-                    )
+        updateListenerJob?.cancel()
+        updateListenerJob = viewModelScope.launch(Dispatchers.IO) {
+            while (true) {
+                delay(10000)
+                val releaseInfo = fileDownloader.getLatestApkReleaseName(apkTagUrl)
+                Logger.debug("releaseInfo = [$releaseInfo]")
+                _uiState.update {
+                    if (BuildConfig.VERSION_NAME.isOlderThan(releaseInfo?.name)) {
+                        it.copy(
+                            title = "New version ${releaseInfo?.name} available",
+                            subtitle = releaseInfo?.description,
+                            enableButtons = true,
+                            buttonAction = ButtonAction.UpdateNow
+                        )
+                    } else {
+                        it.copy(
+                            title = "App is up to date",
+                            enableButtons = true,
+                            buttonAction = ButtonAction.CheckAgain
+                        )
+                    }
                 }
             }
         }
     }
 
     private fun downloadUpdate() {
+        updateListenerJob?.cancel()
         downloadedFile = null
         _uiState.update {
             it.copy(
