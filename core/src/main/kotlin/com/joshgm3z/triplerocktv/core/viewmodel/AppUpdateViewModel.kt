@@ -97,7 +97,7 @@ class AppUpdateViewModel
         updateListenerJob?.cancel()
         updateListenerJob = viewModelScope.launch(Dispatchers.IO) {
             while (true) {
-                delay(1000)
+                delay(500)
                 val releaseInfo = fileDownloader.getLatestApkReleaseName(apkTagUrl)
                 Logger.debug("releaseInfo = [$releaseInfo]")
                 _uiState.update {
@@ -116,6 +116,7 @@ class AppUpdateViewModel
                         )
                     }
                 }
+                delay(10000)
             }
         }
     }
