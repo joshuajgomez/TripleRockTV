@@ -1,0 +1,27 @@
+name: Merge dev branch to master
+
+on:
+  workflow_dispatch:
+
+jobs:
+  merge-dev-to-master:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Merge dev into master
+        run: |
+          git checkout master
+          git merge origin/dev --no-edit --ff-only
+          git push origin master
