@@ -137,8 +137,10 @@ class AppUpdateViewModel
                 Logger.debug("Download state: $it")
                 _uiState.update { uiState ->
                     when (it) {
-                        DownloadState.Completed -> {
+                        is DownloadState.Completed -> {
                             informInstallErrorAfterDelay()
+                            downloadedFile = it.file
+                            apkInstaller.installApk(it.file)
                             uiState.copy(
                                 title = "Update file downloaded",
                                 subtitle = "Trying to install automatically",
@@ -156,10 +158,6 @@ class AppUpdateViewModel
                     }
                 }
             },
-            onDownloadComplete = {
-                downloadedFile = it
-                apkInstaller.installApk(it)
-            }
         )
     }
 

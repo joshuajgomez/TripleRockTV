@@ -15,11 +15,11 @@ import java.net.HttpURLConnection
 import java.net.URL
 import javax.inject.Inject
 
-enum class DownloadState {
-    Waiting,
-    Downloading,
-    Completed,
-    Error
+sealed class DownloadState {
+    object Waiting : DownloadState()
+    object Downloading : DownloadState()
+    class Completed(val file: File) : DownloadState()
+    object Error : DownloadState()
 }
 
 data class ReleaseInfo(
@@ -40,7 +40,6 @@ class FileDownloader
     fun startDownload(
         fileUrl: String,
         onUpdate: (DownloadState) -> Unit,
-        onDownloadComplete: (File) -> Unit
     ) {
         Logger.debug("fileUrl = [${fileUrl}]")
         try {
@@ -73,12 +72,15 @@ class FileDownloader
                 override fun onReceive(context: Context?, intent: Intent?) {
                     val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1L)
                     if (id == downloadId) {
-                        onUpdate(DownloadState.Completed)
 
                         val downloadFolder =
                             context?.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
                         val file = File(downloadFolder, fileName)
-                        onDownloadComplete(file)
+                        if (file.exists()) {
+                            onUpdate(DownloadState.Completed(file))
+                        } else {
+                            onUpdate(DownloadState.Error)
+                        }
 
                         context?.unregisterReceiver(this)
                     }
