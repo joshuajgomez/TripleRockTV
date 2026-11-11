@@ -138,6 +138,7 @@ class SearchFragment : Fragment(R.layout.fragment_search) {
 
     private fun initViews() {
         binding.etInput.setText(viewModel.initialSearchText)
+        binding.keyboardView.text = viewModel.initialSearchText ?: ""
         binding.rvSearchList.isFocusable = false
         binding.rvHints.isFocusable = false
         binding.keyboardView.listener = object : KeyboardViewListener {
