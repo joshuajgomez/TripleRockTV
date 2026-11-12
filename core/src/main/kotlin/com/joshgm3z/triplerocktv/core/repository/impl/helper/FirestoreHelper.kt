@@ -4,6 +4,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.joshgm3z.triplerocktv.core.BuildConfig
 import com.joshgm3z.triplerocktv.core.util.Logger
+import com.joshgm3z.triplerocktv.core.util.isDebugBuild
 import com.joshgm3z.triplerocktv.core.util.isDevBuild
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -68,6 +69,7 @@ class FirestoreHelper
         collection: String,
         dataMap: Map<String, Any> = mapOf("input" to "")
     ): String {
+        if (isDebugBuild) return "debug-app"
         val document = db.collection(collection)
             .add(dataMap)
             .await()
