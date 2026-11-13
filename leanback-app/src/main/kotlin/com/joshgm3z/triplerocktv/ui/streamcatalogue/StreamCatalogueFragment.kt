@@ -42,12 +42,9 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     lateinit var rowsAdapter: PagingDataAdapter<Any>
 
-    private val args: StreamCatalogueFragmentArgs by navArgs()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initRowFragment()
-        title = args.categoryName
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -78,12 +75,14 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
             viewModel.uiState.collectLatest {
                 when (it) {
                     is CatalogueUiState.VideoOnDemand -> {
+                        title = it.categoryName
                         it.pagingStreams.collectLatest {
                             rowsAdapter.submitData(it as PagingData<Any>)
                         }
                     }
 
                     is CatalogueUiState.Series -> {
+                        title = it.categoryName
                         it.pagingStreams.collectLatest {
                             rowsAdapter.submitData(it as PagingData<Any>)
                         }
@@ -123,9 +122,6 @@ class StreamCatalogueFragment : VerticalGridSupportFragment() {
 
     override fun onResume() {
         super.onResume()
-        firebaseLogger.logScreenView(
-            ScreenName.Catalogue,
-            mapOf("catalogue_streamType" to args.streamType.name)
-        )
+        firebaseLogger.logScreenView(ScreenName.Catalogue, mapOf())
     }
 }

@@ -106,6 +106,6 @@ interface StreamDataDao {
     suspend fun deleteAll()
 
     @Query("SELECT * FROM stream_data  WHERE streamType = :streamType ORDER BY added DESC LIMIT :limit")
-    suspend fun getNewlyAddedOfType(streamType: StreamType, limit: Int = 10): List<StreamData>
+    suspend fun getNewlyAddedOfType(streamType: StreamType, limit: Int = 30): List<StreamData>
 
 }

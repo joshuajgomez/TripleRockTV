@@ -203,7 +203,7 @@ fun SearchScreenContent(
                 }
 
                 is SearchUiState.Result -> {
-                    items(uiState.list) {
+                    items(uiState.streams) {
                         StreamItem(it, onStreamClick = {
                             when (it) {
                                 is StreamData -> onStreamClick(
@@ -360,9 +360,10 @@ private fun PreviewSearchScreen_Results() {
     DarkSurface {
         SearchScreenContent(
             uiState = SearchUiState.Result(
-                list = sampleVodList.subList(0, 3)
+                streams = sampleVodList.subList(0, 3)
                         + sampleLiveTvList.subList(0, 3)
-                        + sampleSeriesList.subList(0, 3)
+                        + sampleSeriesList.subList(0, 3),
+                categories = emptyList()
             )
         )
     }

@@ -42,4 +42,22 @@ interface CategoryDataDao {
 
     @Query("DELETE FROM category_data WHERE streamType = :streamType")
     suspend fun deleteAllOfType(streamType: StreamType)
+
+    @Query(
+        """
+    SELECT * FROM category_data 
+    WHERE categoryName LIKE '%' || :name || '%' 
+    ORDER BY 
+        CASE 
+            -- Highest priority: Exact match
+            WHEN categoryName = :name THEN 1
+            -- Second priority: Starts with the word
+            WHEN categoryName LIKE :name || '%' THEN 2
+            -- Lowest priority: Contains the word anywhere else
+            ELSE 3 
+        END, 
+        categoryName ASC
+"""
+    )
+    fun searchByName(name: String): List<CategoryData>
 }

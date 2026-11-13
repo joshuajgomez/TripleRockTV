@@ -4,6 +4,8 @@ import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
 import com.joshgm3z.triplerocktv.core.repository.room.SearchHint
 import com.joshgm3z.triplerocktv.core.repository.room.SearchHintDao
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamDataDao
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
@@ -17,6 +19,7 @@ class SearchRepositoryImpl @Inject constructor(
     private val searchHintDao: SearchHintDao,
     private val streamDataDao: StreamDataDao,
     private val seriesStreamsDao: SeriesStreamsDao,
+    private val categoryDataDao: CategoryDataDao,
 ) : SearchRepository {
 
     override suspend fun searchStreamByName(name: String): List<StreamData> =
@@ -26,6 +29,10 @@ class SearchRepositoryImpl @Inject constructor(
 
     override suspend fun searchSeriesByName(name: String): List<SeriesStream> {
         return seriesStreamsDao.searchStreams(name)
+    }
+
+    override suspend fun searchCategoriesByName(name: String): List<CategoryData> {
+        return categoryDataDao.searchByName(name)
     }
 
     override suspend fun addSearchText(searchText: String) {

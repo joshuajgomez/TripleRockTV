@@ -108,6 +108,9 @@
         <action
             android:id="@+id/toLiveTvCatalogue"
             app:destination="@id/liveTvCatalogue" />
+        <action
+            android:id="@+id/toStreamsCatalogue"
+            app:destination="@id/streamsCatalogue" />
     </fragment>
 
     <fragment
@@ -118,10 +121,6 @@
             android:name="categoryId"
             android:defaultValue="449"
             app:argType="integer" />
-        <argument
-            android:name="categoryName"
-            android:defaultValue="ASIANET"
-            app:argType="string" />
         <argument
             android:name="streamType"
             android:defaultValue="Series"

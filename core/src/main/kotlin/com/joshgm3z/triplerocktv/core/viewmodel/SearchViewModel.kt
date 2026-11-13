@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.joshgm3z.triplerocktv.core.repository.MediaLocalRepository
 import com.joshgm3z.triplerocktv.core.repository.SearchRepository
 import com.joshgm3z.triplerocktv.core.repository.StreamType
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.util.Logger
@@ -26,7 +27,8 @@ sealed class SearchUiState {
     object Loading : SearchUiState()
     object NoResult : SearchUiState()
     class Result(
-        val list: List<Any>
+        val streams: List<Any>,
+        val categories: List<CategoryData>,
     ) : SearchUiState()
 }
 
@@ -85,11 +87,21 @@ constructor(
         _uiState.value = SearchUiState.Loading
 
         val job = viewModelScope.launch(Dispatchers.IO) {
-            val searchResult = repository.searchStreamByName(text).addStreamCategoryNames() +
+            val streamsSearchResult = repository.searchStreamByName(text).addStreamCategoryNames() +
                     repository.searchSeriesByName(text).addSeriesCategoryNames()
-            Logger.debug("searchResult = [$searchResult]")
-            _uiState.value = if (searchResult.isEmpty()) SearchUiState.NoResult
-            else SearchUiState.Result(list = searchResult)
+            val categoriesSearchResult = repository.searchCategoriesByName(text)
+
+            Logger.debug(
+                "streamsSearchResult.size = [${streamsSearchResult.size}], " +
+                        "categoriesSearchResult.size = [${categoriesSearchResult.size}]"
+            )
+            _uiState.value = if (streamsSearchResult.isEmpty()
+                && categoriesSearchResult.isEmpty()
+            ) SearchUiState.NoResult
+            else SearchUiState.Result(
+                streams = streamsSearchResult,
+                categories = categoriesSearchResult
+            )
         }
         this.job = job
         job.invokeOnCompletion {

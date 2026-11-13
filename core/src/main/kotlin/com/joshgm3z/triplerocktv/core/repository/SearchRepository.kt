@@ -1,15 +1,18 @@
 package com.joshgm3z.triplerocktv.core.repository
 
+import com.joshgm3z.triplerocktv.core.repository.room.category.CategoryData
 import com.joshgm3z.triplerocktv.core.repository.room.stream.StreamData
 import com.joshgm3z.triplerocktv.core.repository.room.series.SeriesStream
 import kotlinx.coroutines.flow.Flow
 
-const val SEARCH_LIMIT = 10
+const val SEARCH_LIMIT = 20
 
 interface SearchRepository {
     suspend fun searchStreamByName(name: String): List<StreamData>
 
     suspend fun searchSeriesByName(name: String): List<SeriesStream>
+
+    suspend fun searchCategoriesByName(name: String): List<CategoryData>
 
     suspend fun addSearchText(searchText: String)
 

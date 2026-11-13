@@ -151,7 +151,6 @@ class BrowseFragment : BrowseSupportFragment() {
 
                     else -> BrowseFragmentDirections.toStreamCatalogue().apply {
                         categoryId = item.categoryId
-                        categoryName = item.categoryName
                         streamType = item.streamType
                     }
                 }

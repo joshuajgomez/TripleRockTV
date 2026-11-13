@@ -7,12 +7,36 @@
     android:background="?attr/colorBackground"
     android:padding="@dimen/screen_edge_padding">
 
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorBackground"
+        android:clickable="false"
+        android:drawableStart="@drawable/ic_search"
+        android:drawablePadding="5sp"
+        android:drawableTint="?attr/colorForegroundPrimary"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="Search movies and tv shows"
+        android:padding="10dp"
+        android:textColor="?attr/colorForegroundHigh"
+        android:textColorHint="?attr/colorForegroundMid"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@id/tv_sync_status"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="" />
+
     <com.joshgm3z.triplerocktv.ui.search.KeyboardView
         android:id="@+id/keyboard_view"
         android:layout_width="240dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/et_input" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_hints"
@@ -28,29 +52,6 @@
         app:layout_constraintTop_toBottomOf="@+id/keyboard_view"
         tools:listitem="@layout/item_text" />
 
-    <EditText
-        android:id="@+id/et_input"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:background="?attr/colorBackground"
-        android:clickable="false"
-        android:drawableStart="@drawable/ic_search"
-        android:drawablePadding="5sp"
-        android:drawableTint="?attr/colorForegroundPrimary"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:hint="Search movies and tv shows"
-        android:padding="10dp"
-        android:textColor="?attr/colorForegroundHigh"
-        android:textColorHint="?attr/colorForegroundMid"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/keyboard_view"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="" />
-
     <TextView
         android:id="@+id/tv_sync_status"
         android:layout_width="wrap_content"
@@ -63,50 +64,16 @@
         app:layout_constraintTop_toTopOf="@+id/et_input"
         tools:text="Syncing 9%" />
 
-    <TextView
-        android:id="@+id/tv_status"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_rows_support_fragment"
+        android:name="com.joshgm3z.triplerocktv.ui.search.SearchResultRow"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColor="?attr/colorForegroundMid"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/et_input"
-        tools:text="No results found" />
-
-    <TextView
-        android:id="@+id/tv_streams_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColor="?attr/colorForegroundLow"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/tv_status"
-        tools:text="Recently added" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_search_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="et_input,tv_streams_title" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_list"
-        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/barrier_search_header"
-        app:spanCount="4"
-        tools:listitem="@layout/view_stream_card" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/keyboard_view"
+        app:layout_constraintTop_toBottomOf="@+id/et_input" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
