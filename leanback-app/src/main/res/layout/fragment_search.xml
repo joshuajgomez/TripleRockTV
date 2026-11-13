@@ -63,50 +63,16 @@
         app:layout_constraintTop_toTopOf="@+id/et_input"
         tools:text="Syncing 9%" />
 
-    <TextView
-        android:id="@+id/tv_status"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fcv_rows_support_fragment"
+        android:name="com.joshgm3z.triplerocktv.ui.search.SearchResultRow"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColor="?attr/colorForegroundMid"
-        android:visibility="gone"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/et_input"
-        tools:text="No results found" />
-
-    <TextView
-        android:id="@+id/tv_streams_title"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:textColor="?attr/colorForegroundLow"
-        android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/tv_status"
-        tools:text="Recently added" />
-
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier_search_header"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:barrierDirection="bottom"
-        app:constraint_referenced_ids="et_input,tv_streams_title" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_search_list"
-        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="5dp"
-        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/et_input"
-        app:layout_constraintTop_toBottomOf="@+id/barrier_search_header"
-        app:spanCount="4"
-        tools:listitem="@layout/view_stream_card" />
+        app:layout_constraintTop_toBottomOf="@+id/et_input" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
