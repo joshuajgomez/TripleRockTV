@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="5dp"
+    android:layout_marginTop="3dp"
     android:background="@drawable/text_chip"
-    android:drawableStart="@drawable/outline_history"
+    android:drawableStart="@drawable/rounded_history_24"
     android:drawablePadding="5dp"
     android:drawableTint="@color/color_foreground_low_selector"
     android:ellipsize="end"
@@ -13,5 +13,5 @@
     android:paddingHorizontal="10dp"
     android:paddingVertical="5dp"
     android:textColor="@color/color_foreground_low_selector"
-    android:textSize="16sp"
+    android:textSize="14sp"
     tools:text="The Man from earth (2009)" />
